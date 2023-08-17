@@ -1,0 +1,9 @@
+.rdrInRange,
+.rdrStartEdge,
+.rdrEndEdge,
+.rdrDateDisplay {
+  color: #77998e !important;
+}
+.rdrDayHovered{
+  border-color: #77998e !important;
+}

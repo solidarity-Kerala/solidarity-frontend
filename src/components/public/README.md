@@ -1,0 +1,1 @@
+Components: The components inside the public folder are accessible to all users, regardless of whether they are authenticated or not. These components should be designed with the assumption that the user has not yet logged in, and should provide clear instructions for how to do so.
