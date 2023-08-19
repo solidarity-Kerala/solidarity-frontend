@@ -17,11 +17,11 @@ const AddMeal = (props) => {
   const [attributes] = useState([
     {
       type: "text",
-      placeholder: "Recipe",
+      placeholder: "Meal",
       name: "title",
       validation: "",
       default: "",
-      label: "Recipe",
+      label: "Meal",
       required: true,
       view: true,
       add: true,
