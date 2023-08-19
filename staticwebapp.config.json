@@ -1,0 +1,26 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [
+      "/static/js/*",
+      "/static/css/*",
+      "/static/media/*",
+      "*.json"
+    ]
+  },
+  "mimeTypes": {
+    ".json": "text/json",
+    ".js": "text/javascript",
+    ".css": "text/css",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".svg": "image/svg+xml",
+    ".woff": "font/woff",
+    ".woff2": "font/woff2",
+    ".eot": "application/vnd.ms-fontobject",
+    ".ttf": "application/x-font-ttf",
+    ".otf": "application/x-font-opentype"
+  }
+}

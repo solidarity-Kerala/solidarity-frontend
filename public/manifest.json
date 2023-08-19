@@ -1,0 +1,13 @@
+{
+  "theme_color": "rgb(124, 157, 69)",
+  "background_color": "white",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "Diet Food Management Portal",
+  "short_name": "Diet Food Management Portal",
+  "description": "Diet Food Management Portal",
+  "icons": [
+      
+  ]
+}

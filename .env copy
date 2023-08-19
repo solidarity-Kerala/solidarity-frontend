@@ -1,0 +1,11 @@
+PORT=8000
+MONGO_URI = "mongodb+srv://dfms:yVzN9TryhWK3wXQk@dfms.wgbzmye.mongodb.net/dfms-production?retryWrites=true&w=majority"
+JWT_secret = "+3ZDbeeoh351M18/2c6blnuhi6lDpsTeOGcE3AzkhEo="
+SECRET_ACCESS_KEY = "DO00628WVDKP9EC9KHYN"
+ACCESS_KEY_ID = "9pRskBW02ZhsT8/hxno3Wl3Yu6xrjcw25glSzllRFCE"
+REGION = 'syd1'
+BUCKET_NAME = "event-manager"
+SPACES_ACCESS_KEY_ID="DO00628WVDKP9EC9KHYN"
+SPACES_SECRET_ACCESS_KEY="9pRskBW02ZhsT8/hxno3Wl3Yu6xrjcw25glSzllRFCE"
+SPACES_BUCKET_NAME="event-manager"
+SPACES_ENDPOINT="https://event-manager.syd1.cdn.digitaloceanspaces.com/"

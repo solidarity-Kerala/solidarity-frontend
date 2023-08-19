@@ -1,0 +1,18 @@
+2023/05/24 15:28:10.339292 [INFO] Cleaning log publish record...
+2023/05/24 15:28:10.339310 [INFO] Start log publish job.
+2023/05/24 15:28:10.339313 [INFO] Start publish file /tmp/TailLogs-1684942090332.txt
+2023/05/24 15:28:10.432125 [INFO] Successful upload file /tmp/TailLogs-1684942090332.txt to s3 resources/environments/logs/tail/e-iqggcrpkfm/i-0acf11bd3af8fd164/TailLogs-1684942090332.txt
+2023/05/24 15:28:10.432245 [INFO] Finished log publish job.
+2023/05/24 15:44:37.270583 [INFO] Cleaning log publish record...
+2023/05/24 15:44:37.270612 [INFO] /tmp/TailLogs-1684942090332.txt exists, no need for clean up
+2023/05/24 15:44:37.270615 [INFO] Start log publish job.
+2023/05/24 15:44:37.270618 [INFO] Start publish file /tmp/BundleLogs-1684943077245.zip
+2023/05/24 15:44:37.339053 [INFO] Successful upload file /tmp/BundleLogs-1684943077245.zip to s3 resources/environments/logs/bundle/e-iqggcrpkfm/i-0acf11bd3af8fd164/BundleLogs-1684943077245.zip
+2023/05/24 15:44:37.339142 [INFO] Finished log publish job.
+2023/05/24 15:44:48.285743 [INFO] Cleaning log publish record...
+2023/05/24 15:44:48.285768 [INFO] /tmp/TailLogs-1684942090332.txt exists, no need for clean up
+2023/05/24 15:44:48.285773 [INFO] /tmp/BundleLogs-1684943077245.zip exists, no need for clean up
+2023/05/24 15:44:48.285775 [INFO] Start log publish job.
+2023/05/24 15:44:48.285778 [INFO] Start publish file /tmp/TailLogs-1684943088278.txt
+2023/05/24 15:44:48.384505 [INFO] Successful upload file /tmp/TailLogs-1684943088278.txt to s3 resources/environments/logs/tail/e-iqggcrpkfm/i-0acf11bd3af8fd164/TailLogs-1684943088278.txt
+2023/05/24 15:44:48.384592 [INFO] Finished log publish job.

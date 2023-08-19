@@ -1,0 +1,1 @@
+All the image files that are using inside the application is storing in this folder

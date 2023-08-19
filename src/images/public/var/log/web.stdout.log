@@ -1,0 +1,35 @@
+May 24 15:11:51 ip-172-31-18-64 web: > Elastic-Beanstalk-Sample-App@0.0.1 start
+May 24 15:11:51 ip-172-31-18-64 web: > node app.js
+May 24 15:11:51 ip-172-31-18-64 web: Server running at http://127.0.0.1:8080/
+May 24 15:24:39 ip-172-31-18-64 web: > gold-price-api@1.0.0 start
+May 24 15:24:39 ip-172-31-18-64 web: > node index.js
+May 24 15:24:39 ip-172-31-18-64 web: WebSocket server listening on port 3000
+May 24 15:41:26 ip-172-31-18-64 web: > gold-price-api@1.0.0 start
+May 24 15:41:26 ip-172-31-18-64 web: > node index.js
+May 24 15:41:26 ip-172-31-18-64 web: WebSocket server listening on port 3000
+May 24 16:05:28 ip-172-31-18-64 web: > gold-price-api@1.0.0 start
+May 24 16:05:28 ip-172-31-18-64 web: > node index.js
+May 24 16:05:28 ip-172-31-18-64 web: 8080
+May 24 16:05:28 ip-172-31-18-64 web: WebSocket server listening on port 8080
+May 24 16:07:50 ip-172-31-18-64 web: a client connected
+May 24 16:07:50 ip-172-31-18-64 web: error authentication error
+May 24 16:08:17 ip-172-31-18-64 web: client disconnected
+May 24 16:08:26 ip-172-31-18-64 web: a client connected
+May 24 16:08:26 ip-172-31-18-64 web: error authentication error
+May 24 16:09:26 ip-172-31-18-64 web: client disconnected
+May 24 16:09:26 ip-172-31-18-64 web: a client connected
+May 24 16:09:26 ip-172-31-18-64 web: error authentication error
+May 24 16:09:38 ip-172-31-18-64 web: client disconnected
+May 24 16:09:45 ip-172-31-18-64 web: a client connected
+May 24 16:09:46 ip-172-31-18-64 web: error authentication error
+May 24 16:09:56 ip-172-31-18-64 web: client disconnected
+May 24 16:09:56 ip-172-31-18-64 web: a client connected
+May 24 16:09:57 ip-172-31-18-64 web: error authentication error
+May 24 16:10:02 ip-172-31-18-64 web: client disconnected
+May 24 16:10:02 ip-172-31-18-64 web: a client connected
+May 24 16:10:02 ip-172-31-18-64 web: error authentication error
+May 24 16:13:27 ip-172-31-18-64 web: client disconnected
+May 24 16:16:55 ip-172-31-18-64 web: > gold-price-api@1.0.0 start
+May 24 16:16:55 ip-172-31-18-64 web: > node index.js
+May 24 16:16:56 ip-172-31-18-64 web: 8080
+May 24 16:16:56 ip-172-31-18-64 web: WebSocket server listening on port 8080

@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  font-family: "Calibri",-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+body div,
+body ul {
+  scrollbar-width: thin;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 0px;
+}
+::-webkit-scrollbar:hover {
+  width: 5px;
+  height: 0px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #e7f2f9;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  border-radius: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #08225f;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #08225f;
+}
+div:-webkit-scrollbar {
+  width: 1px;
+  height: 1px;
+  background-color: #aaa; /* or add it to the track */
+}
+
+/* Add a thumb */
+div:-webkit-scrollbar-thumb {
+    background: #000;
+}
