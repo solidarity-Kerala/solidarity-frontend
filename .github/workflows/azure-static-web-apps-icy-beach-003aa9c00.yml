@@ -9,7 +9,7 @@ on:
     branches:
       - main
 env:
-  REACT_APP_API: "https://dfms-api.azurewebsites.net/api/v1/"
+  REACT_APP_API: "https://dfms-api-n4gdx.ondigitalocean.app/api/v1/"
   REACT_APP_CDN: "https://event-manager.syd1.cdn.digitaloceanspaces.com/"
 jobs:
   build_and_deploy_job:
