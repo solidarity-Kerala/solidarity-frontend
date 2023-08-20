@@ -34,7 +34,9 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   useEffect(() => {
     if (menuData?.foodMenu) {
       const reducedResult = menuData.foodMenu.reduce((accumulator, item) => {
-        const { dayNumber, recipes, meals } = item;
+        const { dayNumber, recipes, meals, mealTimeCategory } = item;
+        const availableCalories = menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
+        console.log("availableCaloriesMealTime", mealTimeCategory,availableCalories);
         const key = "day_" + dayNumber;
         if (item.optionNo > 1) {
           return accumulator;
@@ -44,13 +46,30 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
         }
 
         const recipeCalories = recipes.reduce((totalCalories, recipe) => {
-          return totalCalories + recipe.calories;
+          const recipeIngredientsCalories = recipe.recipeIngredients?.reduce((total, ingredient) => {
+            if (ingredient.typeOfIngredient === "Meat") {
+              return ingredient.isCalculated === true ? total + (ingredient.calories * availableCalories["1200"].meal || 0) : total;
+            } else if (ingredient.typeOfIngredient === "Bread") {
+              return ingredient.isCalculated === true ? total + (ingredient.calories * availableCalories["1200"].bread || 0) : total;
+            } else if (ingredient.typeOfIngredient === "Fruit") {
+              return ingredient.isCalculated === true ? total + (ingredient.calories * availableCalories["1200"].fruit || 0) : total;
+            } else {
+              return ingredient.isCalculated === true ? total + (ingredient.calories || 0) : total;
+            }
+          }, 0);
+          return totalCalories + recipeIngredientsCalories;
         }, 0);
 
         accumulator[key] += isNaN(recipeCalories) ? 0 : recipeCalories;
 
         const mealCalories = meals.reduce((totalCalories, meal) => {
-          return totalCalories + meal.calories;
+          const mealRecipeCalories = meal.mealItems.reduce((total, mealItem) => {
+            const recipeIngredientsCalories = mealItem.recipe.recipeIngredients?.reduce((total, ingredient) => {
+              return ingredient.isCalculated === true ? total + (ingredient.calories || 0) : total;
+            }, 0);
+            return total + recipeIngredientsCalories;
+          }, 0);
+          return totalCalories + mealRecipeCalories;
         }, 0);
 
         accumulator[key] += isNaN(mealCalories) ? 0 : mealCalories;
@@ -61,10 +80,24 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       // Now you have the total calories for each day in the 'reducedResult' object
 
       // Example usage:
+      console.log("reducedResult", reducedResult);
       setCalories(reducedResult);
     }
   }, [menuData]);
 
+  const getCalories = (ingredients) => {
+    const mealItemRecipeCalories = ingredients?.reduce((total, ingredient) => {
+      return ingredient.isCalculated === true ? total + (ingredient.calories || 0) : total;
+    }, 0);
+
+    return mealItemRecipeCalories;
+  };
+  const getCaloriesByMeal = (meal) => {
+    const mealRecipeCalories = meal.reduce((total, mealItem) => {
+      return total + getCalories(mealItem.recipe?.recipeIngredients);
+    }, 0);
+    return mealRecipeCalories;
+  };
   //------------
   // const searchChange = (item) => {
   //   setSearchValue(item.target.value);
@@ -264,7 +297,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                   <TableHeader key={index}>
                     <DayHead>
                       <span className="day">{day}</span>
-                      <span className="calories">Cal: {(parseFloat(calories["day_" + index] ?? 0) ?? 0)?.toFixed(2)}</span>
+                      <span className="calories">{(parseFloat(calories["day_" + index] ?? 0) ?? 0)?.toFixed(2)} calories</span>
                     </DayHead>
                   </TableHeader>
                 ))}
@@ -296,6 +329,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                                 <img src={process.env.REACT_APP_CDN + item.photo} alt="icon"></img>
                                               </ProfileImage>
                                               <span className="recipe">{item.title} </span>
+                                              <span>{getCalories(item.recipeIngredients ?? [])} calories</span>
                                               {!(openData.item.viewOnly ?? false) && (
                                                 <span
                                                   className="delete"
@@ -339,7 +373,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                                               </ProfileImage>
                                                               <Details>
                                                                 <span className="recipe">{replacableItem.title}</span>
-                                                                <span className="variant">Cal: {replacableItem.calories}</span>
+                                                                <span>{replacableItem.calories} calories</span>
                                                               </Details>
                                                               {!(openData.item.viewOnly ?? false) && (
                                                                 <span
@@ -377,6 +411,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                               </ProfileImage>
                                               <span className="recipe">{item.title} </span>
                                               <span className="variant">{"Items: " + item.mealItems.length} </span>
+                                              <span>{getCaloriesByMeal(item.mealItems ?? [])} calories</span>
                                               {!(openData.item.viewOnly ?? false) && (
                                                 <span
                                                   className="delete"
@@ -508,7 +543,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                               <span>BHD</span>
                               <span className="price">{meal.price}</span>
                               <span className="offer">{meal.offerPrice}</span>
-                              <span className="calories">{`${meal.calories} calories`}</span>
+                              <span className="calories">{`${getCaloriesByMeal(meal.mealItems ?? [])} calories`}</span>
                             </Title>
                             <Variants>
                               {meal.mealItems.map((item) => {
@@ -521,7 +556,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                     <span>
                                       <span className="recipe">{recipeVariant.title}</span>
                                     </span>
-                                    <span className="variant">{recipeVariant.title}</span>
+                                    <span className="variant">{getCalories(recipeVariant.recipeIngredients ?? [])} calories</span>
                                   </Variant>
                                 );
                               })}
