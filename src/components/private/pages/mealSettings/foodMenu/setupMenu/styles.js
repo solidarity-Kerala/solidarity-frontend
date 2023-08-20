@@ -192,6 +192,7 @@ export const Variant = styled.div`
   position: relative;
   span {
     font-size: 10px;
+    text-align:left;
   }
   .price {
     font-size: 10px;

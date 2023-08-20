@@ -90,7 +90,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
       default: "",
       tag: true,
       label: "Protein Category",
-      required: true,
+      required: false,
       view: true,
       add: true,
       update: true,
