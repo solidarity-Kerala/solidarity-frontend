@@ -36,7 +36,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       const reducedResult = menuData.foodMenu.reduce((accumulator, item) => {
         const { dayNumber, recipes, meals, mealTimeCategory } = item;
         const availableCalories = menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-        console.log("availableCaloriesMealTime", mealTimeCategory,availableCalories);
+        console.log("availableCaloriesMealTime", mealTimeCategory, availableCalories);
         const key = "day_" + dayNumber;
         if (item.optionNo > 1) {
           return accumulator;
