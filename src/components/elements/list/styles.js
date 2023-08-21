@@ -432,6 +432,9 @@ export const Filters = styled.div`
   margin-right: auto;
   display: flex;
   max-width: 80%;
+  &.center {
+    margin-left: auto;
+  }
   @media (max-width: 768px) {
     flex-flow: wrap;
     max-width: 100%;

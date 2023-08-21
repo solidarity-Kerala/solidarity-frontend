@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { GetIcon } from "../../../../../../icons";
 import { deleteData, getData, postData } from "../../../../../../backend/api";
-import { NoData, ProfileImage } from "../../../../../elements/list/styles";
+import { Filters, NoData, ProfileImage } from "../../../../../elements/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import Search from "../../../../../elements/search";
 import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, MealCategoryCell, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details } from "./styles"; // Import styles from styles.js
@@ -12,6 +12,7 @@ import DropTarget from "./dragdrop/drop";
 import { CloseButton } from "../../../../../elements/list/popup/styles";
 import { Header } from "../../../../../elements/list/manage/styles";
 import { useRef } from "react";
+import FormInput from "../../../../../elements/input";
 const SetupMenu = ({ openData, themeColors, setMessage }) => {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const [menuId] = useState(openData.data._id);
@@ -31,6 +32,35 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       handleTabClick(activeTab, event.target.value);
     }, 300);
   };
+
+  const [coloriePerDay, setColoriePerDay] = useState("900");
+
+  const getCalories = useCallback(
+    (ingredients, mealTimeCategory, availableCalories) => {
+      availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
+      const mealItemRecipeCalories = ingredients?.reduce((total, ingredient) => {
+        if (ingredient.typeOfIngredient === "Meat") {
+          return ingredient.isCalculated === true ? total + ingredient.calories * (availableCalories[coloriePerDay].meal || 0) : total;
+        } else if (ingredient.typeOfIngredient === "Bread") {
+          return ingredient.isCalculated === true ? total + ingredient.calories * (availableCalories[coloriePerDay].bread || 0) : total;
+        } else if (ingredient.typeOfIngredient === "Fruit") {
+          return ingredient.isCalculated === true ? total + ingredient.calories * (availableCalories[coloriePerDay].fruit || 0) : total;
+        } else {
+          return ingredient.isCalculated === true ? total + (ingredient.calories || 0) : total;
+        }
+      }, 0);
+
+      return mealItemRecipeCalories;
+    },
+    [menuData, coloriePerDay]
+  );
+  const getCaloriesByMeal = (meal, mealTimeCategory) => {
+    const availableCalories = menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
+    const mealRecipeCalories = meal.reduce((total, mealItem) => {
+      return total + getCalories(mealItem.recipe?.recipeIngredients, mealTimeCategory, availableCalories);
+    }, 0);
+    return mealRecipeCalories;
+  };
   useEffect(() => {
     if (menuData?.foodMenu) {
       const reducedResult = menuData.foodMenu.reduce((accumulator, item) => {
@@ -46,28 +76,14 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
         }
 
         const recipeCalories = recipes.reduce((totalCalories, recipe) => {
-          const recipeIngredientsCalories = recipe.recipeIngredients?.reduce((total, ingredient) => {
-            if (ingredient.typeOfIngredient === "Meat") {
-              return ingredient.isCalculated === true ? total + (ingredient.calories * availableCalories["1200"].meal || 0) : total;
-            } else if (ingredient.typeOfIngredient === "Bread") {
-              return ingredient.isCalculated === true ? total + (ingredient.calories * availableCalories["1200"].bread || 0) : total;
-            } else if (ingredient.typeOfIngredient === "Fruit") {
-              return ingredient.isCalculated === true ? total + (ingredient.calories * availableCalories["1200"].fruit || 0) : total;
-            } else {
-              return ingredient.isCalculated === true ? total + (ingredient.calories || 0) : total;
-            }
-          }, 0);
-          return totalCalories + recipeIngredientsCalories;
+          return totalCalories + getCalories(recipe.recipeIngredients, mealTimeCategory, availableCalories);
         }, 0);
 
         accumulator[key] += isNaN(recipeCalories) ? 0 : recipeCalories;
 
         const mealCalories = meals.reduce((totalCalories, meal) => {
           const mealRecipeCalories = meal.mealItems.reduce((total, mealItem) => {
-            const recipeIngredientsCalories = mealItem.recipe.recipeIngredients?.reduce((total, ingredient) => {
-              return ingredient.isCalculated === true ? total + (ingredient.calories || 0) : total;
-            }, 0);
-            return total + recipeIngredientsCalories;
+            return total + getCalories(mealItem.recipe?.recipeIngredients, mealTimeCategory, availableCalories);
           }, 0);
           return totalCalories + mealRecipeCalories;
         }, 0);
@@ -76,32 +92,9 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
 
         return accumulator;
       }, {});
-
-      // Now you have the total calories for each day in the 'reducedResult' object
-
-      // Example usage:
-      console.log("reducedResult", reducedResult);
       setCalories(reducedResult);
     }
-  }, [menuData]);
-
-  const getCalories = (ingredients) => {
-    const mealItemRecipeCalories = ingredients?.reduce((total, ingredient) => {
-      return ingredient.isCalculated === true ? total + (ingredient.calories || 0) : total;
-    }, 0);
-
-    return mealItemRecipeCalories;
-  };
-  const getCaloriesByMeal = (meal) => {
-    const mealRecipeCalories = meal.reduce((total, mealItem) => {
-      return total + getCalories(mealItem.recipe?.recipeIngredients);
-    }, 0);
-    return mealRecipeCalories;
-  };
-  //------------
-  // const searchChange = (item) => {
-  //   setSearchValue(item.target.value);
-  // };
+  }, [menuData, getCalories]);
 
   const handleTabClick = useCallback((tab, searchKey = "") => {
     setActiveTab(tab);
@@ -284,11 +277,38 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       }
     });
   }, [openData.data._id]);
-
+  const [item] = useState({
+    type: "select",
+    placeholder: "Calories",
+    name: "calories",
+    validation: "",
+    default: "",
+    tag: false,
+    label: "Calories",
+    required: true,
+    view: true,
+    add: true,
+    update: true,
+    selectApi: "900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000",
+    apiType: "CSV",
+  });
   return menuData ? (
     <ColumnContainer style={{ marginBottom: "30px", position: "relative", height: "90%" }}>
       <DndProvider backend={HTML5Backend}>
         <RowContainer className={`menu ${openData.item.viewOnly}`}>
+          <Filters className="center">
+            <FormInput
+              customClass={"filter"}
+              placeholder={`Available Colories`}
+              value={coloriePerDay}
+              key={`input` + 0}
+              id={`available_colories`}
+              {...item}
+              onChange={(event) => {
+                setColoriePerDay(event.value);
+              }}
+            />
+          </Filters>
           <Table>
             <thead>
               <tr>
@@ -329,7 +349,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                                 <img src={process.env.REACT_APP_CDN + item.photo} alt="icon"></img>
                                               </ProfileImage>
                                               <span className="recipe">{item.title} </span>
-                                              <span>{getCalories(item.recipeIngredients ?? [])} calories</span>
+                                              <span>{getCalories(item.recipeIngredients ?? [], mealTimeCategory._id).toFixed(2)} calories</span>
                                               {!(openData.item.viewOnly ?? false) && (
                                                 <span
                                                   className="delete"
@@ -411,7 +431,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                               </ProfileImage>
                                               <span className="recipe">{item.title} </span>
                                               <span className="variant">{"Items: " + item.mealItems.length} </span>
-                                              <span>{getCaloriesByMeal(item.mealItems ?? [])} calories</span>
+                                              <span>{getCaloriesByMeal(item.mealItems ?? [], mealTimeCategory._id).toFixed(2)} calories</span>
                                               {!(openData.item.viewOnly ?? false) && (
                                                 <span
                                                   className="delete"
@@ -526,9 +546,6 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
               {activeTab === "meals" && meals && (
                 <TabDataItem>
                   {meals.map((meal) => (
-                    // <MealItem key={meal._id}>
-                    //   <div>{meal.title ?? "Title not found!"}</div>
-                    // </MealItem>
                     <DraggableItem
                       key={meal._id}
                       item={{ ...meal, mealOrRecepe: "meal", meal: { title: meal.title } }}
@@ -543,7 +560,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                               <span>BHD</span>
                               <span className="price">{meal.price}</span>
                               <span className="offer">{meal.offerPrice}</span>
-                              <span className="calories">{`${getCaloriesByMeal(meal.mealItems ?? [])} calories`}</span>
+                              <span className="calories">{`${meal.calories} calories`}</span>
                             </Title>
                             <Variants>
                               {meal.mealItems.map((item) => {
@@ -556,7 +573,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                     <span>
                                       <span className="recipe">{recipeVariant.title}</span>
                                     </span>
-                                    <span className="variant">{getCalories(recipeVariant.recipeIngredients ?? [])} calories</span>
+                                    <span className="variant">{recipeVariant.calories ?? 0.0} calories</span>
                                   </Variant>
                                 );
                               })}

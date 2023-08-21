@@ -125,6 +125,7 @@ export const SelectBox = styled.div`
   }
   &.open .options {
     border: 1px solid rgb(224, 224, 227);
+    z-index: 100;
   }
   &.open .select {
     display: inherit;
