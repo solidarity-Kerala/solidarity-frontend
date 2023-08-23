@@ -59,12 +59,14 @@ export const MealCategoryCell = styled.th`
   /* position: sticky; */
   left: 0;
   top: 0;
-
   text-align: left;
   width: 0;
   &:first-child {
     width: 10%;
     padding: 0px 10px 0 30px;
+  }
+  div{
+    font-size:12px;
   }
 `;
 
