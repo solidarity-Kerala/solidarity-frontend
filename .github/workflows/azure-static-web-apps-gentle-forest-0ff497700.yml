@@ -8,7 +8,9 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
-
+env:
+  REACT_APP_API: "https://security-website.onrender.com/api/v1/"
+  REACT_APP_CDN: "https://event-manager.syd1.cdn.digitaloceanspaces.com/"
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
@@ -29,7 +31,7 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
-          output_location: "" # Built app content directory - optional
+          output_location: "build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
