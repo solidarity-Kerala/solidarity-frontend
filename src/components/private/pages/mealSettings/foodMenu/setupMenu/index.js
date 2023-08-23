@@ -32,35 +32,60 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       handleTabClick(activeTab, event.target.value);
     }, 300);
   };
-
   const [coloriePerDay, setColoriePerDay] = useState("900");
-
   const getCalories = useCallback(
-    (ingredients, mealTimeCategory, availableCalories) => {
+    (recipe, mealTimeCategory, availableCalories) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-      const mealItemRecipeCalories = ingredients?.reduce((total, ingredient) => {
-        if (ingredient.typeOfIngredient === "Meat") {
-          return ingredient.isCalculated === true ? total + ingredient.calories * (availableCalories[coloriePerDay].meal || 0) : total;
-        } else if (ingredient.typeOfIngredient === "Bread") {
-          return ingredient.isCalculated === true ? total + ingredient.calories * (availableCalories[coloriePerDay].bread || 0) : total;
-        } else if (ingredient.typeOfIngredient === "Fruit") {
-          return ingredient.isCalculated === true ? total + ingredient.calories * (availableCalories[coloriePerDay].fruit || 0) : total;
-        } else {
-          return ingredient.isCalculated === true ? total + (ingredient.calories || 0) : total;
-        }
-      }, 0);
-
-      return mealItemRecipeCalories;
+      const { meal, bread, fruit, dessert } = availableCalories[coloriePerDay];
+      let calories = 0;
+      if (recipe.typeOfRecipe === "Meat") {
+        calories = recipe.calories * (meal || 0);
+      } else if (recipe.typeOfRecipe === "Bread") {
+        calories = recipe.calories * (bread || 0);
+      } else if (recipe.typeOfRecipe === "Fruit") {
+        calories = recipe.calories * (fruit || 0);
+      } else if (recipe.typeOfRecipe === "Dessert") {
+        calories = recipe.calories * (dessert || 0);
+      } else {
+        calories = recipe.isCalculated === true ? recipe.calories || 0 : 0;
+      }
+      return calories;
     },
-    [menuData, coloriePerDay]
+    [coloriePerDay, menuData?.mealTimeCategories]
   );
+
   const getCaloriesByMeal = (meal, mealTimeCategory) => {
     const availableCalories = menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
+
     const mealRecipeCalories = meal.reduce((total, mealItem) => {
-      return total + getCalories(mealItem.recipe?.recipeIngredients, mealTimeCategory, availableCalories);
+      const recipe = mealItem.recipe;
+
+      if (recipe) {
+        const { meal, bread, fruit, dessert } = availableCalories[coloriePerDay];
+
+        let calories = 0;
+
+        if (recipe.typeOfRecipe === "Meat") {
+          calories = recipe.calories * (meal || 0);
+        } else if (recipe.typeOfRecipe === "Bread") {
+          calories = recipe.calories * (bread || 0);
+        } else if (recipe.typeOfRecipe === "Fruit") {
+          calories = recipe.calories * (fruit || 0);
+        } else if (recipe.typeOfRecipe === "Dessert") {
+          calories = recipe.calories * (dessert || 0);
+        } else {
+          calories = recipe.isCalculated === true ? recipe.calories || 0 : 0;
+        }
+
+        return total + calories;
+      }
+
+      return total;
     }, 0);
+
     return mealRecipeCalories;
   };
+
   useEffect(() => {
     if (menuData?.foodMenu) {
       const reducedResult = menuData.foodMenu.reduce((accumulator, item) => {
@@ -76,14 +101,14 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
         }
 
         const recipeCalories = recipes.reduce((totalCalories, recipe) => {
-          return totalCalories + getCalories(recipe.recipeIngredients, mealTimeCategory, availableCalories);
+          return totalCalories + getCalories(recipe, mealTimeCategory, availableCalories);
         }, 0);
 
         accumulator[key] += isNaN(recipeCalories) ? 0 : recipeCalories;
 
         const mealCalories = meals.reduce((totalCalories, meal) => {
           const mealRecipeCalories = meal.mealItems.reduce((total, mealItem) => {
-            return total + getCalories(mealItem.recipe?.recipeIngredients, mealTimeCategory, availableCalories);
+            return total + getCalories(mealItem.recipe, mealTimeCategory, availableCalories);
           }, 0);
           return totalCalories + mealRecipeCalories;
         }, 0);
@@ -270,6 +295,12 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       setMenuData(menuDataTemp);
     }
   };
+  const setCaloriesItems = (mealTimeCategories) => {
+    const { bread, meal, fruit, dessert } = mealTimeCategories.availableCalories[coloriePerDay];
+    console.log(mealTimeCategories.availableCalories[coloriePerDay]);
+    return `${meal && meal > 0 ? meal + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}`;
+  };
+
   useEffect(() => {
     getData({ menuId: openData.data._id }, "food-menu/get-a-menu").then((response) => {
       if (response.status === 200) {
@@ -326,7 +357,10 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
             <TableBody>
               {menuData.mealTimeCategories.map((mealTimeCategory) => (
                 <TableRow key={mealTimeCategory._id}>
-                  <MealCategoryCell>{mealTimeCategory.mealtimeCategoriesName}</MealCategoryCell>
+                  <MealCategoryCell>
+                    {mealTimeCategory.mealtimeCategoriesName}
+                    {<div>{setCaloriesItems(mealTimeCategory)}</div>}
+                  </MealCategoryCell>
                   {daysOfWeek.map((day, dayNumber) => {
                     const options = menuData.foodMenu.filter((item) => item.mealTimeCategory === mealTimeCategory._id && item.dayNumber === dayNumber && (item.meals.length > 0 || item.recipes.length > 0));
                     return (
@@ -349,7 +383,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                                 <img src={process.env.REACT_APP_CDN + item.photo} alt="icon"></img>
                                               </ProfileImage>
                                               <span className="recipe">{item.title} </span>
-                                              <span>{getCalories(item.recipeIngredients ?? [], mealTimeCategory._id).toFixed(2)} calories</span>
+                                              <span>{getCalories(item ?? [], mealTimeCategory._id).toFixed(2)} calories</span>
                                               {!(openData.item.viewOnly ?? false) && (
                                                 <span
                                                   className="delete"
@@ -603,6 +637,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                               <span className="price">{recipe.price}</span>
                               <span className="offer">{recipe.offerPrice}</span>
                               <span className="calories">{`${recipe.calories} calories`}</span>
+                              <span className="calories">{`${recipe.typeOfRecipe}`}</span>
                             </Title>
                           </Title>
                         </MealItem>
