@@ -102,13 +102,12 @@ const SetupRecipe = ({ openData, setMessage }) => {
   const [ingredient, setIngredient] = useState(null);
   const addIngredient = async (option) => {
     // setRefresh(!refresh);
-    if (option.typeOfIngredient) {
+    if (option.measureType) {
       const response = await postData({ ingredient: option.id, recipe }, "recipe-ingredients");
       response.data.addedItems && setIngredients(response.data.addedItems);
       response.data.recipeNutritionInfo && setNutritionInfo(response.data.recipeNutritionInfo);
     } else {
       if (option.id) {
-        option.typeOfIngredient = "";
         option.measureType = "";
         option.gramOfType = 0;
         option.value = typeof option.value === "undefined" ? "" : option.value;
@@ -127,7 +126,6 @@ const SetupRecipe = ({ openData, setMessage }) => {
     setNutritionInfo(response.data.recipeNutritionInfo);
     const data = [...selectData];
     const item = selectData.find((item) => [item.id === post._id]);
-    item.typeOfIngredient = post.typeOfIngredient;
     item.measureType = post.measureType;
     item.gramOfType = post.gramOfType;
     setIngredients(response.data.addedItems);
@@ -228,7 +226,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
                       <DataItem>{((item.ingredient.carbohydrate * item.ingredient.gramOfType) / 100).toFixed(2)} g carbs</DataItem>
                     </DataItemContainer>
                   </TableCell>
-                  <TableCell>{`${item.ingredient.typeOfIngredient} / ${item.ingredient.measureType} = ${item.ingredient.gramOfType}g / ${item.ingredient.calories} cal`}</TableCell>
+                  <TableCell>{`${item.ingredient.gramOfType}g ${item.ingredient.measureType !== "Gram" ? ` per ${item.ingredient.measureType} = ` : ""} | ${item.ingredient.calories.toFixed(2)} cal`}</TableCell>
 
                   <TableCell>
                     <StyledInput
