@@ -93,7 +93,7 @@ const AddRecipe = (props) => {
       add: true,
       update: true,
       filter: false,
-      selectApi: "Bread,Meat,Fruit,Dessert",
+      selectApi: "Bread,Meat,Fruit,Dessert,Salad,Soup",
       apiType: "CSV",
     },
     {
