@@ -93,20 +93,20 @@ const AddRecipe = (props) => {
       add: true,
       update: true,
       filter: false,
-      selectApi: "Bread,Meat,Fruit,Dessert",
+      selectApi: "Bread,Meat,Fruit,Dessert,Soup,Salad",
       apiType: "CSV",
     },
     {
       type: "select",
       apiType: "API",
       selectApi: "protein-categories/select",
-      placeholder: "Protein Category",
+      placeholder: "Ingredient Category",
       name: "proteinCategory",
       validation: "",
       showItem: "proteinCategoriesName",
       default: "",
       tag: true,
-      label: "Protein Category",
+      label: "Ingredient Category",
       required: true,
       view: true,
       add: true,
@@ -521,7 +521,7 @@ const AddRecipe = (props) => {
             <SetupRecipe
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupRecipe>
           }
           themeColors={themeColors}
