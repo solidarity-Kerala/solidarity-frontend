@@ -35,7 +35,7 @@ const Patient = (props) => {
       validation: "",
       default: "",
       tag: true,
-      label: "CPR/Mobile",
+      label: "CPR Number",
       required: true,
       view: true,
       add: true,
