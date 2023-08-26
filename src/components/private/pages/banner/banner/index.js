@@ -12,22 +12,6 @@ const Banner = (props) => {
 
   const [attributes] = useState([
     {
-      type: "select",
-      apiType: "API",
-      selectApi: "franchise/select",
-      placeholder: "Franchise",
-      name: "franchise",
-      showItem: "name",
-      validation: "",
-      default: "",
-      label: "Franchise",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-      filter: false,
-    },
-    {
       type: "text",
       placeholder: "Title",
       name: "title",
