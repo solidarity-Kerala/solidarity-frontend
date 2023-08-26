@@ -7,18 +7,18 @@ import { Container } from "../../../common/layout/styels";
 const ProteinCategory = (props) => {
   //to update the page title
   useEffect(() => {
-    document.title = `Protein Category - Diet Food Management Portal`;
+    document.title = `Ingredient Category - Diet Food Management Portal`;
   }, []);
 
   const [attributes] = useState([
     {
       type: "text",
-      placeholder: "Protein Category",
+      placeholder: "Ingredient Category",
       name: "proteinCategoriesName",
       validation: "",
       default: "",
-      tag: true,
-      label: "Protein Category",
+      // tag: true,
+      label: "Ingredient Category",
       required: true,
       view: true,
       add: true,
