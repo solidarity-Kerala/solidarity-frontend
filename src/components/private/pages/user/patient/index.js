@@ -30,12 +30,25 @@ const Patient = (props) => {
   const [attributes] = useState([
     {
       type: "text",
-      placeholder: "CPR/Mobile",
+      placeholder: "CPR Number",
       name: "cprNumber",
       validation: "",
       default: "",
       tag: true,
       label: "CPR/Mobile",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "number",
+      placeholder: "Mobile Number",
+      name: "mobile",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Mobile Number",
       required: true,
       view: true,
       add: true,
@@ -50,7 +63,7 @@ const Patient = (props) => {
       validation: "",
       default: "",
       label: "Name",
-      required: false,
+      required: true,
       view: true,
       add: true,
       update: true,
@@ -1224,7 +1237,7 @@ const Patient = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
