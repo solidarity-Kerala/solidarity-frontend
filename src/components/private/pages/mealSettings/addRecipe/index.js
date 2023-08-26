@@ -117,7 +117,7 @@ const AddRecipe = (props) => {
       default: "1",
        condition: {
         item: "typeOfRecipe",
-        if: Mixed,
+        if: "Mixed",
         then: "enabled",
         else: "disabled",
       },
@@ -135,7 +135,7 @@ const AddRecipe = (props) => {
       validation: "",
         condition: {
         item: "typeOfRecipe",
-        if: Mixed,
+        if: "Mixed",
         then: "enabled",
         else: "disabled",
       },
