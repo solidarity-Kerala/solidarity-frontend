@@ -156,7 +156,7 @@ const Patient = (props) => {
     {
       type: "number",
       placeholder: "Mobile Number",
-      name: "mobileNumber",
+      name: "mobile",
       validation: "",
       default: "",
       tag: true,
