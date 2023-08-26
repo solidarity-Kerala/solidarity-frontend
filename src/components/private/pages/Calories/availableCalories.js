@@ -41,15 +41,15 @@ const AvailableCalories = (props) => {
       selectApi: "900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000",
       apiType: "CSV",
     },
-    
+
     {
       type: "select",
       apiType: "API",
-      selectApi: "MealTime-Category/select",
+      selectApi: "mealtime-category/select",
       placeholder: "Mealtime Category",
       name: "mealTimeCategory",
       validation: "",
-      showItem: "mealTimeCategoryName",
+      showItem: "mealtimeCategoriesName",
       default: "",
       tag: true,
       label: "Mealtime Category",
@@ -119,7 +119,7 @@ const AvailableCalories = (props) => {
       selectApi: "1,2,3",
       apiType: "CSV",
     },
-   
+
   ]);
 
   return (
@@ -134,6 +134,7 @@ const AvailableCalories = (props) => {
         // parentReference={"userType"}
         // referenceId={"64815bde89e0a44fc31c53b0"}
         formMode={`double`}
+        viewMode="table"
         // formMode={`double`}
         {...props}
         attributes={attributes}
@@ -145,7 +146,7 @@ const AvailableCalories = (props) => {
             <AvailableCaloriesCustom
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             />
           }
           themeColors={themeColors}

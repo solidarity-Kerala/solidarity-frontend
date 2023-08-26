@@ -229,7 +229,7 @@ const ProteinCategory = (props) => {
           collection: "",
         }}
         // Short name or label for the menu
-        shortName={`Protein Category`}
+        shortName={`Ingredient Category`}
         // Privilege flag indicating whether the user can add menu items
         {...props}
         // Additional attributes related to the menu
