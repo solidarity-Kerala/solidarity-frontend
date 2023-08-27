@@ -45,7 +45,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
       add: true,
       update: true,
       filter: false,
-      selectApi: "Gram,Teaspoon,Tablespoon,Cup,Ounce,Pcs,ML",
+      selectApi: "Gram,Teaspoon,Tablespoon,Cup,Ounce,Piece,Milliliter",
       apiType: "CSV",
     },
     {
