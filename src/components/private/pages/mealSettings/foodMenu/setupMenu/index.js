@@ -36,7 +36,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-      const { meal, bread, fruit, dessert } = availableCalories[coloriePerDay];
+      const { meal, bread, fruit, dessert, soup } = availableCalories[coloriePerDay];
       let calories = 0;
       if (recipe.typeOfRecipe === "Meat") {
         calories = recipe.calories * (meal || 0);
@@ -44,10 +44,12 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
         calories = recipe.calories * (bread || 0);
       } else if (recipe.typeOfRecipe === "Fruit") {
         calories = recipe.calories * (fruit || 0);
+      } else if (recipe.typeOfRecipe === "Soup") {
+        calories = recipe.calories * (soup || 0);
       } else if (recipe.typeOfRecipe === "Dessert") {
         calories = recipe.calories * (dessert || 0);
-      } else {
-        calories = recipe.isCalculated === true ? recipe.calories || 0 : 0;
+      } else if (recipe.typeOfRecipe === "Mixed") {
+        calories = (recipe.calories / recipe.mixedMealPercentage) * (meal / 100 || 0) + (recipe.calories / recipe.mixedBreadPercentage) * (bread / 100 || 0);
       }
       return calories;
     },
@@ -61,23 +63,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       const recipe = mealItem.recipe;
 
       if (recipe) {
-        const { meal, bread, fruit, dessert } = availableCalories[coloriePerDay];
-
-        let calories = 0;
-
-        if (recipe.typeOfRecipe === "Meat") {
-          calories = recipe.calories * (meal || 0);
-        } else if (recipe.typeOfRecipe === "Bread") {
-          calories = recipe.calories * (bread || 0);
-        } else if (recipe.typeOfRecipe === "Fruit") {
-          calories = recipe.calories * (fruit || 0);
-        } else if (recipe.typeOfRecipe === "Dessert") {
-          calories = recipe.calories * (dessert || 0);
-        } else {
-          calories = recipe.isCalculated === true ? recipe.calories || 0 : 0;
-        }
-
-        return total + calories;
+        return total + getCalories(recipe, mealTimeCategory, availableCalories);
       }
 
       return total;
