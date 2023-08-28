@@ -7,7 +7,6 @@ import UserType from "../../private/pages/user/userType";
 import UserList from "../../private/pages/user/userList";
 import Dashboard from "../../private/pages/dashboard";
 import PageSettings from "../../private/pages/settings/pageSettings";
-import News from "../../private/pages/news";
 import AboutUs from "../../private/pages/aboutUs";
 import Area from "../../private/pages/area";
 import District from "../../private/pages/district";
@@ -103,29 +102,6 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-   
-   
-    case "aboutUs":
-      return (
-        <AboutUs
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
-    case "blog":
-      return (
-        <Blog
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
-    
     case "area":
       return (
         <Area
