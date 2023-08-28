@@ -40,7 +40,7 @@ const Login = (props) => {
       placeholder: "password",
       name: "password",
       validation: "password",
-      default: "111",
+      default: "",
       label: "password",
       minimum: 0,
       maximum: 16,
