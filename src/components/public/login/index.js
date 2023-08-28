@@ -16,7 +16,7 @@ import { clearLogin, fetchLogin } from "../../../store/actions/login";
 
 const Login = (props) => {
   useEffect(() => {
-    document.title = `Diet Food Management System`;
+    document.title = `Solidarity Youth Movement Kerala`;
   }, []);
 
   const navigate = useNavigate();
