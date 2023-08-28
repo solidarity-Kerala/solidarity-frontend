@@ -45,7 +45,7 @@ const MemberGroup = (props) => {
       placeholder: "Status",
       name: "status",
       validation: "",
-      default: "",
+      default: "true",
       tag: true,
       label: "Status",
       required: false,
