@@ -7,7 +7,6 @@ import UserType from "../../private/pages/user/userType";
 import UserList from "../../private/pages/user/userList";
 import Dashboard from "../../private/pages/dashboard";
 import PageSettings from "../../private/pages/settings/pageSettings";
-import AboutUs from "../../private/pages/aboutUs";
 import Area from "../../private/pages/area";
 import District from "../../private/pages/district";
 import Designation from "../../private/pages/designation";
