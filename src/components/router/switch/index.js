@@ -7,15 +7,8 @@ import UserType from "../../private/pages/user/userType";
 import UserList from "../../private/pages/user/userList";
 import Dashboard from "../../private/pages/dashboard";
 import PageSettings from "../../private/pages/settings/pageSettings";
-import BoardOfDirector from "../../private/pages/boardOfDirector";
-import AdministrativeCouncil from "../../private/pages/administrativeCouncil";
-import Faculties from "../../private/pages/faculties";
 import News from "../../private/pages/news";
 import AboutUs from "../../private/pages/aboutUs";
-import Blog from "../../private/pages/blog";
-import Course from "../../private/pages/course";
-import Department from "../../private/pages/department";
-import Gallery from "../../private/pages/gallery";
 import Area from "../../private/pages/area";
 import District from "../../private/pages/district";
 import Designation from "../../private/pages/designation";
@@ -110,46 +103,8 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-    case "boardOfDirector":
-      return (
-        <BoardOfDirector
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
-    case "faculties":
-      return (
-        <Faculties
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
-    case "administrativeCouncil":
-      return (
-        <AdministrativeCouncil
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
-    case "news":
-      return (
-        <News
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
+   
+   
     case "aboutUs":
       return (
         <AboutUs
@@ -170,36 +125,7 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-    case "course":
-      return (
-        <Course
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
-    case "department":
-      return (
-        <Department
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
-    case "gallery":
-      return (
-        <Gallery
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
+    
     case "area":
       return (
         <Area
