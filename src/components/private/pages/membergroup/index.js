@@ -537,7 +537,7 @@ const MemberGroup = (props) => {
         delPrivilege: true,
         updatePrivilege: true,
         customClass: "medium",
-        formMode: `single`,
+        formMode: `double`,
       },
     }
   ]);
@@ -549,7 +549,7 @@ const MemberGroup = (props) => {
         api={`members-group`}
         itemTitle={{ name: "groupName", type: "text", collection: "" }}
         shortName={`Member Group`}
-        formMode={`single`}
+        formMode={`double`}
         {...props}
         attributes={attributes}
       ></ListTable>
