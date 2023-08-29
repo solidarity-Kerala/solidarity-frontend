@@ -80,7 +80,7 @@ const AddRecipe = (props) => {
       add: true,
       update: true,
     },
-     {
+    {
       type: "number",
       placeholder: "Number of Servings",
       name: "numberOfPortion",
@@ -89,7 +89,7 @@ const AddRecipe = (props) => {
       tag: true,
       label: "Number of Servings",
       required: true,
-      view: false,
+      view: true,
       add: true,
       update: true,
     },
@@ -109,18 +109,18 @@ const AddRecipe = (props) => {
       selectApi: "Bread,Meat,Fruit,Dessert,Salad,Soup,Mixed",
       apiType: "CSV",
     },
-     {
+    {
       type: "number",
       placeholder: "Bread %",
       name: "mixedBreadPercentage",
       validation: "",
       default: "1",
-       condition: {
+      condition: {
         item: "typeOfRecipe",
         if: "Mixed",
         then: "enabled",
         else: "disabled",
-      },
+      },
       tag: false,
       label: "Bread %",
       required: true,
@@ -128,17 +128,17 @@ const AddRecipe = (props) => {
       add: true,
       update: true,
     },
-     {
+    {
       type: "number",
       placeholder: "Meat %",
       name: "mixedMeatPercentage",
       validation: "",
-        condition: {
+      condition: {
         item: "typeOfRecipe",
         if: "Mixed",
         then: "enabled",
         else: "disabled",
-      },
+      },
       default: "1",
       tag: false,
       label: "Meat %",
@@ -572,7 +572,7 @@ const AddRecipe = (props) => {
             <SetupRecipe
               openData={openItemData}
               setMessage={props.setMessage}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupRecipe>
           }
           themeColors={themeColors}

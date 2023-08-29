@@ -13,6 +13,7 @@ import { CloseButton } from "../../../../../elements/list/popup/styles";
 import { Header } from "../../../../../elements/list/manage/styles";
 import { useRef } from "react";
 import FormInput from "../../../../../elements/input";
+import { food } from "../../../../../../images";
 const SetupMenu = ({ openData, themeColors, setMessage }) => {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const [menuId] = useState(openData.data._id);
@@ -21,7 +22,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   const [meals, setMeals] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [calories, setCalories] = useState({});
-  const [activeTab, setActiveTab] = useState("meals");
+  const [activeTab, setActiveTab] = useState("recipes");
   const [searchValue, setSearchValue] = useState("");
   const searchTimeoutRef = useRef();
 
@@ -37,21 +38,23 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
     (recipe, mealTimeCategory, availableCalories) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
       const { meal, bread, fruit, dessert, soup } = availableCalories[coloriePerDay];
-      let calories = 0;
-      if (recipe.typeOfRecipe === "Meat") {
-        calories = recipe.calories * (meal || 0);
-      } else if (recipe.typeOfRecipe === "Bread") {
-        calories = recipe.calories * (bread || 0);
-      } else if (recipe.typeOfRecipe === "Fruit") {
-        calories = recipe.calories * (fruit || 0);
-      } else if (recipe.typeOfRecipe === "Soup") {
-        calories = recipe.calories * (soup || 0);
-      } else if (recipe.typeOfRecipe === "Dessert") {
-        calories = recipe.calories * (dessert || 0);
-      } else if (recipe.typeOfRecipe === "Mixed") {
-        calories = (recipe.calories / recipe.mixedMealPercentage) * (meal / 100 || 0) + (recipe.calories / recipe.mixedBreadPercentage) * (bread / 100 || 0);
+      const { calories, typeOfRecipe, mixedMealPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
+      const portion = calories / numberOfPortion;
+      let total = 0;
+      if (typeOfRecipe === "Meat") {
+        total = portion * (meal || 0);
+      } else if (typeOfRecipe === "Bread") {
+        total = portion * (bread || 0);
+      } else if (typeOfRecipe === "Fruit") {
+        total = portion * (fruit || 0);
+      } else if (typeOfRecipe === "Soup") {
+        total = portion * (soup || 0);
+      } else if (typeOfRecipe === "Dessert") {
+        total = portion * (dessert || 0);
+      } else if (typeOfRecipe === "Mixed") {
+        total = (portion / mixedMealPercentage) * (meal / 100 || 0) + (portion / mixedBreadPercentage) * (bread / 100 || 0);
       }
-      return calories;
+      return total;
     },
     [coloriePerDay, menuData?.mealTimeCategories]
   );
@@ -115,7 +118,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   }, []);
 
   useEffect(() => {
-    handleTabClick("meals");
+    handleTabClick("recipes");
     // console.log(openData.data);
   }, [handleTabClick]);
 
@@ -366,7 +369,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                           return (
                                             <Variant key={item._id} className="vertical">
                                               <ProfileImage>
-                                                <img src={process.env.REACT_APP_CDN + item.photo} alt="icon"></img>
+                                                <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
                                               </ProfileImage>
                                               <span className="recipe">{item.title} </span>
                                               <span>{getCalories(item ?? [], mealTimeCategory._id).toFixed(2)} calories</span>
@@ -409,7 +412,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                                           replacableItems[`replacable-recipe-${item.foodMenuItem}`].map((replacableItem, index) => (
                                                             <Variant key={replacableItem._id} className="horizontal">
                                                               <ProfileImage>
-                                                                <img src={process.env.REACT_APP_CDN + replacableItem.photo} alt="icon"></img>
+                                                                <img src={replacableItem.photo ? process.env.REACT_APP_CDN + replacableItem.photo : food} alt="icon"></img>
                                                               </ProfileImage>
                                                               <Details>
                                                                 <span className="recipe">{replacableItem.title}</span>
@@ -447,7 +450,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                           return (
                                             <Variant key={item._id} className="vertical">
                                               <ProfileImage>
-                                                <img src={process.env.REACT_APP_CDN + item.photo} alt="icon"></img>
+                                                <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
                                               </ProfileImage>
                                               <span className="recipe">{item.title} </span>
                                               <span className="variant">{"Items: " + item.mealItems.length} </span>
@@ -491,7 +494,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                                           replacableItems[`replacable-meal-${item.foodMenuItem}`].map((replacableItem, index) => (
                                                             <Variant key={replacableItem._id} className="horizontal">
                                                               <ProfileImage>
-                                                                <img src={process.env.REACT_APP_CDN + replacableItem.photo} alt="icon"></img>
+                                                                <img src={replacableItem.photo ? process.env.REACT_APP_CDN + replacableItem.photo : food} alt="icon"></img>
                                                               </ProfileImage>
                                                               <Details>
                                                                 <span className="recipe">{replacableItem.title}</span>
@@ -572,7 +575,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                       element={
                         <MealItem key={meal._id}>
                           <ProfileImage>
-                            <img src={process.env.REACT_APP_CDN + meal.photo} alt="icon" />
+                            <img src={meal.photo ? process.env.REACT_APP_CDN + meal.photo : food} alt="icon" />
                           </ProfileImage>
                           <Title>
                             {meal.title ?? "Title not found!"}
@@ -588,7 +591,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                 return (
                                   <Variant key={item._id}>
                                     <ProfileImage>
-                                      <img src={process.env.REACT_APP_CDN + recipeVariant.photo} alt="icon" />
+                                      <img src={recipeVariant.photo ? process.env.REACT_APP_CDN + recipeVariant.photo : food} alt="icon" />
                                     </ProfileImage>
                                     <span>
                                       <span className="recipe">{recipeVariant.title}</span>
@@ -614,7 +617,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                       element={
                         <MealItem key={recipe._id}>
                           <ProfileImage>
-                            <img src={process.env.REACT_APP_CDN + recipe.photo} alt="icon" />
+                            <img src={recipe.photo ? process.env.REACT_APP_CDN + recipe.photo : food} alt="icon" />
                           </ProfileImage>
                           <Title>
                             {recipe.title ?? "Title not found!"}{" "}

@@ -78,6 +78,9 @@ export const Page = styled.div`
   }
   &.full-page
   {
+    position:fixed;
+    top:0;
+    bottom: 0;
     height:100vh;
     max-height:100vh;
      margin: 0;

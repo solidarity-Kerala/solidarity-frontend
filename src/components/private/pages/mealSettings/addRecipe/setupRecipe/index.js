@@ -16,6 +16,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
   const [search] = useState("");
   const dispatch = useDispatch();
   const [recipe] = useState(openData.data._id);
+  const [portion] = useState(openData.data.numberOfPortion ?? 1);
   const selectData = useSelector((state) => state.select["ingredient/select"]);
   const themeColors = useSelector((state) => state.themeColors);
   const [updateIngredient] = useState([
@@ -275,24 +276,69 @@ const SetupRecipe = ({ openData, setMessage }) => {
               </TableCell>
             )}
             {nutritionInfo && (
-              <tr key={0}>
-                <TableCell>Total Nutrition Info</TableCell>
-                <TableCell colSpan={3}>
-                  <DataItemContainer>
-                    <DataItem>Calories: {getValue({ type: "number" }, nutritionInfo.calories)}</DataItem>
-                    <DataItem>Protein: {getValue({ type: "number" }, nutritionInfo.protein)}</DataItem>
-                    <DataItem>Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat)}</DataItem>
-                    <DataItem>Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat)}</DataItem>
-                    <DataItem>Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat)}</DataItem>
-                    <DataItem>Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol)}</DataItem>
-                    <DataItem>Fiber: {getValue({ type: "number" }, nutritionInfo.fiber)}</DataItem>
-                    <DataItem>Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate)}</DataItem>
-                    <DataItem>Sugars: {getValue({ type: "number" }, nutritionInfo.sugars)}</DataItem>
-                    <DataItem>Iron: {getValue({ type: "number" }, nutritionInfo.iron)}</DataItem>
-                    <DataItem>Calcium: {getValue({ type: "number" }, nutritionInfo.calcium)}</DataItem>
-                  </DataItemContainer>
-                </TableCell>
-              </tr>
+              <>
+                {portion > 1 ? (
+                  <tr key={0}>
+                    <TableCell>Total Nutrition Info {portion > 1 && ` of ${1}/${portion}`}</TableCell>
+                    <TableCell colSpan={4}>
+                      <DataItemContainer>
+                        <DataItem>
+                          Calories:{getValue({ type: "number" }, nutritionInfo.calories / portion)}/{getValue({ type: "number" }, nutritionInfo.calories)}
+                        </DataItem>
+                        <DataItem>
+                          Protein: {getValue({ type: "number" }, nutritionInfo.protein / portion)}/ {getValue({ type: "number" }, nutritionInfo.protein)}
+                        </DataItem>
+                        <DataItem>
+                          Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat / portion)}/{getValue({ type: "number" }, nutritionInfo.satFat)}
+                        </DataItem>
+                        <DataItem>
+                          Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat / portion)}/{getValue({ type: "number" }, nutritionInfo.unSatFat)}
+                        </DataItem>
+                        <DataItem>
+                          Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat / portion)}/{getValue({ type: "number" }, nutritionInfo.totalFat)}
+                        </DataItem>
+                        <DataItem>
+                          Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol / portion)}/{getValue({ type: "number" }, nutritionInfo.cholesterol)}
+                        </DataItem>
+                        <DataItem>
+                          Fiber: {getValue({ type: "number" }, nutritionInfo.fiber / portion)}/{getValue({ type: "number" }, nutritionInfo.fiber)}
+                        </DataItem>
+                        <DataItem>
+                          Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate / portion)}/{getValue({ type: "number" }, nutritionInfo.carbohydrate)}
+                        </DataItem>
+                        <DataItem>
+                          Sugars: {getValue({ type: "number" }, nutritionInfo.sugars / portion)}/{getValue({ type: "number" }, nutritionInfo.sugars)}
+                        </DataItem>
+                        <DataItem>
+                          Iron: {getValue({ type: "number" }, nutritionInfo.iron / portion)}/{getValue({ type: "number" }, nutritionInfo.iron)}
+                        </DataItem>
+                        <DataItem>
+                          Calcium: {getValue({ type: "number" }, nutritionInfo.calcium / portion)}/{getValue({ type: "number" }, nutritionInfo.calcium)}
+                        </DataItem>
+                      </DataItemContainer>
+                    </TableCell>
+                  </tr>
+                ) : (
+                  <tr key={0}>
+                    <TableCell>Total Nutrition Info</TableCell>
+                    <TableCell colSpan={4}>
+                      <DataItemContainer>
+                        <DataItem>Calories: {getValue({ type: "number" }, nutritionInfo.calories)}</DataItem>
+                        <DataItem>Protein: {getValue({ type: "number" }, nutritionInfo.protein)}</DataItem>
+                        <DataItem>Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat)}</DataItem>
+                        <DataItem>Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat)}</DataItem>
+                        <DataItem>Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat)}</DataItem>
+                        <DataItem>Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol)}</DataItem>
+                        <DataItem>Fiber: {getValue({ type: "number" }, nutritionInfo.fiber)}</DataItem>
+                        <DataItem>Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate)}</DataItem>
+                        <DataItem>Sugars: {getValue({ type: "number" }, nutritionInfo.sugars)}</DataItem>
+                        <DataItem>Iron: {getValue({ type: "number" }, nutritionInfo.iron)}</DataItem>
+                        <DataItem>Calcium: {getValue({ type: "number" }, nutritionInfo.calcium)}</DataItem>
+                      </DataItemContainer>
+                    </TableCell>
+                  </tr>
+                )}
+              </>
             )}
           </tbody>
         </Table>
