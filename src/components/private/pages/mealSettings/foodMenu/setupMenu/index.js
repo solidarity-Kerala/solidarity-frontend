@@ -25,7 +25,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   const [activeTab, setActiveTab] = useState("recipes");
   const [searchValue, setSearchValue] = useState("");
   const searchTimeoutRef = useRef();
-
+  const [messageText, setMessageText] = useState("");
   const searchChange = (event) => {
     clearTimeout(searchTimeoutRef.current);
     setSearchValue(event.target.value);
@@ -41,7 +41,10 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       let { calories, typeOfRecipe, mixedMealPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
       mixedMealPercentage = mixedMealPercentage ?? 100;
       mixedBreadPercentage = mixedBreadPercentage ?? 100;
-      const portion = calories ?? 0 / numberOfPortion ?? 1;
+      const portion = (calories ?? 0) / (numberOfPortion ?? 1);
+      if (recipe.title === "Fish Sayadeih") {
+        console.log(recipe);
+      }
       let total = 0;
       if (typeOfRecipe === "Meat") {
         total = portion * (meal || 0);
@@ -54,7 +57,9 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       } else if (typeOfRecipe === "Dessert") {
         total = portion * (dessert || 0);
       } else if (typeOfRecipe === "Mixed") {
-        total = (portion / mixedMealPercentage) * (meal / 100 || 0) + (portion / mixedBreadPercentage) * (bread / 100 || 0);
+        const mealCal = (portion * meal * mixedMealPercentage) / 100;
+        const breadCal = (portion * bread * mixedBreadPercentage) / 100;
+        total = mealCal + breadCal;
       } else {
       }
       console.log(calories, typeOfRecipe, mixedMealPercentage, mixedBreadPercentage, portion);
@@ -333,6 +338,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
               }}
             />
           </Filters>
+          <div>{messageText}</div>
           <Table>
             <thead>
               <tr>
@@ -601,6 +607,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                       <span className="recipe">{recipeVariant.title}</span>
                                     </span>
                                     <span className="variant">{recipeVariant.calories ?? 0.0} calories</span>
+                                    {item.typeOfRecipe === "Mixed" ? item.mixedMealPercentage + item.mixedBreadPercentage !== 100 && <span style={{ color: "red" }}>Percentage is wrong!</span> : ""}
                                   </Variant>
                                 );
                               })}
@@ -624,13 +631,14 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                             <img src={recipe.photo ? process.env.REACT_APP_CDN + recipe.photo : food} alt="icon" />
                           </ProfileImage>
                           <Title>
-                            {recipe.title ?? "Title not found!"}{" "}
+                            {recipe.title ?? "Title not found!"}
                             <Title>
                               <span>BHD</span>
                               <span className="price">{recipe.price}</span>
                               <span className="offer">{recipe.offerPrice}</span>
-                              <span className="calories">{`${recipe.calories} calories`}</span>
+                              <span className="calories">{`${recipe.calories.toFixed(2)} calories`}</span>
                               <span className="calories">{`${recipe.typeOfRecipe}`}</span>
+                              {recipe.typeOfRecipe === "Mixed" && <span className="calories">Meat {(recipe.mixedMeatPercentage ?? 0) + "%, Bread " + (recipe.mixedBreadPercentage ?? 0) + "%"}</span>}
                             </Title>
                           </Title>
                         </MealItem>
