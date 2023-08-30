@@ -38,8 +38,10 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
     (recipe, mealTimeCategory, availableCalories) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
       const { meal, bread, fruit, dessert, soup } = availableCalories[coloriePerDay];
-      const { calories, typeOfRecipe, mixedMealPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
-      const portion = calories / numberOfPortion;
+      let { calories, typeOfRecipe, mixedMealPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
+      mixedMealPercentage = mixedMealPercentage ?? 100;
+      mixedBreadPercentage = mixedBreadPercentage ?? 100;
+      const portion = calories ?? 0 / numberOfPortion ?? 1;
       let total = 0;
       if (typeOfRecipe === "Meat") {
         total = portion * (meal || 0);
@@ -53,7 +55,9 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
         total = portion * (dessert || 0);
       } else if (typeOfRecipe === "Mixed") {
         total = (portion / mixedMealPercentage) * (meal / 100 || 0) + (portion / mixedBreadPercentage) * (bread / 100 || 0);
+      } else {
       }
+      console.log(calories, typeOfRecipe, mixedMealPercentage, mixedBreadPercentage, portion);
       return total;
     },
     [coloriePerDay, menuData?.mealTimeCategories]

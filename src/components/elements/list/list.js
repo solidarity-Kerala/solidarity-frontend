@@ -23,6 +23,7 @@ import Popup, { DisplayInformations } from "./popup";
 import Print from "./print/print";
 import Highlight from "./highlight";
 import Editable from "./editable";
+import Details from "./details";
 const SetTd = (props) => {
   if (props.viewMode === "table") {
     return <TdView {...props}></TdView>;
@@ -160,6 +161,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     } catch {}
   };
   const [isOpen, setIsOpen] = useState(false);
+  const [detailView, setDetailView] = useState(false);
   const [isPrint, setIsPrint] = useState(false);
   const [printData, setPrintData] = useState([]);
   const [openData, setOpenData] = useState({});
@@ -421,15 +423,27 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           );
         })}
         {!signleRecord && (
-          <More
-            onClick={() => {
-              setIsOpen(true);
-              setOpenData({ actions, attributes, data });
-              setSubAttributes({ actions, attributes, data });
-            }}
-          >
-            <GetIcon icon={"open"}></GetIcon>
-          </More>
+          <>
+            <More
+              onClick={() => {
+                setIsOpen(true);
+                setOpenData({ actions, attributes, data });
+                setSubAttributes({ actions, attributes, data });
+              }}
+            >
+              <GetIcon icon={"open"}></GetIcon>
+            </More>
+            {/* //added print button */}
+            <More
+              onClick={() => {
+                setDetailView(true);
+                setOpenData({ actions, attributes, data });
+                setSubAttributes({ actions, attributes, data });
+              }}
+            >
+              <GetIcon icon={"print"}></GetIcon>
+            </More>
+          </>
         )}
         {signleRecord && (
           <More
@@ -929,6 +943,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
       {showLoader && <Loader></Loader>}
       {isOpen && <Popup formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Popup>}
+      {detailView && <Details formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Details>}
       {showSublist && subAttributes?.item?.attributes?.length > 0 && <SubPage themeColors={themeColors} formMode={formMode} closeModal={closeModal} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} subAttributes={subAttributes}></SubPage>}
       {isPrint && <Print key={shortName} data={printData} themeColors={themeColors} formMode={formMode} closeModal={closeModal} setMessage={setMessage} setLoaderBox={setLoaderBox} shortName={shortName} attributes={attributes}></Print>}
     </RowContainer>

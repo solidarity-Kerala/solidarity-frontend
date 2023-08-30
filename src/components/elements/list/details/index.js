@@ -6,7 +6,7 @@ import { Footer } from "../create/styles";
 import { DataLayout, Table, Td, Th, Tr } from "./styles";
 import { getValue } from "../functions";
 
-const Print = ({ key, style, themeColors, attributes, setLoaderBox, setMessage, closeModal, shortName, data = [] }) => {
+const Details = ({ key, style, themeColors, attributes, setLoaderBox, setMessage, closeModal, shortName, data = [] }) => {
   // const titleValue = (itemTitle.collection?.length > 0 ? subAttributes?.data?.[itemTitle.collection]?.[itemTitle.name] ?? "" : subAttributes?.data?.[itemTitle.name]) || "Please update the itemTitle.";
   // const viewMode = subAttributes.item.type ?? "subList";
 
@@ -64,4 +64,4 @@ const Print = ({ key, style, themeColors, attributes, setLoaderBox, setMessage, 
   );
 };
 
-export default Print;
+export default Details;
