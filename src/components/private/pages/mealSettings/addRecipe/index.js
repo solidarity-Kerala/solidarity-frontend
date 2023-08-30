@@ -114,7 +114,7 @@ const AddRecipe = (props) => {
       placeholder: "Bread %",
       name: "mixedBreadPercentage",
       validation: "",
-      default: "1",
+      default: 50,
       condition: {
         item: "typeOfRecipe",
         if: "Mixed",
@@ -139,7 +139,7 @@ const AddRecipe = (props) => {
         then: "enabled",
         else: "disabled",
       },
-      default: "1",
+      default: 50,
       tag: false,
       label: "Meat %",
       required: true,

@@ -103,6 +103,10 @@ const SetupRecipe = ({ openData, setMessage }) => {
   const [ingredient, setIngredient] = useState(null);
   const addIngredient = async (option) => {
     // setRefresh(!refresh);
+    if (!option.calories) {
+      setMessage({ content: "You cannot add this ingredient, the calorie of this ingredient is undefined!" });
+      return;
+    }
     if (option.measureType) {
       const response = await postData({ ingredient: option.id, recipe }, "recipe-ingredients");
       response.data.addedItems && setIngredients(response.data.addedItems);
@@ -221,13 +225,13 @@ const SetupRecipe = ({ openData, setMessage }) => {
                       <DataItem>
                         {item.ingredient.gramOfType}g/{item.ingredient.measureType}
                       </DataItem>
-                      <DataItem>{((item.ingredient.calories * item.ingredient.gramOfType) / 100).toFixed(2)} cal</DataItem>
-                      <DataItem>{((item.ingredient.protein * item.ingredient.gramOfType) / 100).toFixed(2)} g protein</DataItem>
-                      <DataItem>{((item.ingredient.totalFat * item.ingredient.gramOfType) / 100).toFixed(2)} g fat</DataItem>
-                      <DataItem>{((item.ingredient.carbohydrate * item.ingredient.gramOfType) / 100).toFixed(2)} g carbs</DataItem>
+                      <DataItem>{((item.ingredient.calories * item.ingredient.gramOfType) / 100)?.toFixed(2)} cal</DataItem>
+                      <DataItem>{((item.ingredient.protein * item.ingredient.gramOfType) / 100)?.toFixed(2)} g protein</DataItem>
+                      <DataItem>{((item.ingredient.totalFat * item.ingredient.gramOfType) / 100)?.toFixed(2)} g fat</DataItem>
+                      <DataItem>{((item.ingredient.carbohydrate * item.ingredient.gramOfType) / 100)?.toFixed(2)} g carbs</DataItem>
                     </DataItemContainer>
                   </TableCell>
-                  <TableCell>{`${item.ingredient.gramOfType}g ${item.ingredient.measureType !== "Gram" ? ` per ${item.ingredient.measureType} = ` : ""} | ${item.ingredient.calories.toFixed(2)} cal`}</TableCell>
+                  <TableCell>{`${item.ingredient.gramOfType}g ${item.ingredient.measureType !== "Gram" ? ` per ${item.ingredient.measureType} = ` : ""} | ${item.ingredient.calories?.toFixed(2)} cal`}</TableCell>
 
                   <TableCell>
                     <StyledInput
@@ -247,7 +251,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
                     />
                   </TableCell>
 
-                  <TableCell>{`${(item.ingredient.gramOfType * item.quantity).toFixed(2)}g / ${((item.ingredient.calories * (item.ingredient.gramOfType * item.quantity)) / 100).toFixed(2)}cal`}</TableCell>
+                  <TableCell>{`${(item.ingredient.gramOfType * item.quantity).toFixed(2)}g / ${((item.ingredient.calories * (item.ingredient.gramOfType * item.quantity)) / 100)?.toFixed(2)}cal`}</TableCell>
 
                   <TableCell>
                     <Button
