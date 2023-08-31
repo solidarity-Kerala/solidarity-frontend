@@ -25,7 +25,6 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   const [activeTab, setActiveTab] = useState("recipes");
   const [searchValue, setSearchValue] = useState("");
   const searchTimeoutRef = useRef();
-  const [messageText, setMessageText] = useState("");
   const searchChange = (event) => {
     clearTimeout(searchTimeoutRef.current);
     setSearchValue(event.target.value);
@@ -338,7 +337,6 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
               }}
             />
           </Filters>
-          <div>{messageText}</div>
           <Table>
             <thead>
               <tr>
