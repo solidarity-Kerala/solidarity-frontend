@@ -28,8 +28,9 @@ const MemberGroup = (props) => {
       apiType: "API",
       selectApi: "area/select",
       placeholder: "Area",
-      name: "area",
+      collection: "area",
       showItem: "areaName",
+      name: "area",
       validation: "",
       default: "",
       tag: true,
@@ -38,17 +39,32 @@ const MemberGroup = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
     },
     {
       type: "checkbox",
       placeholder: "Status",
+      collection: "group",
+      showItem: "status",
       name: "status",
       validation: "",
       default: "true",
       tag: true,
       label: "Status",
       required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "number",
+      placeholder: "Paid Amount",
+      name: "totalAmountPaid",
+      validation: "",
+      default: "",
+      label: "Paid Amount",
+      tag: true,
+      required: true,
       view: true,
       add: true,
       update: true,
@@ -557,7 +573,7 @@ const MemberGroup = (props) => {
       <ListTable
         actions={actions}
         api={`members-group`}
-        itemTitle={{ name: "groupName", type: "text", collection: "" }}
+        itemTitle={{ name: "groupName", type: "text", collection: "group" }}
         shortName={`Member Group`}
         formMode={`double`}
         // displayColumn="double"

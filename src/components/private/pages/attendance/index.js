@@ -27,14 +27,14 @@ const Attendence = (props) => {
     {
       type: "select",
       apiType: "API",
-      selectApi: "members-group/select",
-      placeholder: "Group ID",
-      name: "groupId",
-      showItem: "groupName",
+      selectApi: "member/select",
+      placeholder: "member",
+      name: "member",
+      showItem: "name",
       validation: "",
       default: "",
-      tag: true,
-      label: "Group ID",
+      // tag: true,
+      label: "Member",
       required: false,
       view: true,
       add: true,
@@ -44,19 +44,20 @@ const Attendence = (props) => {
     {
       type: "select",
       apiType: "API",
-      selectApi: "member/select",
-      placeholder: "memberId",
-      name: "memberId",
-      showItem: "name",
+      selectApi: "members-group/select",
+      placeholder: "Group",
+      name: "group",
+      collection: "group",
+      showItem: "groupName",
       validation: "",
       default: "",
       tag: true,
-      label: "MemberId",
+      label: "Group",
       required: false,
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
     },
     {
       type: "select",
@@ -68,8 +69,8 @@ const Attendence = (props) => {
       label: "Status",
       showItem: "status",
       required: false,
-      view: false,
-      filter: false,
+      view: true,
+      filter: true,
       add: true,
       update: true,
       apiType: "CSV",
@@ -94,8 +95,9 @@ const Attendence = (props) => {
     <Container className="noshadow">
       <ListTable
         // actions={actions}
+        datefilter="true"
         api={`attendence`}
-        itemTitle={{ name: "status", type: "text", collection: "" }}
+        itemTitle={{ name: "name", type: "text", collection: "member" }}
         shortName={`Attendence`}
         formMode={`single`}
         {...props}

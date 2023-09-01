@@ -201,7 +201,7 @@ const Members = (props) => {
         api={`member`}
         itemTitle={{ name: "name", type: "text", collection: "" }}
         shortName={`Member`}
-        formMode={`single`}
+        formMode={`double`}
         {...props}
         attributes={attributes}
       ></ListTable>

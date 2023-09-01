@@ -52,7 +52,6 @@ const Login = (props) => {
     if (user.data?.token) {
       navigate(user.data?.menu[0]?.path ?? "404");
     }
-    console.log("DATA", user.data);
     setLoaderBox(user.isLoading);
     if (user.error !== null) {
       props.setMessage({ type: 1, content: t(user.error), proceed: "Okay" });

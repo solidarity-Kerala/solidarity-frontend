@@ -7,47 +7,130 @@ import { Container } from "../../common/layout/styels";
 const BithulmalByMemberGroup = (props) => {
   //to update the page title
   useEffect(() => {
-    document.title = `Bithulmal By MemberGroup- Membership Mangement`;
+    document.title = `Bithulmal By MemberGroup - Membership Mangement`;
   }, []);
 
   const [attributes] = useState([
     {
       type: "text",
-      placeholder: "groupId",
-      name: "_id",
+      placeholder: "Amount Paid",
+      name: "amountPaid",
       validation: "",
       default: "",
-      label: "groupId",
       tag: true,
+      label: "Amount Paid",
       required: false,
       view: true,
-      add: false,
-      update: false,
+      add: true,
+      update: true,
     },
     {
       type: "text",
-      placeholder: "AmountPaid",
-      name: "amount",
+      placeholder: "Status",
+      name: "status",
       validation: "",
       default: "",
-      label: "AmountPaid",
       tag: true,
+      label: "Status",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "date",
+      placeholder: "Date",
+      name: "month",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Date",
       required: false,
       view: true,
       add: false,
       update: false,
+      filter: true,
     },
+    {
+      type: "select",
+      apiType: "API",
+      selectApi: "members-group/select",
+      placeholder: "Group",
+      name: "group",
+      collection: "group",
+      showItem: "groupName",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Group",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+    },
+    {
+      type: "select",
+      apiType: "API",
+      selectApi: "member/select",
+      placeholder: "Member",
+      name: "member",
+      collection: "member",
+      showItem: "groupName",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Member",
+      required: false,
+      view: false,
+      add: false,
+      update: false,
+      filter: true,
+    },
+    // {
+    //   type: "date",
+    //   placeholder: "Booking Date",
+    //   name: "bookingDate",
+    //   validation: "",
+    //   default: "",
+    //   tag: true,
+    //   label: "Booking Date",
+    //   required: false,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    //   filter: true,
+    // },
   ]);
+
+  const today = new Date();
+  const startOfDay = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+    0,
+    0,
+    0
+  );
+  const endOfDay = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+    23,
+    59,
+    59
+  );
 
   return (
     <Container className="noshadow">
       <ListTable
         // actions={actions}
-        api={`bithulmal/report/member-group`}
-        itemTitle={{ name: "_id", type: "text", collection: "" }}
-        shortName={`Bithulmal by MemberGroup`}
-        formMode={`single`}
-        // viewMode={"subItem"}
+        datefilter="true"
+        // preFilter={{ startDate: startOfDay, endDate: endOfDay }}
+        api={`bithulmal`}
+        itemTitle={{ name: "name", type: "text", collection: "member" }}
+        shortName={`bithulmal`}
+        formMode={`double`}
         {...props}
         attributes={attributes}
       ></ListTable>
