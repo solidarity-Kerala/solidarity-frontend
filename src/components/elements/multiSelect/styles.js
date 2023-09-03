@@ -124,13 +124,17 @@ export const SelectBox = styled.div`
     transition: all 1s ease-out 0s;
   }
   .options li.true {
-    background: #ddedeb;
+    background: rgb(234, 234, 234);
     color: #0f0f0f;
     font-weight: bold;
     border-bottom: 1px solid rgb(224, 224, 227);
     justify-content: left;
     display: flex;
     align-items: center;
+  }
+  &.list .options {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
   .options li {
     cursor: pointer;
@@ -147,7 +151,7 @@ export const SelectBox = styled.div`
     border-bottom: 0px solid rgb(224, 224, 227);
   }
   .options li:hover {
-    background: #ddedeb;
+    background: rgb(234, 234, 234);
     color: #0f0f0f;
   }
 `;

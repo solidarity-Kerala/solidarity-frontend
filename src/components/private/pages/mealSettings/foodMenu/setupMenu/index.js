@@ -37,12 +37,12 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
     (recipe, mealTimeCategory, availableCalories) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
       const { meal, bread, fruit, dessert, soup } = availableCalories[coloriePerDay];
-      let { calories, typeOfRecipe, mixedMealPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
-      mixedMealPercentage = mixedMealPercentage ?? 100;
+      let { title,calories, typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
+      mixedMeatPercentage = mixedMeatPercentage ?? 100;
       mixedBreadPercentage = mixedBreadPercentage ?? 100;
       const portion = (calories ?? 0) / (numberOfPortion ?? 1);
       if (recipe.title === "Fish Sayadeih") {
-        console.log(recipe);
+        // console.log(recipe);
       }
       let total = 0;
       if (typeOfRecipe === "Meat") {
@@ -53,15 +53,15 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
         total = portion * (fruit || 0);
       } else if (typeOfRecipe === "Soup") {
         total = portion * (soup || 0);
-      } else if (typeOfRecipe === "Dessert") {
+      } else if (typeOfRecipe === "Dessert") { 
         total = portion * (dessert || 0);
       } else if (typeOfRecipe === "Mixed") {
-        const mealCal = (portion * meal * mixedMealPercentage) / 100;
+        const mealCal = (portion * meal * mixedMeatPercentage) / 100;
         const breadCal = (portion * bread * mixedBreadPercentage) / 100;
+        console.log(title,calories, numberOfPortion, mealCal, breadCal);
         total = mealCal + breadCal;
       } else {
       }
-      console.log(calories, typeOfRecipe, mixedMealPercentage, mixedBreadPercentage, portion);
       return total;
     },
     [coloriePerDay, menuData?.mealTimeCategories]
@@ -88,7 +88,6 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       const reducedResult = menuData.foodMenu.reduce((accumulator, item) => {
         const { dayNumber, recipes, meals, mealTimeCategory } = item;
         const availableCalories = menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-        console.log("availableCaloriesMealTime", mealTimeCategory, availableCalories);
         const key = "day_" + dayNumber;
         if (item.optionNo > 1) {
           return accumulator;
@@ -294,7 +293,6 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   };
   const setCaloriesItems = (mealTimeCategories) => {
     const { bread, meal, fruit, dessert } = mealTimeCategories.availableCalories[coloriePerDay];
-    console.log(mealTimeCategories.availableCalories[coloriePerDay]);
     return `${meal && meal > 0 ? meal + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}`;
   };
 

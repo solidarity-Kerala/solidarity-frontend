@@ -26,7 +26,11 @@ export const getValue = (attribute, itemValue, display = false) => {
       response = itemValue.map((item) => item[attribute.showItem].toString()).join(", ");
       break;
     case "number":
-      response = (itemValue?itemValue:0).toFixed(2);
+      if (Number.isInteger(itemValue ? itemValue : 0)) {
+        response = (itemValue ? itemValue : 0).toString(); // Return as whole number
+      } else {
+        response = (itemValue ? itemValue : 0).toFixed(2); // Format with two decimal places
+      }
       break;
     case "date":
       response = dateFormat(itemValue);

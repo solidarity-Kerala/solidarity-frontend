@@ -103,6 +103,13 @@ const CrudForm = (props) => {
           flag += 1;
         }
         break;
+      case "number":
+        const numberRegex = /^\d+$/;
+        if (!numberRegex.test(value)) {
+          tempformError = t("validContent", { label: t(field.label) });
+          flag += 1;
+        }
+        break;
       case "cvv":
         if (!/^[0-9]{3}$/.test(value)) {
           tempformError = t("validContent", { label: t(field.label) });
