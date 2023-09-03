@@ -185,10 +185,10 @@ const ActiveAppointment = (props) => {
       filter: false,
     },
     {
-      type: "number",
+      type: "text",
       placeholder: "Mobile Number",
       name: "mobileNumber",
-      validation: "",
+      validation: "number",
       default: "",
       tag: true,
       label: "Mobile Number",

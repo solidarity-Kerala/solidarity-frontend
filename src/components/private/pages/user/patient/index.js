@@ -42,10 +42,10 @@ const Patient = (props) => {
       update: true,
     },
     {
-      type: "number",
+      type: "text",
       placeholder: "Mobile Number",
       name: "mobile",
-      validation: "",
+      validation: "number",
       default: "",
       tag: true,
       label: "Mobile Number",
@@ -828,7 +828,7 @@ const Patient = (props) => {
       filter: false,
     },
     {
-      type: "datetime",
+      type: "date",
       placeholder: "Start Date & Time",
       name: "startDate",
       showItem: "",
@@ -856,7 +856,9 @@ const Patient = (props) => {
       update: true,
     },
     {
-      type: "text",
+      type: "select",
+      selectApi: "900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000",
+      apiType: "CSV",
       placeholder: "Calories",
       name: "calories",
       showItem: "",
@@ -864,55 +866,36 @@ const Patient = (props) => {
       default: "",
       tag: true,
       label: "Calories",
+      filter: false,
       required: true,
       view: true,
       add: true,
       update: true,
     },
     {
-      type: "text",
-      placeholder: "% Of Carbs",
-      name: "percentageOfCarbs",
-      disabled: true,
-      showItem: "",
+      type: "multiSelect",
+      placeholder: "Select Days of Week",
+      listView: true,
+      name: "eligibleDays",
       validation: "",
       default: "",
-      tag: true,
-      label: "% Of Carbs",
-      required: false,
+      label: "Select Days of Week",
+      required: true,
       view: true,
+      customClass: "list",
       add: true,
       update: true,
-    },
-    {
-      type: "text",
-      placeholder: "% Of Protein",
-      name: "percentageOfProtein",
-      disabled: true,
-      showItem: "",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "% Of Protein",
-      required: false,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "text",
-      placeholder: "% Of Fat",
-      name: "percentageOfFat",
-      showItem: "",
-      disabled: true,
-      validation: "",
-      default: "",
-      tag: true,
-      label: "% Of Fat",
-      required: false,
-      view: true,
-      add: true,
-      update: true,
+      apiType: "JSON",
+      search:false,
+      selectApi: [
+        { value: "Sunday", id: 0 },
+        { value: "Monday", id: 1 },
+        { value: "Tuesday", id: 2 },
+        { value: "Wednesday", id: 3 },
+        { value: "Thursday", id: 4 },
+        { value: "Friday", id: 5 },
+        { value: "Saturday", id: 8 },
+      ],
     },
     {
       type: "textarea",
@@ -928,39 +911,39 @@ const Patient = (props) => {
       add: true,
       update: true,
     },
-    {
-      type: "checkbox",
-      placeholder: "Dietician Visit",
-      name: "dieticianVisit",
-      validation: "",
-      default: "false",
-      tag: true,
-      label: "Dietician Visit",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "date",
-      placeholder: "Visit Shedule",
-      name: "visitShedule",
-      condition: {
-        item: "dieticianVisit",
-        if: true,
-        then: "enabled",
-        else: "disabled",
-      },
-      showItem: "",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Visit Shedule",
-      required: false,
-      view: true,
-      add: true,
-      update: true,
-    },
+    // {
+    //   type: "checkbox",
+    //   placeholder: "Dietician Visit",
+    //   name: "dieticianVisit",
+    //   validation: "",
+    //   default: "false",
+    //   tag: true,
+    //   label: "Dietician Visit",
+    //   required: true,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    // },
+    // {
+    //   type: "date",
+    //   placeholder: "Visit Shedule",
+    //   name: "visitShedule",
+    //   condition: {
+    //     item: "dieticianVisit",
+    //     if: true,
+    //     then: "enabled",
+    //     else: "disabled",
+    //   },
+    //   showItem: "",
+    //   validation: "",
+    //   default: "",
+    //   tag: true,
+    //   label: "Visit Shedule",
+    //   required: false,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    // },
   ]);
 
   const [appointment] = useState([
@@ -1181,7 +1164,6 @@ const Patient = (props) => {
         delPrivilege: true,
         updatePrivilege: true,
         customClass: "medium",
-        viewMode: "table",
         formMode: "double",
       },
     },
@@ -1219,17 +1201,7 @@ const Patient = (props) => {
 
   return (
     <Container className="noshadow">
-      <ListTable
-        actions={actions}
-        api={`user`}
-        itemTitle={{ name: "username", type: "text", collection: "" }}
-        shortName={`Patient`}
-        parentReference={"userType"}
-        referenceId={"6471b3849fb2b29fe045887b"}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
+      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
       {openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
@@ -1237,7 +1209,7 @@ const Patient = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}

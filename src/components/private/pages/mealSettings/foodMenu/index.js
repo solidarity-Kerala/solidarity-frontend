@@ -137,7 +137,6 @@ const FoodMenu = (props) => {
       type: "callback",
       callback: (item, data) => {
         // Set the data for the clicked item and open the SetupMenu popup
-        console.log(item, data);
         setOpenItemData({ item, data });
         setOpenMenuSetup(true);
       },
