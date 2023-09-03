@@ -281,6 +281,13 @@ const CrudForm = (props) => {
       if (["calories"].includes(field.name)) {
         updateCaloriDetails(udpateValue);
       }
+      if (type === "select") {
+        if (field.updateFields) {
+          field.updateFields?.forEach((element) => {
+            udpateValue[element.id] = event[element.value];
+          });
+        }
+      }
       console.log("udpateValue", udpateValue);
       // Creating an updated fieldß
       // updating the formm values

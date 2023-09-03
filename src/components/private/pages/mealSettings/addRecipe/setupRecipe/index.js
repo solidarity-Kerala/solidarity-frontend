@@ -103,8 +103,8 @@ const SetupRecipe = ({ openData, setMessage }) => {
   const [ingredient, setIngredient] = useState(null);
   const addIngredient = async (option) => {
     // setRefresh(!refresh);
-    if (!option.calories) {
-      setMessage({ content: "You cannot add this ingredient, the calorie of this ingredient is undefined!" });
+    if (typeof option.calories !== "number" || isNaN(option.calories)) {
+      setMessage({ content: "You cannot add this ingredient, the calorie of this ingredient is not a valid number!" });
       return;
     }
     if (option.measureType) {
