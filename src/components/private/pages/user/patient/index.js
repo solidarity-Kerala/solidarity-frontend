@@ -767,6 +767,7 @@ const Patient = (props) => {
       apiType: "API",
       selectApi: "package/select",
       updateOn: "subDiet",
+      updateFields: [{ id: "foodMenu", value: "foodMenu" }],
       placeholder: "Package",
       tags: [
         {
@@ -814,7 +815,7 @@ const Patient = (props) => {
           setOpenMenuSetup(true);
         },
       },
-      name: "foodMenu",
+      name: "package",
       validation: "",
       showItem: "value",
       collection: "diet",
@@ -886,7 +887,7 @@ const Patient = (props) => {
       add: true,
       update: true,
       apiType: "JSON",
-      search:false,
+      search: false,
       selectApi: [
         { value: "Sunday", id: 0 },
         { value: "Monday", id: 1 },
