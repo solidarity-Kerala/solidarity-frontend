@@ -104,7 +104,14 @@ const SetupRecipe = ({ openData, setMessage }) => {
   const addIngredient = async (option) => {
     // setRefresh(!refresh);
     if (typeof option.calories !== "number" || isNaN(option.calories)) {
-      setMessage({ content: "You cannot add this ingredient, the calorie of this ingredient is not a valid number!" });
+      // setMessage({ content: "You cannot add this ingredient, the calorie of this ingredient is not valid!" });
+      option.measureType = "";
+      option.gramOfType = 0;
+      option.value = typeof option.value === "undefined" ? "" : option.value;
+      option.ingredientsName = option.value ?? "";
+      setIngredient(option);
+      setUpdateId(option._id);
+      setIsOpen(true);
       return;
     }
     if (option.measureType) {
@@ -145,6 +152,13 @@ const SetupRecipe = ({ openData, setMessage }) => {
     apiSearch: true,
     listBox: true,
     tags: [
+    
+      {
+        type: "text",
+        item: "gram",
+        title: "Gram",
+        collection: "",
+      }, 
       {
         type: "text",
         item: "calories",
@@ -201,9 +215,9 @@ const SetupRecipe = ({ openData, setMessage }) => {
               <TableCell className="left">
                 <Div className="variants">Ingredients ({ingredients?.length ?? 0})</Div>
               </TableCell>
-              <TableCell className="left">
+              {/* <TableCell className="left">
                 <Div className="variants">Measurement</Div>
-              </TableCell>
+              </TableCell> */}
               <TableCell className="left">
                 <Div className="variants">Quantity (based on 1M/1B etc) / Calculate?</Div>
               </TableCell>
@@ -231,7 +245,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
                       <DataItem>{((item.ingredient.carbohydrate * item.ingredient.gramOfType) / 100)?.toFixed(2)} g carbs</DataItem>
                     </DataItemContainer>
                   </TableCell>
-                  <TableCell>{`${item.ingredient.gramOfType}g ${item.ingredient.measureType !== "Gram" ? ` per ${item.ingredient.measureType} = ` : ""} | ${item.ingredient.calories?.toFixed(2)} cal`}</TableCell>
+                  {/* <TableCell>{`${item.ingredient.gramOfType}g ${item.ingredient.measureType !== "Gram" ? ` per ${item.ingredient.measureType} = ` : ""} | ${item.ingredient.calories?.toFixed(2)} cal`}</TableCell> */}
 
                   <TableCell>
                     <StyledInput
@@ -287,6 +301,9 @@ const SetupRecipe = ({ openData, setMessage }) => {
                     <TableCell colSpan={4}>
                       <DataItemContainer>
                         <DataItem>
+                          Gram:{getValue({ type: "number" }, nutritionInfo.gram / portion)}/{getValue({ type: "number" }, nutritionInfo.gram)}
+                        </DataItem>
+                        <DataItem>
                           Calories:{getValue({ type: "number" }, nutritionInfo.calories / portion)}/{getValue({ type: "number" }, nutritionInfo.calories)}
                         </DataItem>
                         <DataItem>
@@ -327,6 +344,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
                     <TableCell>Total Nutrition Info</TableCell>
                     <TableCell colSpan={4}>
                       <DataItemContainer>
+                        <DataItem>Gram: {getValue({ type: "number" }, nutritionInfo.gram)}</DataItem>
                         <DataItem>Calories: {getValue({ type: "number" }, nutritionInfo.calories)}</DataItem>
                         <DataItem>Protein: {getValue({ type: "number" }, nutritionInfo.protein)}</DataItem>
                         <DataItem>Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat)}</DataItem>

@@ -24,6 +24,9 @@ export const SelectBox = styled.div`
     max-height: none;
     height: auto;
   }
+  &.auto{
+    width:auto;
+  }
   &.list-box .options {
     display: block;
     position: inherit;

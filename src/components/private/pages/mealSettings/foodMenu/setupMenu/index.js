@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { GetIcon } from "../../../../../../icons";
 import { deleteData, getData, postData } from "../../../../../../backend/api";
-import { Filters, NoData, ProfileImage } from "../../../../../elements/list/styles";
+import { NoData, ProfileImage } from "../../../../../elements/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import Search from "../../../../../elements/search";
 import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, MealCategoryCell, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details } from "./styles"; // Import styles from styles.js
@@ -37,7 +37,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
     (recipe, mealTimeCategory, availableCalories) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
       const { meal, bread, fruit, dessert, soup } = availableCalories[coloriePerDay];
-      let { title,calories, typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
+      let { title, calories, typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
       mixedMeatPercentage = mixedMeatPercentage ?? 100;
       mixedBreadPercentage = mixedBreadPercentage ?? 100;
       const portion = (calories ?? 0) / (numberOfPortion ?? 1);
@@ -53,12 +53,12 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
         total = portion * (fruit || 0);
       } else if (typeOfRecipe === "Soup") {
         total = portion * (soup || 0);
-      } else if (typeOfRecipe === "Dessert") { 
+      } else if (typeOfRecipe === "Dessert") {
         total = portion * (dessert || 0);
       } else if (typeOfRecipe === "Mixed") {
         const mealCal = (portion * meal * mixedMeatPercentage) / 100;
         const breadCal = (portion * bread * mixedBreadPercentage) / 100;
-        console.log(title,calories, numberOfPortion, mealCal, breadCal);
+        console.log(title, calories, numberOfPortion, mealCal, breadCal);
         total = mealCal + breadCal;
       } else {
       }
@@ -322,23 +322,27 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
     <ColumnContainer style={{ marginBottom: "30px", position: "relative", height: "90%" }}>
       <DndProvider backend={HTML5Backend}>
         <RowContainer className={`menu ${openData.item.viewOnly}`}>
-          <Filters className="center">
-            <FormInput
-              customClass={"filter"}
-              placeholder={`Available Colories`}
-              value={coloriePerDay}
-              key={`input` + 0}
-              id={`available_colories`}
-              {...item}
-              onChange={(event) => {
-                setColoriePerDay(event.value);
-              }}
-            />
-          </Filters>
           <Table>
             <thead>
               <tr>
-                <MealCategoryCell></MealCategoryCell>
+                <MealCategoryCell className="nb">
+                  <DayHead>
+                    <span>Set Calories</span>
+                    <FormInput
+                      customClass={"filter auto"}
+                      placeholder={`Available Colories`}
+                      value={coloriePerDay}
+                      key={`input` + 0}
+                      id={`available_colories`}
+                      {...item}
+                      onChange={(event) => {
+                        if (!isNaN(event.value) && event.value?.toString().length>0) {
+                          setColoriePerDay(event.value);
+                        }
+                      }}
+                    />
+                  </DayHead>
+                </MealCategoryCell>
                 {daysOfWeek.map((day, index) => (
                   <TableHeader key={index}>
                     <DayHead>
