@@ -61,12 +61,16 @@ export const MealCategoryCell = styled.th`
   top: 0;
   text-align: left;
   width: 0;
+  border: 1px solid #d6d6d6;
   &:first-child {
     width: 10%;
     padding: 0px 10px 0 30px;
   }
-  div{
-    font-size:12px;
+  &.nb{
+    border:0;
+  }
+  div {
+    font-size: 12px;
   }
 `;
 
@@ -194,7 +198,7 @@ export const Variant = styled.div`
   position: relative;
   span {
     font-size: 10px;
-    text-align:left;
+    text-align: left;
   }
   .price {
     font-size: 10px;
