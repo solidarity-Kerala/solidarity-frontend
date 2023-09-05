@@ -152,13 +152,12 @@ const SetupRecipe = ({ openData, setMessage }) => {
     apiSearch: true,
     listBox: true,
     tags: [
-    
       {
         type: "text",
         item: "gram",
         title: "Gram",
         collection: "",
-      }, 
+      },
       {
         type: "text",
         item: "calories",
