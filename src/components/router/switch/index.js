@@ -77,6 +77,7 @@ import DeliveryManLocation from "../../private/pages/dispatch/deliveryManLocatio
 
 import DeliveryLocation from "../../private/pages/registrationSettings/DeliveryLocation";
 import AddMeal from "../../private/pages/mealSettings/addMeal";
+import Recipes from "../../private/pages/mealSettings/recipes";
 
 /**
  * Switch component to render different pages based on the provided page prop.
@@ -120,7 +121,7 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-      
+
     // return (
     //   <Franchise
     //     key={key}
@@ -171,16 +172,16 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-      case "delivery-location":
-        return (
-          <DeliveryLocation
-            key={key}
-            exportPrivilege={exportPrivilege}
-            addPrivilege={addPrivilege}
-            delPrivilege={delPrivilege}
-            updatePrivilege={updatePrivilege}
-          />
-        );
+    case "delivery-location":
+      return (
+        <DeliveryLocation
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
     case "protein-category":
       return (
         <ProteinCategory
@@ -851,10 +852,19 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-
     case "deliveryman-location":
       return (
         <DeliveryManLocation
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "recipes":
+      return (
+        <Recipes
           key={key}
           exportPrivilege={exportPrivilege}
           addPrivilege={addPrivilege}
