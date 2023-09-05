@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import Layout from "../../common/layout";
 import ListTable from "../../../elements/list/list";
 import { Container } from "../../common/layout/styels";
@@ -193,12 +194,16 @@ const MemberGroup = (props) => {
     // },
     {
       type: "date",
-      placeholder: "Date of Birth",
+      placeholder: "",
       name: "dob",
+      showItem: "dateOfBirth",
+      collection: "subscriber",
       validation: "",
-      default: "",
-      label: "Date of Birth",
-      required: false,
+      minDate: moment().add(-70, "years").toDate(),
+      default: moment().toDate(),
+      tag: true,
+      label: "DOB",
+      required: true,
       view: true,
       add: true,
       update: true,
@@ -378,12 +383,16 @@ const MemberGroup = (props) => {
     // },
     {
       type: "date",
-      placeholder: "Date of Birth",
+      placeholder: "",
       name: "dob",
+      showItem: "dateOfBirth",
+      collection: "subscriber",
       validation: "",
-      default: "",
-      label: "Date of Birth",
-      required: false,
+      minDate: moment().add(-70, "years").toDate(),
+      default: moment().toDate(),
+      tag: true,
+      label: "DOB",
+      required: true,
       view: true,
       add: true,
       update: true,
