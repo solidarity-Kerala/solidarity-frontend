@@ -89,7 +89,7 @@ const Resicpes = (props) => {
       required: false,
       view: false,
       add: true,
-      update: false,
+      update: true,
     },
     {
       type: "text",
@@ -102,7 +102,7 @@ const Resicpes = (props) => {
       required: false,
       view: false,
       add: true,
-      update: false,
+      update: true,
     },
     {
       type: "text",
@@ -115,7 +115,7 @@ const Resicpes = (props) => {
       required: false,
       view: false,
       add: true,
-      update: false,
+      update: true,
     },
     {
       type: "select",

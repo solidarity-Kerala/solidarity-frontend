@@ -74,23 +74,6 @@ const AppointmentHistory = (props) => {
     {
       type: "select",
       apiType: "API",
-      selectApi: "booking-slot/select",
-      placeholder: "Time Slot",
-      name: "bookingSlot",
-      showItem: "bookingSlotsName",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Time Slot",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-      filter: false,
-    },
-    {
-      type: "select",
-      apiType: "API",
       selectApi: "user/select?userType=6471b34d9fb2b29fe0458878",
       placeholder: "Dietician",
       name: "dietician",
@@ -104,6 +87,24 @@ const AppointmentHistory = (props) => {
       add: true,
       update: true,
       filter: true,
+    },
+    {
+      type: "select",
+      apiType: "API",
+      updateOn: "dietician",
+      selectApi: "day-slot/dietician",
+      placeholder: "Time Slot",
+      name: "bookingSlot",
+      showItem: "bookingSlotsName",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Time Slot",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: false,
     },
     // {
     //   type: "select",
@@ -1432,7 +1433,7 @@ const AppointmentHistory = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
