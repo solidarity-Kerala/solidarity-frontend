@@ -100,7 +100,7 @@ const FoodMenu = (props) => {
       add: true,
       update: true,
       apiType: "CSV",
-      selectApi: "Fixed,Optional,Dynamic",
+      selectApi: "Fixed,Dynamic",
     },
     {
       type: "checkbox",

@@ -13,8 +13,8 @@ export const ColumnContainer = styled.div`
     position: "relative";
     column-gap: 20px;
   }
-  &.diret{
-    justify-content:'space-between'
+  &.diret {
+    justify-content: "space-between";
   }
   &.shadow {
     box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
@@ -106,7 +106,7 @@ export const RowContainer = styled.div`
   &.quarter {
     width: 300px;
     flex: 1 1 300px;
-    min-width:300px;
+    min-width: 300px;
   }
   &.mealSelection {
     padding-right: 30px;
@@ -161,6 +161,9 @@ export const RowContainer = styled.div`
     border-radius: 10px 0 0 0;
     border-top: 1px solid #bdbdbd !important;
     border-left: 1px solid #bdbdbd !important;
+  }
+  &.menu-header {
+    margin-left: 30px;
   }
   h2 {
     font-size: 1.8em;
