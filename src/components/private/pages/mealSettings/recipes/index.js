@@ -185,7 +185,6 @@ const Resicpes = (props) => {
       params: {
         api: `food-group-item`,
         parentReference: "",
-
         itemTitle: {
           name: "mealName",
           type: "text",
@@ -212,31 +211,8 @@ const Resicpes = (props) => {
   return (
     <Container className="noshadow">
       {/* Render a ListTable component */}
-      <ListTable
-        actions={actions}
-        api={`recipe-item`}
-        itemTitle={{ name: "title", type: "text", collection: "" }}
-        profileImage="photo"
-        shortName={`Recipe Item`}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
-      {openMenuSetup && openItemData && (
-        <PopupView
-          popupData={
-            <SetupRecipe
-              openData={openItemData}
-              setMessage={props.setMessage}
-            ></SetupRecipe>
-          }
-          themeColors={themeColors}
-          closeModal={closeModal}
-          itemTitle={{ name: "title", type: "text", collection: "" }}
-          openData={openItemData}
-          customClass={"full-page"}
-        ></PopupView>
-      )}
+      <ListTable actions={actions} api={`recipe-item`} itemTitle={{ name: "title", type: "text", collection: "" }} profileImage="photo" shortName={`Recipe Item`} formMode={`double`} {...props} attributes={attributes}></ListTable>
+      {openMenuSetup && openItemData && <PopupView popupData={<SetupRecipe openData={openItemData} setMessage={props.setMessage}></SetupRecipe>} themeColors={themeColors} closeModal={closeModal} itemTitle={{ name: "title", type: "text", collection: "" }} openData={openItemData} customClass={"full-page"}></PopupView>}
     </Container>
   );
 };

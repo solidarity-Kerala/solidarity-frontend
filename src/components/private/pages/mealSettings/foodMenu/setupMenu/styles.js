@@ -66,8 +66,8 @@ export const MealCategoryCell = styled.th`
     width: 10%;
     padding: 0px 10px 0 30px;
   }
-  &.nb{
-    border:0;
+  &.nb {
+    border: 0;
   }
   div {
     font-size: 12px;
@@ -79,6 +79,7 @@ export const Div = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  padding:5px;
   flex-direction: column;
   border-top: 1px solid rgb(204, 204, 204);
   &:first-child {
@@ -159,12 +160,26 @@ export const Variants = styled.div`
   overflow-wrap: anywhere;
   margin-top: 10px;
   column-gap: 10px;
-
+  &.add-button {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed gray;
+    margin: 10px;
+    border-radius: 5px;
+  }
   &.vertical {
     flex-direction: column;
     row-gap: 5px;
     margin-top: 0px;
     overflow-wrap: initial;
+    && {
+      .true & {
+        flex-direction: row;
+        justify-content: left;
+      }
+    }
   }
 `;
 export const Details = styled.div`
@@ -259,22 +274,41 @@ export const Variant = styled.div`
     justify-content: center;
     align-items: center;
   }
+  &.add-button {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed gray;
+    border-radius: 5px;
+  }
+  && {
+    .false & {
+      &.replace {
+        flex-direction: row;
+      }
+    }
+  }
 `;
 
 export const ReplacableItems = styled.div`
-  position: fixed;
-  top: 0;
-  left: 10%;
-  width: 200px;
-  top: auto;
-  min-height: 200px;
-  right: auto;
-  bottom: 0;
-  background-color: white;
-  z-index: 1;
-  padding: 10px;
-  border-radius: 10px 10px 0px 0px;
-  box-shadow: 0px 0px 3px 1px rgb(181 181 181 / 45%);
+  &.false {
+    position: fixed;
+    top: 0;
+    left: 10%;
+    width: 200px;
+    top: auto;
+    min-height: 200px;
+    right: auto;
+    bottom: 0;
+    background-color: white;
+    z-index: 1;
+    padding: 10px;
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: 0px 0px 3px 1px rgb(181 181 181 / 45%);
+  }
+  &.true {
+  }
 `;
 export const SideHead = styled.div`
   width: 100%;
