@@ -81,7 +81,7 @@ export const Div = styled.div`
   position: relative;
   padding:5px;
   flex-direction: column;
-  border-top: 1px solid rgb(204, 204, 204);
+  /* border-top: 1px solid rgb(204, 204, 204); */
   &:first-child {
     border-top: 0px solid rgb(204, 204, 204);
   }
@@ -264,6 +264,10 @@ export const Variant = styled.div`
     margin-top: 5px;
     cursor: pointer;
     max-width: 50px;
+  }
+  &.Fixed{
+    border:0;
+    padding:0;
   }
   &.selected {
     background-color: black;

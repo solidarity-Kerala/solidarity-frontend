@@ -112,7 +112,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
         }
       } else if (item.type === "multiSelect") {
         if (item.add) {
-          addValuesTemp.addValues[item.name] = [];
+          addValuesTemp.addValues[item.name] = Array.isArray(item.default) ? item.default : [];
         }
         if (item.update) {
           addValuesTemp.updateValues[item.name] = [];
