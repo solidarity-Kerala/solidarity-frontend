@@ -23,7 +23,7 @@ const CuisineCategory = (props) => {
       validation: "",
       // Default value for the input field
       default: "",
-      tag: true,
+      tag: false,
       // Label text for the input field
       label: "Cuisine Category",
       // Indicates if the input field is required
