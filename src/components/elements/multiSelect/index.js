@@ -68,6 +68,7 @@ function MultiSelect(props) {
       setOptions(options);
       setInitialized(true);
     } else if (props.apiType === "JSON") {
+      handleOptions(props.selectApi);
       setOptions(props.selectApi);
       setInitialized(true);
     }

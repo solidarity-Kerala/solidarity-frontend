@@ -879,7 +879,7 @@ const Patient = (props) => {
       listView: true,
       name: "eligibleDays",
       validation: "",
-      default: "",
+      default: [0,1,2,3,4,5,6],
       label: "Select Days of Week",
       required: true,
       view: true,
@@ -895,7 +895,7 @@ const Patient = (props) => {
         { value: "Wednesday", id: 3 },
         { value: "Thursday", id: 4 },
         { value: "Friday", id: 5 },
-        { value: "Saturday", id: 8 },
+        { value: "Saturday", id: 6 },
       ],
     },
     {

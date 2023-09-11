@@ -377,7 +377,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                         // Render your items inside the FoodButton here
                                         // For example, you can render a list of items like this
                                         return (
-                                          <Variant key={item._id} className="vertical replace">
+                                          <Variant key={item._id} className={`vertical replace ${data.menuType} ${(openData.item.viewOnly ?? false) === true ? "Fixed" : ""}`}>
                                             <Variant key={item._id} className="vertical">
                                               <ProfileImage>
                                                 <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
@@ -406,7 +406,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                                                 <GetIcon icon={"replace"} />
                                               </span>
                                             )}
-                                            {(showReplacable === item.foodMenuItem || showAllReplacable === true) && (
+                                            {(showReplacable === item.foodMenuItem || showAllReplacable === true) && data.menuType === "Dynamic" && (
                                               <DropTarget
                                                 onDrop={onDrop}
                                                 className={showAllReplacable.toString()}
@@ -464,18 +464,19 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                             </Div>
                           );
                         })}
-
-                        <Div>
-                          <DropTarget
-                            onDrop={showReplacable ? () => {} : onDrop}
-                            data={{ mealTimeCategory: mealTimeCategory._id, dayNumber, optionNo: options.length + 1 }}
-                            element={
-                              <Variants className="vertical add-button">
-                                <GetIcon icon={"add"}></GetIcon>
-                              </Variants>
-                            }
-                          />
-                        </Div>
+                        {(!openData.item.viewOnly ?? false) && (
+                          <Div>
+                            <DropTarget
+                              onDrop={showReplacable ? () => {} : onDrop}
+                              data={{ mealTimeCategory: mealTimeCategory._id, dayNumber, optionNo: options.length + 1 }}
+                              element={
+                                <Variants className="vertical add-button">
+                                  <GetIcon icon={"add"}></GetIcon>
+                                </Variants>
+                              }
+                            />
+                          </Div>
+                        )}
                       </TableCell>
                     );
                   })}
