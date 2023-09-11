@@ -17,7 +17,7 @@ const RecipeTag = (props) => {
       name: "recipeTag",
       validation: "",
       default: "",
-      tag: true,
+      tag: false,
       label: "Recipe Tag",
       required: true,
       view: true,

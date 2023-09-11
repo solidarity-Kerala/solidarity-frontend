@@ -2,7 +2,7 @@ import React from "react";
 import { useDrop } from "react-dnd";
 import styled from "styled-components";
 
-const DropTarget = ({ element, data, onDrop }) => {
+const DropTarget = ({ element, data, onDrop, className }) => {
   const [{ isOver }, drop] = useDrop({
     accept: "DATA", // Specify the type of the draggable item to accept
     drop: (item) => {
@@ -15,7 +15,7 @@ const DropTarget = ({ element, data, onDrop }) => {
   });
 
   return (
-    <Div ref={drop} className={isOver ? "hover" : ""}>
+    <Div ref={drop} className={`${className}${isOver ? "hover" : ""}`}>
       {element}
     </Div>
   );
@@ -29,6 +29,12 @@ const Div = styled.div`
   padding: 10px 10px;
   padding: 5px 5px;
   width: calc(100% - 10px);
+
+  &.true {
+    flex-direction: row;
+    justify-content: left;
+    padding: 5px 0px;
+  }
 
   &.hover {
     border: 1px dashed rgb(204, 204, 204);
