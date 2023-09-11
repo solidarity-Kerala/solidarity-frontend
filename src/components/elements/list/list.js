@@ -100,7 +100,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           addValuesTemp.updateValues[item.name] = date.toISOString();
         }
         if (item.type === "date" && (item.filter ?? false) === true) {
-          addValuesTemp.filterValues[item.name] = date.toISOString();
+          // addValuesTemp.filterValues[item.name] = date.toISOString();
           // tempFilter = true;
         }
       } else if (item.type === "image" || item.type === "file") {
@@ -140,7 +140,6 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     setFilterView((prevFilterView) => {
       return { ...prevFilterView, ...addValuesTemp.filterValues };
     });
-    console.log(addValuesTemp.filterValues);
     // setFilter(tempFilter);
     setInitialized(true);
   }, [attributes, dispatch, setPrevCrud, prevCrud, setFormInput, setAddValues, setUpdateValues, setFilterView, parentReference, referenceId]);
@@ -852,7 +851,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
               case "select":
                 return (item.filter ?? true) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} />;
               case "date":
-                return (item.filter ?? true) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} />;
+                return (item.filter ?? false) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} />;
               default:
                 return null;
             }
