@@ -9,7 +9,6 @@ import PopupView from "../../../../elements/popupview";
 import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
-
 const Patient = (props) => {
   //to update the page title
   useEffect(() => {
