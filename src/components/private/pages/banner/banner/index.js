@@ -38,7 +38,7 @@ const Banner = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
     },
     {
       type: "text",
@@ -85,7 +85,7 @@ const Banner = (props) => {
       <ListTable
         // actions={actions}
         api={`banner`}
-        itemTitle={{ name: "title", type: "text", collection: "", }}
+        itemTitle={{ name: "title", type: "text", collection: "" }}
         shortName={`Banner`}
         // formMode={`single`}
         formMode={`double`}

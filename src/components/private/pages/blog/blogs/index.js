@@ -64,6 +64,18 @@ const Blog = (props) => {
       update: false,
     },
     {
+      type: "text",
+      placeholder: "Video URL",
+      name: "videoUrl",
+      validation: "",
+      default: "",
+      label: "Video URL",
+      required: false,
+      view: true,
+      add: true,
+      update: false,
+    },
+    {
       type: "select",
       apiType: "API",
       selectApi: "post-category/select",

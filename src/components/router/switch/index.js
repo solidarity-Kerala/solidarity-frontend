@@ -78,6 +78,7 @@ import DeliveryManLocation from "../../private/pages/dispatch/deliveryManLocatio
 import DeliveryLocation from "../../private/pages/registrationSettings/DeliveryLocation";
 import AddMeal from "../../private/pages/mealSettings/addMeal";
 import Recipes from "../../private/pages/mealSettings/recipes";
+import RecipeReport from "../../private/pages/report/recipeReport";
 
 /**
  * Switch component to render different pages based on the provided page prop.
@@ -865,6 +866,16 @@ const Switch = ({
     case "recipes":
       return (
         <Recipes
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "recipe-report":
+      return (
+        <RecipeReport
           key={key}
           exportPrivilege={exportPrivilege}
           addPrivilege={addPrivilege}
