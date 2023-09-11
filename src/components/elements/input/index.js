@@ -72,7 +72,7 @@ function FormInput(props) {
     case "date":
       let userFriendlyDate = props.value.length > 0 ? new Date(props.value) : null;
       return (
-        <InputContainer className={`${props.dynamicClass ?? ""}`}>
+        <InputContainer className={`${props.dynamicClass ?? ""} ${props.customClass ?? ""}`}>
           <DatetimeInput showYearDropdown yearDropdownItemNumber={70} minDate={props.minDate ?? moment().toDate()} maxDate={props.maxDate ?? moment().add(1, "year").toDate()} dateFormat={"yyyy-MM-dd"} theme={themeColors} className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholderText={`${t(props.label)}${props.required ? " *" : ""}`} type={props.type} value={userFriendlyDate} selected={userFriendlyDate} onChange={(event) => props.onChange(event, props.id, props.type)} />
           {props.error?.length ? (
             <Label theme={themeColors} className={`${!props.value.length > 0 ? "error shrink" : "error"}`}>
