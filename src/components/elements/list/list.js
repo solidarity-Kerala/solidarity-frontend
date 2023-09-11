@@ -275,7 +275,8 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
             proceed: "Okay",
           });
           setIsCreating(false);
-          refreshView();
+          setCurrentIndex(0);
+          refreshView(0);
           // udpateView(0);
         } else if (response.status === 404) {
           setMessage({ type: 1, content: "User not found!", proceed: "Okay" });
