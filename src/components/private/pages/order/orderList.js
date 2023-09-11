@@ -34,6 +34,7 @@ const OrderList = (props) => {
       name: "orderDate",
       validation: "",
       default: "",
+      filter: true,
       tag: true,
       label: "Order Date",
       required: true,

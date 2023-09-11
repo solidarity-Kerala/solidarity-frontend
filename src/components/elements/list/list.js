@@ -99,6 +99,10 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
         if (item.add) {
           addValuesTemp.updateValues[item.name] = date.toISOString();
         }
+        if (item.type === "date" && (item.filter ?? false) === true) {
+          addValuesTemp.filterValues[item.name] = date.toISOString();
+          // tempFilter = true;
+        }
       } else if (item.type === "image" || item.type === "file") {
         if (item.add) {
           addValuesTemp.addValues[item.name] = [];
@@ -136,7 +140,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     setFilterView((prevFilterView) => {
       return { ...prevFilterView, ...addValuesTemp.filterValues };
     });
-
+    console.log(addValuesTemp.filterValues);
     // setFilter(tempFilter);
     setInitialized(true);
   }, [attributes, dispatch, setPrevCrud, prevCrud, setFormInput, setAddValues, setUpdateValues, setFilterView, parentReference, referenceId]);
@@ -271,7 +275,8 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
             proceed: "Okay",
           });
           setIsCreating(false);
-          refreshView();
+          setCurrentIndex(0);
+          refreshView(0);
           // udpateView(0);
         } else if (response.status === 404) {
           setMessage({ type: 1, content: "User not found!", proceed: "Okay" });
@@ -325,13 +330,14 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
   };
 
   const filterChange = (option, name) => {
-    const udpateValue = {
+    const updateValue = {
       ...filterView,
-      [name]: option.id,
+      [name]: option.id ? option.id : option.toISOString(),
     };
-    // updating the formm values
-    setFilterView(udpateValue);
+    setFilterView(updateValue);
+    // updating the form values
   };
+
   const dateRangeChange = (item) => {
     const startDate = new Date(item?.startDate);
     startDate.setHours(0, 0, 0, 0); // Set start date to 00:00
@@ -842,7 +848,14 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
         </FilterBox>
         <Filters>
           {formInput.map((item, index) => {
-            return item.type === "select" && (item.filter ?? true) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} />;
+            switch (item.type) {
+              case "select":
+                return (item.filter ?? true) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} />;
+              case "date":
+                return (item.filter ?? true) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} />;
+              default:
+                return null;
+            }
           })}
         </Filters>
         {(addPrivilege ? addPrivilege : false) && (

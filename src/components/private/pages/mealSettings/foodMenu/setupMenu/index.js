@@ -359,10 +359,8 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                     {<div>{setCaloriesItems(mealTimeCategory)}</div>}
                   </MealCategoryCell>
                   {daysOfWeek.map((day, dayNumber) => {
-                    if(showAllReplacable)
-                    {
-                      if(dayNumber!==selectedDayNumber)
-                      {
+                    if (showAllReplacable) {
+                      if (dayNumber !== selectedDayNumber) {
                         return null;
                       }
                     }
