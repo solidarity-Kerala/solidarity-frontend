@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import Layout from "../../common/layout";
 import ListTable from "../../../elements/list/list";
 import { Container } from "../../common/layout/styels";
-// import PopupView from "../../../elements/popupview";
-// import SetupRecipe from "./setupRecipe";
-import { useSelector } from "react-redux";
 
 const RecipeReport = (props) => {
   useEffect(() => {
