@@ -13,12 +13,12 @@ const MealTimeCategory = (props) => {
   const [attributes] = useState([
     {
       type: "text",
-      placeholder: "Meal time Category",
+      placeholder: "Recipe Category",
       name: "mealtimeCategoriesName",
       validation: "",
       default: "",
-      tag: true,
-      label: "Meal time Category",
+      tag: false,
+      label: "Recipe Category",
       required: true,
       view: true,
       add: true,
