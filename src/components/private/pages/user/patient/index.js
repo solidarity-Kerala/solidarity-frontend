@@ -282,7 +282,6 @@ const Patient = (props) => {
       apiType: "API",
       selectApi: "",
       placeholder: "DOB",
-      // collection: "subscriber",
       name: "dateOfBirth",
       showItem: "",
       tag: true,
@@ -417,7 +416,6 @@ const Patient = (props) => {
       add: true,
       update: true,
     },
-
     {
       type: "text",
       placeholder: "BMR",
