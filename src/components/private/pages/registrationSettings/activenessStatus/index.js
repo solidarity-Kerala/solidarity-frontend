@@ -65,7 +65,7 @@ const ActivenessStatus = (props) => {
       update: true,
     },
   ]);
- 
+
   return (
     <Container className="noshadow">
       {/* Render a ListTable component */}
