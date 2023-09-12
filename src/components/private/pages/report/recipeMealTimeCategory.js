@@ -3,7 +3,7 @@ import Layout from "../../common/layout";
 import ListTable from "../../../elements/list/list";
 import { Container } from "../../common/layout/styels";
 
-const RecipeReport = (props) => {
+const RecipeMealTimeCategroy = (props) => {
   useEffect(() => {
     document.title = `Recipe - Diet Food Management Portal`;
   }, []);
@@ -27,35 +27,37 @@ const RecipeReport = (props) => {
       update: true,
     },
     {
+      type: "select",
+      apiType: "API",
+      selectApi: "mealtime-category/select",
+      placeholder: "Mealtime Category",
+      name: "mealTimeCategory",
+      validation: "",
+      showItem: "mealtimeCategoriesName",
+      default: "",
+      tag: true,
+      label: "Mealtime Category",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+    },
+    {
       type: "text",
-      placeholder: "Count",
-      name: "recipe",
-      collection: "sum",
-      showItem: "recipe",
+      placeholder: "Delivery Date",
+      name: "deliveryDate",
+      collection: "",
+      showItem: " ",
       validation: "",
       default: "",
       tag: true,
-      label: "Count",
+      label: "Delivery Date",
       required: true,
       view: true,
       add: true,
       update: true,
     },
-    // {
-    //   type: "text",
-    //   placeholder: "Count",
-    //   name: "recipe",
-    //   collection: "sum",
-    //   showItem: "name ",
-    //   validation: "",
-    //   default: "",
-    //   tag: false,
-    //   label: "Count",
-    //   required: true,
-    //   view: true,
-    //   add: true,
-    //   update: true,
-    // },
     // {
     //   type: "textarea",
     //   placeholder: "Description",
@@ -76,8 +78,8 @@ const RecipeReport = (props) => {
       {/* Render a ListTable component */}
       <ListTable
         // actions={actions}
-        api={`recipe/recipe-by-date`}
-        itemTitle={{ name: "name", type: "text", collection: "sum" }}
+        api={`recipe-schedule/recipe-mealtimecategory`}
+        itemTitle={{ name: "title", type: "text", collection: "recipe" }}
         // profileImage="photo"
         shortName={`Recipe Item`}
         formMode={`double`}
@@ -89,4 +91,4 @@ const RecipeReport = (props) => {
   );
 };
 
-export default Layout(RecipeReport);
+export default Layout(RecipeMealTimeCategroy);

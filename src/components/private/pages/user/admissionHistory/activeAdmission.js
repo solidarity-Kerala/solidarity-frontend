@@ -41,23 +41,23 @@ const ActiveAdmission = (props) => {
       add: false,
       update: false,
     },
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "user/select?userType=6471b3849fb2b29fe045887b",
-      placeholder: "Patient",
-      name: "user",
-      validation: "",
-      showItem: "userDisplayName",
-      default: "",
-      tag: true,
-      label: "Patient",
-      required: true,
-      view: true,
-      add: true,
-      update: false,
-      filter: false,
-    },
+    // {
+    //   type: "select",
+    //   apiType: "API",
+    //   selectApi: "user/select?userType=6471b3849fb2b29fe045887b",
+    //   placeholder: "Patient",
+    //   name: "user",
+    //   validation: "",
+    //   showItem: "userDisplayName",
+    //   default: "",
+    //   tag: true,
+    //   label: "Patient",
+    //   required: true,
+    //   view: true,
+    //   add: true,
+    //   update: false,
+    //   filter: false,
+    // },
     {
       type: "date",
       placeholder: "Booking Date",
@@ -1455,7 +1455,7 @@ const ActiveAdmission = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}

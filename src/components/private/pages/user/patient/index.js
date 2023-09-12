@@ -220,7 +220,7 @@ const Patient = (props) => {
       update: true,
     },
     {
-      type: "number",
+      type: "text",
       placeholder: "Number of Children",
       name: "numberOfChildren",
       condition: {
@@ -279,7 +279,7 @@ const Patient = (props) => {
       add: true,
       update: false,
     },
-  
+
     {
       type: "select",
       placeholder: "Gender",
@@ -935,10 +935,26 @@ const Patient = (props) => {
       filter: false,
     },
     {
+      type: "select",
+      apiType: "API",
+      selectApi: "user/select?userType=6471b34d9fb2b29fe0458878",
+      placeholder: "Dietician",
+      name: "dietician",
+      validation: "",
+      showItem: "userDisplayName",
+      default: "",
+      tag: true,
+      label: "Dietician",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+    },
+    {
       type: "date",
       placeholder: "Booking Date",
       name: "bookingDate",
-      showItem: "",
       validation: "",
       default: "",
       tag: true,
@@ -952,85 +968,53 @@ const Patient = (props) => {
       type: "select",
       apiType: "API",
       updateOn: "bookingDate",
-      selectApi: "day-slot/select",
-      placeholder: "Booking Slot",
+      selectApi: "day-slot/avail-slot",
+      placeholder: "Time Slot",
       name: "bookingSlot",
-      validation: "",
-      showItem: "",
-      default: "",
-      tag: true,
-      label: "Booking Slot",
-      required: true,
-      view: false,
-      add: true,
-      update: true,
-      filter: false,
-    },
-    {
-      type: "text",
-      apiType: "",
-      selectApi: "",
-      placeholder: "Booking Slot",
-      collection: "bookingSlot",
       showItem: "availableSlots",
-      name: "availableSlots",
       validation: "",
       default: "",
       tag: true,
-      label: "Booking Slot",
-      required: false,
-      view: true,
-      add: false,
-      update: false,
-      filter: false,
-    },
-    {
-      type: "number",
-      placeholder: "Number of Bookings",
-      name: "numBookings",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Number of Bookings",
+      label: "Time Slot",
       required: true,
       view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "user/select?userType=6471b34d9fb2b29fe0458878",
-      placeholder: "Dietician",
-      name: "dietician",
-      validation: "",
-      showItem: "",
-      default: "",
-      tag: true,
-      label: "Dietician",
-      required: true,
-      view: false,
       add: true,
       update: true,
       filter: false,
     },
     {
       type: "text",
-      apiType: "",
+      apiType: "API",
+      updateOn: "",
       selectApi: "",
-      placeholder: "Dietician",
-      name: "dietician",
+      placeholder: "Status",
+      name: "appointmentStatus",
+      showItem: "",
       validation: "",
-      showItem: "username",
       default: "",
       tag: true,
-      label: "Dietician",
+      label: "Status",
       required: false,
       view: true,
       add: false,
       update: false,
       filter: false,
     },
+    // {
+    //   type: "select",
+    //   apiType: "API",
+    //   selectApi: "user-type/select",
+    //   placeholder: "User Type",
+    //   name: "userType",
+    //   validation: "",
+    //   showItem: "role",
+    //   default: "",
+    //   label: "User Type",
+    //   required: true,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    // },
   ]);
 
   const [actions] = useState([
@@ -1171,7 +1155,17 @@ const Patient = (props) => {
 
   return (
     <Container className="noshadow">
-      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
+      <ListTable
+        actions={actions}
+        api={`user`}
+        itemTitle={{ name: "username", type: "text", collection: "" }}
+        shortName={`Patient`}
+        parentReference={"userType"}
+        referenceId={"6471b3849fb2b29fe045887b"}
+        formMode={`double`}
+        {...props}
+        attributes={attributes}
+      ></ListTable>
       {openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC

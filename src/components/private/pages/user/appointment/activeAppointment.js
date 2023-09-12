@@ -41,43 +41,43 @@ const ActiveAppointment = (props) => {
       add: false,
       update: false,
     },
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "user/select?userType=6471b3849fb2b29fe045887b",
-      tags: [
-        {
-          type: "text",
-          item: "userDisplayName",
-          title: "Name",
-          collection: "",
-        },
-        {
-          type: "text",
-          item: "cprNumber",
-          title: "Cpr Number",
-          collection: "",
-        },
-        {
-          type: "text",
-          item: "email",
-          title: "Email",
-          collection: "",
-        },
-      ],
-      placeholder: "Patient",
-      name: "user",
-      validation: "",
-      showItem: "userDisplayName",
-      default: "",
-      tag: true,
-      label: "Patient",
-      required: true,
-      view: true,
-      add: true,
-      update: false,
-      filter: false,
-    },
+    // {
+    //   type: "select",
+    //   apiType: "API",
+    //   selectApi: "user/select?userType=6471b3849fb2b29fe045887b",
+    //   tags: [
+    //     {
+    //       type: "text",
+    //       item: "userDisplayName",
+    //       title: "Name",
+    //       collection: "",
+    //     },
+    //     {
+    //       type: "text",
+    //       item: "cprNumber",
+    //       title: "Cpr Number",
+    //       collection: "",
+    //     },
+    //     {
+    //       type: "text",
+    //       item: "email",
+    //       title: "Email",
+    //       collection: "",
+    //     },
+    //   ],
+    //   placeholder: "Patient",
+    //   name: "user",
+    //   validation: "",
+    //   showItem: "userDisplayName",
+    //   default: "",
+    //   tag: true,
+    //   label: "Patient",
+    //   required: true,
+    //   view: true,
+    //   add: true,
+    //   update: false,
+    //   filter: false,
+    // },
     {
       type: "date",
       placeholder: "Booking Date",
@@ -91,26 +91,27 @@ const ActiveAppointment = (props) => {
       add: true,
       update: true,
     },
-    {
-      type: "date",
-      placeholder: "Admission Date",
-      name: "admissionDate",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Admission Date",
-      required: false,
-      view: true,
-      add: true,
-      update: true,
-    },
+    // {
+    //   type: "date",
+    //   placeholder: "Admission Date",
+    //   name: "admissionDate",
+    //   validation: "",
+    //   default: "",
+    //   tag: true,
+    //   label: "Admission Date",
+    //   required: false,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    // },
     {
       type: "select",
       apiType: "API",
       selectApi: "booking-slot/select",
       placeholder: "Time Slot",
       name: "bookingSlot",
-      showItem: "bookingSlotsName",
+      collection: "bookingSlot",
+      showItem: "availableSlots",
       validation: "",
       default: "",
       tag: true,
@@ -137,6 +138,19 @@ const ActiveAppointment = (props) => {
       add: true,
       update: true,
       filter: true,
+    },
+    {
+      type: "text",
+      placeholder: "Status",
+      name: "appointmentStatus",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Status",
+      required: false,
+      view: true,
+      add: false,
+      update: false,
     },
   ]);
 
@@ -1463,11 +1477,11 @@ const ActiveAppointment = (props) => {
       {/* Render a ListTable component */}
       <ListTable
         actions={actions}
-        api={`appointment`}
+        api={`appointment/active-appointments`}
         preFilter={{ startDate: startOfDay, endDate: endOfDay }}
         // itemTitle={`label`}
         itemTitle={{
-          name: "username",
+          name: "userDisplayName",
           type: "text",
           collection: "user",
         }}
@@ -1477,6 +1491,7 @@ const ActiveAppointment = (props) => {
         //
         {...props}
         attributes={attributes}
+        datefilter={true}
       ></ListTable>
       {openMenuSetup && openItemData && (
         <PopupView
@@ -1485,7 +1500,7 @@ const ActiveAppointment = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
