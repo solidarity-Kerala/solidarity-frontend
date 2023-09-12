@@ -1,40 +1,3 @@
-// import React, { useEffect } from "react";
-// import { getData } from "../../../../../../backend/api";
-// // import './App.css';
-
-// function App() {
-//   const generatePDF = async () => {
-//     const response = await fetch(
-//       "http://localhost:8000/api/v1/recipe/generate-pdf"
-//     );
-
-//     // getData({ meal }, "meal-item").then((response) => {
-//     // });
-//     console.log({ response });
-//     const blob = await response.blob();
-//     const url = window.URL.createObjectURL(blob);
-//     const a = document.createElement("a");
-//     a.href = url;
-//     a.download = "sample.pdf";
-//     document.body.appendChild(a);
-//     a.click();
-//     window.URL.revokeObjectURL(url);
-//   };
-
-//   // useEffect(() => {
-//   //   generatePDF();
-//   // }, []);
-
-//   return (
-//     <div className="App">
-//       <h1>PDF Downloader</h1>
-//       <button onClick={generatePDF}>Generate PDFs</button>
-//     </div>
-//   );
-// }
-
-// export default App;
-
 import React, { useEffect, useRef, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -56,24 +19,6 @@ function EuroCake({ openData }) {
       }
     );
   }, [openData]);
-
-  // const generatePDF = async () => {
-  //   const response = await fetch(
-  //     "http://localhost:8000/api/v1/recipe/generate-pdf"
-  //   );
-
-  //   // getData({ meal }, "meal-item").then((response) => {
-  //   // });
-  //   console.log({ response });
-  //   const blob = await response.blob();
-  //   const url = window.URL.createObjectURL(blob);
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = "sample.pdf";
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   window.URL.revokeObjectURL(url);
-  // };
 
   const generatePDF = async () => {
     const pdf = new jsPDF("p", "mm", "a4");

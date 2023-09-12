@@ -81,6 +81,9 @@ import Recipes from "../../private/pages/mealSettings/recipes";
 import RecipeReport from "../../private/pages/report/recipeReport";
 import RecipeMealTimeCategory from "../../private/pages/report/recipeMealTimeCategory";
 
+import BirthdayReport from "../../private/pages/report/birthdayReport";
+import WeddingdayReport from "../../private/pages/report/weddingdayReport";
+import NewPatientTodayReport from "../../private/pages/report/newPatientTodayReport";
 /**
  * Switch component to render different pages based on the provided page prop.
  * @param {string} page - The page to be rendered.
@@ -887,6 +890,37 @@ const Switch = ({
     case "recipe-mealtimecategory":
       return (
         <RecipeMealTimeCategory
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+
+    case "birthday-report":
+      return (
+        <BirthdayReport
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "weddingday-report":
+      return (
+        <WeddingdayReport
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "new-patient-on-today":
+      return (
+        <NewPatientTodayReport
           key={key}
           exportPrivilege={exportPrivilege}
           addPrivilege={addPrivilege}
