@@ -9,7 +9,6 @@ import PopupView from "../../../../elements/popupview";
 import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
-
 const Patient = (props) => {
   //to update the page title
   useEffect(() => {
@@ -59,7 +58,7 @@ const Patient = (props) => {
       placeholder: "Name",
       name: "username",
       showItem: "",
-      tag: true,
+      tag: false,
       validation: "",
       default: "",
       label: "Name",
@@ -152,19 +151,6 @@ const Patient = (props) => {
       add: true,
       update: true,
       filter: false,
-    },
-    {
-      type: "number",
-      placeholder: "Mobile Number",
-      name: "mobile",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Mobile Number",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
     },
     {
       type: "textarea",
@@ -282,6 +268,7 @@ const Patient = (props) => {
       apiType: "API",
       selectApi: "",
       placeholder: "DOB",
+      collection: "subscriber",
       name: "dateOfBirth",
       showItem: "",
       tag: true,
@@ -290,25 +277,10 @@ const Patient = (props) => {
       label: "DOB",
       required: true,
       view: true,
-      add: false,
+      add: true,
       update: false,
     },
-    {
-      type: "date",
-      placeholder: "",
-      name: "dateOfBirth",
-      showItem: "dateOfBirth",
-      collection: "subscriber",
-      validation: "",
-      minDate: moment().add(-70, "years").toDate(),
-      default: moment().toDate(),
-      tag: true,
-      label: "DOB",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
+  
     {
       type: "select",
       placeholder: "Gender",
