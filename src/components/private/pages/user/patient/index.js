@@ -388,7 +388,6 @@ const Patient = (props) => {
       add: true,
       update: true,
     },
-
     {
       type: "text",
       placeholder: "BMR",
