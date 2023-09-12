@@ -153,7 +153,7 @@ const Patient = (props) => {
       filter: false,
     },
     {
-      type: "textarea"
+      type: "textarea",
       apiType: "API",
       selectApi: "",
       placeholder: "Address",
