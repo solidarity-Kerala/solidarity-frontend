@@ -96,15 +96,15 @@ const AdmissionHistory = (props) => {
       placeholder: "Admission Type",
       name: "admissionType",
       validation: "",
-      default: "",
+      default: "IN",
       tag: true,
       label: "Admission Type",
       showItem: "",
-      required: true,
+      required: false,
       view: true,
-      add: true,
-      update: true,
-      filter: false,
+      add: false,
+      update: false,
+      filter: true,
       apiType: "CSV",
       selectApi: "IN,OUT",
     },
@@ -1479,6 +1479,7 @@ const AdmissionHistory = (props) => {
         //
         {...props}
         attributes={attributes}
+        datefilter={true}
       ></ListTable>
       {openMenuSetup && openItemData && (
         <PopupView
@@ -1487,7 +1488,7 @@ const AdmissionHistory = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
