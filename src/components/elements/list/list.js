@@ -559,7 +559,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                     if (attribute.editable === true) {
                       alert("yes");
                     } else {
-                      alert("no");
+                      // alert("no");
                     }
                   }}
                 >
@@ -604,7 +604,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                 }}
               >
                 {!profileImage && <GetIcon icon={selectedMenuItem.icon} />} <span>{` ${getValue({ type: itemTitle.type ?? "text" }, titleValue)}`}</span>
-                <Highlight highlight={highlight}>Delivered</Highlight>
+                <Highlight data={data} highlight={highlight}></Highlight>
               </Head>
             )}
           </SetTd>

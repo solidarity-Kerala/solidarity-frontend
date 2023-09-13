@@ -609,15 +609,13 @@ export const TableView = styled.table`
 `;
 export const ThView = styled.th`
   text-align: left;
-  padding: 15px 8px 10px;
+  padding: 15px 8px 15px;
   white-space: nowrap;
-  background-color: white;
-  color: #444;
   font-weight: bolder;
   border-radius: 0px;
   min-width: 100px;
-  background-color: #5a5a5a;
-  color: rgb(255 255 255);
+  background-color: white;
+  color: black;
   :first-child {
     border-top-left-radius: 12px;
   }

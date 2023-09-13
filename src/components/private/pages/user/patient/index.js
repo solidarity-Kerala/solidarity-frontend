@@ -6,7 +6,7 @@ import ListTable from "../../../../elements/list/list";
 import { Container } from "../../../common/layout/styels";
 import { useSelector } from "react-redux";
 import PopupView from "../../../../elements/popupview";
-import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
+import DietMenu from "./dietMenu";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
 const Patient = (props) => {
@@ -1169,34 +1169,46 @@ const Patient = (props) => {
         formMode: "double",
       },
     },
+    {
+      element: "button",
+      type: "callback",
+      callback: (item, data) => {
+        // Set the data for the clicked item and open the SetupMenu popup
+        setOpenItemData({ item, data });
+        setOpenMenuSetup(true);
+      },
+      itemTitle: { name: "username", type: "text", collection: "" },
+      icon: "menu",
+      title: "Diet Menu",
+      params: {
+        api: `food-group-item`,
+        parentReference: "",
+        itemTitle: { name: "username", type: "text", collection: "" },
+        shortName: "Recipe Items",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+      },
+    },
   ]);
 
   return (
     <Container className="noshadow">
-      <ListTable
-        actions={actions}
-        api={`user`}
-        itemTitle={{ name: "username", type: "text", collection: "" }}
-        shortName={`Patient`}
-        parentReference={"userType"}
-        referenceId={"6471b3849fb2b29fe045887b"}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
+      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
       {openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
           popupData={
-            <SetupMenu
+            <DietMenu
               openData={openItemData}
               setMessage={props.setMessage}
               // Pass selected item data (Menu Title) to the popup for setting the time
-            ></SetupMenu>
+            ></DietMenu>
           }
           themeColors={themeColors}
           closeModal={closeModal}
-          itemTitle={{ name: "value", type: "text", collection: "" }}
+          itemTitle={{ name: "username", type: "text", collection: "" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"full-page"}
         ></PopupView>
