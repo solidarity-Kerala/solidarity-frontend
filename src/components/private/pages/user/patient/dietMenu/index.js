@@ -43,9 +43,6 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
       mixedMeatPercentage = mixedMeatPercentage ?? 100;
       mixedBreadPercentage = mixedBreadPercentage ?? 100;
       const portion = (calories ?? 0) / (numberOfPortion ?? 1);
-      if (recipe.title === "Fish Sayadeih") {
-        // console.log(recipe);
-      }
       let total = 0;
       if (typeOfRecipe === "Meat") {
         total = portion * (meal || 0);
@@ -320,12 +317,12 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
   };
 
   useEffect(() => {
-    getData({ menuId: openData.data._id }, "food-menu/get-a-menu").then((response) => {
+    getData({ userId }, "patient-diet/food-schedule").then((response) => {
       if (response.status === 200) {
         setMenuData(response.data);
       }
     });
-  }, [openData.data._id]);
+  }, [userId]);
   const [item] = useState({
     type: "select",
     placeholder: "Calories",
