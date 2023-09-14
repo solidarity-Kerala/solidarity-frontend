@@ -1194,7 +1194,17 @@ const Patient = (props) => {
 
   return (
     <Container className="noshadow">
-      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
+      <ListTable
+        actions={actions}
+        api={`user`}
+        itemTitle={{ name: "username", type: "text", collection: "" }}
+        shortName={`Patient`}
+        parentReference={"userType"}
+        referenceId={"6471b3849fb2b29fe045887b"}
+        formMode={`double`}
+        {...props}
+        attributes={attributes}
+      ></ListTable>
       {openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
