@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 //
 import Layout from "../../../common/layout";
 import ListTable from "../../../../elements/list/list";
 import { Container } from "../../../common/layout/styels";
 import { useSelector } from "react-redux";
 import PopupView from "../../../../elements/popupview";
-import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
+import DietMenu from "./dietMenu";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
 const Patient = (props) => {
@@ -272,14 +273,31 @@ const Patient = (props) => {
       showItem: "",
       tag: true,
       validation: "",
+      minDate: moment().add(-70, "years").toDate(),
+      default: moment().toDate(),
       default: "",
       label: "DOB",
       required: true,
       view: true,
       add: true,
-      update: false,
+      update: true,
     },
-
+    // {
+    //   type: "date",
+    //   placeholder: "",
+    //   name: "dob",
+    //   showItem: "dateOfBirth",
+    //   collection: "subscriber",
+    //   validation: "",
+    //   minDate: moment().add(-70, "years").toDate(),
+    //   default: moment().toDate(),
+    //   tag: true,
+    //   label: "DOB",
+    //   required: true,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    // },
     {
       type: "select",
       placeholder: "Gender",
@@ -388,7 +406,7 @@ const Patient = (props) => {
       update: true,
     },
     {
-      type: "text",
+      type: "number",
       placeholder: "BMR",
       name: "bmr",
       disabled: true,
@@ -402,7 +420,7 @@ const Patient = (props) => {
       update: true,
     },
     {
-      type: "text",
+      type: "number",
       placeholder: "Calories",
       name: "calories",
       disabled: true,
@@ -417,7 +435,7 @@ const Patient = (props) => {
       update: true,
     },
     {
-      type: "text",
+      type: "number",
       placeholder: "% Of Carbs",
       name: "percentageOfCarbs",
       showItem: "",
@@ -432,7 +450,7 @@ const Patient = (props) => {
       update: true,
     },
     {
-      type: "text",
+      type: "number",
       placeholder: "% Of Protein",
       name: "percentageOfProtein",
       showItem: "",
@@ -447,7 +465,7 @@ const Patient = (props) => {
       update: true,
     },
     {
-      type: "text",
+      type: "number",
       placeholder: "% Of Fat",
       name: "percentageOfFat",
       showItem: "",
@@ -621,16 +639,16 @@ const Patient = (props) => {
       placeholder: "Admission Type",
       name: "admissionType",
       validation: "",
-      default: "",
+      default: "IN",
       tag: true,
       editable: true,
       label: "Admission Type",
       showItem: "Admission Type",
       required: false,
-      view: true,
+      view: false,
       filter: false,
-      add: true,
-      update: true,
+      add: false,
+      update: false,
       apiType: "CSV",
       selectApi: "IN,OUT",
     },
@@ -1072,16 +1090,16 @@ const Patient = (props) => {
       element: "button",
       type: "subList",
       id: "patient-history",
-      itemTitle: { name: "userDisplayName", type: "text", collection: "user" },
+      itemTitle: { name: "admissionDate", type: "text", collection: "" },
       title: "Admission History",
       attributes: admissionHistory,
       params: {
-        api: `appointment`,
+        api: `appointment/admission-history`,
         parentReference: "user",
         itemTitle: {
-          name: "userDisplayName",
+          name: "admissionDate",
           type: "text",
-          collection: "user",
+          collection: "",
         },
         shortName: "Admission History",
         addPrivilege: true,
@@ -1151,34 +1169,46 @@ const Patient = (props) => {
         formMode: "double",
       },
     },
+    {
+      element: "button",
+      type: "callback",
+      callback: (item, data) => {
+        // Set the data for the clicked item and open the SetupMenu popup
+        setOpenItemData({ item, data });
+        setOpenMenuSetup(true);
+      },
+      itemTitle: { name: "username", type: "text", collection: "" },
+      icon: "menu",
+      title: "Diet Menu",
+      params: {
+        api: `food-group-item`,
+        parentReference: "",
+        itemTitle: { name: "username", type: "text", collection: "" },
+        shortName: "Recipe Items",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+      },
+    },
   ]);
 
   return (
     <Container className="noshadow">
-      <ListTable
-        actions={actions}
-        api={`user`}
-        itemTitle={{ name: "username", type: "text", collection: "" }}
-        shortName={`Patient`}
-        parentReference={"userType"}
-        referenceId={"6471b3849fb2b29fe045887b"}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
+      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
       {openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
           popupData={
-            <SetupMenu
+            <DietMenu
               openData={openItemData}
               setMessage={props.setMessage}
               // Pass selected item data (Menu Title) to the popup for setting the time
-            ></SetupMenu>
+            ></DietMenu>
           }
           themeColors={themeColors}
           closeModal={closeModal}
-          itemTitle={{ name: "value", type: "text", collection: "" }}
+          itemTitle={{ name: "username", type: "text", collection: "" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"full-page"}
         ></PopupView>
