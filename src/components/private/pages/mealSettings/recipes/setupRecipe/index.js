@@ -96,10 +96,91 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     padding: 8,
   },
+  nutritionData: {
+    fontSize: 14,
+    fontWeight: "600",
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  headerLineBlack: {
+    border: 1,
+    borderColor: "#000",
+  },
+  headerLineBlackSmall: {
+    border: 1,
+    borderColor: "#000",
+    height: 5,
+  },
+  paragraph: {
+    width: "350px",
+    fontSize: 14,
+  },
+  milkBreadTable: {
+    marginTop: 20,
+    border: 1,
+    padding: 10,
+  },
+  milkBreadTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  nutritionFacts: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  servingSize: {
+    display: "flex",
+    justifyContent: "space-between",
+    fontSize: 20,
+    fontWeight: "600",
+  },
+  headerLine: {
+    borderTop: 1,
+    marginTop: 5,
+  },
+  nutrientRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    fontSize: 20,
+    fontWeight: "600",
+    marginTop: 10,
+  },
+  headerLineSmall: {
+    borderTop: 1,
+    marginTop: 5,
+  },
+  description: {
+    width: "350px",
+    fontSize: 14,
+  },
+  sectionBottomItems: {
+    marginBottom: 20, // Adjust as needed
+  },
+  sectionBottomTitle: {
+    backgroundColor: '#f0f0f0', // Example background color, adjust as needed
+    padding: 10, // Adjust as needed
+    borderRadius: 5, // Example border radius, adjust as needed
+  },
+  sectionBottomHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5, // Adjust as needed
+  },
+  h2: {
+    fontSize: 16, // Example font size, adjust as needed
+    fontWeight: 'bold',
+    // Add other text styles (color, fontFamily, etc.) as needed
+  },
+  sectionBottomTimings: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });
 
-const CustomTable = ({ data, openData }) => (
+const CustomTable = ({ data, openData, recipeIngredients }) => (
   <View style={styles.table}>
+    {/* Table Header */}
     <View style={styles.tableRow}>
       <View style={[styles.tableCell, styles.bold]}>
         <Text>Ingredient</Text>
@@ -111,6 +192,7 @@ const CustomTable = ({ data, openData }) => (
         <Text>Quantity</Text>
       </View>
     </View>
+    {/* Table Data Rows */}
     {data?.length &&
       data.map((row, index) => (
         <View style={styles.tableRow} key={index}>
@@ -125,6 +207,178 @@ const CustomTable = ({ data, openData }) => (
           </View>
         </View>
       ))}
+    {/* Nutrition Data */}
+    <View>
+      <Text>{openData?.data?.title}</Text>
+      {/* Nutrition Data Entries */}
+      <View style={styles.nutritionData}>
+        <Text>Calories</Text>
+        <Text>
+          {openData?.data?.calories / openData?.data?.numberOfPortion}
+        </Text>
+      </View>
+      <View style={styles.headerLineBlackSmall} />
+
+      {/* Repeat the above structure for other nutrition data */}
+      <View style={styles.nutritionData}>
+        <Text>Total Fat 1.5g</Text>
+        <Text>
+          {openData?.data?.totalFat / openData?.data?.numberOfPortion}
+        </Text>
+      </View>
+      <View style={styles.headerLineBlackSmall} />
+
+      <View style={styles.nutritionData}>
+        <Text>Total Fiber 0g</Text>
+        <Text>
+          {openData?.data?.fiber / openData?.data?.numberOfPortion}
+        </Text>
+      </View>
+      <View style={styles.headerLineBlackSmall} />
+
+      <View style={styles.nutritionData}>
+        <Text>Total Sugar 0g</Text>
+        <Text>
+          {openData?.data?.sugars / openData?.data?.numberOfPortion}
+        </Text>
+      </View>
+      <View style={styles.headerLineBlackSmall} />
+
+      <View style={styles.nutritionData}>
+        <Text>Protein 2g</Text>
+        <Text>
+          {openData?.data?.calories / openData?.data?.numberOfPortion}
+        </Text>
+      </View>
+      <View style={styles.headerLineBlackSmall} />
+
+      <View style={styles.nutritionData}>
+        <Text>Calcium 15mg</Text>
+        <Text>
+          {openData?.data?.calcium / openData?.data?.numberOfPortion}
+        </Text>
+      </View>
+      <View style={styles.headerLineBlackSmall} />
+
+      <View style={styles.nutritionData}>
+        <Text>Iron 1mg</Text>
+        <Text>
+          {openData?.data?.iron / openData?.data?.numberOfPortion}
+        </Text>
+      </View>
+
+      {/* Additional Paragraph */}
+      <Text style={styles.paragraph}>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae nam,
+        odio mollitia, repellendus quo commodi quas
+      </Text>
+    </View>
+    <View style={styles.milkBreadTable}>
+      <Text style={styles.milkBreadTitle}>Milk bread small</Text>
+      <Text style={styles.nutritionFacts}>Nutrition facts</Text>
+      <View style={styles.servingSize}>
+        <Text>serving size</Text>
+        <Text>(25g)</Text>
+      </View>
+      <View style={styles.headerLine} />
+      <Text>Calories</Text>
+      <View style={styles.servingSize}>
+        <Text>Calories</Text>
+        <Text>70</Text>
+      </View>
+      <View style={styles.headerLineSmall} />
+      <View style={styles.servingSize}>
+        <Text>serving size</Text>
+        <Text>(25g)</Text>
+      </View>
+      <View style={styles.servingSize}>
+        <Text>Trans fat</Text>
+        <Text>0</Text>
+      </View>
+      <View style={styles.servingSize}>
+        <Text>Total carbohydrate</Text>
+        <Text>4%</Text>
+      </View>
+      <View style={styles.headerLine} />
+      <View style={styles.servingSize}>
+        <Text>chelostrol</Text>
+        <Text>4%</Text>
+      </View>
+      <View style={styles.servingSize}>
+        <Text>sodium</Text>
+        <Text>2%</Text>
+      </View>
+      <View style={styles.servingSize}>
+        <Text>Chelostrol</Text>
+        <Text>2%</Text>
+      </View>
+      <View style={styles.headerLineSmall} />
+      <Text style={styles.description}>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae nam,
+        odio mollitia, repellendus quo commodi quas
+      </Text>
+    </View>
+
+    {/* <Footer /> Include the Footer component here */}
+    <View style={styles.sectionBottomItems}>
+      <View style={styles.sectionBottomTitle}>
+        {/* Allergens */}
+        <View style={styles.sectionBottomHeader}>
+          <Text style={styles.h2}>Allergens: </Text>
+          <Text style={styles.h2}>{openData?.data?.allergy || 0}</Text>
+        </View>
+
+        {/* Ingredients */}
+        <View style={styles.sectionBottomHeader}>
+          <Text style={styles.h2}>Ingredients: </Text>
+          {recipeIngredients?.length &&
+            recipeIngredients.map((data, key) => (
+              <Text style={styles.h2} key={key}>{data.ingredient?.ingredientsName}</Text>
+            ))}
+        </View>
+
+        {/* Storage */}
+        <View style={styles.sectionBottomHeader}>
+          <Text style={styles.h2}>Storage: </Text>
+          <Text style={styles.h2}>{openData?.data?.storage || 0}</Text>
+        </View>
+
+        {/* Validity */}
+        <View style={styles.sectionBottomHeader} id="section-validity">
+          <Text style={styles.h2}>Validity: </Text>
+          <Text style={styles.h2}>{openData?.data?.validity || 0}</Text>
+        </View>
+
+        {/* Produced By */}
+        <View style={styles.sectionBottomHeader}>
+          <Text style={styles.h2}>Produced By: </Text>
+          <Text style={styles.h2}>EUROS BAKE, Bahrain</Text>
+        </View>
+
+        {/* MADE IN BAHRAIN */}
+        <View style={styles.sectionBottomHeader}>
+          <Text style={styles.h2}>MADE IN BAHRAIN</Text>
+        </View>
+
+        {/* Timings */}
+        <View style={styles.sectionBottomTimings}>
+          <Text>12/27/2021</Text>
+          <Text>3:45:35pm</Text>
+        </View>
+      </View>
+    </View>
+    <View style={styles.footer}>
+      <View style={styles.footerItems}>
+        <View style={styles.footerItemsData}>
+          <Text style={styles.footerText}>Euros Bake W.L.L, CR.No:72669-6</Text>
+          <Text style={styles.footerText}>P.O BOX:80304, Sanad, Kingdom of Bahrain</Text>
+        </View>
+        <View>
+          <Text style={styles.footerText}>(+973 17 627777 ) (+973 33 626044)</Text>
+          <Text style={styles.footerText}>(sales@eurobakes.me.com) (www.eurobakes.com)</Text>
+        </View>
+      </View>
+    </View>
   </View>
 );
 
@@ -177,10 +431,39 @@ const PDFGenerator = ({ openData, closeModal }) => {
         <PDFViewer style={{ width: "100%", height: "600px" }}>
           {generatePDF()}
         </PDFViewer>
+        {/* Add the provided code here */}
+        <hr className="footer-line-brown" />
+        <div className="button-container" style={{ padding: 10 }}>
+          <button
+            style={{
+              backgroundColor: "#007bff",
+              color: "#fff",
+              padding: "10px 20px",
+              border: "none",
+              cursor: "pointer",
+              marginRight: "10px",
+            }}
+            onClick={generatePDF}
+          >
+            Generate PDF
+          </button>
+          <button
+            style={{
+              backgroundColor: "#007bff",
+              color: "#fff",
+              padding: "10px 20px",
+              border: "none",
+              cursor: "pointer",
+            }}
+            onClick={() => window.print()}
+          >
+            Print PDF
+          </button>
+        </div>
         <Footer>
-          <FormInput type="close" value={"cancel"} onChange={closeModal} />
+          <FormInput type="close" value={t("cancel")} onChange={closeModal} />
           <Button document={generatePDF()} fileName="test.pdf">
-            {({ blob, url, loading, error }) => (loading ? "Loading document..." : "Download PDF")}
+            {({ blob, url, loading, error }) => (loading ? "Loading document..." : t("download") + " PDF")}
           </Button>
         </Footer>
       </PageView>
