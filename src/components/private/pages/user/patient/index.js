@@ -275,7 +275,6 @@ const Patient = (props) => {
       validation: "",
       minDate: moment().add(-70, "years").toDate(),
       default: moment().toDate(),
-      default: "",
       label: "DOB",
       required: true,
       view: true,
