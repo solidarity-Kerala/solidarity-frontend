@@ -1,14 +1,23 @@
 // Define the updateHealthDetails function
 export const updateHealthDetails = (data = {}) => {
   try {
-    const { gender = "Male", presentWeight = 68, height = 160, dateOfBirth = new Date(), userActivenessStatus = "sedentary" } = data;
+    const {
+      gender = "Male",
+      presentWeight = 68,
+      height = 160,
+      dateOfBirth = new Date(),
+      userActivenessStatus = "sedentary",
+    } = data;
 
     // Calculate age based on date of birth
     const today = new Date();
     const birthDate = new Date(dateOfBirth);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
 
@@ -38,7 +47,11 @@ export const updateHealthDetails = (data = {}) => {
     const normalizedActivityFactor = userActivenessStatus.toLowerCase();
 
     // Check if the provided activityFactor exists in the activityFactors object
-    const selectedActivityFactor = activityFactors.hasOwnProperty(normalizedActivityFactor) ? activityFactors[normalizedActivityFactor] : 1.2; // Default to sedentary activity factor if not found
+    const selectedActivityFactor = activityFactors.hasOwnProperty(
+      normalizedActivityFactor
+    )
+      ? activityFactors[normalizedActivityFactor]
+      : 1.2; // Default to sedentary activity factor if not found
 
     // Calculate daily calorie needs (using BMR and activity factor)
     const calories = bmr * selectedActivityFactor;
@@ -54,9 +67,9 @@ export const updateHealthDetails = (data = {}) => {
     data.calories = isNaN(calories) ? 0 : calories;
     data.percentageOfCarbs = isNaN(percentageOfCarbs) ? 0 : percentageOfCarbs;
     data.percentageOfFat = isNaN(percentageOfFat) ? 0 : percentageOfFat;
-    data.percentageOfProtein = isNaN(percentageOfProtein) ? 0 : percentageOfProtein;
-
-    console.log(data);
+    data.percentageOfProtein = isNaN(percentageOfProtein)
+      ? 0
+      : percentageOfProtein;
   } catch (error) {
     console.log(error);
   }
@@ -74,7 +87,9 @@ export const updateCaloriDetails = (data = {}) => {
     // Update the data object with the calculated values
     data.percentageOfCarbs = isNaN(percentageOfCarbs) ? 0 : percentageOfCarbs;
     data.percentageOfFat = isNaN(percentageOfFat) ? 0 : percentageOfFat;
-    data.percentageOfProtein = isNaN(percentageOfProtein) ? 0 : percentageOfProtein;
+    data.percentageOfProtein = isNaN(percentageOfProtein)
+      ? 0
+      : percentageOfProtein;
 
     console.log("updateCaloriDetails", data);
   } catch (error) {
