@@ -9,6 +9,15 @@ import {
   PDFViewer,
   Image,
 } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFViewer,
+  Image,
+} from "@react-pdf/renderer";
 import { Button } from "../../../../../elements/select/styles";
 import { Footer } from "../../../../../elements/form/styles";
 import { Overlay } from "../../../../../elements/form/styles";
@@ -28,14 +37,30 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica",
     fontSize: "12pt",
   },
-  logo: { width: "80px", marginBottom: "20px", marginTop: 30 },
+  headerContainer: {
+    flexDirection: 'row', // lays out children (text and logo) side by side
+    justifyContent: 'space-between', // creates space between the text and logo
+    alignItems: 'center', // vertically centers the text and logo
+    marginBottom: 20, // or any other value to give some space below the header
+  },
+  textContainer: {
+    width: '65%', // allocates 65% of the space to the text
+  },
+  logoContainer: {
+    width: '35%', // allocates 35% of the space to the logo
+  },
+  logo: {
+    width: 80, // or any other value
+    height: 80, // or any other value, but should maintain the aspect ratio of your logo
+  },
   bold: {
     fontWeight: "bold",
     fontFamily: "Helvetica-Bold",
   },
   title: {
     marginBottom: 5,
-    fontSize: 12,
+    fontSize: 20,
+    textAlign:"left",
     fontWeight: 600,
   },
   italic: {
@@ -46,8 +71,10 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "0",
   },
-  addressItem: {
+ 
+  recipetitle: {
     minHeight: "10px",
+    textAlign:"left",
   },
   content: {
     marginBottom: 20,
@@ -65,11 +92,15 @@ const styles = StyleSheet.create({
     width: 200,
     paddingTop: 5,
   },
-  footerText: {
-    marginTop: 30,
-    textAlign: "center",
-    paddingLeft: 30,
-    paddingRight: 30,
+  footerTextleft: {
+    marginTop: 2,
+    textAlign: "left",
+  
+  },
+  footerTextright: {
+    marginTop: 2,
+    textAlign: "right",
+    
   },
   singleItem: {
     display: "flex",
@@ -91,25 +122,23 @@ const styles = StyleSheet.create({
   },
   table: {
     display: "table",
-    width: "auto",
+    width: "100%",
     borderCollapse: "collapse",
     marginTop: 20,
-  },
-  tableRow: {
+    tableLayout: "fixed",
+},
+tableRow: {
     margin: "auto",
     flexDirection: "row",
-  },
-  tableCell: {
+},
+tableCell: {
     borderWidth: 1,
     borderColor: "#000",
-    padding: 8,
-  },
-  nutritionData: {
-    fontSize: 14,
-    fontWeight: "600",
-    display: "flex",
-    justifyContent: "space-between",
-  },
+    padding: 2,
+    width: "33.33%",
+    height: "20px",  // Adjust the value to your preference
+},
+
   headerLineBlack: {
     border: 1,
     borderColor: "#000",
@@ -117,7 +146,8 @@ const styles = StyleSheet.create({
   headerLineBlackSmall: {
     border: 1,
     borderColor: "#000",
-    height: 5,
+    height: 1,
+    marginBottom:5,
   },
   paragraph: {
     width: "350px",
@@ -167,10 +197,13 @@ const styles = StyleSheet.create({
   },
   sectionBottomTitle: {
     backgroundColor: "#f0f0f0", // Example background color, adjust as needed
+    backgroundColor: "#f0f0f0", // Example background color, adjust as needed
     padding: 10, // Adjust as needed
     borderRadius: 5, // Example border radius, adjust as needed
   },
   sectionBottomHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 5, // Adjust as needed
@@ -178,9 +211,12 @@ const styles = StyleSheet.create({
   h2: {
     fontSize: 16, // Example font size, adjust as needed
     fontWeight: "bold",
+    fontWeight: "bold",
     // Add other text styles (color, fontFamily, etc.) as needed
   },
   sectionBottomTimings: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -216,173 +252,127 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
         </View>
       ))}
     {/* Nutrition Data */}
-    <View>
-      <Text>{openData?.data?.title}</Text>
-      {/* Nutrition Data Entries */}
-      <View style={styles.nutritionData}>
-        <Text>Calories</Text>
-        <Text>
-          {openData?.data?.calories / openData?.data?.numberOfPortion}
-        </Text>
-      </View>
-      <View style={styles.headerLineBlackSmall} />
 
-      {/* Repeat the above structure for other nutrition data */}
-      <View style={styles.nutritionData}>
-        <Text>Total Fat 1.5g</Text>
-        <Text>
-          {openData?.data?.totalFat / openData?.data?.numberOfPortion}
-        </Text>
-      </View>
-      <View style={styles.headerLineBlackSmall} />
+    <View style={styles.table}>
+  <View style={styles.tableRow}>
+    <Text style={styles.tableCell}>Calories</Text>
+    <Text style={styles.tableCell}>السعرات الحرارية</Text>
+    <Text style={styles.tableCell}>
+      {openData?.data?.calories / openData?.data?.numberOfPortion}
+    </Text>
+  </View>
+  <View style={styles.tableRow}>
+    <Text style={styles.tableCell}>Total Fat</Text>
+    <Text style={styles.tableCell}>الدهون الكلية</Text>
+    <Text style={styles.tableCell}>
+      {openData?.data?.totalFat / openData?.data?.numberOfPortion}
+    </Text>
+  </View>
+  <View style={styles.tableRow}>
+    <Text style={styles.tableCell}>Total Fiber</Text>
+    <Text style={styles.tableCell}>الألياف الكلية</Text>
+    <Text style={styles.tableCell}>
+      {openData?.data?.fiber / openData?.data?.numberOfPortion}
+    </Text>
+  </View>
+  <View style={styles.tableRow}>
+    <Text style={styles.tableCell}>Total Sugar</Text>
+    <Text style={styles.tableCell}>السكر الكلي</Text>
+    <Text style={styles.tableCell}>
+      {openData?.data?.sugars / openData?.data?.numberOfPortion}
+    </Text>
+  </View>
+  <View style={styles.tableRow}>
+    <Text style={styles.tableCell}>Protein</Text>
+    <Text style={styles.tableCell}>البروتين</Text>
+    <Text style={styles.tableCell}>
+      {openData?.data?.protein / openData?.data?.numberOfPortion}
+    </Text>
+  </View>
+  <View style={styles.tableRow}>
+    <Text style={styles.tableCell}>Calcium</Text>
+    <Text style={styles.tableCell}>الكالسيوم</Text>
+    <Text style={styles.tableCell}>
+      {openData?.data?.calcium / openData?.data?.numberOfPortion}
+    </Text>
+  </View>
+  <View style={styles.tableRow}>
+    <Text style={styles.tableCell}>Iron</Text>
+    <Text style={styles.tableCell}>الحديد</Text>
+    <Text style={styles.tableCell}>
+      {openData?.data?.iron / openData?.data?.numberOfPortion}
+    </Text>
+  </View>
+  <Text style={styles.paragraph}>
+    {openData?.data?.description}
+  </Text>
+</View>
 
-      <View style={styles.nutritionData}>
-        <Text>Total Fiber 0g</Text>
-        <Text>{openData?.data?.fiber / openData?.data?.numberOfPortion}</Text>
-      </View>
-      <View style={styles.headerLineBlackSmall} />
 
-      <View style={styles.nutritionData}>
-        <Text>Total Sugar 0g</Text>
-        <Text>{openData?.data?.sugars / openData?.data?.numberOfPortion}</Text>
-      </View>
-      <View style={styles.headerLineBlackSmall} />
-
-      <View style={styles.nutritionData}>
-        <Text>Protein 2g</Text>
-        <Text>
-          {openData?.data?.calories / openData?.data?.numberOfPortion}
-        </Text>
-      </View>
-      <View style={styles.headerLineBlackSmall} />
-
-      <View style={styles.nutritionData}>
-        <Text>Calcium 15mg</Text>
-        <Text>{openData?.data?.calcium / openData?.data?.numberOfPortion}</Text>
-      </View>
-      <View style={styles.headerLineBlackSmall} />
-
-      <View style={styles.nutritionData}>
-        <Text>Iron 1mg</Text>
-        <Text>{openData?.data?.iron / openData?.data?.numberOfPortion}</Text>
-      </View>
-
-      {/* Additional Paragraph */}
-      <Text style={styles.paragraph}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae nam,
-        odio mollitia, repellendus quo commodi quas
-      </Text>
-    </View>
-    <View style={styles.milkBreadTable}>
-      <Text style={styles.milkBreadTitle}>Milk bread small</Text>
-      <Text style={styles.nutritionFacts}>Nutrition facts</Text>
-      <View style={styles.servingSize}>
-        <Text>serving size</Text>
-        <Text>(25g)</Text>
-      </View>
-      <View style={styles.headerLine} />
-      <Text>Calories</Text>
-      <View style={styles.servingSize}>
-        <Text>Calories</Text>
-        <Text>70</Text>
-      </View>
-      <View style={styles.headerLineSmall} />
-      <View style={styles.servingSize}>
-        <Text>serving size</Text>
-        <Text>(25g)</Text>
-      </View>
-      <View style={styles.servingSize}>
-        <Text>Trans fat</Text>
-        <Text>0</Text>
-      </View>
-      <View style={styles.servingSize}>
-        <Text>Total carbohydrate</Text>
-        <Text>4%</Text>
-      </View>
-      <View style={styles.headerLine} />
-      <View style={styles.servingSize}>
-        <Text>chelostrol</Text>
-        <Text>4%</Text>
-      </View>
-      <View style={styles.servingSize}>
-        <Text>sodium</Text>
-        <Text>2%</Text>
-      </View>
-      <View style={styles.servingSize}>
-        <Text>Chelostrol</Text>
-        <Text>2%</Text>
-      </View>
-      <View style={styles.headerLineSmall} />
-      <Text style={styles.description}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae nam,
-        odio mollitia, repellendus quo commodi quas
-      </Text>
-    </View>
 
     {/* <Footer /> Include the Footer component here */}
     <View style={styles.sectionBottomItems}>
       <View style={styles.sectionBottomTitle}>
         {/* Allergens */}
         <View style={styles.sectionBottomHeader}>
-          <Text style={styles.h2}>Allergens: </Text>
-          <Text style={styles.h2}>{openData?.data?.allergy || 0}</Text>
+          <Text style={styles.h3}>Allergens: </Text>
+          <Text style={styles.h3}>{openData?.data?.allergy || 0}</Text>
         </View>
 
         {/* Ingredients */}
-        <View style={styles.sectionBottomHeader}>
-          <Text style={styles.h2}>Ingredients: </Text>
-          {recipeIngredients?.length &&
-            recipeIngredients.map((data, key) => (
-              <Text style={styles.h2} key={key}>
-                {data.ingredient?.ingredientsName}
-              </Text>
-            ))}
-        </View>
+        
 
         {/* Storage */}
         <View style={styles.sectionBottomHeader}>
-          <Text style={styles.h2}>Storage: </Text>
-          <Text style={styles.h2}>{openData?.data?.storage || 0}</Text>
+          <Text style={styles.h3}>Storage: </Text>
+          <Text style={styles.h3}>{openData?.data?.storage || 0}</Text>
         </View>
 
         {/* Validity */}
         <View style={styles.sectionBottomHeader} id="section-validity">
-          <Text style={styles.h2}>Validity: </Text>
-          <Text style={styles.h2}>{openData?.data?.validity || 0}</Text>
+          <Text style={styles.h3}>Validity: </Text>
+          <Text style={styles.h3}>{openData?.data?.validity || 0}</Text>
         </View>
-
+        <View style={styles.sectionBottomHeader}>
+          <Text style={styles.h3}>Ingredients: </Text>
+          {data?.length &&
+            data.map((data, key) => (
+              <Text style={styles.h3} key={key}>
+                {data.ingredient?.ingredientsName}
+              </Text>
+            ))}
+        </View>
+        <View style={styles.headerLineBlackSmall} />
         {/* Produced By */}
         <View style={styles.sectionBottomHeader}>
-          <Text style={styles.h2}>Produced By: </Text>
-          <Text style={styles.h2}>EUROS BAKE, Bahrain</Text>
+          <Text style={styles.h3}>Produced By: </Text>
+          <Text style={styles.h3}>EUROS BAKE, Bahrain</Text>
         </View>
 
         {/* MADE IN BAHRAIN */}
         <View style={styles.sectionBottomHeader}>
-          <Text style={styles.h2}>MADE IN BAHRAIN</Text>
+          <Text style={styles.h3}>MADE IN BAHRAIN</Text>
+          <Text>{new Date().toLocaleString()}</Text>
         </View>
 
         {/* Timings */}
-        <View style={styles.sectionBottomTimings}>
-          <Text>12/27/2021</Text>
-          <Text>3:45:35pm</Text>
-        </View>
+       
       </View>
     </View>
     <View style={styles.footer}>
       <View style={styles.footerItems}>
-        <View style={styles.footerItemsData}>
-          <Text style={styles.footerText}>Euros Bake W.L.L, CR.No:72669-6</Text>
-          <Text style={styles.footerText}>
+        <View >
+          <Text style={styles.footerTextleft}>Euros Bake W.L.L, CR.No:72669-6</Text>
+          <Text style={styles.footerTextleft}>
             P.O BOX:80304, Sanad, Kingdom of Bahrain
           </Text>
         </View>
         <View>
-          <Text style={styles.footerText}>
+          <Text style={styles.footerTextright}>
             (+973 17 627777 ) (+973 33 626044)
           </Text>
-          <Text style={styles.footerText}>
-            (sales@eurobakes.me.com) (www.eurobakes.com)
+          <Text style={styles.footerTextright}>
+            (sales@eurobakes.me.com)
           </Text>
         </View>
       </View>
@@ -409,26 +399,25 @@ const PDFGenerator = ({ openData, closeModal }) => {
   const generatePDF = () => (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View style={styles.address}>
-          <Image
-            src="https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img/https://foodcitybahrain.com/wp-content/uploads/2020/07/EuroBake_LogoSize_600x600.png"
-            alt="Euro Bake"
-            style={styles.logo}
-          />
-          <Text style={styles.addressItem}>
-            {openData?.data?.title} ({openData?.data?.measurementType})
-          </Text>
-          <Text style={styles.addressItem}>
-            Number of servings: 60.82(25g per slice)
-          </Text>
-          <Text style={styles.addressItem}>
-            Number of servings: {openData?.data?.numberOfPortion}
-          </Text>
-          <Text style={styles.addressItem}>
-            weight: 1850g (yield: 1520.59g)
-          </Text>
-          <Text style={styles.addressItem}></Text>
-        </View>
+      <View style={styles.headerContainer}>
+  <View style={styles.textContainer}>
+    <Text style={styles.title}>
+      {openData?.data?.title} ({openData?.data?.measurementType})
+    </Text>
+    <Text style={styles.recipetitle}>
+      Number of servings: {openData?.data?.numberOfPortion}
+    </Text>
+    <Text style={styles.recipetitle}>
+      weight: {openData?.data?.quantity}
+    </Text>
+  </View>
+  <View style={styles.logoContainer}>
+    <Image
+      source={require('https://www.gcpr.net/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/03/Public-Link-bild-blog-450x338.jpg')} // Adjusted the way of specifying source
+      style={styles.logo}
+    />
+  </View>
+</View>
 
         {/* Render the custom table component */}
         <CustomTable data={recipeIngredients} openData={openData} />
@@ -476,6 +465,9 @@ const PDFGenerator = ({ openData, closeModal }) => {
         <Footer>
           <FormInput type="close" value={t("cancel")} onChange={closeModal} />
           <Button document={generatePDF()} fileName="test.pdf">
+            {({ blob, url, loading, error }) =>
+              loading ? "Loading document..." : t("download") + " PDF"
+            }
             {({ blob, url, loading, error }) =>
               loading ? "Loading document..." : t("download") + " PDF"
             }
