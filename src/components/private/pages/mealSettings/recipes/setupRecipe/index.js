@@ -9,6 +9,15 @@ import {
   PDFViewer,
   Image,
 } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFViewer,
+  Image,
+} from "@react-pdf/renderer";
 import { Button } from "../../../../../elements/select/styles";
 import { Footer } from "../../../../../elements/form/styles";
 import { Overlay } from "../../../../../elements/form/styles";
@@ -188,10 +197,13 @@ tableCell: {
   },
   sectionBottomTitle: {
     backgroundColor: "#f0f0f0", // Example background color, adjust as needed
+    backgroundColor: "#f0f0f0", // Example background color, adjust as needed
     padding: 10, // Adjust as needed
     borderRadius: 5, // Example border radius, adjust as needed
   },
   sectionBottomHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 5, // Adjust as needed
@@ -199,9 +211,12 @@ tableCell: {
   h2: {
     fontSize: 16, // Example font size, adjust as needed
     fontWeight: "bold",
+    fontWeight: "bold",
     // Add other text styles (color, fontFamily, etc.) as needed
   },
   sectionBottomTimings: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -450,6 +465,9 @@ const PDFGenerator = ({ openData, closeModal }) => {
         <Footer>
           <FormInput type="close" value={t("cancel")} onChange={closeModal} />
           <Button document={generatePDF()} fileName="test.pdf">
+            {({ blob, url, loading, error }) =>
+              loading ? "Loading document..." : t("download") + " PDF"
+            }
             {({ blob, url, loading, error }) =>
               loading ? "Loading document..." : t("download") + " PDF"
             }
