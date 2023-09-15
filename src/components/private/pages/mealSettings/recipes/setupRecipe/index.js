@@ -1,6 +1,14 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Document, Page, Text, View, StyleSheet, PDFViewer, Image } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFViewer,
+  Image,
+} from "@react-pdf/renderer";
 import { Button } from "../../../../../elements/select/styles";
 import { Footer } from "../../../../../elements/form/styles";
 import { Overlay } from "../../../../../elements/form/styles";
@@ -158,23 +166,23 @@ const styles = StyleSheet.create({
     marginBottom: 20, // Adjust as needed
   },
   sectionBottomTitle: {
-    backgroundColor: '#f0f0f0', // Example background color, adjust as needed
+    backgroundColor: "#f0f0f0", // Example background color, adjust as needed
     padding: 10, // Adjust as needed
     borderRadius: 5, // Example border radius, adjust as needed
   },
   sectionBottomHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 5, // Adjust as needed
   },
   h2: {
     fontSize: 16, // Example font size, adjust as needed
-    fontWeight: 'bold',
+    fontWeight: "bold",
     // Add other text styles (color, fontFamily, etc.) as needed
   },
   sectionBottomTimings: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 
@@ -230,17 +238,13 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
 
       <View style={styles.nutritionData}>
         <Text>Total Fiber 0g</Text>
-        <Text>
-          {openData?.data?.fiber / openData?.data?.numberOfPortion}
-        </Text>
+        <Text>{openData?.data?.fiber / openData?.data?.numberOfPortion}</Text>
       </View>
       <View style={styles.headerLineBlackSmall} />
 
       <View style={styles.nutritionData}>
         <Text>Total Sugar 0g</Text>
-        <Text>
-          {openData?.data?.sugars / openData?.data?.numberOfPortion}
-        </Text>
+        <Text>{openData?.data?.sugars / openData?.data?.numberOfPortion}</Text>
       </View>
       <View style={styles.headerLineBlackSmall} />
 
@@ -254,17 +258,13 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
 
       <View style={styles.nutritionData}>
         <Text>Calcium 15mg</Text>
-        <Text>
-          {openData?.data?.calcium / openData?.data?.numberOfPortion}
-        </Text>
+        <Text>{openData?.data?.calcium / openData?.data?.numberOfPortion}</Text>
       </View>
       <View style={styles.headerLineBlackSmall} />
 
       <View style={styles.nutritionData}>
         <Text>Iron 1mg</Text>
-        <Text>
-          {openData?.data?.iron / openData?.data?.numberOfPortion}
-        </Text>
+        <Text>{openData?.data?.iron / openData?.data?.numberOfPortion}</Text>
       </View>
 
       {/* Additional Paragraph */}
@@ -333,7 +333,9 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
           <Text style={styles.h2}>Ingredients: </Text>
           {recipeIngredients?.length &&
             recipeIngredients.map((data, key) => (
-              <Text style={styles.h2} key={key}>{data.ingredient?.ingredientsName}</Text>
+              <Text style={styles.h2} key={key}>
+                {data.ingredient?.ingredientsName}
+              </Text>
             ))}
         </View>
 
@@ -371,11 +373,17 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
       <View style={styles.footerItems}>
         <View style={styles.footerItemsData}>
           <Text style={styles.footerText}>Euros Bake W.L.L, CR.No:72669-6</Text>
-          <Text style={styles.footerText}>P.O BOX:80304, Sanad, Kingdom of Bahrain</Text>
+          <Text style={styles.footerText}>
+            P.O BOX:80304, Sanad, Kingdom of Bahrain
+          </Text>
         </View>
         <View>
-          <Text style={styles.footerText}>(+973 17 627777 ) (+973 33 626044)</Text>
-          <Text style={styles.footerText}>(sales@eurobakes.me.com) (www.eurobakes.com)</Text>
+          <Text style={styles.footerText}>
+            (+973 17 627777 ) (+973 33 626044)
+          </Text>
+          <Text style={styles.footerText}>
+            (sales@eurobakes.me.com) (www.eurobakes.com)
+          </Text>
         </View>
       </View>
     </View>
@@ -392,7 +400,6 @@ const PDFGenerator = ({ openData, closeModal }) => {
   useEffect(() => {
     getData({ recipe: openData?.data?._id }, "recipe-ingredients").then(
       (response) => {
-        console.log({ response });
         setRecipeIngredients(response?.data?.response);
       }
     );
@@ -411,9 +418,15 @@ const PDFGenerator = ({ openData, closeModal }) => {
           <Text style={styles.addressItem}>
             {openData?.data?.title} ({openData?.data?.measurementType})
           </Text>
-          <Text style={styles.addressItem}>Number of servings: 60.82(25g per slice)</Text>
-          <Text style={styles.addressItem}>Number of servings: {openData?.data?.numberOfPortion}</Text>
-          <Text style={styles.addressItem}>weight: 1850g (yield: 1520.59g)</Text>
+          <Text style={styles.addressItem}>
+            Number of servings: 60.82(25g per slice)
+          </Text>
+          <Text style={styles.addressItem}>
+            Number of servings: {openData?.data?.numberOfPortion}
+          </Text>
+          <Text style={styles.addressItem}>
+            weight: 1850g (yield: 1520.59g)
+          </Text>
           <Text style={styles.addressItem}></Text>
         </View>
 
@@ -463,7 +476,9 @@ const PDFGenerator = ({ openData, closeModal }) => {
         <Footer>
           <FormInput type="close" value={t("cancel")} onChange={closeModal} />
           <Button document={generatePDF()} fileName="test.pdf">
-            {({ blob, url, loading, error }) => (loading ? "Loading document..." : t("download") + " PDF")}
+            {({ blob, url, loading, error }) =>
+              loading ? "Loading document..." : t("download") + " PDF"
+            }
           </Button>
         </Footer>
       </PageView>

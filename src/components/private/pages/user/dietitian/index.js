@@ -211,6 +211,72 @@ const Dietitian = (props) => {
     },
   ]);
 
+  const [daySlot] = useState([
+    {
+      type: "text",
+      placeholder: "User Name",
+      name: "username",
+      validation: "",
+      default: "",
+      label: "User Name",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Name",
+      name: "userDisplayName",
+      validation: "",
+      default: "",
+      label: "Name",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "email",
+      placeholder: "E-Mail",
+      name: "email",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "E-Mail",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+  ]);
+
+  const [actions] = useState([
+    {
+      element: "button",
+      type: "subItem",
+      id: "patient-details",
+      itemTitle: "username",
+      title: "Details",
+      attributes: daySlot,
+      params: {
+        api: `day-slot`,
+        parentReference: "dietitian",
+        itemTitle: {
+          name: "mobileNumber",
+          type: "text",
+          collection: "",
+        },
+        shortName: "Day Slot",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+        formMode: `double`,
+      },
+    },
+  ]);
+
   return (
     <Container className="noshadow">
       <ListTable

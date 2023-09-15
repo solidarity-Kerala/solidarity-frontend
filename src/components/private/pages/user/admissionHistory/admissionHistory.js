@@ -1466,7 +1466,7 @@ const AdmissionHistory = (props) => {
       {/* Render a ListTable component */}
       <ListTable
         actions={actions}
-        api={`appointment`}
+        api={`appointment/all-admission-history`}
         // itemTitle={`label`}
         itemTitle={{
           name: "username",
