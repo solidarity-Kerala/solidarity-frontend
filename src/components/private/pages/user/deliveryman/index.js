@@ -65,7 +65,13 @@ const DeliveryMan = (props) => {
       add: true,
       update: false,
     },
-
+    {
+      type: "title",
+      title: "Email and password are required for login",
+      name: "bmr",
+      add: true,
+      update: true,
+    },
     {
       type: "select",
       placeholder: "Gender",
@@ -208,6 +214,49 @@ const DeliveryMan = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "select",
+      placeholder: "Identity Type",
+      name: "identityType",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Identity Type",
+      showItem: "identityType",
+      required: true,
+      view: true,
+      filter: false,
+      add: true,
+      update: true,
+      apiType: "CSV",
+      selectApi: "Passport,Govt Id",
+    },
+    {
+      type: "image",
+      placeholder: "Identity Image",
+      name: "identityImage",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Identity Image",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Identity Number",
+      name: "identityNumber",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Identity Number",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
   return (
@@ -221,6 +270,7 @@ const DeliveryMan = (props) => {
         parentReference={"userType"}
         referenceId={"64815bde89e0a44fc31c53b0"}
         // formMode={`single`}
+        displayColumn="single"
         formMode={`double`}
         {...props}
         attributes={attributes}

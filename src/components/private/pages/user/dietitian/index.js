@@ -71,7 +71,7 @@ const Dietitian = (props) => {
       required: true,
       view: true,
       add: true,
-      update: true,
+      update: false,
     },
     {
       type: "password",
@@ -85,6 +85,13 @@ const Dietitian = (props) => {
       view: true,
       add: true,
       update: false,
+    },
+    {
+      type: "title",
+      title: "Email and password are required for login",
+      name: "bmr",
+      add: true,
+      update: true,
     },
     {
       type: "textarea",
@@ -209,7 +216,7 @@ const Dietitian = (props) => {
       <ListTable
         // actions={actions}
         api={`user`}
-        displayColumn="double"
+        displayColumn="single"
         // itemTitle={`userDisplayName`}
         itemTitle={{ name: "userDisplayName", type: "text", collection: "" }}
         shortName={`Dietitian`}
