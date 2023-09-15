@@ -184,8 +184,8 @@ const Dietitian = (props) => {
       apiType: "API",
       selectApi: "diet-centre-branch/select",
       placeholder: "Diet Centre Branch",
-      name: "name",
-      showItem: "name",
+      name: "branchName",
+      showItem: "",
       validation: "",
       default: "",
       tag: true,
@@ -251,28 +251,49 @@ const Dietitian = (props) => {
     },
   ]);
 
+  const [resetPassword] = useState([
+    {
+      type: "text",
+      placeholder: "New Password",
+      name: "updatedPassword",
+      validation: "",
+      default: "",
+      label: "New Password",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+  ]);
+
   const [actions] = useState([
     {
       element: "button",
-      type: "subItem",
-      id: "patient-details",
-      itemTitle: "username",
-      title: "Details",
-      attributes: daySlot,
+      type: "subList",
+      id: "appointment",
+      // itemTitle: "username",
+      itemTitle: {
+        name: "username",
+        type: "text",
+        collection: "dietician",
+      },
+      title: "Reset Password",
+      attributes: resetPassword,
       params: {
-        api: `day-slot`,
-        parentReference: "dietitian",
+        api: `user/update-passoword`,
+        parentReference: "user",
+        // itemTitle: "username",
         itemTitle: {
-          name: "mobileNumber",
+          name: "username",
           type: "text",
-          collection: "",
+          collection: "dietician",
         },
-        shortName: "Day Slot",
+        shortName: "Reset Password",
         addPrivilege: true,
         delPrivilege: true,
         updatePrivilege: true,
         customClass: "medium",
-        formMode: `double`,
+        formMode: "double",
       },
     },
   ]);
@@ -280,7 +301,7 @@ const Dietitian = (props) => {
   return (
     <Container className="noshadow">
       <ListTable
-        // actions={actions}
+        actions={actions}
         api={`user`}
         displayColumn="single"
         // itemTitle={`userDisplayName`}
