@@ -41,7 +41,6 @@ const AvailableCalories = (props) => {
       selectApi: "900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000",
       apiType: "CSV",
     },
-
     {
       type: "select",
       apiType: "API",
@@ -119,7 +118,6 @@ const AvailableCalories = (props) => {
       selectApi: "1,2,3",
       apiType: "CSV",
     },
-
   ]);
 
   return (
@@ -146,7 +144,7 @@ const AvailableCalories = (props) => {
             <AvailableCaloriesCustom
               openData={openItemData}
               setMessage={props.setMessage}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             />
           }
           themeColors={themeColors}

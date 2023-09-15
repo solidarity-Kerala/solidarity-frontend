@@ -255,7 +255,7 @@ const Dietitian = (props) => {
     {
       type: "text",
       placeholder: "New Password",
-      name: "updatedPassword",
+      name: "newPassword",
       validation: "",
       default: "",
       label: "New Password",
@@ -280,7 +280,7 @@ const Dietitian = (props) => {
       title: "Reset Password",
       attributes: resetPassword,
       params: {
-        api: `user/update-passoword`,
+        api: `auth/update-passoword`,
         parentReference: "user",
         // itemTitle: "username",
         itemTitle: {
