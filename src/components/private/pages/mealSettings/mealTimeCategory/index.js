@@ -24,6 +24,19 @@ const MealTimeCategory = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "number",
+      placeholder: "sequence",
+      name: "sequence",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "sequence",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
   // const [timingAttributes] = useState([
   //   {
