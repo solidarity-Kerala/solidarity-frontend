@@ -135,7 +135,7 @@ const DeliveryMan = (props) => {
       // tag: true,
       label: "password",
       required: true,
-      view: true,
+      view: false,
       add: true,
       update: false,
     },
@@ -278,10 +278,57 @@ const DeliveryMan = (props) => {
     },
   ]);
 
+  const [resetPassword] = useState([
+    {
+      type: "text",
+      placeholder: "New Password",
+      name: "newPassword",
+      validation: "",
+      default: "",
+      label: "New Password",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+  ]);
+
+  const [actions] = useState([
+    {
+      element: "button",
+      type: "subList",
+      id: "appointment",
+      // itemTitle: "username",
+      itemTitle: {
+        name: "username",
+        type: "text",
+        collection: "dietician",
+      },
+      title: "Reset Password",
+      attributes: resetPassword,
+      params: {
+        api: `auth/update-passoword`,
+        parentReference: "user",
+        // itemTitle: "username",
+        itemTitle: {
+          name: "username",
+          type: "text",
+          collection: "dietician",
+        },
+        shortName: "Reset Password",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+        formMode: "double",
+      },
+    },
+  ]);
+
   return (
     <Container className="noshadow">
       <ListTable
-        // actions={actions}
+        actions={actions}
         api={`user`}
         displayColumn="double"
         // itemTitle={`userDisplayName`}

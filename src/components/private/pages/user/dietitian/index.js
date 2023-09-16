@@ -15,6 +15,18 @@ const Dietitian = (props) => {
   const [attributes] = useState([
     {
       type: "text",
+      placeholder: "Employee ID",
+      name: "employeeID",
+      validation: "",
+      default: "",
+      label: "Employee ID",
+      required: false,
+      view: true,
+      add: false,
+      update: false,
+    },
+    {
+      type: "text",
       placeholder: "Name",
       name: "userDisplayName",
       validation: "",
@@ -25,7 +37,6 @@ const Dietitian = (props) => {
       add: true,
       update: true,
     },
-
     {
       type: "select",
       placeholder: "Gender",
@@ -82,7 +93,7 @@ const Dietitian = (props) => {
       // tag: true,
       label: "password",
       required: true,
-      view: true,
+      view: false,
       add: true,
       update: false,
     },
