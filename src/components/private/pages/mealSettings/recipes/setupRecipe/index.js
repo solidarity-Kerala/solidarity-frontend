@@ -394,12 +394,12 @@ const PDFGenerator = ({ openData, closeModal }) => {
       weight: {openData?.data?.quantity}
     </Text>
   </View>
-  <View style={styles.logoContainer}>
+  {/* <View style={styles.logoContainer}>
     <Image
       source={require('https://www.gcpr.net/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/03/Public-Link-bild-blog-450x338.jpg')} // Adjusted the way of specifying source
       style={styles.logo}
     />
-  </View>
+  </View> */}
 </View>
 
         {/* Render the custom table component */}
