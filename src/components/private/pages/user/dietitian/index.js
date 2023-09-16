@@ -184,8 +184,8 @@ const Dietitian = (props) => {
       apiType: "API",
       selectApi: "diet-centre-branch/select",
       placeholder: "Diet Centre Branch",
-      name: "name",
-      showItem: "name",
+      name: "branchName",
+      showItem: "",
       validation: "",
       default: "",
       tag: true,
@@ -214,11 +214,12 @@ const Dietitian = (props) => {
   const [daySlot] = useState([
     {
       type: "text",
-      placeholder: "User Name",
-      name: "username",
+      placeholder: "Slot",
+      name: "availableSlots",
       validation: "",
       default: "",
-      label: "User Name",
+      label: "Slot",
+      tag: true,
       required: true,
       view: true,
       add: true,
@@ -226,25 +227,28 @@ const Dietitian = (props) => {
     },
     {
       type: "text",
-      placeholder: "Name",
-      name: "userDisplayName",
+      placeholder: "Max Booking Slots",
+      name: "maxBookingsPerSlot",
       validation: "",
       default: "",
-      label: "Name",
+      label: "Max Booking Slots",
+      tag: true,
       required: true,
       view: true,
       add: true,
       update: true,
     },
+  ]);
+
+  const [resetPassword] = useState([
     {
-      type: "email",
-      placeholder: "E-Mail",
-      name: "email",
+      type: "text",
+      placeholder: "New Password",
+      name: "newPassword",
       validation: "",
       default: "",
-      tag: true,
-      label: "E-Mail",
-      required: false,
+      label: "New Password",
+      required: true,
       view: true,
       add: true,
       update: true,
@@ -254,25 +258,60 @@ const Dietitian = (props) => {
   const [actions] = useState([
     {
       element: "button",
-      type: "subItem",
-      id: "patient-details",
-      itemTitle: "username",
-      title: "Details",
+      type: "subList",
+      id: "appointment",
+      // itemTitle: "username",
+      itemTitle: {
+        name: "day",
+        type: "text",
+        collection: "",
+      },
+      title: "Slots",
       attributes: daySlot,
       params: {
         api: `day-slot`,
-        parentReference: "dietitian",
+        parentReference: "dietician",
+        // itemTitle: "username",
         itemTitle: {
-          name: "mobileNumber",
+          name: "day",
           type: "text",
           collection: "",
         },
-        shortName: "Day Slot",
+        shortName: "Slots",
+        addPrivilege: false,
+        delPrivilege: false,
+        updatePrivilege: false,
+        customClass: "medium",
+        formMode: "double",
+      },
+    },
+    {
+      element: "button",
+      type: "subList",
+      id: "appointment",
+      // itemTitle: "username",
+      itemTitle: {
+        name: "username",
+        type: "text",
+        collection: "dietician",
+      },
+      title: "Reset Password",
+      attributes: resetPassword,
+      params: {
+        api: `auth/update-passoword`,
+        parentReference: "user",
+        // itemTitle: "username",
+        itemTitle: {
+          name: "username",
+          type: "text",
+          collection: "dietician",
+        },
+        shortName: "Reset Password",
         addPrivilege: true,
         delPrivilege: true,
         updatePrivilege: true,
         customClass: "medium",
-        formMode: `double`,
+        formMode: "double",
       },
     },
   ]);
@@ -280,7 +319,7 @@ const Dietitian = (props) => {
   return (
     <Container className="noshadow">
       <ListTable
-        // actions={actions}
+        actions={actions}
         api={`user`}
         displayColumn="single"
         // itemTitle={`userDisplayName`}
