@@ -23,7 +23,6 @@ import { Footer } from "../../../../../elements/form/styles";
 import { Overlay } from "../../../../../elements/form/styles";
 import { Page as PageView } from "../../../../../elements/form/styles";
 import FormInput from "../../../../../elements/input";
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { getData } from "../../../../../../backend/api";
 
@@ -384,7 +383,6 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
 const PDFGenerator = ({ openData, closeModal }) => {
   const [recipeIngredients, setRecipeIngredients] = useState();
   const { t } = useTranslation();
-  const themeColors = useSelector((state) => state.themeColors);
 
   // Fetch recipe ingredients data
   useEffect(() => {

@@ -7,6 +7,7 @@ import { Container } from "../../../common/layout/styels";
 import { useSelector } from "react-redux";
 import PopupView from "../../../../elements/popupview";
 import DietMenu from "./dietMenu";
+import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
 const Patient = (props) => {
@@ -17,7 +18,7 @@ const Patient = (props) => {
   const themeColors = useSelector((state) => state.themeColors);
   // State to control the display of the SetupMenu popup
   const [openMenuSetup, setOpenMenuSetup] = useState(false);
-
+  const [openedMenu, setOpenedMenu] = useState("");
   // State to store the data for the item that was clicked on in the ListTable
   const [openItemData, setOpenItemData] = useState(null);
 
@@ -781,7 +782,7 @@ const Patient = (props) => {
       apiType: "API",
       selectApi: "package/select",
       updateOn: "subDiet",
-      updateFields: [{ id: "foodMenu", value: "foodMenu" }],
+      updateFields: [{ id: "foodMenu", value: "_id", collection: "foodMenu" }],
       placeholder: "Package",
       tags: [
         {
@@ -795,9 +796,10 @@ const Patient = (props) => {
         title: "View Menu",
         callback: (item, data) => {
           console.log(item);
+          setOpenedMenu("menu");
           // Set the data for the clicked item and open the SetupMenu popup
           setOpenItemData({
-            data: { ...item, _id: item.foodMenu },
+            data: { ...item, _id: item.foodMenu._id },
             item: {
               viewOnly: true,
               itemTitle: {
@@ -1201,6 +1203,8 @@ const Patient = (props) => {
       type: "callback",
       callback: (item, data) => {
         // Set the data for the clicked item and open the SetupMenu popup
+        console.log(data);
+        setOpenedMenu("diet");
         setOpenItemData({ item, data });
         setOpenMenuSetup(true);
       },
@@ -1222,18 +1226,25 @@ const Patient = (props) => {
 
   return (
     <Container className="noshadow">
-      <ListTable
-        actions={actions}
-        api={`user`}
-        itemTitle={{ name: "username", type: "text", collection: "" }}
-        shortName={`Patient`}
-        parentReference={"userType"}
-        referenceId={"6471b3849fb2b29fe045887b"}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
-      {openMenuSetup && openItemData && (
+      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
+      {openedMenu === "menu" && openMenuSetup && openItemData && (
+        <PopupView
+          // Popup data is a JSX element which is binding to the Popup Data Area like HOC
+          popupData={
+            <SetupMenu
+              openData={openItemData}
+              setMessage={props.setMessage}
+              // Pass selected item data (Menu Title) to the popup for setting the time
+            ></SetupMenu>
+          }
+          themeColors={themeColors}
+          closeModal={closeModal}
+          itemTitle={{ name: "title", type: "text", collection: "foodMenu" }}
+          openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+          customClass={"full-page"}
+        ></PopupView>
+      )}
+      {openedMenu === "diet" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
           popupData={
