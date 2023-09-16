@@ -14,7 +14,6 @@ import { Footer } from "../../../../../elements/form/styles";
 import { Overlay } from "../../../../../elements/form/styles";
 import { Page as PageView } from "../../../../../elements/form/styles";
 import FormInput from "../../../../../elements/input";
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { getData } from "../../../../../../backend/api";
 
@@ -186,13 +185,10 @@ const styles = StyleSheet.create({
   },
   sectionBottomTitle: {
     backgroundColor: "#f0f0f0", // Example background color, adjust as needed
-    backgroundColor: "#f0f0f0", // Example background color, adjust as needed
     padding: 10, // Adjust as needed
     borderRadius: 5, // Example border radius, adjust as needed
   },
   sectionBottomHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 5, // Adjust as needed
@@ -200,12 +196,9 @@ const styles = StyleSheet.create({
   h2: {
     fontSize: 16, // Example font size, adjust as needed
     fontWeight: "bold",
-    fontWeight: "bold",
     // Add other text styles (color, fontFamily, etc.) as needed
   },
   sectionBottomTimings: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -367,7 +360,6 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
 const PDFGenerator = ({ openData, closeModal }) => {
   const [recipeIngredients, setRecipeIngredients] = useState();
   const { t } = useTranslation();
-  const themeColors = useSelector((state) => state.themeColors);
 
   // Fetch recipe ingredients data
   useEffect(() => {
