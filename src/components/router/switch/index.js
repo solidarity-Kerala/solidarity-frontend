@@ -87,6 +87,7 @@ import NewPatientTodayReport from "../../private/pages/report/newPatientTodayRep
 
 import DietCentreBranch from "../../private/pages/registrationSettings/dietCentreBranch";
 import ErrorLog from "../../private/pages/errorLog";
+import IngredientReport from "../../private/pages/report/ingredientReport";
 /**
  * Switch component to render different pages based on the provided page prop.
  * @param {string} page - The page to be rendered.
@@ -944,6 +945,16 @@ const Switch = ({
     case "error-log":
       return (
         <ErrorLog
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "ingredient-report":
+      return (
+        <IngredientReport
           key={key}
           exportPrivilege={exportPrivilege}
           addPrivilege={addPrivilege}

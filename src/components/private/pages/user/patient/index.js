@@ -1079,6 +1079,21 @@ const Patient = (props) => {
     // },
   ]);
 
+  const [resetPassword] = useState([
+    {
+      type: "text",
+      placeholder: "New Password",
+      name: "newPassword",
+      validation: "",
+      default: "",
+      label: "New Password",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+  ]);
+
   const [actions] = useState([
     {
       element: "button",
@@ -1235,6 +1250,35 @@ const Patient = (props) => {
         delPrivilege: true,
         updatePrivilege: true,
         customClass: "medium",
+      },
+    },
+    {
+      element: "button",
+      type: "subList",
+      id: "appointment",
+      // itemTitle: "username",
+      itemTitle: {
+        name: "username",
+        type: "text",
+        collection: "dietician",
+      },
+      title: "Reset Password",
+      attributes: resetPassword,
+      params: {
+        api: `auth/update-passoword`,
+        parentReference: "user",
+        // itemTitle: "username",
+        itemTitle: {
+          name: "username",
+          type: "text",
+          collection: "dietician",
+        },
+        shortName: "Reset Password",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+        formMode: "double",
       },
     },
   ]);
