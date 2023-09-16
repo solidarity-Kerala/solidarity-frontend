@@ -319,7 +319,7 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
   useEffect(() => {
     getData({ userId }, "patient-diet/food-schedule").then((response) => {
       if (response.status === 200) {
-        setMenuData(response.data);
+        // setMenuData(response.data);
       }
     });
   }, [userId]);

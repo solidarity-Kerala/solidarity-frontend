@@ -284,11 +284,11 @@ const CrudForm = (props) => {
       if (type === "select") {
         if (field.updateFields) {
           field.updateFields?.forEach((element) => {
-            udpateValue[element.id] = event[element.value];
+            udpateValue[element.id] = element.collection ? event[element.collection]?.[element.value] : event[element.value];
           });
         }
       }
-      console.log("udpateValue", udpateValue);
+      console.log(udpateValue);
       // Creating an updated fieldßƒ
       // updating the formm values
       setFormValues(udpateValue);
