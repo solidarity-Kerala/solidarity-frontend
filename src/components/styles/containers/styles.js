@@ -127,12 +127,12 @@ export const RowContainer = styled.div`
     flex: 1 1 400px;
     overflow: scroll;
     padding: 0px 30px;
-    position:relative;
-    position:sticky;
-    top:0;
+    position: relative;
+    position: sticky;
+    top: 0;
   }
   &.menu-schedule {
-     position:relative;
+    position: relative;
     max-width: calc(100% - 450px);
     width: calc(100% - 450px);
     flex: 1 1 calc(100% - 450px);
