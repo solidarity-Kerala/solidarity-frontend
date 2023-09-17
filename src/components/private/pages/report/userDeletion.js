@@ -215,56 +215,56 @@ const UserDeletion = (props) => {
     },
   ]);
 
-  const [Restore] = useState([
-    {
-      type: "select",
-      placeholder: "Delete",
-      name: "identityType",
-      validation: "",
-      default: "",
-      tag: false,
-      label: "Delete",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-      selectApi: "True, False",
-      apiType: "CSV",
-      filter: false,
-    },
-  ]);
+  // const [Restore] = useState([
+  //   {
+  //     type: "select",
+  //     placeholder: "Delete",
+  //     name: "identityType",
+  //     validation: "",
+  //     default: "",
+  //     tag: false,
+  //     label: "Delete",
+  //     required: true,
+  //     view: true,
+  //     add: true,
+  //     update: true,
+  //     selectApi: "True, False",
+  //     apiType: "CSV",
+  //     filter: false,
+  //   },
+  // ]);
 
-  const [actions] = useState([
-    {
-      element: "button",
-      type: "subList",
-      id: "appointment",
-      // itemTitle: "username",
-      itemTitle: {
-        name: "username",
-        type: "text",
-        collection: "dietician",
-      },
-      title: "Restore",
-      attributes: Restore,
-      params: {
-        api: `user/user-deletion`,
-        parentReference: "user",
-        // itemTitle: "username",
-        itemTitle: {
-          name: "username",
-          type: "text",
-          collection: "dietician",
-        },
-        shortName: "Restore",
-        addPrivilege: true,
-        delPrivilege: true,
-        updatePrivilege: true,
-        customClass: "medium",
-        formMode: "double",
-      },
-    },
-  ]);
+  // const [actions] = useState([
+  //   {
+  //     element: "button",
+  //     type: "subList",
+  //     id: "appointment",
+  //     // itemTitle: "username",
+  //     itemTitle: {
+  //       name: "username",
+  //       type: "text",
+  //       collection: "dietician",
+  //     },
+  //     title: "Restore",
+  //     attributes: Restore,
+  //     params: {
+  //       api: `user/user-deletion`,
+  //       parentReference: "user",
+  //       // itemTitle: "username",
+  //       itemTitle: {
+  //         name: "username",
+  //         type: "text",
+  //         collection: "dietician",
+  //       },
+  //       shortName: "Restore",
+  //       addPrivilege: true,
+  //       delPrivilege: true,
+  //       updatePrivilege: true,
+  //       customClass: "medium",
+  //       formMode: "double",
+  //     },
+  //   },
+  // ]);
 
   return (
     <Container className="noshadow">
