@@ -195,7 +195,7 @@ export const Details = styled.article`
   display: flex;
   margin: 0px;
   padding: 10px;
-  font-size:12px;
+  font-size: 12px;
   background: white;
   &.head {
     background: rgb(248, 248, 248);
@@ -203,20 +203,21 @@ export const Details = styled.article`
     font-weight: 600;
     padding: 10px;
     border-radius: 10px;
-    margin-bottom:10px;
+    margin-bottom: 10px;
+    cursor: pointer;
   }
   > div {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
   }
-  div:last-child {
-    font-size:13px;
+  div:nth-child(2) {
+    font-size: 13px;
     font-weight: bold;
   }
   > div > span {
-    width: 100%;
     display: flex;
+    margin-right: 1px;
   }
   > div > span::after {
     content: " \u2022"; /* Unicode character for round dot */
@@ -336,14 +337,25 @@ export const DayData = styled.div`
   padding: 0px;
 `;
 export const MealTimeHead = styled.div`
-  background: #f8f8f8;
-  color: black;
   font-weight: 600;
   padding: 10px;
   border-radius: 10px;
+  position: relative;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color:${({ active }) => (active ? "#4b4b4b" : "#f8f8f8;")};
+  color:${({ active }) => (active ? "white" : "black")};;
+  transform:rotate(0deg);
+  svg { 
+    margin-left: auto;
+    margin-right: 0;
+    position: absolute;
+    right: 15px;
+    transform:rotate(${({ active }) => (active ? '180deg' : '0deg')});
+  }
 `;
 export const Recepes = styled.div`
-  margin: 10px 0;
+  margin-bottom: 10px;
   .recipe {
     border-bottom: 1px solid rgb(227 227 227);
   }
@@ -445,6 +457,7 @@ export const ReplacableItemsList = styled.div`
 `;
 export const UserDetails = styled.div`
   row-gap: 10px;
+  margin-bottom: 10px;
   article {
     border-bottom: 1px solid rgb(227 227 227);
   }
