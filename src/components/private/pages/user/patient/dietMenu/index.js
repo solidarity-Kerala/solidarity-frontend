@@ -12,6 +12,7 @@ import { dateFormat } from "../../../../../functions/date";
 const DietMenu = ({ openData, themeColors, setMessage }) => {
   const [userId] = useState(openData.data._id);
   const [menuData, setMenuData] = useState(0);
+  const [replacableItems, setReplacableItems] = useState({});
   const [selectedDayNumber, setSelectedDayNumber] = useState(0);
   const [selectedMealTime, setSelectedMealTime] = useState({});
   useEffect(() => {
@@ -21,6 +22,13 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
       }
     });
   }, [userId]);
+  const getReplacableItems = (foodMenuItem) => {
+    getData({ foodMenuItem, calories: menuData.user.diet.calories }, "food-menu/replacable-items").then((response) => {
+      if (response.status === 200) {
+        setReplacableItems((prev) => ({ ...prev, [foodMenuItem]: response.data.replacableItems }));
+      }
+    });
+  };
   const populateArray = (items, value) => {
     if (value === "days") {
       const days = [
@@ -39,9 +47,9 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
     }
   };
   function calculateExpiryDate(startDate, totalDays, excludedDays, skippedDays) {
-    console.log(startDate, totalDays, excludedDays, skippedDays)
+    console.log(startDate, totalDays, excludedDays, skippedDays);
     // Adjust total days considering skipped days and excluded days
-    const eligibleDays = totalDays  ;
+    const eligibleDays = totalDays;
 
     let currentDate = moment(startDate);
     let eligibleCount = 0;
@@ -108,25 +116,29 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
                                     </span>
                                   </RecepeData>
                                 </RecepeContent>
-                                {recipeItem.replacableItems.length > 0 && (
+                                {recipeItem.foodmenuitem.replacableItems > 0 && (
                                   <ReplacableItems className="horizontal" active={selectedDayNumber === index}>
-                                    <div className="head">Available Options</div>
-                                    <ReplacableItemsList>
-                                      {recipeItem.replacableItems.map((replacableItem) => (
-                                        <Recepe className="horizontal">
-                                          <RecepeContent>
-                                            <RecepeImage src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food}></RecepeImage>
-                                            <RecepeData>
-                                              <span className="title">{replacableItem.recipe.title}</span>
-                                              <span className="light">
-                                                <span>{replacableItem.recipe.calories.toFixed(2)} Cal</span>
-                                                <span>{replacableItem.recipe.gram.toFixed(2)} g</span>
-                                              </span>
-                                            </RecepeData>
-                                          </RecepeContent>
-                                        </Recepe>
-                                      ))}
-                                    </ReplacableItemsList>
+                                    <button onClick={() => getReplacableItems(recipeItem.foodmenuitem._id)}>
+                                      <div>Replacable Options ({recipeItem.foodmenuitem.replacableItems}) </div> <GetIcon icon={"down"}></GetIcon>
+                                    </button>
+                                    {replacableItems[recipeItem.foodmenuitem._id] && (
+                                      <ReplacableItemsList>
+                                        {replacableItems[recipeItem.foodmenuitem._id]?.map((replacableItem) => (
+                                          <Recepe className="horizontal">
+                                            <RecepeContent>
+                                              <RecepeImage src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food}></RecepeImage>
+                                              <RecepeData>
+                                                <span className="title">{replacableItem.recipe.title}</span>
+                                                <span className="light">
+                                                  <span>{replacableItem.recipe.calories.toFixed(2)} Cal</span>
+                                                  <span>{replacableItem.recipe.gram.toFixed(2)} g</span>
+                                                </span>
+                                              </RecepeData>
+                                            </RecepeContent>
+                                          </Recepe>
+                                        ))}
+                                      </ReplacableItemsList>
+                                    )}
                                   </ReplacableItems>
                                 )}
                               </Recepe>
@@ -216,6 +228,10 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
                 <Details>
                   <div>No of Days</div>
                   <div>{menuData.user.diet.numberofDays}</div>
+                </Details>
+                <Details>
+                  <div>Calorie Intake</div>
+                  <div>{menuData.user.diet.calories} (Per day)</div>
                 </Details>
                 <Details>
                   <div>End Date</div>
