@@ -915,6 +915,21 @@ const Patient = (props) => {
       ],
     },
     {
+      type: "multiSelect",
+      placeholder: "Select Meal Times",
+      listView: true,
+      name: "mealTimeCategory",
+      label: "Select Meal Times",
+      required: true,
+      view: true,
+      customClass: "list",
+      add: true,
+      update: true,
+      apiType: "API",
+      search: false,
+      selectApi: 'mealtime-category/select',
+    },
+    {
       type: "textarea",
       placeholder: "Remarks",
       name: "remarks",
@@ -1302,7 +1317,7 @@ const Patient = (props) => {
           closeModal={closeModal}
           itemTitle={{ name: "username", type: "text", collection: "" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
-          customClass={"full-page"}
+          customClass={"medium"}
         ></PopupView>
       )}
     </Container>

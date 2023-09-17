@@ -12,6 +12,8 @@ export const Table = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     border-bottom: 0px solid #d9d9d9;
+    column-gap: 5px;
+    row-gap: 5px;
   }
   @media (max-width: 768px) {
     &.double {
@@ -86,7 +88,7 @@ export const Tr = styled.div`
     border-bottom-left-radius: 12px;
   }
   .double.table & {
-    border-radius: 0px;
+    border-radius: 12px;
     &:first-child {
       border-top-left-radius: 12px;
     }

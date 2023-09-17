@@ -3,20 +3,24 @@ import styled from "styled-components";
 export const TabContainer = styled.div`
   display: flex;
   flex-direction: row;
+  overflow: auto;
+  width: 100%;
   position: sticky;
-  top: 0;
-  background: #eaeaea;
+  top: -32px;
+  background: rgb(234, 234, 234);
   z-index: 1;
 `;
 
 export const TabButton = styled.button`
-  padding: 10px 20px;
-  background-color: ${({ active }) => (active ? "#f9f9f9" : "#ccc")};
+  padding: 0px 20px;
+  background-color: transparent;
   border: none;
-  border-radius: 4px;
   font-size: 14px;
   margin-bottom: 10px;
+  padding: 10px 10px;
   cursor: pointer;
+  border-bottom: 1px solid ${({ active }) => (active ? "#EB6B55" : "rgb(204, 204, 204)")};
+  color: ${({ active }) => (active ? "#EB6B55" : "black")};
 `;
 
 export const Table = styled.table`
@@ -40,9 +44,9 @@ export const TableBody = styled.tbody``;
 export const TableRow = styled.tr``;
 
 export const DayHead = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 5px;
+  margin: 0px 0px;
+  font-weight: 600;
+  padding-bottom: 0;
   .calories {
     font-size: 12px;
     background-color: white;
@@ -51,8 +55,13 @@ export const DayHead = styled.div`
     width: auto;
     align-self: center;
   }
+
+  white-space: nowrap;
   .day {
-    font-size: 15px;
+    font-size: 14px;
+  }
+  .dayName {
+    font-size: 12px;
   }
 `;
 export const MealCategoryCell = styled.th`
@@ -79,7 +88,7 @@ export const Div = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  padding:5px;
+  padding: 5px;
   flex-direction: column;
   /* border-top: 1px solid rgb(204, 204, 204); */
   &:first-child {
@@ -182,21 +191,39 @@ export const Variants = styled.div`
     }
   }
 `;
-export const Details = styled.div`
-  width: calc(100% - 60px);
-  text-align: left;
-  span {
+export const Details = styled.article`
+  display: flex;
+  margin: 0px;
+  padding: 10px;
+  font-size: 12px;
+  background: white;
+  &.head {
+    background: rgb(248, 248, 248);
+    color: black;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  > div {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
   }
-  span:first-child {
-    font-size: 12px !important;
+  div:nth-child(2) {
+    font-size: 13px;
     font-weight: bold;
   }
-  .variant {
-    font-size: 11px !important;
-    font-weight: normal;
-    padding-top: 2px;
+  > div > span {
+    display: flex;
+    margin-right: 1px;
+  }
+  > div > span::after {
+    content: " \u2022"; /* Unicode character for round dot */
+  }
+  > div > span:last-child::after {
+    content: ""; /* Empty content for the last span */
   }
 `;
 export const Variant = styled.div`
@@ -265,9 +292,9 @@ export const Variant = styled.div`
     cursor: pointer;
     max-width: 50px;
   }
-  &.Fixed{
-    border:0;
-    padding:0;
+  &.Fixed {
+    border: 0;
+    padding: 0;
   }
   &.selected {
     background-color: black;
@@ -295,28 +322,152 @@ export const Variant = styled.div`
   }
 `;
 
-export const ReplacableItems = styled.div`
-  &.false {
-    position: fixed;
-    top: 0;
-    left: 10%;
-    width: 200px;
-    top: auto;
-    min-height: 200px;
-    right: auto;
-    bottom: 0;
-    background-color: white;
-    z-index: 1;
-    padding: 10px;
-    border-radius: 10px 10px 0px 0px;
-    box-shadow: 0px 0px 3px 1px rgb(181 181 181 / 45%);
-  }
-  &.true {
-  }
-`;
 export const SideHead = styled.div`
   width: 100%;
   margin-bottom: 10px;
   padding-bottom: 5px;
   border-bottom: 1px solid lightgray;
+`;
+export const Box = styled.div`
+  padding: 0px;
+  display: ${({ active }) => (active ? "block" : "none")};
+`;
+
+export const DayData = styled.div`
+  padding: 0px;
+`;
+export const MealTimeHead = styled.div`
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 10px;
+  position: relative;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color:${({ active }) => (active ? "#4b4b4b" : "#f8f8f8;")};
+  color:${({ active }) => (active ? "white" : "black")};;
+  transform:rotate(0deg);
+  svg { 
+    margin-left: auto;
+    margin-right: 0;
+    position: absolute;
+    right: 15px;
+    transform:rotate(${({ active }) => (active ? '180deg' : '0deg')});
+  }
+`;
+export const Recepes = styled.div`
+  margin-bottom: 10px;
+  .recipe {
+    border-bottom: 1px solid rgb(227 227 227);
+  }
+  .recipe:first-child {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+  }
+  .recipe:last-child {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom: 0px;
+  }
+`;
+export const Recepe = styled.div`
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  padding: 10px;
+  background: white;
+  &.horizontal {
+    border: 1px solid rgb(227 227 227);
+    border-radius: 10px;
+  }
+`;
+export const RecepeData = styled.div`
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  .title {
+    font-weight: bold;
+  }
+  .light {
+    font-size: 12px;
+    color: gray;
+    line-height: 12px;
+    margin-top: 5px;
+    font-weight: bold;
+  }
+  .light span {
+    margin-right: 3px;
+  }
+  .light span::after {
+    content: " \u2022"; /* Unicode character for round dot */
+  }
+  .light span:last-child::after {
+    content: ""; /* Empty content for the last span */
+  }
+
+  && {
+    .horizontal & {
+      .title {
+        font-size: 12px;
+      }
+      .light {
+        font-size: 11px;
+      }
+    }
+  }
+`;
+export const RecepeContent = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+export const RecepeImage = styled.img`
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+  border-radius: 10px;
+  object-fit: cover;
+  && {
+    .horizontal & {
+      width: 40px;
+      height: 40px;
+    }
+  }
+`;
+export const ReplacableItems = styled.div`
+  border: 1px solid rgb(227 227 227);
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  .head {
+    font-size: 12px;
+    border-bottom: 1px solid rgb(227 227 227);
+    padding: 5px 0px;
+    font-weight: 600;
+    margin: 0 0px;
+    margin-bottom: 10px;
+  }
+`;
+
+export const ReplacableItemsList = styled.div`
+  display: flex;
+  flex-flow: wrap;
+  display: flex;
+  column-gap: 10px;
+  row-gap: 10px;
+`;
+export const UserDetails = styled.div`
+  row-gap: 10px;
+  margin-bottom: 10px;
+  article {
+    border-bottom: 1px solid rgb(227 227 227);
+  }
+  article:first-child {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+  }
+  article:last-child {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom: 0px;
+  }
 `;

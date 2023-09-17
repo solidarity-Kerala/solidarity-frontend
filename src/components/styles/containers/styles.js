@@ -120,6 +120,24 @@ export const RowContainer = styled.div`
     top: 0;
     overflow: scroll;
   }
+  &.user-details {
+    padding-right: 30px;
+    max-width: 400px;
+    width: 400px;
+    flex: 1 1 400px;
+    overflow: scroll;
+    padding: 0px 30px;
+    position: relative;
+    position: sticky;
+    top: 0;
+  }
+  &.menu-schedule {
+    position: relative;
+    max-width: calc(100% - 450px);
+    width: calc(100% - 450px);
+    flex: 1 1 calc(100% - 450px);
+    padding: 0px 30px;
+  }
   &.menu {
     max-width: calc(100% - 450px);
     width: calc(100% - 450px);
