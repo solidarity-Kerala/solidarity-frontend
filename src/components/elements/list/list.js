@@ -39,15 +39,21 @@ const SetTr = (props) => {
   }
 };
 const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list" }) => {
-  const users = useSelector((state) =>
-    state.pages[`${api}`]
-      ? state.pages[`${api}`]
-      : {
-          data: null,
-          isLoading: true,
-          error: null,
-        }
-  );
+  const userData = useSelector((state) => state.pages);
+  const [users, setUsers] = useState({
+    data: null,
+    isLoading: true,
+    error: null,
+  });
+  useEffect(() => {
+    setUsers(
+      userData[`${api}`] ?? {
+        data: null,
+        isLoading: true,
+        error: null,
+      }
+    );
+  }, [userData, api]);
   const [showSublist, setShowSubList] = useState(false);
   const [currentApi] = useState(`${api}`);
   const [subAttributes, setSubAttributes] = useState(null);
