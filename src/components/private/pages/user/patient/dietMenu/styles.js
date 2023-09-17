@@ -343,15 +343,15 @@ export const MealTimeHead = styled.div`
   position: relative;
   margin-bottom: 10px;
   cursor: pointer;
-  background-color:${({ active }) => (active ? "#4b4b4b" : "#f8f8f8;")};
-  color:${({ active }) => (active ? "white" : "black")};;
-  transform:rotate(0deg);
-  svg { 
+  background-color: ${({ active }) => (active ? "#4b4b4b" : "#f8f8f8;")};
+  color: ${({ active }) => (active ? "white" : "black")};
+  transform: rotate(0deg);
+  svg {
     margin-left: auto;
     margin-right: 0;
     position: absolute;
     right: 15px;
-    transform:rotate(${({ active }) => (active ? '180deg' : '0deg')});
+    transform: rotate(${({ active }) => (active ? "180deg" : "0deg")});
   }
 `;
 export const Recepes = styled.div`
@@ -438,6 +438,20 @@ export const ReplacableItems = styled.div`
   padding: 10px;
   margin-top: 10px;
   border-radius: 10px;
+  > button {
+   cursor: pointer;
+    border: 0px;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    display: flex;
+    font-size: 12px;
+    padding: 5px 0px;
+    font-weight: 600;
+    margin: 0px 0px;
+  }
   .head {
     font-size: 12px;
     border-bottom: 1px solid rgb(227 227 227);
@@ -454,6 +468,9 @@ export const ReplacableItemsList = styled.div`
   display: flex;
   column-gap: 10px;
   row-gap: 10px;
+  margin-top:5px;
+  border-top: 1px solid rgb(227 227 227);
+  padding-top:10px;
 `;
 export const UserDetails = styled.div`
   row-gap: 10px;
