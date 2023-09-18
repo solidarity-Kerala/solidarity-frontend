@@ -89,6 +89,7 @@ const WeddingdayReport = (props) => {
                 // profileImage="photo"
                 shortName={`Wedding Day`}
                 formMode={`double`}
+                viewMode="table"
                 {...props}
                 attributes={attributes}
                 datefilter={true}
