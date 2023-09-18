@@ -89,6 +89,7 @@ const BirthdayReport = (props) => {
                 // profileImage="photo"
                 shortName={`Birthday`}
                 formMode={`double`}
+                viewMode="table"
                 {...props}
                 attributes={attributes}
                 datefilter={true}

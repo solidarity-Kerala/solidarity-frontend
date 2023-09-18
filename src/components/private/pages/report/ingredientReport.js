@@ -70,6 +70,7 @@ const IngredientReport = (props) => {
         // profileImage="photo"
         shortName={`Recipe Item`}
         formMode={`double`}
+        viewMode="table"
         {...props}
         attributes={attributes}
         datefilter={true}

@@ -102,6 +102,7 @@ const TodayPatientReport = (props) => {
                 // profileImage="photo"
                 shortName={`Today Patient Report`}
                 formMode={`double`}
+                viewMode="table"
                 {...props}
                 attributes={attributes}
                 datefilter={true}
