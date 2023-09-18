@@ -111,7 +111,6 @@ const Switch = ({
   updatePrivilege = false,
   exportPrivilege = false,
 }) => {
-  console.log(page);
   switch (page) {
     case "login":
       return <Login key={key} />;

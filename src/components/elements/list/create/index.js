@@ -288,7 +288,6 @@ const CrudForm = (props) => {
           });
         }
       }
-      console.log(udpateValue);
       // Creating an updated fieldßƒ
       // updating the formm values
       setFormValues(udpateValue);

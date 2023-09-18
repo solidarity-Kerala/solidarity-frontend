@@ -27,7 +27,6 @@ const Patient = (props) => {
     setOpenMenuSetup(false);
     setOpenItemData(null);
   };
-
   const [attributes] = useState([
     {
       type: "text",
@@ -695,19 +694,6 @@ const Patient = (props) => {
       update: true,
     },
     {
-      type: "text",
-      placeholder: "Room Number",
-      name: "appointmentStatus",
-      validation: "",
-      default: "Admission",
-      tag: false,
-      label: "Room Number",
-      required: false,
-      view: false,
-      add: false,
-      update: false,
-    },
-    {
       type: "datetime",
       placeholder: "Admission Date",
       name: "admissionDate",
@@ -931,17 +917,17 @@ const Patient = (props) => {
     {
       type: "multiSelect",
       placeholder: "Select Meal Times",
-      listView: true,
       name: "mealTimeCategory",
+      updateOn: "package",
       label: "Select Meal Times",
       required: true,
       view: true,
-      customClass: "list",
+      default: "",
       add: true,
       update: true,
       apiType: "API",
       search: false,
-      selectApi: "mealtime-category/select",
+      selectApi: "mealtime-category/select-by-menu",
     },
     {
       type: "textarea",
@@ -1052,12 +1038,6 @@ const Patient = (props) => {
       selectApi: "user/select?userType=6471b34d9fb2b29fe0458878",
       placeholder: "Dietician",
       name: "dietician",
-      condition: {
-        item: "physical",
-        if: true,
-        then: "enabled",
-        else: "disabled",
-      },
       validation: "",
       showItem: "userDisplayName",
       default: "",
