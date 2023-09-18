@@ -89,6 +89,10 @@ import DietCentreBranch from "../../private/pages/registrationSettings/dietCentr
 import ErrorLog from "../../private/pages/errorLog";
 import IngredientReport from "../../private/pages/report/ingredientReport";
 import UserDeletion from "../../private/pages/report/userDeletion";
+import RestoreDeliveryMan from "../../private/pages/restoreUser/restoreDeliveryMan";
+import RestorePatient from "../../private/pages/restoreUser/restorePatient";
+import RestoreDietitian from "../../private/pages/restoreUser/restoreDietitian";
+import RestoreFranchiseAdmin from "../../private/pages/restoreUser/restoreFranchiseAdmin";
 /**
  * Switch component to render different pages based on the provided page prop.
  * @param {string} page - The page to be rendered.
@@ -966,6 +970,46 @@ const Switch = ({
     case "user-deletion":
       return (
         <UserDeletion
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "restore-delivery-man":
+      return (
+        <RestoreDeliveryMan
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "restore-patient":
+      return (
+        <RestorePatient
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "restore-dietitian":
+      return (
+        <RestoreDietitian
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "restore-franchise-admin":
+      return (
+        <RestoreFranchiseAdmin
           key={key}
           exportPrivilege={exportPrivilege}
           addPrivilege={addPrivilege}

@@ -1,0 +1,288 @@
+.App {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.header-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-logo img {
+    width: 180px;
+    height: auto;
+}
+
+.header-line {
+    margin: auto;
+    width: 90%;
+}
+
+.header-line-green {
+    border-top: 2px solid green;
+}
+
+.header-line-grey {
+    margin-top: 2px;
+    border-top: 2px solid grey;
+}
+
+/** milkbread **/
+.section-milkbread {
+    margin: auto;
+    width: 90%;
+}
+
+.section-milkbread-header {
+    margin-top: 10px;
+}
+
+.section-milkbread-header>h1 {
+    font-size: 22px;
+    font-weight: bold;
+    color: rgb(42, 164, 231);
+    text-transform: capitalize;
+}
+
+.section-milkbread-header>p {
+    margin-top: 5px;
+    padding: 5px 0px;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+    text-transform: capitalize;
+}
+
+.section-milkbread-table {
+    margin-top: 10px;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.section-milkbread-row>th {
+    font-size: 18px;
+    background-color: rgb(175, 174, 174);
+}
+
+.section-milkbread-row>td,
+th {
+    font-size: 16px;
+    text-align: left;
+    padding: 8px;
+}
+
+.header-line-blue {
+    margin-top: 5px;
+    border-top: 5px solid blue;
+}
+
+.section-milkbread-row:nth-child(odd) {
+    background-color: #c3d5e9;
+}
+
+@media (max-width: 600px) {
+    .section-milkbread-row>th {
+        font-size: 14px;
+    }
+
+    .section-milkbread-row>td,
+    th {
+        font-size: 14px;
+        text-align: justify;
+        padding: 6px;
+    }
+}
+
+/** End milkbread **/
+
+/** milk small **/
+.section-milksmall-data {
+    display: flex;
+    margin: auto;
+    width: 90%;
+}
+
+.section-milksmall-title {
+    text-align: center;
+}
+
+.table-resp {
+    margin-top: 10px;
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black;
+}
+
+.section-milksmall-body>tr {
+    font-size: 20px;
+    text-align: left;
+}
+
+.table-resp tr td:first-child,
+.table-resp tr th:first-child {
+    border-bottom: 1px solid #000;
+    /* Adjust the color and thickness as needed */
+}
+
+.section-milksmall-tabletwo {
+    margin-left: 20px;
+}
+
+.header-line-black {
+    border: 5px solid black;
+    margin-bottom: 5px;
+    width: 90%;
+    margin: auto;
+}
+
+.header-line-blacksmall {
+    border: 3px solid black;
+    margin-bottom: 5px;
+    width: 90%;
+    margin: auto;
+}
+
+.milkbread-data {
+    font-size: 20px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.nutrition-data {
+    font-size: 32px;
+    text-align: left;
+    margin: 0;
+    font-style: normal;
+    font-weight: bolder;
+}
+
+@media (min-width: 768px) {
+    .table-resp {
+        margin-top: 3em;
+        position: relative;
+    }
+
+    .table-resp caption {
+        position: absolute;
+        top: -2em;
+        margin-bottom: 0.75em;
+    }
+
+    .table-resp td,
+    .table-resp th {
+        padding: 0.25em 2.5em;
+    }
+
+    .table-resp td:nth-child(2),
+    .table-resp th:nth-child(2) {
+        border-left: 3px solid #fff;
+    }
+}
+
+@media (max-width: 700px) {
+    .section-milksmall-body>tr {
+        font-size: 16px;
+    }
+}
+
+/** End milk small **/
+
+/** section-bottom **/
+.section-bottom-items {
+    margin: auto;
+    width: 90%;
+}
+
+.section-bottom-title {
+    margin-top: 30px;
+}
+
+.section-bottom-header {
+    display: flex;
+    margin-top: 10px;
+}
+
+.section-bottom-header h2:first-child {
+    font-size: 20px;
+    font-weight: 600;
+    color: black;
+}
+
+.section-bottom-header h2:not(:first-child) {
+    font-size: 18px;
+    font-weight: 200;
+    margin-left: 5px;
+    margin-top: 3px;
+    color: rgb(49, 48, 48);
+}
+
+#section-validity {
+    padding: 5px;
+    width: 60%;
+    border: 2px solid black;
+}
+
+.section-bottom-timings {
+    margin-top: 10px;
+    width: 25%;
+    font-size: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+@media (max-width: 600px) {
+    #section-validity {
+        width: 100%;
+        font-size: 16px;
+    }
+}
+
+/** End section-bottom **/
+
+/** footer **/
+.footer {
+    margin-top: 20px;
+}
+
+.footer-items {
+    margin: auto;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-items p {
+    color: goldenrod;
+    font-size: 18px;
+    padding: 5px;
+}
+
+.footer-line-brown {
+    border: none;
+    /* Remove the default border */
+    background: linear-gradient(to right,
+            brown,
+            goldenrod);
+    /* Replace these colors with your desired gradient */
+    height: 5px;
+    /* Adjust the height of the line as needed */
+}
+
+@media (max-width: 600px) {
+    .footer-items {
+        margin: auto;
+        width: 90%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .footer-items p {
+        color: goldenrod;
+        font-size: 14px;
+        padding: 0px;
+    }
+}

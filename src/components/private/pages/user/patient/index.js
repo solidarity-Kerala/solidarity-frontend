@@ -1026,9 +1026,9 @@ const Patient = (props) => {
     {
       type: "select",
       apiType: "API",
-      selectApi: "franchise/select",
-      placeholder: "Franchise",
-      name: "franchise",
+      selectApi: "diet-centre-branch/select",
+      placeholder: "center",
+      name: "center",
       condition: {
         item: "physical",
         if: true,
@@ -1038,7 +1038,7 @@ const Patient = (props) => {
       showItem: "name",
       validation: "",
       default: "",
-      label: "Franchise",
+      label: "center",
       required: true,
       view: true,
       add: true,
@@ -1048,6 +1048,7 @@ const Patient = (props) => {
     {
       type: "select",
       apiType: "API",
+      updateOn: "center",
       selectApi: "user/select?userType=6471b34d9fb2b29fe0458878",
       placeholder: "Dietician",
       name: "dietician",
