@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 //
-import Layout from "../../../common/layout";
-import ListTable from "../../../../elements/list/list";
-import { Container } from "../../../common/layout/styels";
+import Layout from "../../common/layout";
+import ListTable from "../../../elements/list/list";
+import { Container } from "../../common/layout/styels";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
 
-const DeliveryMan = (props) => {
+const UserDeletion = (props) => {
   //to update the page title
   useEffect(() => {
     document.title = `Delivery Man - Diet Food Management Portal`;
@@ -38,6 +38,23 @@ const DeliveryMan = (props) => {
       update: false,
     },
     {
+      type: "select",
+      apiType: "API",
+      selectApi: "user-type/select",
+      placeholder: "User Type",
+      name: "userType",
+      validation: "",
+      showItem: "role",
+      tag: true,
+      default: "",
+      label: "User Type",
+      required: true,
+      view: true,
+      add: true,
+      update: false,
+      filter: true,
+    },
+    {
       type: "text",
       placeholder: "Name",
       name: "userDisplayName",
@@ -47,7 +64,7 @@ const DeliveryMan = (props) => {
       required: true,
       view: true,
       add: true,
-      update: true,
+      update: false,
     },
     {
       type: "select",
@@ -62,7 +79,7 @@ const DeliveryMan = (props) => {
       view: false,
       filter: false,
       add: true,
-      update: true,
+      update: false,
       apiType: "CSV",
       selectApi: "Male,Female",
     },
@@ -96,36 +113,6 @@ const DeliveryMan = (props) => {
       // apiType: "CSV",
       // selectApi: "Male,Female",
     },
-
-    // {
-    //   type: "date",
-    //   apiType: "API",
-    //   selectApi: "",
-    //   placeholder: "DOB",
-    //   name: "subscriber",
-    //   validation: "",
-    //   showItem: "dateOfBirth",
-    //   default: "",
-    //   tag: true,
-    //   label: "DOB",
-    //   required: true,
-    //   view: true,
-    //   add: false,
-    //   update: false,
-    // },
-    // {
-    //   type: "date",
-    //   placeholder: "YYYY/MM/DD",
-    //   name: "dateOfBirth",
-    //   validation: "",
-    //   default: "",
-    //   tag: true,
-    //   label: "DOB",
-    //   required: true,
-    //   view: false,
-    //   add: true,
-    //   update: true,
-    // },
     {
       type: "password",
       placeholder: "password",
@@ -139,39 +126,6 @@ const DeliveryMan = (props) => {
       add: true,
       update: false,
     },
-    // {
-    //   type: "textarea",
-    //   apiType: "",
-    //   selectApi: "",
-    //   placeholder: "Address",
-    //   name: "subscriber",
-    //   // collection: "subscribers",
-    //   validation: "",
-    //   showItem: "address",
-    //   default: "",
-    //   tag: true,
-    //   label: "Address",
-    //   required: true,
-    //   view: true,
-    //   add: false,
-    //   update: false,
-    // },
-    // {
-    //   type: "textarea",
-    //   apiType: "",
-    //   selectApi: "",
-    //   placeholder: "Address",
-    //   name: "address",
-    //   validation: "",
-    //   showItem: "address",
-    //   default: "",
-    //   tag: true,
-    //   label: "Address",
-    //   required: true,
-    //   view: false,
-    //   add: true,
-    //   update: true,
-    // },
     {
       type: "textarea",
       apiType: "",
@@ -190,40 +144,6 @@ const DeliveryMan = (props) => {
       update: false,
     },
     {
-      type: "select",
-      apiType: "API",
-      selectApi: "deliveryman-location/select",
-      placeholder: "Location",
-      name: "deliveryManLocation",
-      collection: "",
-      validation: "",
-      showItem: "",
-      default: "",
-      tag: true,
-      label: "Location",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "vehicle-category/select",
-      placeholder: "Vehicle",
-      name: "vehicleType",
-      collection: "",
-      validation: "",
-      showItem: "",
-      default: "",
-      tag: true,
-      label: "Vehicle",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
       type: "image",
       placeholder: "Image",
       name: "userImage",
@@ -234,7 +154,7 @@ const DeliveryMan = (props) => {
       required: true,
       view: true,
       add: true,
-      update: true,
+      update: false,
     },
     {
       type: "select",
@@ -247,9 +167,10 @@ const DeliveryMan = (props) => {
       required: true,
       view: true,
       add: true,
-      update: true,
+      update: false,
       selectApi: "Passport, License",
       apiType: "CSV",
+      filter: false,
     },
     {
       type: "image",
@@ -262,7 +183,7 @@ const DeliveryMan = (props) => {
       required: true,
       view: true,
       add: true,
-      update: true,
+      update: false,
     },
     {
       type: "text",
@@ -274,68 +195,89 @@ const DeliveryMan = (props) => {
       required: true,
       view: true,
       add: true,
-      update: true,
+      update: false,
     },
-  ]);
-
-  const [resetPassword] = useState([
     {
-      type: "text",
-      placeholder: "New Password",
-      name: "newPassword",
+      type: "select",
+      placeholder: "Delete",
+      name: "delete",
       validation: "",
       default: "",
-      label: "New Password",
-      required: true,
-      view: true,
-      add: true,
+      tag: false,
+      label: "Delete",
+      required: false,
+      view: false,
+      add: false,
       update: true,
+      selectApi: "True, False",
+      apiType: "CSV",
+      filter: false,
     },
   ]);
 
-  const [actions] = useState([
-    {
-      element: "button",
-      type: "subList",
-      id: "appointment",
-      // itemTitle: "username",
-      itemTitle: {
-        name: "username",
-        type: "text",
-        collection: "dietician",
-      },
-      title: "Reset Password",
-      attributes: resetPassword,
-      params: {
-        api: `auth/update-passoword`,
-        parentReference: "user",
-        // itemTitle: "username",
-        itemTitle: {
-          name: "username",
-          type: "text",
-          collection: "dietician",
-        },
-        shortName: "Reset Password",
-        addPrivilege: true,
-        delPrivilege: true,
-        updatePrivilege: true,
-        customClass: "medium",
-        formMode: "double",
-      },
-    },
-  ]);
+  // const [Restore] = useState([
+  //   {
+  //     type: "select",
+  //     placeholder: "Delete",
+  //     name: "identityType",
+  //     validation: "",
+  //     default: "",
+  //     tag: false,
+  //     label: "Delete",
+  //     required: true,
+  //     view: true,
+  //     add: true,
+  //     update: true,
+  //     selectApi: "True, False",
+  //     apiType: "CSV",
+  //     filter: false,
+  //   },
+  // ]);
+
+  // const [actions] = useState([
+  //   {
+  //     element: "button",
+  //     type: "subList",
+  //     id: "appointment",
+  //     // itemTitle: "username",
+  //     itemTitle: {
+  //       name: "username",
+  //       type: "text",
+  //       collection: "dietician",
+  //     },
+  //     title: "Restore",
+  //     attributes: Restore,
+  //     params: {
+  //       api: `user/user-deletion`,
+  //       parentReference: "user",
+  //       // itemTitle: "username",
+  //       itemTitle: {
+  //         name: "username",
+  //         type: "text",
+  //         collection: "dietician",
+  //       },
+  //       shortName: "Restore",
+  //       addPrivilege: true,
+  //       delPrivilege: true,
+  //       updatePrivilege: true,
+  //       customClass: "medium",
+  //       formMode: "double",
+  //     },
+  //   },
+  // ]);
 
   return (
     <Container className="noshadow">
       <ListTable
-        actions={actions}
-        api={`user`}
+        delPrivilege={false}
+        // actions={actions}
+        api={`user/user-deletion`}
         displayColumn="double"
         // itemTitle={`userDisplayName`}
         itemTitle={{ name: "userDisplayName", type: "text", collection: "" }}
         shortName={`Delivery Man`}
-        parentReference={"userType"}
-        referenceId={"64815bde89e0a44fc31c53b0"}
+        // parentReference={"userType"}
+        // referenceId={"64815bde89e0a44fc31c53b0"}
         // formMode={`single`}
         formMode={`double`}
         {...props}
@@ -344,4 +286,4 @@ const DeliveryMan = (props) => {
     </Container>
   );
 };
-export default Layout(DeliveryMan);
+export default Layout(UserDeletion);

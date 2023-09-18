@@ -915,6 +915,21 @@ const Patient = (props) => {
       ],
     },
     {
+      type: "multiSelect",
+      placeholder: "Select Meal Times",
+      name: "mealTimeCategory",
+      updateOn: "package",
+      label: "Select Meal Times",
+      required: true,
+      view: true,
+      default: "",
+      add: true,
+      update: true,
+      apiType: "API",
+      search: false,
+      selectApi: "mealtime-category/select-by-menu",
+    },
+    {
       type: "textarea",
       placeholder: "Remarks",
       name: "remarks",
@@ -1062,6 +1077,21 @@ const Patient = (props) => {
     //   add: true,
     //   update: true,
     // },
+  ]);
+
+  const [resetPassword] = useState([
+    {
+      type: "text",
+      placeholder: "New Password",
+      name: "newPassword",
+      validation: "",
+      default: "",
+      label: "New Password",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
   const [actions] = useState([
@@ -1222,6 +1252,35 @@ const Patient = (props) => {
         customClass: "medium",
       },
     },
+    {
+      element: "button",
+      type: "subList",
+      id: "appointment",
+      // itemTitle: "username",
+      itemTitle: {
+        name: "username",
+        type: "text",
+        collection: "dietician",
+      },
+      title: "Reset Password",
+      attributes: resetPassword,
+      params: {
+        api: `auth/update-passoword`,
+        parentReference: "user",
+        // itemTitle: "username",
+        itemTitle: {
+          name: "username",
+          type: "text",
+          collection: "dietician",
+        },
+        shortName: "Reset Password",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+        formMode: "double",
+      },
+    },
   ]);
 
   return (
@@ -1258,7 +1317,7 @@ const Patient = (props) => {
           closeModal={closeModal}
           itemTitle={{ name: "username", type: "text", collection: "" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
-          customClass={"full-page"}
+          customClass={"medium"}
         ></PopupView>
       )}
     </Container>

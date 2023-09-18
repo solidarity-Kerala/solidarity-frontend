@@ -10,7 +10,8 @@ import Search from "../search";
 
 function MultiSelect(props) {
   const [optionsVisible, setOptionsVisible] = useState(false);
-  const [selectedId, setSelectedId] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
+  const [updateValue, setUpdateValue] = useState("_");
   const [initialized, setInitialized] = useState(false);
   const [selectedValue, setSelectedValue] = useState("");
   const [options, setOptions] = useState([]);
@@ -31,49 +32,83 @@ function MultiSelect(props) {
       setFilteredOptions([]);
     }
   };
-  const fetchData = useCallback(async () => {
-    const handleOptions = (data) => {
-      const selectedData = (props.value || [])
-        .map((item) => {
-          const foundItem = data.find((dataItem) => dataItem.id === item);
-          return foundItem ? { id: foundItem.id, value: foundItem.value } : null;
-        })
-        .filter(Boolean);
-      setSelectedId(selectedData);
-      setOptions(data);
-      setInitialized(true);
-    };
-
-    if (props.apiType === "API") {
-      if (selectData) {
-        handleOptions(selectData);
-      } else if (!initialized) {
-        try {
-          const response = await getData({}, props.selectApi);
-          if (response.status === 200) {
-            handleOptions(response.data);
-            dispatch(addSelectObject(response.data, props.selectApi));
-          } else {
+  const fetchData = useCallback(
+    async (item = "", force = false, name = "", searchKey = "") => {
+      const handleOptions = (data) => {
+        if (!selectedId) {
+          const selectedData = (props.value || [])
+            .map((item) => {
+              const foundItem = data.find((dataItem) => dataItem.id === item);
+              return foundItem ? { id: foundItem.id, value: foundItem.value } : null;
+            })
+            .filter(Boolean);
+          setSelectedId(selectedData);
+        }
+        setOptions(data);
+        setInitialized(true);
+      };
+      if (force && props.apiType === "API") {
+        const optionHandler = (data) => {
+          setOptions(data);
+          setInitialized(true);
+          try {
+            const selected = data.filter((item) => item.id === selectedId)[0].value;
+            setSelectedValue(selected ? selected : props.placeHolder);
+          } catch {}
+        };
+        await getData({ [name]: item, searchKey, limit: props.apiSearch ? 20 : 0 }, `${props.selectApi}`)
+          .then((response) => {
+            if (response.status === 200) {
+              optionHandler(response.data);
+              dispatch(addSelectObject(response.data, props.selectApi));
+            } else if (response.status === 404) {
+              setInitialized(false);
+            } else {
+              setInitialized(false);
+            }
+          })
+          .catch((error) => {
+            setInitialized(false);
+          });
+      } else if (props.apiType === "API") {
+        if (selectData) {
+          handleOptions(selectData);
+        } else if (!initialized) {
+          try {
+            const response = await getData({}, props.selectApi);
+            if (response.status === 200) {
+              handleOptions(response.data);
+              dispatch(addSelectObject(response.data, props.selectApi));
+            } else {
+              setInitialized(false);
+            }
+          } catch (error) {
             setInitialized(false);
           }
-        } catch (error) {
-          setInitialized(false);
         }
+      } else if (props.apiType === "CSV") {
+        const options = props.selectApi.split(",").map((item) => ({
+          id: item.trim(),
+          value: item.trim().charAt(0).toUpperCase() + item.trim().slice(1),
+        }));
+        setOptions(options);
+        setInitialized(true);
+      } else if (props.apiType === "JSON") {
+        handleOptions(props.selectApi);
+        setOptions(props.selectApi);
+        setInitialized(true);
       }
-    } else if (props.apiType === "CSV") {
-      const options = props.selectApi.split(",").map((item) => ({
-        id: item.trim(),
-        value: item.trim().charAt(0).toUpperCase() + item.trim().slice(1),
-      }));
-      setOptions(options);
-      setInitialized(true);
-    } else if (props.apiType === "JSON") {
-      handleOptions(props.selectApi);
-      setOptions(props.selectApi);
-      setInitialized(true);
+    },
+    [props.apiType, props.apiSearch, props.placeHolder, props.selectApi, selectedId, props.value, initialized, selectData, dispatch]
+  );
+  useEffect(() => {
+    if (props.updateOn) {
+      if (updateValue !== props.updateValue) {
+        setUpdateValue(props.updateValue);
+        fetchData(props.updateValue, true, props.updateOn);
+      }
     }
-  }, [props.apiType, props.value, props.selectApi, initialized, selectData, dispatch]);
-
+  }, [props.updateValue, updateValue, fetchData, props.updateOn]);
   useEffect(() => {
     try {
       setSelectedValue(selectedId.length > 0 ? `${selectedId[0].value}${selectedId.length > 1 ? " (" + (selectedId.length - 1) + " more)" : ""}` : props.label);
@@ -146,6 +181,7 @@ function MultiSelect(props) {
                       // If event._id already exists, remove it from the items array
                       items.splice(index, 1);
                     }
+                    console.log(items);
                     setSelectedId(items);
 
                     setSelectedValue(items.length > 0 ? `${items[0].value} ${items.length > 1 ? " (" + (items.length - 1) + " more)" : ""}` : props.label);
