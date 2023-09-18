@@ -1313,7 +1313,7 @@ const Patient = (props) => {
     },
     {
       element: "button",
-      type: "subItem",
+      type: "subList",
       id: "user/subscriber",
       itemTitle: {
         name: "username",
@@ -1323,7 +1323,7 @@ const Patient = (props) => {
       title: "Delivery Address",
       attributes: deliveryAddress,
       params: {
-        api: `user/subscriber`,
+        api: `addDeliveryAddress`,
         parentReference: "user",
         itemTitle: {
           name: "username",
