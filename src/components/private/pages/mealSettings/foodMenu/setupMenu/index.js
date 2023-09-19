@@ -19,7 +19,6 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const [menuId] = useState(openData.data._id);
   const [data] = useState(openData.data);
-  console.log(data);
   const [menuData, setMenuData] = useState(null);
   const [showAllReplacable, setShowAllReplacable] = useState(false);
   const [selectedDayNumber, setSelectedDayNumber] = useState(0);
@@ -35,6 +34,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       handleTabClick(activeTab, event.target.value);
     }, 300);
   };
+  console.log("data",data)
   const [coloriePerDay, setColoriePerDay] = useState("900");
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories) => {

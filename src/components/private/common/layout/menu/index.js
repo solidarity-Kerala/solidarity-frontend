@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Header, MenuGroup, Nav, SubMenu } from "./styels";
 import { useTranslation } from "react-i18next"; // react-i18next hook for translations
@@ -7,12 +7,33 @@ import { currentMenu, menuStatus, openedMenu, selectedMenu } from "../../../../.
 import { CloseIcon, GetIcon } from "../../../../../icons";
 import { Logo, MNavClose } from "../header/styels";
 import { logo } from "../../../../../images";
+import Search from "../../../../elements/search";
 const Menu = (props) => {
   const { t } = useTranslation();
   const themeColors = useSelector((state) => state.themeColors);
   const openedMenus = useSelector((state) => state.openedMenu);
   const selectedMenuItem = useSelector((state) => state.selectedMenu);
+  const [currentMenus, setCurrentMenus] = useState(props.user.menu);
   const dispatch = useDispatch();
+  const [searchValue, setSearchValue] = useState("");
+  const handleChange = (event) => {
+    const search = event.target.value.toLowerCase(); // Convert to lower case for case-insensitive matching
+    setSearchValue(search);
+    let menu = JSON.parse(JSON.stringify(props.user.menu));
+    console.log(menu);
+    const newMenu = menu.filter((menuItem) => {
+      const labelMatches = menuItem.label.toLowerCase().includes(search);
+      // Filter submenu labels
+      const filteredSubmenu = menuItem.submenus.filter((submenuItem) => submenuItem.label.toLowerCase().includes(search));
+      console.log("filteredSubmenu", filteredSubmenu);
+      menuItem.submenus = labelMatches ? menuItem.submenus : filteredSubmenu;
+
+      return labelMatches || filteredSubmenu.length > 0;
+    });
+
+    setCurrentMenus(newMenu);
+  };
+
   return (
     <>
       <Logo src={logo} alt="logo" />
@@ -35,8 +56,9 @@ const Menu = (props) => {
         </MNavClose>
       </Header>
       <Nav theme={themeColors}>
+        <Search title={"Search"} className="menu active" theme={themeColors} placeholder="Search Menu" value={searchValue} onChange={handleChange}></Search>
         {/* Link to the home page */}
-        {props.user.menu?.map((menuItem) => (
+        {currentMenus?.map((menuItem) => (
           <div key={menuItem._id}>
             {menuItem.submenus.length > 0 ? (
               <React.Fragment>
@@ -47,12 +69,12 @@ const Menu = (props) => {
                     console.log(menuItem);
                     dispatch(openedMenu(menuItem._id));
                   }}
-                  className={openedMenus[menuItem._id] === true ? "open active" : " open"}
+                  className={openedMenus[menuItem._id] === true || searchValue.length > 0 ? "open active" : " open"}
                 >
                   <GetIcon icon={menuItem.icon} /> <span>{t(menuItem.label)} </span>
                   <GetIcon icon={"down"}></GetIcon>
                 </MenuGroup>
-                <SubMenu className={openedMenus[menuItem._id] === true ? "down" : "close"}>
+                <SubMenu className={openedMenus[menuItem._id] === true || searchValue.length > 0 ? "down" : "close"}>
                   {menuItem.submenus?.map((submenu) => (
                     <Link
                       key={submenu._id} // Use submenu.label as the key

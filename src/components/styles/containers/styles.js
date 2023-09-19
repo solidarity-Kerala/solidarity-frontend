@@ -182,6 +182,8 @@ export const RowContainer = styled.div`
   }
   &.menu-header {
     margin-left: 30px;
+    flex: 0;
+    margin-bottom: 0;
   }
   h2 {
     font-size: 1.8em;

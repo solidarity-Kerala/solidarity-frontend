@@ -175,7 +175,7 @@ export const Variants = styled.div`
     margin-top: 0px;
     overflow-wrap: initial;
     && {
-      .true & {
+      .true & > {
         flex-direction: row;
         justify-content: left;
       }
