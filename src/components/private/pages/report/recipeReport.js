@@ -15,8 +15,6 @@ const RecipeReport = (props) => {
       type: "text",
       placeholder: "Recipe",
       name: "recipe",
-      collection: "sum",
-      showItem: "recipe",
       validation: "",
       default: "",
       label: "Recipe",

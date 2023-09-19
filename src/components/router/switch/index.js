@@ -79,7 +79,7 @@ import DeliveryLocation from "../../private/pages/registrationSettings/DeliveryL
 import AddMeal from "../../private/pages/mealSettings/addMeal";
 import Recipes from "../../private/pages/mealSettings/recipes";
 import RecipeReport from "../../private/pages/report/recipeReport";
-import RecipeMealTimeCategory from "../../private/pages/report/recipeMealTimeCategory";
+
 
 import BirthdayReport from "../../private/pages/report/birthdayReport";
 import WeddingdayReport from "../../private/pages/report/weddingdayReport";
@@ -895,16 +895,7 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-    case "recipe-mealtimecategory":
-      return (
-        <RecipeMealTimeCategory
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
+   
 
     case "birthday-report":
       return (
