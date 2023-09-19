@@ -76,7 +76,7 @@ const Patient = (props) => {
       default: "",
       tag: true,
       label: "E-Mail",
-      required: false,
+      required: true,
       view: true,
       add: true,
       update: true,
