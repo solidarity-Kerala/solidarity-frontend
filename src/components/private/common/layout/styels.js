@@ -17,6 +17,7 @@ export const SideBar = styled.div`
   flex-direction: column;
   background-color: ${(props) => props.theme.themeBackground};
   color: white;
+      box-shadow: 6px 0px 11px 3px #ededed;
   @media screen and (max-width: 768px) {
     position: absolute;
     left: 0;
@@ -26,6 +27,7 @@ export const SideBar = styled.div`
     min-height: 60%;
     max-height: 100%;
     z-index: 1001;
+    box-shadow:none;
     &.active {
       visibility: visible;
     }

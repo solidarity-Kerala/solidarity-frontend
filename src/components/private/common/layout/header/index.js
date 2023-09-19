@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Container, Logout, MNav, Status, Title } from "./styels";
 import { menuStatus } from "../../../../../store/actions/common";
-import { LogoutIcon, MenuIcon } from "../../../../../icons";
+import { GetIcon, LogoutIcon } from "../../../../../icons";
 import { clearLogin } from "../../../../../store/actions/login";
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const Header = (props) => {
           dispatch(menuStatus(!menuCurrentStatus));
         }}
       >
-        <MenuIcon />
+        <GetIcon icon={selectedMenuItem.icon} />
       </MNav>
       <Status>
         <Title>{selectedMenuItem.label}</Title>

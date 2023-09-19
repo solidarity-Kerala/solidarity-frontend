@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  padding: 00em 0em;
+  padding: 0px 2em;
   display: flex;
   height: 60px;
 `;
@@ -41,8 +41,8 @@ export const MNav = styled.div`
   display: flex;
   align-items: center;
   height: 60px;
-  padding: 0px 15px 15px;
-
+  padding: 0px;
+  margin-right:10px;
   @media screen and (max-width: 768px) {
     display: flex;
     padding-left: 15px;
@@ -51,6 +51,7 @@ export const MNav = styled.div`
 `;
 export const Title = styled.div`
   margin-right: auto;
+  font-weight: bold;
   svg {
     margin-right: 10px;
   }
@@ -94,7 +95,7 @@ export const MNavClose = styled.div`
   cursor: pointer;
   justify-content: center;
   align-items: center;
-  display:none;
+  display: none;
   a {
     text-decoration: none;
   }

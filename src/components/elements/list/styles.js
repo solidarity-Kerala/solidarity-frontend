@@ -1,7 +1,9 @@
 import styled from "styled-components";
 export const Table = styled.div`
   border-collapse: collapse;
-  /* width: calc(100% + 60px); */
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
   font-family: Arial, sans-serif;
   margin-bottom: auto;
   border-top: 0px solid #d9d9d9;
@@ -66,6 +68,7 @@ export const Tr = styled.div`
   margin: 0em 2em 0px;
   padding: 10px;
   background-color: ${(props) => props.theme.background};
+  border-radius: 10px;
   && {
     /* .popup-child & {
       box-shadow: rgb(167 167 167 / 26%) 0px 0px 12px 0px;
@@ -362,6 +365,10 @@ export const ButtonPanel = styled.div`
   padding: 1em 2em 0.5em;
   justify-content: space-between;
   margin-bottom: 0.5em;
+  position: sticky;
+  top: -5px;
+  background: #eaeaea;
+  z-index: 100;
   svg {
     background-color: transparent;
   }
@@ -515,6 +522,7 @@ export const More = styled.div`
   right: 0;
   margin-top: 5px;
   &.callBack {
+    margin-right: 10px;
     width: auto;
     border-radius: 10px;
     padding: 0 10px;
@@ -612,17 +620,19 @@ export const TableView = styled.table`
 export const ThView = styled.th`
   text-align: left;
   padding: 15px 8px 15px;
+  border-right: 1px solid rgb(238 238 238);
   white-space: nowrap;
   font-weight: bolder;
   border-radius: 0px;
   min-width: 100px;
-  background-color: white;
+  background-color: #f3f3f3;
   color: black;
   :first-child {
     border-top-left-radius: 12px;
   }
   :last-child {
     border-top-right-radius: 12px;
+    border-right: 0px solid rgb(238 238 238);
   }
   && {
     .plain & {
@@ -662,6 +672,7 @@ export const TrView = styled.tr`
 export const TdView = styled.td`
   text-align: left;
   background-color: white;
+  border-right: 1px solid rgb(238 238 238);
   padding: 8px;
   height: 30px;
   position: relative;
