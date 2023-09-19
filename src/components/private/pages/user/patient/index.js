@@ -1285,7 +1285,8 @@ const Patient = (props) => {
     {
       element: "button",
       type: "subList",
-      id: "user/subscriber",
+      id: "addDeliveryAddress",
+      parentReference: "user",
       itemTitle: {
         name: "username",
         type: "text",
