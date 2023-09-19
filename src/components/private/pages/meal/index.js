@@ -93,30 +93,7 @@ const Meal = (props) => {
       add: true,
       update: true,
     },
-    // {
-    //   type: "checkbox",
-    //   placeholder: "Status",
-    //   name: "status",
-    //   validation: "",
-    //   default: "true",
-    //   label: "Status",
-    //   required: true,
-    //   view: true,
-    //   add: true,
-    //   update: true,
-    // },
-    // {
-    //   type: "checkbox",
-    //   placeholder: "Is Link",
-    //   name: "isLink",
-    //   validation: "",
-    //   default: "false",
-    //   label: "Is Link",
-    //   required: true,
-    //   view: true,
-    //   add: true,
-    //   update: true,
-    // },
+    
   ]);
   const [timingAttributes] = useState([
     {

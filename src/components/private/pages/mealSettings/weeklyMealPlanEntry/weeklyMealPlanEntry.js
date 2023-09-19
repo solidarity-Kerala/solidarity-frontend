@@ -144,19 +144,7 @@ const WeeklyMealPlanEntry = (props) => {
       update: true,
       filter: false,
     },
-    // {
-    //   type: "checkbox",
-    //   placeholder: "Order Date",
-    //   name: "weekEndDate",
-    //   validation: "",
-    //   default: "",
-    //   tag: true,
-    //   label: "week End Date",
-    //   required: true,
-    //   view: true,
-    //   add: true,
-    //   update: true,
-    // },
+   
     {
       type: "checkbox",
       placeholder: "Is Selected",

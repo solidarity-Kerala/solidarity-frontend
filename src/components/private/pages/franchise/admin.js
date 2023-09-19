@@ -81,23 +81,7 @@ const FranchiseAdmin = (props) => {
       add: true,
       update: false,
     },
-    // {
-    //   type: "hidden",
-    //   apiType: "",
-    //   selectApi: "",
-    //   placeholder: "User Type",
-    //   name: "userType",
-    //   validation: "",
-    //   showItem: "",
-    //   default: "6459f25d7f6e9664fbd7486f",
-    //   tag: true,
-    //   label: "User Type",
-    //   required: true,
-    //   view: false,
-    //   add: true,
-    //   update: true,
-    //   filter: false,
-    // },
+    
   ]);
 
   const [resetPassword] = useState([

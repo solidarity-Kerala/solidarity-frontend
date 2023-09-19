@@ -224,25 +224,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
         }
         setMenuData(menuDataTemp);
       } else if (data.mealOrRecepe === "meal" && activeTab === "meals") {
-        // const response = await postData({ ...data, mealOrRecepe: item.mealOrRecepe, foodMenuItem, meal: item._id }, "food-menu-item/replacable-item");
-        // if (response?.data?.success === true) {
-        //   const replacableItems = replacableItemsTemp[`replacable-${item.mealOrRecepe}-${foodMenuItem}`];
-        //   if (replacableItems) {
-        //     replacableItems.push({
-        //       ...item,
-        //       ...data,
-        //       foodMenuReplacableItem: response.data.foodMenuReplacableItem._id,
-        //     });
-        //   } else {
-        //     replacableItemsTemp[`replacable-${item.mealOrRecepe}-${foodMenuItem}`] = [
-        //       {
-        //         ...item,
-        //         ...data,
-        //         foodMenuReplacableItem: response.data.foodMenuReplacableItem._id,
-        //       },
-        //     ];
-        //   }
-        // }
+        
       }
       // setReplacableItems(replacableItemsTemp);
     } else {
