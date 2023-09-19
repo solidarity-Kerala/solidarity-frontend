@@ -5,6 +5,55 @@ export const Container = styled.div`
   display: flex;
   height: 60px;
 `;
+export const HeaderMenu = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #d9d9d9;
+  flex-direction: column;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  position: relative;
+  background-color: red;
+  cursor: pointer;
+  img {
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  > span {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  h6 {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+  @media (max-width: 768px) {
+    padding: 15px;
+    width: -webkit-fill-available;
+    width: 10px;
+    height: 10px;
+    &.vertical {
+      flex-direction: column;
+    }
+  }
+`;
 export const Logo = styled.img`
   height: 65px;
   width: fit-content;
@@ -42,7 +91,7 @@ export const MNav = styled.div`
   align-items: center;
   height: 60px;
   padding: 0px;
-  margin-right:10px;
+  margin-right: 10px;
   @media screen and (max-width: 768px) {
     display: flex;
     padding-left: 15px;
@@ -81,12 +130,9 @@ export const Logout = styled.div`
     justify-content: center;
     align-items: center;
     height: 25px;
-    width: 25px;
+    padding:5px 10px;
     cursor: pointer;
     text-transform: uppercase;
-    svg {
-      margin: auto;
-    }
   }
 `;
 
