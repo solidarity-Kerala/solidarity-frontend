@@ -886,9 +886,9 @@ const Patient = (props) => {
       tags: [
         {
           type: "text",
-          item: "calories",
-          title: "Calories",
-          collection: "",
+          item: "menuType",
+          title: "Menu Type",
+          collection: "foodMenu",
         },
       ],
       viewButton: {
