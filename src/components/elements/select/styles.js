@@ -24,8 +24,8 @@ export const SelectBox = styled.div`
     max-height: none;
     height: auto;
   }
-  &.auto{
-    width:auto;
+  &.auto {
+    width: auto;
   }
   &.list-box .options {
     display: block;
@@ -128,7 +128,7 @@ export const SelectBox = styled.div`
   }
   &.open .options {
     border: 1px solid rgb(224, 224, 227);
-    z-index: 100;
+    z-index: 1004;
   }
   &.open .select {
     display: inherit;
@@ -154,7 +154,7 @@ export const SelectBox = styled.div`
     display: flex;
     flex-direction: column;
     position: absolute;
-    z-index: 1;
+    z-index: 1004;
     top: 36px;
     transition: all 1s ease-out 0s;
   }
