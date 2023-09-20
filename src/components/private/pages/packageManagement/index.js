@@ -153,6 +153,14 @@ const PackageManagement = (props) => {
       selectApi: "food-menu/getfoodmenu-typeofdiet",
       updateOn: "subDiet",
       placeholder: "Food Menu",
+      tags: [
+        {
+          type: "text",
+          item: "menuType",
+          title: "Menu Type",
+          collection: "",
+        },
+      ],
       viewButton: {
         title: "View Menu",
         callback: (item, data) => {

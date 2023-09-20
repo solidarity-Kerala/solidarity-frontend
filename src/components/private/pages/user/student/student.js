@@ -13,19 +13,7 @@ const Student = (props) => {
   }, []);
 
   const [attributes] = useState([
-    // {
-    //   type: "text",
-    //   placeholder: "CPR/Mobile",
-    //   name: "username",
-    //   validation: "",
-    //   default: "",
-    //   tag: true,
-    //   label: "CPR/Mobile",
-    //   required: true,
-    //   view: false,
-    //   add: true,
-    //   update: true,
-    // },
+    
     {
       type: "text",
       placeholder: "Name",

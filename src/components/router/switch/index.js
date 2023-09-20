@@ -88,7 +88,7 @@ import NewPatientTodayReport from "../../private/pages/report/newPatientTodayRep
 import DietCentreBranch from "../../private/pages/registrationSettings/dietCentreBranch";
 import ErrorLog from "../../private/pages/errorLog";
 import IngredientReport from "../../private/pages/report/ingredientReport";
-import UserDeletion from "../../private/pages/report/userDeletion";
+
 import RestoreDeliveryMan from "../../private/pages/restoreUser/restoreDeliveryMan";
 import RestorePatient from "../../private/pages/restoreUser/restorePatient";
 import RestoreDietitian from "../../private/pages/restoreUser/restoreDietitian";
@@ -957,16 +957,7 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-    case "user-deletion":
-      return (
-        <UserDeletion
-          key={key}
-          exportPrivilege={exportPrivilege}
-          addPrivilege={addPrivilege}
-          delPrivilege={delPrivilege}
-          updatePrivilege={updatePrivilege}
-        />
-      );
+    
     case "restore-delivery-man":
       return (
         <RestoreDeliveryMan

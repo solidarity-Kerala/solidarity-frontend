@@ -13,18 +13,7 @@ const Resicpes = (props) => {
 
   const themeColors = useSelector((state) => state.themeColors);
   const [attributes] = useState([
-    // {
-    //   type: "text",
-    //   placeholder: "User Name",
-    //   name: "username",
-    //   validation: "",
-    //   default: "",
-    //   label: "User Name",
-    //   required: true,
-    //   view: true,
-    //   add: true,
-    //   update: true,
-    // },
+    
     {
       type: "text",
       placeholder: "Employee ID",

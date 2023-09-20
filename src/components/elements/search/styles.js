@@ -6,6 +6,16 @@ export const SearchInput = styled.div`
   animation-duration: 0.2s;
   margin-bottom: 5px;
   margin-top: 4px;
+  &.menu {
+    margin-left: 10px;
+    border-bottom: 1px solid #efeded;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  &.menu input {
+    width: 100% !important;
+  }
   &.select {
     top: 0;
     z-index: 1;
@@ -34,10 +44,10 @@ export const SearchInput = styled.div`
       width: 200px;
       border-radius: 10px;
       color: ${(props) => props.theme.foreground};
-      padding-left: 40px;
+      padding-left: 45px;
     }
   }
-  &.sticky{
+  &.sticky {
     position: sticky;
     top: 50px;
   }
@@ -53,7 +63,7 @@ export const SearchInput = styled.div`
     width: 200px;
     border-radius: 10px;
     color: ${(props) => props.theme.foreground};
-    padding-left: 40px;
+    padding-left: 45px;
   }
   svg {
     position: absolute;

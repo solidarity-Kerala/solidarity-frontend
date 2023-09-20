@@ -11,23 +11,7 @@ const FoodGroupItems = (props) => {
   }, []);
 
   const [attributes] = useState([
-    // {
-    //     type: "select",
-    //     apiType: "API",
-    //     selectApi: "meal/select",
-    //     placeholder: "Meal",
-    //     name: "meal",
-    //     validation: "",
-    //     showItem: "mealName",
-    //     default: "",
-    //     tag: true,
-    //     label: "Meal",
-    //     required: true,
-    //     view: true,
-    //     add: true,
-    //     update: true,
-    //     filter: false,
-    // },
+    
     {
       type: "select",
       apiType: "API",

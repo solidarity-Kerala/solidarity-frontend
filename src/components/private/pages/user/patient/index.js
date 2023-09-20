@@ -78,7 +78,7 @@ const Patient = (props) => {
       default: "",
       tag: true,
       label: "E-Mail",
-      required: false,
+      required: true,
       view: true,
       add: true,
       update: true,
@@ -889,9 +889,9 @@ const Patient = (props) => {
       tags: [
         {
           type: "text",
-          item: "calories",
-          title: "Calories",
-          collection: "",
+          item: "menuType",
+          title: "Menu Type",
+          collection: "foodMenu",
         },
       ],
       viewButton: {
@@ -901,7 +901,7 @@ const Patient = (props) => {
           setOpenedMenu("menu");
           // Set the data for the clicked item and open the SetupMenu popup
           setOpenItemData({
-            data: { ...item, _id: item.foodMenu._id },
+            data: { ...item, ...item.foodMenu, _id: item.foodMenu._id },
             item: {
               viewOnly: true,
               itemTitle: {
@@ -1475,17 +1475,7 @@ const Patient = (props) => {
 
   return (
     <Container className="noshadow">
-      <ListTable
-        actions={actions}
-        api={`user`}
-        itemTitle={{ name: "username", type: "text", collection: "" }}
-        shortName={`Patient`}
-        parentReference={"userType"}
-        referenceId={"6471b3849fb2b29fe045887b"}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
+      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC

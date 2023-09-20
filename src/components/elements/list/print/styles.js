@@ -10,7 +10,7 @@ export const Table = styled.table`
     background-color: ${(props) => props.theme.pageBackground};
   }
   tr:hover {
-    background-color: ${(props) => props.theme.pageBackground};;
+    background-color: ${(props) => props.theme.pageBackground};
   }
   &.auto {
     width: auto;
@@ -23,6 +23,7 @@ export const Table = styled.table`
 `;
 export const DataLayout = styled.div`
   padding: 25px;
+  overflow: auto;
 `;
 export const Th = styled.th`
   text-align: left;

@@ -19,7 +19,6 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const [menuId] = useState(openData.data._id);
   const [data] = useState(openData.data);
-  console.log(data);
   const [menuData, setMenuData] = useState(null);
   const [showAllReplacable, setShowAllReplacable] = useState(false);
   const [selectedDayNumber, setSelectedDayNumber] = useState(0);
@@ -35,6 +34,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       handleTabClick(activeTab, event.target.value);
     }, 300);
   };
+  console.log("data",data)
   const [coloriePerDay, setColoriePerDay] = useState("900");
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories) => {
@@ -224,25 +224,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
         }
         setMenuData(menuDataTemp);
       } else if (data.mealOrRecepe === "meal" && activeTab === "meals") {
-        // const response = await postData({ ...data, mealOrRecepe: item.mealOrRecepe, foodMenuItem, meal: item._id }, "food-menu-item/replacable-item");
-        // if (response?.data?.success === true) {
-        //   const replacableItems = replacableItemsTemp[`replacable-${item.mealOrRecepe}-${foodMenuItem}`];
-        //   if (replacableItems) {
-        //     replacableItems.push({
-        //       ...item,
-        //       ...data,
-        //       foodMenuReplacableItem: response.data.foodMenuReplacableItem._id,
-        //     });
-        //   } else {
-        //     replacableItemsTemp[`replacable-${item.mealOrRecepe}-${foodMenuItem}`] = [
-        //       {
-        //         ...item,
-        //         ...data,
-        //         foodMenuReplacableItem: response.data.foodMenuReplacableItem._id,
-        //       },
-        //     ];
-        //   }
-        // }
+        
       }
       // setReplacableItems(replacableItemsTemp);
     } else {

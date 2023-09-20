@@ -334,10 +334,11 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       });
   };
 
-  const filterChange = (option, name) => {
+  const filterChange = (option, name, type) => {
+    console.log(type);
     const updateValue = {
       ...filterView,
-      [name]: option.id ? option.id : option.toISOString(),
+      [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : null,
     };
     setFilterView(updateValue);
     // updating the form values
@@ -544,6 +545,9 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     let sticky = true;
     return viewMode === "table" ? (
       <TrView style={{ zIndex: users.data?.response?.length - slNo }} key={`${shortName}-${slNo}`}>
+        <TdView className={sticky} key={-1}>
+          <GetIcon icon={selectedMenuItem.icon} /> {slNo + 1 + currentIndex}
+        </TdView>
         {attributes.map((attribute, index) => {
           if (attribute.view) {
             try {
@@ -583,7 +587,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
 
           return null;
         })}
-        <TdView style={{ zIndex: users.data?.response?.length - slNo }} key={`actions-${shortName}-${data._id}`} className="actions">
+        <TdView style={{ zIndex: users.data?.response?.length - slNo, border: 0 }} key={`actions-${shortName}-${data._id}`} className="actions">
           {ActionDiv}
         </TdView>
       </TrView>
@@ -875,6 +879,9 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           <TableView>
             <thead>
               <tr>
+                <ThView className={headerSticky} key={"slno"}>
+                  S/N
+                </ThView>
                 {attributes.map((attribute) => {
                   const result =
                     attribute.view === true ? (

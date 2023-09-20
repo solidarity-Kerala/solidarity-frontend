@@ -32,16 +32,20 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
   const [userId] = useState(openData.data._id);
   const [menuData, setMenuData] = useState(0);
   const [replacableItems, setReplacableItems] = useState({});
+  const [isLoaded, setIsLoaded] = useState(false);
   const [selectedDayNumber, setSelectedDayNumber] = useState(0);
   const [selectedMealTime, setSelectedMealTime] = useState({});
   useEffect(() => {
-    getData({ userId, details: true }, "patient-diet/food-schedule").then(
-      (response) => {
+    getData({ userId, details: true }, "patient-diet/food-schedule")
+      .then((response) => {
         if (response.status === 200) {
           setMenuData(response.data);
+          setIsLoaded(true);
         }
-      }
-    );
+      })
+      .catch((error) => {
+        setIsLoaded(true);
+      });
   }, [userId]);
   const getReplacableItems = (foodMenuItem) => {
     getData(
@@ -108,7 +112,7 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
     return dateFormat(currentDate.toDate());
   }
 
-  return menuData ? (
+  return menuData?.user?.diet ? (
     <ColumnContainer style={{ marginBottom: "2em" }}>
       <RowContainer className="menu-schedule">
         <TabContainer>
@@ -426,7 +430,7 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
       </RowContainer>
     </ColumnContainer>
   ) : (
-    <NoData>Loading</NoData>
+    <NoData>{isLoaded ? "No Diet Schedule Found" : "Loading"}</NoData>
   );
 };
 
