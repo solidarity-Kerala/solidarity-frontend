@@ -11,14 +11,29 @@ const RecipeReport = (props) => {
   // const themeColors = useSelector((state) => state.themeColors);
 
   const [attributes] = useState([
+    // {
+    //   type: "text",
+    //   placeholder: "Recipe",
+    //   name: "recipe",
+    //   validation: "",
+    //   default: "",
+    //   label: "Recipe",
+    //   tag: false,
+    //   required: true,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    // },
     {
       type: "text",
       placeholder: "Recipe",
       name: "recipe",
+      collection: "sum",
+      showItem: "name",
       validation: "",
       default: "",
+      tag: true,
       label: "Recipe",
-      tag: false,
       required: true,
       view: true,
       add: true,

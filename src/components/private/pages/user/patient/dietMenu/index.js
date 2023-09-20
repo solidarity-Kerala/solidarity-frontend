@@ -1,8 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { getData } from "../../../../../../backend/api";
 import { NoData } from "../../../../../elements/list/styles";
-import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
-import { TabContainer, TabButton, DayHead, Box, DayData, MealTimeHead, Recepe, RecepeImage, RecepeData, Recepes, RecepeContent, ReplacableItems, ReplacableItemsList, UserDetails, Details } from "./styles"; // Import styles from styles.js
+import {
+  ColumnContainer,
+  RowContainer,
+} from "../../../../../styles/containers/styles";
+import {
+  TabContainer,
+  TabButton,
+  DayHead,
+  Box,
+  DayData,
+  MealTimeHead,
+  Recepe,
+  RecepeImage,
+  RecepeData,
+  Recepes,
+  RecepeContent,
+  ReplacableItems,
+  ReplacableItemsList,
+  UserDetails,
+  Details,
+} from "./styles"; // Import styles from styles.js
 
 import moment from "moment";
 import { food } from "../../../../../../images";
@@ -16,16 +35,24 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
   const [selectedDayNumber, setSelectedDayNumber] = useState(0);
   const [selectedMealTime, setSelectedMealTime] = useState({});
   useEffect(() => {
-    getData({ userId, details: true }, "patient-diet/food-schedule").then((response) => {
-      if (response.status === 200) {
-        setMenuData(response.data);
+    getData({ userId, details: true }, "patient-diet/food-schedule").then(
+      (response) => {
+        if (response.status === 200) {
+          setMenuData(response.data);
+        }
       }
-    });
+    );
   }, [userId]);
   const getReplacableItems = (foodMenuItem) => {
-    getData({ foodMenuItem, calories: menuData.user.diet.calories }, "food-menu/replacable-items").then((response) => {
+    getData(
+      { foodMenuItem, calories: menuData.user.diet.calories },
+      "food-menu/replacable-items"
+    ).then((response) => {
       if (response.status === 200) {
-        setReplacableItems((prev) => ({ ...prev, [foodMenuItem]: response.data.replacableItems }));
+        setReplacableItems((prev) => ({
+          ...prev,
+          [foodMenuItem]: response.data.replacableItems,
+        }));
       }
     });
   };
@@ -41,12 +68,21 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
         { value: "Saturday", id: 6 },
       ];
       const filteredDays = days.filter((day) => days.includes(day));
-      return filteredDays?.map((item, index) => <span key={index}>{item["value"]}</span>);
+      return filteredDays?.map((item, index) => (
+        <span key={index}>{item["value"]}</span>
+      ));
     } else {
-      return items?.map((item, index) => <span key={index}>{item[value]}</span>);
+      return items?.map((item, index) => (
+        <span key={index}>{item[value]}</span>
+      ));
     }
   };
-  function calculateExpiryDate(startDate, totalDays, excludedDays, skippedDays) {
+  function calculateExpiryDate(
+    startDate,
+    totalDays,
+    excludedDays,
+    skippedDays
+  ) {
     console.log(startDate, totalDays, excludedDays, skippedDays);
     // Adjust total days considering skipped days and excluded days
     const eligibleDays = totalDays;
@@ -57,7 +93,10 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
     // Iterate through each day and find the eligible expiry date
     while (eligibleCount < eligibleDays) {
       // Check if the current day is not an excluded day or a skipped day
-      if (excludedDays.indexOf(currentDate.day()) === -1 && skippedDays.indexOf(currentDate.day()) === -1) {
+      if (
+        excludedDays.indexOf(currentDate.day()) === -1 &&
+        skippedDays.indexOf(currentDate.day()) === -1
+      ) {
         eligibleCount++;
       }
 
@@ -98,40 +137,114 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
                 <DayData>
                   {day.menu.map((menuItem) => (
                     <Box active={selectedDayNumber === index} key={menuItem.id}>
-                      <MealTimeHead active={selectedMealTime[`${menuItem.mealTimeCategory._id}-${day._id}`] ?? false} onClick={() => setSelectedMealTime((prev) => ({ ...prev, [`${menuItem.mealTimeCategory._id}-${day._id}`]: !prev[`${menuItem.mealTimeCategory._id}-${day._id}`] ?? true }))}>
-                        {menuItem.mealTimeCategory.mealtimeCategoriesName} <GetIcon icon={"down"}></GetIcon>
+                      <MealTimeHead
+                        active={
+                          selectedMealTime[
+                            `${menuItem.mealTimeCategory._id}-${day._id}`
+                          ] ?? false
+                        }
+                        onClick={() =>
+                          setSelectedMealTime((prev) => ({
+                            ...prev,
+                            [`${menuItem.mealTimeCategory._id}-${day._id}`]:
+                              !prev[
+                                `${menuItem.mealTimeCategory._id}-${day._id}`
+                              ] ?? true,
+                          }))
+                        }
+                      >
+                        {menuItem.mealTimeCategory.mealtimeCategoriesName}{" "}
+                        <GetIcon icon={"down"}></GetIcon>
                       </MealTimeHead>
-                      {selectedMealTime[`${menuItem.mealTimeCategory._id}-${day._id}`] === true && (
+                      {selectedMealTime[
+                        `${menuItem.mealTimeCategory._id}-${day._id}`
+                      ] === true && (
                         <Recepes>
                           {menuItem.recipes.map((recipeItem) => (
                             <>
                               <Recepe className="recipe">
                                 <RecepeContent>
-                                  <RecepeImage src={recipeItem.recipe.photo ? process.env.REACT_APP_CDN + recipeItem.recipe.photo : food}></RecepeImage>
+                                  <RecepeImage
+                                    src={
+                                      recipeItem.recipe.photo
+                                        ? process.env.REACT_APP_CDN +
+                                          recipeItem.recipe.photo
+                                        : food
+                                    }
+                                  ></RecepeImage>
                                   <RecepeData>
-                                    <span className="title">{recipeItem.recipe.title}</span>
+                                    <span className="title">
+                                      {recipeItem.recipe.title}
+                                    </span>
                                     <span className="light">
-                                      <span>{recipeItem.calories.toFixed(2)} Cal</span>
-                                      <span>{recipeItem.gram.toFixed(2)} g</span>
+                                      <span>
+                                        {recipeItem.calories.toFixed(2)} Cal
+                                      </span>
+                                      <span>
+                                        {recipeItem.gram.toFixed(2)} g
+                                      </span>
                                     </span>
                                   </RecepeData>
                                 </RecepeContent>
-                                {recipeItem.foodmenuitem.replacableItems > 0 && (
-                                  <ReplacableItems className="horizontal" active={selectedDayNumber === index}>
-                                    <button onClick={() => getReplacableItems(recipeItem.foodmenuitem._id)}>
-                                      <div>Replacable Options ({recipeItem.foodmenuitem.replacableItems}) </div> <GetIcon icon={"down"}></GetIcon>
+                                {recipeItem.foodmenuitem.replacableItems >
+                                  0 && (
+                                  <ReplacableItems
+                                    className="horizontal"
+                                    active={selectedDayNumber === index}
+                                  >
+                                    <button
+                                      onClick={() =>
+                                        getReplacableItems(
+                                          recipeItem.foodmenuitem._id
+                                        )
+                                      }
+                                    >
+                                      <div>
+                                        Replacable Options (
+                                        {
+                                          recipeItem.foodmenuitem
+                                            .replacableItems
+                                        }
+                                        ){" "}
+                                      </div>{" "}
+                                      <GetIcon icon={"down"}></GetIcon>
                                     </button>
-                                    {replacableItems[recipeItem.foodmenuitem._id] && (
+                                    {replacableItems[
+                                      recipeItem.foodmenuitem._id
+                                    ] && (
                                       <ReplacableItemsList>
-                                        {replacableItems[recipeItem.foodmenuitem._id]?.map((replacableItem) => (
+                                        {replacableItems[
+                                          recipeItem.foodmenuitem._id
+                                        ]?.map((replacableItem) => (
                                           <Recepe className="horizontal">
                                             <RecepeContent>
-                                              <RecepeImage src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food}></RecepeImage>
+                                              <RecepeImage
+                                                src={
+                                                  replacableItem.recipe.photo
+                                                    ? process.env
+                                                        .REACT_APP_CDN +
+                                                      replacableItem.recipe
+                                                        .photo
+                                                    : food
+                                                }
+                                              ></RecepeImage>
                                               <RecepeData>
-                                                <span className="title">{replacableItem.recipe.title}</span>
+                                                <span className="title">
+                                                  {replacableItem.recipe.title}
+                                                </span>
                                                 <span className="light">
-                                                  <span>{replacableItem.recipe.calories.toFixed(2)} Cal</span>
-                                                  <span>{replacableItem.recipe.gram.toFixed(2)} g</span>
+                                                  <span>
+                                                    {replacableItem.recipe.calories.toFixed(
+                                                      2
+                                                    )}{" "}
+                                                    Cal
+                                                  </span>
+                                                  <span>
+                                                    {replacableItem.recipe.gram.toFixed(
+                                                      2
+                                                    )}{" "}
+                                                    g
+                                                  </span>
                                                 </span>
                                               </RecepeData>
                                             </RecepeContent>
@@ -157,7 +270,15 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
       <RowContainer className="user-details">
         {menuData && menuData.user && (
           <>
-            <Details className="head" onClick={() => setSelectedMealTime((prev) => ({ ...prev, [`patient-diet`]: !prev[`patient-diet`] ?? true }))}>
+            <Details
+              className="head"
+              onClick={() =>
+                setSelectedMealTime((prev) => ({
+                  ...prev,
+                  [`patient-diet`]: !prev[`patient-diet`] ?? true,
+                }))
+              }
+            >
               <div>Patient Details</div>
               <GetIcon icon={"down"}></GetIcon>
             </Details>
@@ -186,24 +307,52 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
 
                 <Details>
                   <div>Foodlike list </div>
-                  <div>{populateArray(menuData.user.profile.foodLikeList, "foodLikeListName")}</div>
+                  <div>
+                    {populateArray(
+                      menuData.user.profile.foodLikeList,
+                      "foodLikeListName"
+                    )}
+                  </div>
                 </Details>
                 <Details>
                   <div>Dislike list </div>
-                  <div>{populateArray(menuData.user.profile.foodDisLikeList, "foodDislikeListName")}</div>
+                  <div>
+                    {populateArray(
+                      menuData.user.profile.foodDisLikeList,
+                      "foodDislikeListName"
+                    )}
+                  </div>
                 </Details>
                 <Details>
                   <div>Medical condition </div>
-                  <div>{populateArray(menuData.user.profile.medicalCondition, "medicalConditionsName")}</div>
+                  <div>
+                    {populateArray(
+                      menuData.user.profile.medicalCondition,
+                      "medicalConditionsName"
+                    )}
+                  </div>
                 </Details>
                 <Details>
                   <div>Addiction list</div>
-                  <div>{populateArray(menuData.user.profile.addictionList, "addictionListName")}</div>
+                  <div>
+                    {populateArray(
+                      menuData.user.profile.addictionList,
+                      "addictionListName"
+                    )}
+                  </div>
                 </Details>
               </UserDetails>
             )}
 
-            <Details className="head" onClick={() => setSelectedMealTime((prev) => ({ ...prev, [`active-deit`]: !prev[`active-deit`] ?? true }))}>
+            <Details
+              className="head"
+              onClick={() =>
+                setSelectedMealTime((prev) => ({
+                  ...prev,
+                  [`active-deit`]: !prev[`active-deit`] ?? true,
+                }))
+              }
+            >
               <div>Active Diet</div>
               <GetIcon icon={"down"}></GetIcon>
             </Details>
@@ -215,11 +364,18 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
                 </Details>
                 <Details>
                   <div>Choosen Days</div>
-                  <div>{populateArray(menuData.user.diet.eligibleDays, "days")}</div>
+                  <div>
+                    {populateArray(menuData.user.diet.eligibleDays, "days")}
+                  </div>
                 </Details>
                 <Details>
                   <div>Selected Meal Times</div>
-                  <div>{populateArray(menuData.user.diet.mealTimeCategory, "mealtimeCategoriesName")}</div>
+                  <div>
+                    {populateArray(
+                      menuData.user.diet.mealTimeCategory,
+                      "mealtimeCategoriesName"
+                    )}
+                  </div>
                 </Details>
                 <Details>
                   <div>Start Date</div>
@@ -235,11 +391,26 @@ const DietMenu = ({ openData, themeColors, setMessage }) => {
                 </Details>
                 <Details>
                   <div>End Date</div>
-                  <div>{calculateExpiryDate(menuData.user.diet.startDate, menuData.user.diet.numberofDays, menuData.user.diet.eligibleDays, [])}</div>
+                  <div>
+                    {calculateExpiryDate(
+                      menuData.user.diet.startDate,
+                      menuData.user.diet.numberofDays,
+                      menuData.user.diet.eligibleDays,
+                      []
+                    )}
+                  </div>
                 </Details>
               </UserDetails>
             )}
-            <Details className="head" onClick={() => setSelectedMealTime((prev) => ({ ...prev, [`active-deit`]: !prev[`active-deit`] ?? true }))}>
+            <Details
+              className="head"
+              onClick={() =>
+                setSelectedMealTime((prev) => ({
+                  ...prev,
+                  [`active-deit`]: !prev[`active-deit`] ?? true,
+                }))
+              }
+            >
               <div>Remarks</div>
               <GetIcon icon={"down"}></GetIcon>
             </Details>

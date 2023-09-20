@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import PopupView from "../../../../elements/popupview";
 import DietMenu from "./dietMenu";
 import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
+import AppointmentMenu from "./appointmentMenu";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
 const Patient = (props) => {
@@ -27,6 +28,7 @@ const Patient = (props) => {
     setOpenMenuSetup(false);
     setOpenItemData(null);
   };
+
   const [attributes] = useState([
     {
       type: "text",
@@ -631,6 +633,7 @@ const Patient = (props) => {
       filter: false,
     },
   ]);
+
   const [deliveryAddress] = useState([
     // TYPE OF DIET IS A DIET //
     {
@@ -758,8 +761,6 @@ const Patient = (props) => {
         { value: "Saturday", id: 6 },
       ],
     },
-    
-   
   ]);
 
   const [admissionHistory] = useState([
@@ -1285,7 +1286,7 @@ const Patient = (props) => {
     {
       element: "button",
       type: "subList",
-      id: "addDeliveryAddress",
+      id: "delivery-address",
       parentReference: "user",
       itemTitle: {
         name: "username",
@@ -1295,7 +1296,7 @@ const Patient = (props) => {
       title: "Delivery Address",
       attributes: deliveryAddress,
       params: {
-        api: `addDeliveryAddress`,
+        api: `delivery-address`,
         parentReference: "user",
         itemTitle: {
           name: "username",
@@ -1419,6 +1420,30 @@ const Patient = (props) => {
     },
     {
       element: "button",
+      type: "callback",
+      callback: (item, data) => {
+        // Set the data for the clicked item and open the SetupMenu popup
+        console.log(data);
+        setOpenedMenu("appointment");
+        setOpenItemData({ item, data });
+        setOpenMenuSetup(true);
+      },
+      itemTitle: { name: "username", type: "text", collection: "" },
+      icon: "menu",
+      title: "Appointment",
+      params: {
+        api: `food-group-item`,
+        parentReference: "",
+        itemTitle: { name: "username", type: "text", collection: "" },
+        shortName: "Recipe Items",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+      },
+    },
+    {
+      element: "button",
       type: "subList",
       id: "appointment",
       // itemTitle: "username",
@@ -1487,6 +1512,23 @@ const Patient = (props) => {
               setMessage={props.setMessage}
               // Pass selected item data (Menu Title) to the popup for setting the time
             ></DietMenu>
+          }
+          themeColors={themeColors}
+          closeModal={closeModal}
+          itemTitle={{ name: "username", type: "text", collection: "" }}
+          openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+          customClass={"medium"}
+        ></PopupView>
+      )}
+      {openedMenu === "appointment" && openMenuSetup && openItemData && (
+        <PopupView
+          // Popup data is a JSX element which is binding to the Popup Data Area like HOC
+          popupData={
+            <AppointmentMenu
+              openData={openItemData}
+              setMessage={props.setMessage}
+              // Pass selected item data (Menu Title) to the popup for setting the time
+            ></AppointmentMenu>
           }
           themeColors={themeColors}
           closeModal={closeModal}
