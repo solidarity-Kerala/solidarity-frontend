@@ -13,7 +13,7 @@ function Restore({ openData }) {
       // After the API call is complete, navigate back to the previous page
       navigate(0); // This navigates back one step in the history
     });
-  }, [navigate]);
+  }, [openData?.data?._id,navigate]);
   return (
     <>
       <div>Restore</div>
