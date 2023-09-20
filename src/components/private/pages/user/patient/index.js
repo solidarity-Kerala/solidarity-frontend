@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import PopupView from "../../../../elements/popupview";
 import DietMenu from "./dietMenu";
 import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
-import AppointmentMenu from "./appointmentMenu";
+import AppointmentMenu from "./appointment";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
 const Patient = (props) => {
@@ -1475,7 +1475,17 @@ const Patient = (props) => {
 
   return (
     <Container className="noshadow">
-      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
+      <ListTable
+        actions={actions}
+        api={`user`}
+        itemTitle={{ name: "username", type: "text", collection: "" }}
+        shortName={`Patient`}
+        parentReference={"userType"}
+        referenceId={"6471b3849fb2b29fe045887b"}
+        formMode={`double`}
+        {...props}
+        attributes={attributes}
+      ></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
