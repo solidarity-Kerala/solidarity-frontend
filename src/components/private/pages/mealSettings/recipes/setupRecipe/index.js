@@ -332,7 +332,7 @@ const PDFGenerator = ({ openData, closeModal }) => {
 
   // Function to generate the PDF document
   const generatePDF = () => (
-    <Document author="Tecnocorp" subject={`Number of servings: ${openData?.data?.numberOfPortion}, weight: ${openData?.data?.quantity}`} title={openData?.data?.title}>
+    <Document author="Tecnocorp Solutions" subject={`Number of servings: ${openData?.data?.numberOfPortion}, weight: ${openData?.data?.quantity}`} title={openData?.data?.title}>
       <Page size="A4" style={styles.page}>
         <View style={styles.headerContainer}>
           <View style={styles.textContainer}>
