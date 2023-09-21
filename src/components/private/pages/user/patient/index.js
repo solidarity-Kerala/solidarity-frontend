@@ -406,22 +406,22 @@ const Patient = (props) => {
       add: true,
       update: true,
     },
-    {
-      selectApi: "diet-plan/get-typeofdiet-dietplan",
-      updateOn: "userActivenessStatus",
-      type: "text",
-      placeholder: "BMI",
-      disabled: true,
-      name: "bmi",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "BMI",
-      required: false,
-      view: true,
-      add: true,
-      update: true,
-    },
+    // {
+    //   selectApi: "diet-plan/get-typeofdiet-dietplan",
+    //   updateOn: "userActivenessStatus",
+    //   type: "text",
+    //   placeholder: "BMI",
+    //   disabled: true,
+    //   name: "bmi",
+    //   validation: "",
+    //   default: "",
+    //   tag: true,
+    //   label: "BMI",
+    //   required: false,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    // },
     {
       type: "number",
       placeholder: "BMR",
@@ -440,7 +440,7 @@ const Patient = (props) => {
       type: "number",
       placeholder: "IBW",
       name: "ibw",
-      disabled: true,
+      // disabled: true,
       validation: "",
       default: "",
       tag: true,
@@ -454,7 +454,7 @@ const Patient = (props) => {
       type: "number",
       placeholder: "ABW",
       name: "abw",
-      disabled: true,
+      // disabled: true,
       validation: "",
       default: "",
       tag: true,
@@ -1181,7 +1181,7 @@ const Patient = (props) => {
       type: "select",
       apiType: "API",
       updateOn: "center",
-      selectApi: "user/select?userType=6471b34d9fb2b29fe0458878",
+      selectApi: "user/branch-dietitian?userType=6471b34d9fb2b29fe0458878",
       placeholder: "Dietician",
       name: "dietician",
       validation: "",
@@ -1415,7 +1415,7 @@ const Patient = (props) => {
       id: "appointment",
       // itemTitle: "username",
       itemTitle: {
-        name: "username",
+        name: "userDisplayName",
         type: "text",
         collection: "dietician",
       },
@@ -1424,9 +1424,9 @@ const Patient = (props) => {
       params: {
         api: `appointment`,
         parentReference: "user",
-        // itemTitle: "username",
+        // itemTitle: "userDisplayName",
         itemTitle: {
-          name: "username",
+          name: "userDisplayName",
           type: "text",
           collection: "dietician",
         },
@@ -1462,30 +1462,30 @@ const Patient = (props) => {
         customClass: "medium",
       },
     },
-    {
-      element: "button",
-      type: "callback",
-      callback: (item, data) => {
-        // Set the data for the clicked item and open the SetupMenu popup
-        console.log(data);
-        setOpenedMenu("appointment");
-        setOpenItemData({ item, data });
-        setOpenMenuSetup(true);
-      },
-      itemTitle: { name: "username", type: "text", collection: "" },
-      icon: "menu",
-      title: "Appointment",
-      params: {
-        api: `food-group-item`,
-        parentReference: "",
-        itemTitle: { name: "username", type: "text", collection: "" },
-        shortName: "Recipe Items",
-        addPrivilege: true,
-        delPrivilege: true,
-        updatePrivilege: true,
-        customClass: "medium",
-      },
-    },
+    // {
+    //   element: "button",
+    //   type: "callback",
+    //   callback: (item, data) => {
+    //     // Set the data for the clicked item and open the SetupMenu popup
+    //     console.log(data);
+    //     setOpenedMenu("appointment");
+    //     setOpenItemData({ item, data });
+    //     setOpenMenuSetup(true);
+    //   },
+    //   itemTitle: { name: "username", type: "text", collection: "" },
+    //   icon: "menu",
+    //   title: "Appointment",
+    //   params: {
+    //     api: `food-group-item`,
+    //     parentReference: "",
+    //     itemTitle: { name: "username", type: "text", collection: "" },
+    //     shortName: "Recipe Items",
+    //     addPrivilege: true,
+    //     delPrivilege: true,
+    //     updatePrivilege: true,
+    //     customClass: "medium",
+    //   },
+    // },
     {
       element: "button",
       type: "subList",
