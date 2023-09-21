@@ -247,7 +247,7 @@ const Ingredient = (props) => {
       name: "sodium",
       validation: "",
       showItem: "",
-      default: "100",
+      default: "0",
       tag: false,
       label: "Sodium",
       required: true,
