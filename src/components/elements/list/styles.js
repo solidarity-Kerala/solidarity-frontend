@@ -642,7 +642,6 @@ export const ThView = styled.th`
   &.true {
     position: sticky;
     left: 0px;
-    z-index: 1001;
   }
 
   &.actions {
@@ -679,7 +678,6 @@ export const TdView = styled.td`
   &.true {
     position: sticky;
     left: 0px;
-    z-index: 1001;
     background: white;
   }
   &.no,

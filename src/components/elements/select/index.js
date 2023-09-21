@@ -12,7 +12,7 @@ import { getValue } from "../list/functions";
 
 function CustomSelect(props) {
   const [optionsVisible, setOptionsVisible] = useState(false);
-  const [updateValue, setUpdateValue] = useState("_");
+  const [updateValue, setUpdateValue] = useState({});
   const [defaultValue] = useState(props.default);
   const [selectedId, setSelectedId] = useState(props.value);
   const [initialized, setInitialized] = useState(false);
@@ -43,17 +43,17 @@ function CustomSelect(props) {
   };
 
   const fetchData = useCallback(
-    async (item = "", force = false, name = "", searchKey = "") => {
+    async (item = {}, force = false, name = "", searchKey = "", params = {}) => {
       if (force && props.apiType === "API") {
         const optionHandler = (data) => {
           setOptions(data);
           setInitialized(true);
           try {
-            const selected = data.filter((item) => item.id === selectedId)[0].value;
+            const selected = data.filter((itemValue) => itemValue.id === selectedId)[0].value;
             setSelectedValue(selected ? selected : props.placeHolder);
           } catch {}
         };
-        await getData({ [name]: item, searchKey, limit: props.apiSearch ? 20 : 0 }, `${props.selectApi}`)
+        await getData({ ...item, searchKey, limit: props.apiSearch ? 20 : 0, ...params }, `${props.selectApi}`)
           .then((response) => {
             if (response.status === 200) {
               optionHandler(response.data);
@@ -72,7 +72,7 @@ function CustomSelect(props) {
           setOptions(data);
           setInitialized(true);
           try {
-            const selected = data.filter((item) => item.id === selectedId)[0].value;
+            const selected = data.filter((itemValue) => itemValue.id === selectedId)[0].value;
             setSelectedValue(selected ? selected : props.placeHolder);
           } catch {}
         };
@@ -81,11 +81,11 @@ function CustomSelect(props) {
         } else {
           if (initialized) {
           } else {
-            await getData({ id: item }, `${props.selectApi + item}`)
+            await getData({ ...item }, `${props.selectApi}`)
               .then((response) => {
                 if (response.status === 200) {
-                  optionHandler(props.selectApi + item);
-                  dispatch(addSelectObject(response.data, props.selectApi + item));
+                  optionHandler(props.selectApi);
+                  dispatch(addSelectObject(response.data, props.selectApi));
                 } else if (response.status === 404) {
                   setInitialized(false);
                 } else {
@@ -122,18 +122,45 @@ function CustomSelect(props) {
     },
     [props.apiType, props.selectApi, props.placeHolder, props.apiSearch, initialized, selectedId, selectData, dispatch]
   );
+
   useEffect(() => {
     fetchData();
   }, [props.selectApi, fetchData]);
   const selectRef = useRef(null);
   useEffect(() => {
     if (props.updateOn) {
-      if (updateValue !== props.updateValue) {
+      const isObjectEqual = (obj1, obj2) => {
+        const keys1 = Object.keys(obj1 ?? {});
+        const keys2 = Object.keys(obj2 ?? {});
+        // console.log("Keys:",keys1, keys2);
+        if (keys1.length !== keys2.length) {
+          return false;
+        }
+
+        for (let key of keys1) {
+          if (obj1[key] !== obj2[key]) {
+            return false;
+          }
+        }
+
+        return true;
+      };
+      const equal = isObjectEqual(updateValue, props.updateValue);
+
+      if (!equal) {
+        console.log("equal1", equal, updateValue, props.updateValue);
         setUpdateValue(props.updateValue);
-        fetchData(props.updateValue, true, props.updateOn);
+        let values = {};
+        props.params?.forEach((item) => {
+          if (!item.value) {
+            item.value = props.formValues?.[item.name] ?? "";
+          }
+          values[item.name] = item.value;
+        });
+        fetchData(props.updateValue, true, props.updateOn, "", values);
       }
     }
-  }, [props.updateValue, updateValue, fetchData, props.updateOn]);
+  }, [props.updateValue, updateValue, fetchData, props.updateOn, props.params, props.formValues]);
   useEffect(() => {
     function handleClick(event) {
       if (!selectRef.current.contains(event.target)) {
@@ -207,7 +234,7 @@ function CustomSelect(props) {
                   {props.displayValue ? option[props.displayValue] : option.value}
                   {props.tags && (
                     <TagBox>
-                    {  console.log(props.iconImage)}
+                      {console.log(props.iconImage)}
                       {props.iconImage && <ImgBox src={process.env.REACT_APP_CDN + (props.iconImage.collection.length > 0 ? option[props.iconImage.collection]?.[props.iconImage.item] ?? "" : option[props.iconImage.item])} />}
                       <TagData>
                         {props.tags.map((tag) => (

@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getData, postData } from "../../../../../../backend/api";
-import {
-  buttonStyle,
-  containerStyle,
-  formStyle,
-  inputStyle,
-  rowStyle,
-  selectStyle,
-} from "./styles";
+import { getData } from "../../../../../../backend/api";
+import { buttonStyle, containerStyle, formStyle, inputStyle, rowStyle, selectStyle } from "./styles";
 import axios from "axios";
 
 function AppointmentMenu() {
@@ -46,7 +39,7 @@ function AppointmentMenu() {
   };
 
   const handleDropdownChange = (e) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
 
     setFormData({
       ...formData,
@@ -98,63 +91,24 @@ function AppointmentMenu() {
 
   return (
     <div style={containerStyle}>
-      <h2
-        style={{ fontSize: "24px", marginBottom: "20px", textAlign: "center" }}
-      >
-        Appointment Menu
-      </h2>
+      <h2 style={{ fontSize: "24px", marginBottom: "20px", textAlign: "center" }}>Appointment Menu</h2>
       <form onSubmit={handleSubmit} style={formStyle}>
         <div style={rowStyle}>
-          <select
-            id="selectedOption1"
-            name="center"
-            value={formData.center}
-            onChange={handleDropdownChange}
-            style={{ ...selectStyle, marginRight: "10px" }}
-          >
+          <select id="selectedOption1" name="center" value={formData.center} onChange={handleDropdownChange} style={{ ...selectStyle, marginRight: "10px" }}>
             <option value="">Center</option>
-            {dietCenter?.length &&
-              dietCenter?.map((value) => (
-                <option value={value?.id}>{value?.value}</option>
-              ))}
+            {dietCenter?.length && dietCenter?.map((value) => <option value={value?.id}>{value?.value}</option>)}
           </select>
-          <select
-            id="selectedOption2"
-            name="dietitian"
-            value={formData.dietitian}
-            onChange={handleDropdownChange}
-            style={selectStyle}
-          >
+          <select id="selectedOption2" name="dietitian" value={formData.dietitian} onChange={handleDropdownChange} style={selectStyle}>
             <option value="">Dietitian</option>
-            {dietitian?.length &&
-              dietitian?.map((value) => (
-                <option value={value?.id}>{value?.value}</option>
-              ))}
+            {dietitian?.length && dietitian?.map((value) => <option value={value?.id}>{value?.value}</option>)}
           </select>
         </div>
         <div style={rowStyle}>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            placeholder="Email"
-            style={inputStyle}
-          />
-          <select
-            id="slot"
-            name="slot"
-            value={formData.slot}
-            onChange={handleDropdownChange}
-            style={{ ...inputStyle, width: "100%" }}
-          >
+          <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} placeholder="Email" style={inputStyle} />
+          <select id="slot" name="slot" value={formData.slot} onChange={handleDropdownChange} style={{ ...inputStyle, width: "100%" }}>
             <option value="">Slot</option>
 
-            {avialSlots?.length &&
-              avialSlots?.map((value) => (
-                <option value={value?.id}>{value?.value}</option>
-              ))}
+            {avialSlots?.length && avialSlots?.map((value) => <option value={value?.id}>{value?.value}</option>)}
           </select>
         </div>
         <button type="submit" style={buttonStyle}>

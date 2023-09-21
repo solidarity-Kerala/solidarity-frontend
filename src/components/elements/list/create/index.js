@@ -340,8 +340,18 @@ const CrudForm = (props) => {
                   dynamicClass = item.condition.else;
                 }
               }
+              let updateValue = {};
+
+              if (Array.isArray(item.updateOn)) {
+                updateValue = {};
+                item.updateOn?.forEach((itemName) => {
+                  updateValue[itemName] = formValues[itemName];
+                });
+              } else {
+                updateValue = { [item.updateOn]: formValues[item.updateOn] };
+              }
               if ((props.formType === "put" && item.update) || (props.formType === "post" && item.add)) {
-                return <FormInput dynamicClass={dynamicClass} updateValue={formValues[item.updateOn]} placeholder={item.placeHolder} key={`input` + index} id={index} error={formErrors[formState[index].name]} value={formValues[formState[index].name]} {...item} onChange={handleChange} />;
+                return <FormInput dynamicClass={dynamicClass} formValues={formValues} updateValue={updateValue} placeholder={item.placeHolder} key={`input` + index} id={index} error={formErrors[formState[index].name]} value={formValues[formState[index].name]} {...item} onChange={handleChange} />;
               } else {
                 return null;
               }
