@@ -142,6 +142,8 @@ const Dietitian = (props) => {
       default: "",
       label: "License Validity",
       tag: true,
+      minDate: moment().add(-70, "years").toDate(),
+      default: moment().toDate(),
       required: true,
       view: true,
       add: true,
