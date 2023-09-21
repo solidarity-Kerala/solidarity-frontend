@@ -266,6 +266,9 @@ export const RowContainer = styled.div`
   &.subList {
     border-radius: 12px;
   }
+  &.print{
+    padding:0;
+  }
   @media screen and (max-width: 768px) {
     max-width: 100%;
     margin-right: 0px;

@@ -18,7 +18,7 @@ const PopupView = ({ themeColors, closeModal, itemTitle, popupData, customClass,
             <GetIcon icon={"Close"} />
           </CloseButton>
         </Header>
-        <RowContainer theme={themeColors} className="popup-data">
+        <RowContainer theme={themeColors} className={`${customClass ?? "medium"} popup-data`}>
           {popupData}
         </RowContainer>
       </Page>

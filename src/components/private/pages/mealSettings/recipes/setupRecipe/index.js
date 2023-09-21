@@ -1,20 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  PDFViewer,
-  Image,
-} from "@react-pdf/renderer";
-import { Button } from "../../../../../elements/select/styles";
-import { Footer } from "../../../../../elements/form/styles";
-import { Overlay } from "../../../../../elements/form/styles";
+import { Document, Page, Text, View, StyleSheet, PDFViewer, Image } from "@react-pdf/renderer";
 import { Page as PageView } from "../../../../../elements/form/styles";
-import FormInput from "../../../../../elements/input";
-import { useTranslation } from "react-i18next";
 import { getData } from "../../../../../../backend/api";
 import { food } from "../../../../../../images";
 
@@ -240,51 +227,37 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
       <View style={styles.tableRow}>
         <Text style={styles.tableCell}>Calories</Text>
         <Text style={styles.tableCell}>السعرات الحرارية</Text>
-        <Text style={styles.tableCell}>
-          {openData?.data?.calories / openData?.data?.numberOfPortion}
-        </Text>
+        <Text style={styles.tableCell}>{openData?.data?.calories / openData?.data?.numberOfPortion}</Text>
       </View>
       <View style={styles.tableRow}>
         <Text style={styles.tableCell}>Total Fat</Text>
         <Text style={styles.tableCell}>الدهون الكلية</Text>
-        <Text style={styles.tableCell}>
-          {openData?.data?.totalFat / openData?.data?.numberOfPortion}
-        </Text>
+        <Text style={styles.tableCell}>{openData?.data?.totalFat / openData?.data?.numberOfPortion}</Text>
       </View>
       <View style={styles.tableRow}>
         <Text style={styles.tableCell}>Total Fiber</Text>
         <Text style={styles.tableCell}>الألياف الكلية</Text>
-        <Text style={styles.tableCell}>
-          {openData?.data?.fiber / openData?.data?.numberOfPortion}
-        </Text>
+        <Text style={styles.tableCell}>{openData?.data?.fiber / openData?.data?.numberOfPortion}</Text>
       </View>
       <View style={styles.tableRow}>
         <Text style={styles.tableCell}>Total Sugar</Text>
         <Text style={styles.tableCell}>السكر الكلي</Text>
-        <Text style={styles.tableCell}>
-          {openData?.data?.sugars / openData?.data?.numberOfPortion}
-        </Text>
+        <Text style={styles.tableCell}>{openData?.data?.sugars / openData?.data?.numberOfPortion}</Text>
       </View>
       <View style={styles.tableRow}>
         <Text style={styles.tableCell}>Protein</Text>
         <Text style={styles.tableCell}>البروتين</Text>
-        <Text style={styles.tableCell}>
-          {openData?.data?.protein / openData?.data?.numberOfPortion}
-        </Text>
+        <Text style={styles.tableCell}>{openData?.data?.protein / openData?.data?.numberOfPortion}</Text>
       </View>
       <View style={styles.tableRow}>
         <Text style={styles.tableCell}>Calcium</Text>
         <Text style={styles.tableCell}>الكالسيوم</Text>
-        <Text style={styles.tableCell}>
-          {openData?.data?.calcium / openData?.data?.numberOfPortion}
-        </Text>
+        <Text style={styles.tableCell}>{openData?.data?.calcium / openData?.data?.numberOfPortion}</Text>
       </View>
       <View style={styles.tableRow}>
         <Text style={styles.tableCell}>Iron</Text>
         <Text style={styles.tableCell}>الحديد</Text>
-        <Text style={styles.tableCell}>
-          {openData?.data?.iron / openData?.data?.numberOfPortion}
-        </Text>
+        <Text style={styles.tableCell}>{openData?.data?.iron / openData?.data?.numberOfPortion}</Text>
       </View>
       <Text style={styles.paragraph}>{openData?.data?.description}</Text>
     </View>
@@ -313,12 +286,7 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
         </View>
         <View style={styles.sectionBottomHeader}>
           <Text style={styles.h3}>Ingredients: </Text>
-          {data?.length &&
-            data.map((data, key) => (
-              <Text style={styles.h3} key={key}>
-                {data.ingredient?.ingredientsName}
-              </Text>
-            ))}
+          <Text style={styles.h3}>{data?.length && data.map((data, index) => (index !== 0 ? ", " : "") + data.ingredient?.ingredientsName)}</Text>
         </View>
         <View style={styles.headerLineBlackSmall} />
         {/* Produced By */}
@@ -339,17 +307,11 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
     <View style={styles.footer}>
       <View style={styles.footerItems}>
         <View>
-          <Text style={styles.footerTextleft}>
-            Euros Bake W.L.L, CR.No:72669-6
-          </Text>
-          <Text style={styles.footerTextleft}>
-            P.O BOX:80304, Sanad, Kingdom of Bahrain
-          </Text>
+          <Text style={styles.footerTextleft}>Euros Bake W.L.L, CR.No:72669-6</Text>
+          <Text style={styles.footerTextleft}>P.O BOX:80304, Sanad, Kingdom of Bahrain</Text>
         </View>
         <View>
-          <Text style={styles.footerTextright}>
-            (+973 17 627777 ) (+973 33 626044)
-          </Text>
+          <Text style={styles.footerTextright}>(+973 17 627777 ) (+973 33 626044)</Text>
           <Text style={styles.footerTextright}>(sales@eurobakes.me.com)</Text>
         </View>
       </View>
@@ -360,36 +322,29 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
 // PDFGenerator component
 const PDFGenerator = ({ openData, closeModal }) => {
   const [recipeIngredients, setRecipeIngredients] = useState();
-  const { t } = useTranslation();
 
   // Fetch recipe ingredients data
   useEffect(() => {
-    getData({ recipe: openData?.data?._id }, "recipe-ingredients").then(
-      (response) => {
-        setRecipeIngredients(response?.data?.response);
-      }
-    );
+    getData({ recipe: openData?.data?._id }, "recipe-ingredients").then((response) => {
+      setRecipeIngredients(response?.data?.response);
+    });
   }, [openData]);
 
   // Function to generate the PDF document
   const generatePDF = () => (
-    <Document>
+    <Document author="Tecnocorp" subject={`Number of servings: ${openData?.data?.numberOfPortion}, weight: ${openData?.data?.quantity}`} title={openData?.data?.title}>
       <Page size="A4" style={styles.page}>
         <View style={styles.headerContainer}>
           <View style={styles.textContainer}>
             <Text style={styles.title}>
               {openData?.data?.title} ({openData?.data?.measurementType})
             </Text>
-            <Text style={styles.recipetitle}>
-              Number of servings: {openData?.data?.numberOfPortion}
-            </Text>
-            <Text style={styles.recipetitle}>
-              weight: {openData?.data?.quantity}
-            </Text>
+            <Text style={styles.recipetitle}>Number of servings: {openData?.data?.numberOfPortion}</Text>
+            <Text style={styles.recipetitle}>weight: {openData?.data?.gram}g</Text>
           </View>
           <View style={styles.logoContainer}>
             <Image
-              source={food} // Adjusted the way of specifying source
+              source={openData?.data?.photo ? process.env.REACT_APP_CDN + openData?.data?.photo : food} // Adjusted the way of specifying source
               style={styles.logo}
             />
           </View>
@@ -404,53 +359,9 @@ const PDFGenerator = ({ openData, closeModal }) => {
   );
 
   return (
-    <Overlay className={"popup"}>
-      <PageView className={"full"}>
-        <PDFViewer style={{ width: "100%", height: "600px" }}>
-          {generatePDF()}
-        </PDFViewer>
-        {/* Add the provided code here */}
-        <hr className="footer-line-brown" />
-        <div className="button-container" style={{ padding: 10 }}>
-          <button
-            style={{
-              backgroundColor: "#007bff",
-              color: "#fff",
-              padding: "10px 20px",
-              border: "none",
-              cursor: "pointer",
-              marginRight: "10px",
-            }}
-            onClick={generatePDF}
-          >
-            Generate PDF
-          </button>
-          <button
-            style={{
-              backgroundColor: "#007bff",
-              color: "#fff",
-              padding: "10px 20px",
-              border: "none",
-              cursor: "pointer",
-            }}
-            onClick={() => window.print()}
-          >
-            Print PDF
-          </button>
-        </div>
-        <Footer>
-          <FormInput type="close" value={t("cancel")} onChange={closeModal} />
-          <Button document={generatePDF()} fileName="test.pdf">
-            {({ blob, url, loading, error }) =>
-              loading ? "Loading document..." : t("download") + " PDF"
-            }
-            {({ blob, url, loading, error }) =>
-              loading ? "Loading document..." : t("download") + " PDF"
-            }
-          </Button>
-        </Footer>
-      </PageView>
-    </Overlay>
+    <PageView>
+      <PDFViewer style={{ width: "100%", height: "600px" }}>{generatePDF()}</PDFViewer>
+    </PageView>
   );
 };
 
