@@ -6,16 +6,7 @@ export const SearchInput = styled.div`
   animation-duration: 0.2s;
   margin-bottom: 5px;
   margin-top: 4px;
-  &.menu {
-    margin-left: 10px;
-    border-bottom: 1px solid #efeded;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-  &.menu input {
-    width: 100% !important;
-  }
+ 
   &.select {
     top: 0;
     z-index: 1;
@@ -70,6 +61,22 @@ export const SearchInput = styled.div`
     left: 13px;
     top: 12px;
     pointer-events: none;
+  }
+  &.menu {
+    margin-left: 0;
+    border-bottom: 1px solid rgb(239, 237, 237);
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+    margin-bottom: 0;
+  }
+  &.menu input {
+    width: 100% !important;
+    padding-left: 55px;
+    border-radius: 0;
+  }
+  &.menu svg {
+    left: 20px;
   }
   &.select {
     margin: 5px 5px;

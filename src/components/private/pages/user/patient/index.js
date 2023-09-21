@@ -1211,9 +1211,10 @@ const Patient = (props) => {
     {
       type: "select",
       apiType: "API",
-      updateOn: "bookingDate",
+      updateOn: ["bookingDate", "dietician", "physical"],
       selectApi: "day-slot/avail-slot",
       placeholder: "Time Slot",
+      params: [{ name: "center" }, { name: "bookingDate" }, { name: "dietician" }, { name: "physical" }],
       name: "bookingSlot",
       showItem: "availableSlots",
       validation: "",
@@ -1261,20 +1262,20 @@ const Patient = (props) => {
     // },
   ]);
 
-  const [resetPassword] = useState([
-    {
-      type: "text",
-      placeholder: "New Password",
-      name: "newPassword",
-      validation: "",
-      default: "",
-      label: "New Password",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-  ]);
+  // const [resetPassword] = useState([
+  //   {
+  //     type: "text",
+  //     placeholder: "New Password",
+  //     name: "newPassword",
+  //     validation: "",
+  //     default: "",
+  //     label: "New Password",
+  //     required: true,
+  //     view: true,
+  //     add: true,
+  //     update: true,
+  //   },
+  // ]);
 
   const [actions] = useState([
     {
@@ -1462,30 +1463,6 @@ const Patient = (props) => {
         customClass: "medium",
       },
     },
-    // {
-    //   element: "button",
-    //   type: "callback",
-    //   callback: (item, data) => {
-    //     // Set the data for the clicked item and open the SetupMenu popup
-    //     console.log(data);
-    //     setOpenedMenu("appointment");
-    //     setOpenItemData({ item, data });
-    //     setOpenMenuSetup(true);
-    //   },
-    //   itemTitle: { name: "username", type: "text", collection: "" },
-    //   icon: "menu",
-    //   title: "Appointment",
-    //   params: {
-    //     api: `food-group-item`,
-    //     parentReference: "",
-    //     itemTitle: { name: "username", type: "text", collection: "" },
-    //     shortName: "Recipe Items",
-    //     addPrivilege: true,
-    //     delPrivilege: true,
-    //     updatePrivilege: true,
-    //     customClass: "medium",
-    //   },
-    // },
     {
       element: "button",
       type: "subList",
@@ -1519,17 +1496,7 @@ const Patient = (props) => {
 
   return (
     <Container className="noshadow">
-      <ListTable
-        actions={actions}
-        api={`user`}
-        itemTitle={{ name: "username", type: "text", collection: "" }}
-        shortName={`Patient`}
-        parentReference={"userType"}
-        referenceId={"6471b3849fb2b29fe045887b"}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
+      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
