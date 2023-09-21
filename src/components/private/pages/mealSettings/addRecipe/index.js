@@ -105,7 +105,7 @@ const AddRecipe = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
       selectApi: "Bread,Meat,Fruit,Dessert,Salad,Soup,Mixed",
       apiType: "CSV",
     },
@@ -162,7 +162,7 @@ const AddRecipe = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
     },
     {
       type: "select",
@@ -179,7 +179,7 @@ const AddRecipe = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
     },
 
     {
@@ -197,7 +197,6 @@ const AddRecipe = (props) => {
     },
   ]);
 
-  
   const [actions] = useState([
     {
       element: "button",

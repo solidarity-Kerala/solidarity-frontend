@@ -227,6 +227,7 @@ const Resicpes = (props) => {
             <SetupRecipe
               openData={openItemData}
               setMessage={props.setMessage}
+              closeModal={closeModal}
             ></SetupRecipe>
           }
           themeColors={themeColors}
