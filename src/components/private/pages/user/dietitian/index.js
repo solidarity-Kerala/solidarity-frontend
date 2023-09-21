@@ -220,6 +220,23 @@ const Dietitian = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "select",
+      placeholder: "Status",
+      name: "status",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Status",
+      showItem: "status",
+      required: true,
+      view: true,
+      filter: true,
+      add: true,
+      update: true,
+      apiType: "CSV",
+      selectApi: "Active,Leave,Resigned,Terminated",
+    },
   ]);
 
   const [daySlot] = useState([
