@@ -36,6 +36,7 @@ export const TitleBox = styled.div`
 export const Title = styled.span`
   font-size: 16px;
   color: gray;
+  white-space: nowrap;
 `;
 
 export const Count = styled.div`
@@ -53,4 +54,5 @@ export const IconWrapper = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
+  align-self: flex-start;
 `;

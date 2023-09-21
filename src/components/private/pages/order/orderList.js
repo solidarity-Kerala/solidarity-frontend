@@ -155,7 +155,7 @@ const OrderList = (props) => {
       color: "color",
       validation: "",
       default: "",
-      tag: true,
+      tag: false,
       label: "Order Status",
       required: true,
       view: true,
@@ -218,7 +218,7 @@ const OrderList = (props) => {
         api: `dispatch`,
         parentReference: "weeklyMealPlanEntry",
         itemTitle: {
-          name: "userDisplayName",
+          name: "orderDate",
           type: "text",
           collection: "user",
         },
@@ -242,6 +242,13 @@ const OrderList = (props) => {
           name: "userDisplayName",
           type: "text",
           collection: "user",
+        }}
+        highlight={{
+          name: "orderStatus",
+          type: "text",
+          collection: "orderStatus",
+          colorName: "color",
+          colorCollection: "orderStatus",
         }}
         shortName={`Order`}
         // formMode={`single`}

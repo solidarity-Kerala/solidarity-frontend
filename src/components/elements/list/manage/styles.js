@@ -65,7 +65,9 @@ export const Page = styled.div`
   background-color: white;
   max-height: 90%;
   box-shadow: 0px 0px 3px 1px rgb(181 181 181 / 45%);
-  
+  &.print{
+    width: 70%;
+  }
   &.medium {
     width: 70%;
     min-width: 250px;
