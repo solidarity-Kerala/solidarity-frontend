@@ -79,7 +79,7 @@ export const Div = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  padding:5px;
+  padding: 5px;
   flex-direction: column;
   /* border-top: 1px solid rgb(204, 204, 204); */
   &:first-child {
@@ -265,9 +265,9 @@ export const Variant = styled.div`
     cursor: pointer;
     max-width: 50px;
   }
-  &.Fixed{
-    border:0;
-    padding:0;
+  &.Fixed {
+    border: 0;
+    padding: 0;
   }
   &.selected {
     background-color: black;
@@ -319,4 +319,31 @@ export const SideHead = styled.div`
   margin-bottom: 10px;
   padding-bottom: 5px;
   border-bottom: 1px solid lightgray;
+`;
+export const WeekSelection = styled.div`
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+  padding: 10px 10px;
+  background-color: rgb(249, 249, 249);
+  border: none;
+  border-radius: 4px;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+  button {
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+  span{
+    font-weight:bold;
+    width:70px;
+    text-align:center;
+  }
 `;
