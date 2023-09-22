@@ -1132,7 +1132,10 @@ export const GetIcon = ({ icon }) => {
       return <AnnouncementIcon />;
     case "dietprice":
       return <DietpriceIcon />;
-
+    case "previous":
+      return <PreviousIcon />;
+    case "next":
+      return <NextIcon />;
     default:
       // console.log("missing icon", icon);
       return <QuestionIcon />;

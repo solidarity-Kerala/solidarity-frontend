@@ -4,7 +4,7 @@ import { deleteData, getData, postData } from "../../../../../../backend/api";
 import { NoData, ProfileImage } from "../../../../../elements/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import Search from "../../../../../elements/search";
-import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, MealCategoryCell, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details } from "./styles"; // Import styles from styles.js
+import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, MealCategoryCell, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection } from "./styles"; // Import styles from styles.js
 import DraggableItem from "./dragdrop/drag";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
@@ -14,8 +14,7 @@ import { Header } from "../../../../../elements/list/manage/styles";
 import { useRef } from "react";
 import FormInput from "../../../../../elements/input";
 import { food } from "../../../../../../images";
-const SetupMenu = ({ openData, themeColors, setMessage }) => {
- 
+const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const [menuId] = useState(openData.data._id);
   const [data] = useState(openData.data);
@@ -25,6 +24,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   const [recipes, setRecipes] = useState([]);
   const [calories, setCalories] = useState({});
   const [activeTab, setActiveTab] = useState("recipes");
+  const [weekNumber, setWeekNumber] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const searchTimeoutRef = useRef();
   const searchChange = (event) => {
@@ -34,7 +34,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
       handleTabClick(activeTab, event.target.value);
     }, 300);
   };
-  console.log("data",data)
+  console.log("data", data);
   const [coloriePerDay, setColoriePerDay] = useState("900");
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories) => {
@@ -211,6 +211,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
             foodMenuItem,
             recipe: item._id,
             optionNo: data.optionNo,
+            weekNumber,
           },
           "food-menu-item/replacable-item"
         );
@@ -224,7 +225,6 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
         }
         setMenuData(menuDataTemp);
       } else if (data.mealOrRecepe === "meal" && activeTab === "meals") {
-        
       }
       // setReplacableItems(replacableItemsTemp);
     } else {
@@ -237,6 +237,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
             foodMenu: menuId,
             recipe: item._id,
             optionNo: data.optionNo,
+            weekNumber,
           },
           "food-menu-item"
         );
@@ -269,6 +270,7 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
             foodMenu: menuId,
             meal: item._id,
             optionNo: data.optionNo,
+            weekNumber,
           },
           "food-menu-item"
         );
@@ -303,12 +305,16 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
   };
 
   useEffect(() => {
-    getData({ menuId: openData.data._id }, "food-menu/get-a-menu").then((response) => {
-      if (response.status === 200) {
-        setMenuData(response.data);
-      }
-    });
-  }, [openData.data._id]);
+    setLoaderBox(true);
+    getData({ menuId: openData.data._id, weekNumber }, "food-menu/get-a-menu")
+      .then((response) => {
+        if (response.status === 200) {
+          setMenuData(response.data);
+          setLoaderBox(false);
+        }
+      })
+      .catch(() => [setLoaderBox(false)]);
+  }, [openData.data._id, weekNumber, setLoaderBox]);
   const [item] = useState({
     type: "select",
     placeholder: "Calories",
@@ -337,6 +343,15 @@ const SetupMenu = ({ openData, themeColors, setMessage }) => {
                 Day View
               </TabButton>
             </TabContainer>
+            <WeekSelection>
+              <button onClick={() => setWeekNumber((prev) => (prev > 0 ? prev - 1 : prev))}>
+                <GetIcon icon={"previous"} />
+              </button>
+              <span>Week {weekNumber + 1}</span>
+              <button onClick={() => setWeekNumber((prev) => (prev < 51 ? prev + 1 : prev))}>
+                <GetIcon icon={"next"} />
+              </button>
+            </WeekSelection>
           </RowContainer>
           <Table>
             <thead>

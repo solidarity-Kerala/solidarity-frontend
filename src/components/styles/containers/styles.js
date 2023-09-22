@@ -184,6 +184,9 @@ export const RowContainer = styled.div`
     margin-left: 30px;
     flex: 0;
     margin-bottom: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: 10px;
   }
   h2 {
     font-size: 1.8em;
@@ -266,8 +269,8 @@ export const RowContainer = styled.div`
   &.subList {
     border-radius: 12px;
   }
-  &.print{
-    padding:0;
+  &.print {
+    padding: 0;
   }
   @media screen and (max-width: 768px) {
     max-width: 100%;
