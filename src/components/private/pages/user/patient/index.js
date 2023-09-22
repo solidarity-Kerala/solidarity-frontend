@@ -1195,14 +1195,28 @@ const Patient = (props) => {
       update: true,
       filter: true,
     },
+    // {
+    //   type: "date",
+    //   placeholder: "Booking Date",
+    //   name: "bookingDate",
+    //   validation: "",
+    //   default: "",
+    //   tag: true,
+    //   label: "Booking Date",
+    //   required: true,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    // },
     {
       type: "date",
-      placeholder: "Booking Date",
+      placeholder: "Start Date & Time",
       name: "bookingDate",
+      showItem: "",
       validation: "",
       default: "",
       tag: true,
-      label: "Booking Date",
+      label: "Start Date",
       required: true,
       view: true,
       add: true,
@@ -1214,7 +1228,12 @@ const Patient = (props) => {
       updateOn: ["bookingDate", "dietician", "physical"],
       selectApi: "day-slot/avail-slot",
       placeholder: "Time Slot",
-      params: [{ name: "center" }, { name: "bookingDate" }, { name: "dietician" }, { name: "physical" }],
+      params: [
+        { name: "center" },
+        { name: "bookingDate" },
+        { name: "dietician" },
+        { name: "physical" },
+      ],
       name: "bookingSlot",
       showItem: "availableSlots",
       validation: "",
@@ -1496,7 +1515,17 @@ const Patient = (props) => {
 
   return (
     <Container className="noshadow">
-      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
+      <ListTable
+        actions={actions}
+        api={`user`}
+        itemTitle={{ name: "username", type: "text", collection: "" }}
+        shortName={`Patient`}
+        parentReference={"userType"}
+        referenceId={"6471b3849fb2b29fe045887b"}
+        formMode={`double`}
+        {...props}
+        attributes={attributes}
+      ></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
