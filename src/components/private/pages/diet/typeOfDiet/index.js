@@ -57,6 +57,23 @@ const TypeOfDiet = (props) => {
       update: true,
       filter: false,
     },
+  
+  {
+    type: "select",
+    placeholder: "Category",
+    name: "category",
+    validation: "",
+    tag: true,
+    default: "0",
+    filter: false,
+    label: "Category",
+    required: true,
+    view: true,
+    add: true,
+    update: true,
+    selectApi: "General, Diabetic,Liquid",
+    apiType: "CSV",
+  },
   ]);
 
   const [actions] = useState([
