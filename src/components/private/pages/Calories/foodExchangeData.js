@@ -125,7 +125,7 @@ const FoodExchangeData = (props) => {
     {
       type: "select",
       placeholder: "fat",
-      name: "Fat",
+      name: "fat",
       validation: "",
       tag: true,
       default: "0",
