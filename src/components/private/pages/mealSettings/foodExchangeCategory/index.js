@@ -26,6 +26,20 @@ const FoodExchangeCategory = (props) => {
     },
     {
       type: "number",
+      placeholder: "Calori",
+      name: "calori",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Calori",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    
+    {
+      type: "number",
       placeholder: "sequence",
       name: "sequence",
       validation: "",
