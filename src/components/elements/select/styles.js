@@ -93,6 +93,9 @@ export const SelectBox = styled.div`
   &.filter {
     margin-right: 0.5em;
   }
+  &.single {
+    margin-right: 0em;
+  }
   button label {
     display: none;
   }

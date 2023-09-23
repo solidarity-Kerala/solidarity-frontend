@@ -61,6 +61,7 @@ export const SelectBox = styled.div`
     height: 40px;
     margin: 4px 0;
     min-width: 150px;
+    background: white;
   }
   &.filter {
     margin-right: 0.5em;
