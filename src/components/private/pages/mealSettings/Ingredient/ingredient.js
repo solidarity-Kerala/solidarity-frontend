@@ -299,7 +299,7 @@ const Ingredient = (props) => {
     },
    
     {
-      type: "multiSelect",
+      type: "select",
       placeholder: "Yield Type",
       name: "yieldType",
       validation: "",
@@ -330,6 +330,7 @@ const Ingredient = (props) => {
       update: true,
       filter: false,
     },
+    
     {
       type: "checkbox",
       placeholder: "Added Sugar",
