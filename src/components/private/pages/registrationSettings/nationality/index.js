@@ -24,19 +24,19 @@ const Nationality = (props) => {
             add: true,
             update: true,
         },
-        {
-            type: "checkbox",
-            placeholder: "Status",
-            name: "isActive",
-            validation: "",
-            default: "",
-            tag: true,
-            label: "Status",
-            required: true,
-            view: true,
-            add: true,
-            update: true,
-        },
+        // {
+        //     type: "checkbox",
+        //     placeholder: "Status",
+        //     name: "isActive",
+        //     validation: "",
+        //     default: "",
+        //     tag: true,
+        //     label: "Status",
+        //     required: true,
+        //     view: true,
+        //     add: true,
+        //     update: true,
+        // },
     ]);
 
     return (
@@ -46,7 +46,7 @@ const Nationality = (props) => {
                 // Actions to be displayed in the ListTable
                 // actions={actions}
                 // API endpoint for fetching menu data
-                api={``}
+                api={`nationality`}
                 displayColumn="double"
                 // Property name for the title of each menu item
                 itemTitle={{ name: "nationality", type: "text", collection: "" }}

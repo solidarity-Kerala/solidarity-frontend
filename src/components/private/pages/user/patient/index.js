@@ -58,13 +58,41 @@ const Patient = (props) => {
     },
     {
       type: "text",
-      placeholder: "Name",
+      placeholder: "First Name",
       name: "username",
       showItem: "",
       tag: false,
       validation: "",
       default: "",
-      label: "Name",
+      label: "First Name",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Middle Name",
+      name: "middleName",
+      showItem: "",
+      tag: false,
+      validation: "",
+      default: "",
+      label: "Middle Name",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Last Name",
+      name: "lastName",
+      showItem: "",
+      tag: false,
+      validation: "",
+      default: "",
+      label: "Last Name",
       required: true,
       view: true,
       add: true,
@@ -597,7 +625,7 @@ const Patient = (props) => {
       selectApi: "allergy/select",
       placeholder: "Allergy",
       name: "allergy",
-      showItem: "allergyName",
+      showItem: "title",
       validation: "",
       default: "",
       tag: true,
@@ -1550,7 +1578,7 @@ const Patient = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
@@ -1567,7 +1595,7 @@ const Patient = (props) => {
             <DietMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></DietMenu>
           }
           themeColors={themeColors}
@@ -1584,7 +1612,7 @@ const Patient = (props) => {
             <AppointmentMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></AppointmentMenu>
           }
           themeColors={themeColors}

@@ -93,6 +93,9 @@ import RestoreDeliveryMan from "../../private/pages/restoreUser/restoreDeliveryM
 import RestorePatient from "../../private/pages/restoreUser/restorePatient";
 import RestoreDietitian from "../../private/pages/restoreUser/restoreDietitian";
 import RestoreFranchiseAdmin from "../../private/pages/restoreUser/restoreFranchiseAdmin";
+import Allergy from "../../private/pages/allergy";
+import Inventory from "../../private/pages/inventory";
+
 /**
  * Switch component to render different pages based on the provided page prop.
  * @param {string} page - The page to be rendered.
@@ -895,7 +898,7 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-   
+
 
     case "birthday-report":
       return (
@@ -957,7 +960,7 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-    
+
     case "restore-delivery-man":
       return (
         <RestoreDeliveryMan
@@ -991,6 +994,26 @@ const Switch = ({
     case "restore-franchise-admin":
       return (
         <RestoreFranchiseAdmin
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "allergy":
+      return (
+        <Allergy
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "inventory":
+      return (
+        <Inventory
           key={key}
           exportPrivilege={exportPrivilege}
           addPrivilege={addPrivilege}
