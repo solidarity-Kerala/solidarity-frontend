@@ -57,9 +57,8 @@ export const Page = styled.div`
   min-width: 250px;
   max-width: 100%;
   height: auto;
-  animation: ${fadeIn} 1s ease-in-out;
-  /* animation: ${zoomAnimation} 1s ease-in-out; */
-  animation-duration: 0.2s;
+  /* animation: ${fadeIn} 1s ease-in-out; */
+  animation: ${zoomAnimation} .3s ease-in-out;
   margin: 5vh auto auto auto;
   padding: 0em 0;
   background-color: white;

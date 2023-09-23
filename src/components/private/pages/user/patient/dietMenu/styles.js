@@ -342,6 +342,7 @@ export const MealTimeHead = styled.div`
   border-radius: 10px;
   position: relative;
   margin-bottom: 10px;
+      margin-bottom: 0px;
   cursor: pointer;
   background-color: ${({ active }) => (active ? "#4b4b4b" : "#f8f8f8;")};
   color: ${({ active }) => (active ? "white" : "black")};

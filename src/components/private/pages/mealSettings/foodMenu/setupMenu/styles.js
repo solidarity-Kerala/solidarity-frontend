@@ -20,8 +20,14 @@ export const TabButton = styled.button`
 `;
 
 export const Table = styled.table`
-  width: 100%;
+  width: calc(100% - 40px);
+  margin-left: 30px;
+  margin-right: 10px;
   border-collapse: collapse;
+  tr.head th {
+    border-radius: 0;
+    background-color: rgb(234 234 234);
+  }
   thead {
     position: sticky;
     top: 0px;
@@ -33,6 +39,15 @@ export const Table = styled.table`
 export const TableHeader = styled.th`
   padding: 10px;
   text-align: center;
+  border-radius: ${({ active }) => (active ? "0px" : "0")} !important;
+  margin-bottom: 5px;
+  background-color: ${({ active }) => (active ? "#f9f9f9" : "rgb(234, 234, 234)")} !important;
+  border-left: 1px solid rgb(204, 204, 204);
+  border-bottom: 1px solid rgb(204, 204, 204);
+  border-top: 1px solid rgb(204, 204, 204);
+  &:first-child {
+    border-left: 0;
+  }
 `;
 
 export const TableBody = styled.tbody``;
@@ -61,7 +76,7 @@ export const MealCategoryCell = styled.th`
   top: 0;
   text-align: left;
   width: 0;
-  border: 1px solid #d6d6d6;
+  border-top: 1px solid #d6d6d6;
   &:first-child {
     width: 10%;
     padding: 0px 10px 0 30px;
@@ -91,12 +106,18 @@ export const Div = styled.div`
 `;
 
 export const TableCell = styled.td`
-  padding: 0px;
-  border: 1px solid #ccc;
-  background-color: white;
+  padding: 5px;
   text-align: center;
   width: 12%;
   height: 50px;
+  border-left: 1px solid #ccc;
+  &:first-child {
+    border: 0;
+  }
+  .layer {
+    border-radius: 10px;
+    background-color: white;
+  }
 `;
 
 export const FoodButton = styled.button`
@@ -180,6 +201,9 @@ export const Variants = styled.div`
         justify-content: left;
       }
     }
+  }
+  &.day{
+     flex-direction: row;
   }
 `;
 export const Details = styled.div`
@@ -323,27 +347,30 @@ export const SideHead = styled.div`
 export const WeekSelection = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 20px;
-  padding: 10px 10px;
-  background-color: rgb(249, 249, 249);
+  column-gap: 10px;
+  padding: 0px 0px;
   border: none;
   border-radius: 4px;
   align-items: center;
   font-size: 14px;
-  margin-bottom: 10px;
-  button {
+  > button {
     border: 1px solid rgb(204, 204, 204);
     border-radius: 50%;
     display: flex;
+    background-color: rgb(249, 249, 249);
     justify-content: center;
     align-items: center;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
+    transition: all 1s;
   }
-  span{
-    font-weight:bold;
-    width:70px;
-    text-align:center;
+  > button:hover {
+    transform: scale(1.1);
+  }
+  span {
+    font-weight: bold;
+    width: 70px;
+    text-align: center;
   }
 `;

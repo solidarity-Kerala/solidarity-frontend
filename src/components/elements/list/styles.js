@@ -408,6 +408,17 @@ export const AddButton = styled.button`
 export const FilterBox = styled.div`
   flex-direction: row;
   display: flex;
+  &.menu {
+    width: 100%;
+    margin-bottom: 5px;
+    position: sticky;
+    top: 0;
+    padding-bottom: 5px;
+    background: #eaeaea;
+  }
+  .filter {
+    margin-right: 0;
+  }
 `;
 export const Filter = styled.button`
   background: transparent;
