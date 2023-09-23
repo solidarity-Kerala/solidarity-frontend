@@ -4,7 +4,7 @@ import { deleteData, getData, postData } from "../../../../../../backend/api";
 import { FilterBox, NoData, ProfileImage } from "../../../../../elements/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import Search from "../../../../../elements/search";
-import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, MealCategoryCell, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection } from "./styles"; // Import styles from styles.js
+import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection } from "./styles"; // Import styles from styles.js
 import DraggableItem from "./dragdrop/drag";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
