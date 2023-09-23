@@ -16,6 +16,7 @@ import FormInput from "../../../../../elements/input";
 import { food } from "../../../../../../images";
 import { MealTimeHead } from "../../../user/patient/dietMenu/styles";
 import PopupView from "../../../../../elements/popupview";
+import { getValue } from "../../../../../elements/list/functions";
 const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const [menuId] = useState(openData.data._id);
@@ -72,7 +73,47 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     },
     [coloriePerDay, menuData?.mealTimeCategories]
   );
-
+  const getNutritionInfo = (recipe, availableCalories) => {
+    const { meal, bread, fruit, dessert, soup } = availableCalories;
+    let { typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
+    mixedMeatPercentage = mixedMeatPercentage ?? 100;
+    mixedBreadPercentage = mixedBreadPercentage ?? 100;
+    let count = 0,
+      count1 = 0,
+      count2 = 0,
+      nutritionInfo = {};
+    if (typeOfRecipe === "Meat") {
+      count1 = meal || 0;
+    } else if (typeOfRecipe === "Bread") {
+      count1 = bread || 0;
+    } else if (typeOfRecipe === "Fruit") {
+      count1 = fruit || 0;
+    } else if (typeOfRecipe === "Soup") {
+      count1 = soup || 0;
+    } else if (typeOfRecipe === "Dessert") {
+      count1 = dessert || 0;
+    } else if (typeOfRecipe === "Mixed") {
+      count1 = (meal * mixedMeatPercentage) / 100;
+      count2 = (bread * mixedBreadPercentage) / 100;
+    }
+    console.log("mixed", count1, count2);
+    count = parseInt(count1) + parseInt(count2);
+    console.log(numberOfPortion, count);
+    nutritionInfo.calories = ((recipe.calories ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.Gram = ((recipe.gram ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.Protein = ((recipe.protein ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.SaturatedFat = ((recipe.satFat ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.UnsaturatedFat = ((recipe.unSatFat ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.TotalFat = ((recipe.totalFat ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.Cholesterol = ((recipe.cholesterol ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.Fiber = ((recipe.fiber ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.Carbohydrate = ((recipe.carbohydrate ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.Sugars = ((recipe.sugars ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.Iron = ((recipe.iron ?? 0) / (numberOfPortion ?? 1)) * count;
+    nutritionInfo.Calcium = ((recipe.calcium ?? 0) / (numberOfPortion ?? 1)) * count;
+    console.log(nutritionInfo, recipe);
+    return nutritionInfo;
+  };
   useEffect(() => {
     if (menuData?.foodMenu) {
       const reducedResult = menuData.foodMenu.reduce((accumulator, item) => {
@@ -304,9 +345,29 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       setMenuData(menuDataTemp);
     }
   };
-  const setCaloriesItems = (mealTimeCategories) => {
-    const { bread, meal, fruit, dessert } = mealTimeCategories.availableCalories[coloriePerDay];
-    return `${meal && meal > 0 ? meal + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}`;
+  const setCaloriesItems = (mealTimeCategories, single = false, recepeType = "") => {
+    const { bread, meal, fruit, dessert, soup } = mealTimeCategories.availableCalories[coloriePerDay];
+    if (!single) {
+      return `${meal && meal > 0 ? meal + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}`;
+    } else {
+      let count = 0;
+      if (recepeType === "Meat") {
+        count = (meal || 0) + "M";
+      } else if (recepeType === "Bread") {
+        count = (bread || 0) + "B";
+      } else if (recepeType === "Fruit") {
+        count = (fruit || 0) + "F";
+      } else if (recepeType === "Soup") {
+        count = (soup || 0) + "S";
+      } else if (recepeType === "Dessert") {
+        count = (dessert || 0) + "D";
+      } else if (recepeType === "Mixed") {
+        count = meal + "M" + bread + "B";
+      } else {
+        count = "0";
+      }
+      return count;
+    }
   };
 
   useEffect(() => {
@@ -391,11 +452,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               </TabButton>
             </TabContainer>
             <WeekSelection>
-              {/* <button onClick={() => setWeekNumber((prev) => (prev > 0 ? prev - 1 : prev))}>
-                <GetIcon icon={"previous"} />
-              </button> */}
+              
               <FormInput
-                customClass={"filter auto"}
+                customClass={"filter auto single"}
                 placeholder={`Available Colories`}
                 value={coloriePerDay}
                 key={`input` + 0}
@@ -421,6 +480,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   }
                 }}
               />
+              <button onClick={() => setWeekNumber((prev) => (prev > 0 ? prev - 1 : prev))}>
+                Clone Week <GetIcon icon={"clone"} />
+              </button>
               {/* <button onClick={() => setWeekNumber((prev) => (prev < 51 ? prev + 1 : prev))}>
                 <GetIcon icon={"next"} />
               </button> */}
@@ -524,7 +586,8 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                       <span
                                                         className="info"
                                                         onClick={() => {
-                                                          setCurrentNutritionInfo({ data: item, mealTimeCategory: mealTimeCategory._id });
+                                                          setCurrentNutritionInfo({ data: item, mealTimeCategory: mealTimeCategory._id, nutritionInfo: getNutritionInfo(item, mealTimeCategory.availableCalories[coloriePerDay]), Serving: setCaloriesItems(mealTimeCategory, true, item.typeOfRecipe) });
+                                                          console.log(currentNutritionInfo);
                                                         }}
                                                       >
                                                         <GetIcon icon={"info"} />
@@ -591,7 +654,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                                     <span
                                                                       className="info"
                                                                       onClick={() => {
-                                                                        setCurrentNutritionInfo({ data: item, mealTimeCategory: mealTimeCategory._id });
+                                                                        setCurrentNutritionInfo({ data: replacableItem.recipe, mealTimeCategory: mealTimeCategory._id, nutritionInfo: getNutritionInfo(replacableItem.recipe, mealTimeCategory.availableCalories[coloriePerDay]), Serving: setCaloriesItems(mealTimeCategory, true, replacableItem.recipe.typeOfRecipe) });
                                                                       }}
                                                                     >
                                                                       <GetIcon icon={"info"} />
@@ -725,7 +788,26 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       </DndProvider>
       {currentNutritionInfo && (
         <PopupView
-          popupData={<div>{JSON.stringify(currentNutritionInfo)}</div>}
+          popupData={
+            <Table className="full short">
+              <thead>
+                <tr>
+                  <TableHeader colSpan={2}>Nutrition Info</TableHeader>
+                </tr>
+                <tr>
+                  <TableHeader colSpan={2}>{` Base Calori: ${coloriePerDay} | Serving: ${currentNutritionInfo.Serving}`}</TableHeader>
+                </tr>
+              </thead>
+              <TableBody>
+                {Object.entries(currentNutritionInfo.nutritionInfo ?? {}).map(([key, value]) => (
+                  <TableRow key={key}>
+                    <TableCell>{key.charAt(0).toUpperCase() + key.slice(1)}</TableCell>
+                    <TableCell>{getValue({ type: "number" }, value)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          }
           themeColors={themeColors}
           closeModal={() => setCurrentNutritionInfo(null)}
           itemTitle={{ name: "title", type: "text", collection: "" }}

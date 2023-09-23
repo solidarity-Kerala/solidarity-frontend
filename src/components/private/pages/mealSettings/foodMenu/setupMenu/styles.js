@@ -34,6 +34,10 @@ export const Table = styled.table`
     z-index: 1;
     background-color: rgb(234 234 234);
   }
+  &.full {
+    margin: 10px 10px;
+    width: calc(100% - 20px);
+  }
 `;
 
 export const TableHeader = styled.th`
@@ -117,6 +121,12 @@ export const TableCell = styled.td`
   .layer {
     border-radius: 10px;
     background-color: white;
+  }
+  && {
+    .short & {
+      height: auto;
+      border-bottom: 1px solid #ccc;
+    }
   }
 `;
 
@@ -395,19 +405,26 @@ export const WeekSelection = styled.div`
   align-items: center;
   font-size: 14px;
   > button {
-    border: 1px solid rgb(204, 204, 204);
-    border-radius: 50%;
+    border:0;
+    outline:none;
     display: flex;
-    background-color: rgb(249, 249, 249);
+    -webkit-box-pack: center;
+    justify-content: center;
+    min-height: 40px;
+    height: 40px;
+    border-radius: 10px;
+    margin: 4px 0px;
+    min-width: 150px;
+    background: white;
+    transition: all 1s ease 0s;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    column-gap: 10px;
     cursor: pointer;
-    transition: all 1s;
+    font-weight:bold;
   }
   > button:hover {
-    transform: scale(1.1);
+    transform: scale(1.02);
   }
   span {
     font-weight: bold;
