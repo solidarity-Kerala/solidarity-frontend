@@ -21,14 +21,6 @@ export const Form = styled.div`
     }
   }
 `;
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
 
 export const Overlay = styled.div`
   position: fixed;
