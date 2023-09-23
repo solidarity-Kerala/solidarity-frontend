@@ -182,8 +182,9 @@ export const RowContainer = styled.div`
   }
   &.menu-header {
     margin-left: 30px;
+    margin-right: 30px;
     flex: 0;
-    margin-bottom: 0;
+    margin-bottom: 10px;
     flex-direction: row;
     justify-content: space-between;
     margin-right: 10px;

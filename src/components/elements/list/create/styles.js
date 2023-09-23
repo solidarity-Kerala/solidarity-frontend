@@ -56,6 +56,15 @@ export const Overlay = styled.div`
     border-top: 1px solid rgb(224, 224, 227);
   }
 `;
+const zoomAnimation = keyframes`
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+`;
+
 export const Page = styled.div`
   display: flex;
   flex-direction: column;
@@ -66,7 +75,7 @@ export const Page = styled.div`
   min-width: 250px;
   max-width: 100%;
   height: auto;
-  animation: ${fadeIn} 1s ease-in-out;
+  animation: ${zoomAnimation} 1s ease-in-out;
   animation-duration: 0.2s;
   margin: auto;
   padding: 1em;
