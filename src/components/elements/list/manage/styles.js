@@ -76,6 +76,10 @@ export const Page = styled.div`
     width: 80%;
     min-width: 250px;
     max-width: 100%;
+  }&.small {
+    width: 30%;
+    min-width: 250px;
+    max-width: 100%;
   }
   &.full-page
   {

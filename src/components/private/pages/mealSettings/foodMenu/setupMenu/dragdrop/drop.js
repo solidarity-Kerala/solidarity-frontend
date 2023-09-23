@@ -15,7 +15,7 @@ const DropTarget = ({ element, data, onDrop, className }) => {
   });
 
   return (
-    <Div ref={drop} className={`${className}${isOver ? "hover" : ""}`}>
+    <Div ref={drop} className={`${className} ${isOver ? "hover" : ""}`}>
       {element}
     </Div>
   );
