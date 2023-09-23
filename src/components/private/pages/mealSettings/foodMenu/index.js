@@ -181,6 +181,7 @@ const FoodMenu = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
+              themeColors={themeColors}
               {...props}
               // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>

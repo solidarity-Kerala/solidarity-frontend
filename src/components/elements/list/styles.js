@@ -35,6 +35,7 @@ export const ProfileImage = styled.div`
   background: #ececec;
   font-size: 10px;
   margin-right: 10px;
+  position:relative;
   img {
     width: 100%;
     height: 100%;

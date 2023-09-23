@@ -202,8 +202,8 @@ export const Variants = styled.div`
       }
     }
   }
-  &.day{
-     flex-direction: row;
+  &.day {
+    flex-direction: row;
   }
 `;
 export const Details = styled.div`
@@ -263,19 +263,63 @@ export const Variant = styled.div`
   .horizontal {
     flex-direction: row;
   }
-  .delete {
+  .actions,
+  .sub-actions {
     display: none;
-    font-size: 8px;
+    font-size: 12px;
     position: absolute;
     padding: 2px;
-    right: -5px;
-    top: -5px;
+    right: 0px;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    cursor: pointer;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(204 204 204 / 32%);
+    column-gap: 5px;
+    > span {
+      box-shadow: rgb(110 113 105 / 25%) 0px 0px 12px 9px;
+      border: 1px solid gray;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+      background-color: white;
+      border: 0;
+    }
+    .delete {
+      right: 15px;
+      top: 15px;
+      background-color: red;
+      color: white;
+    }
+  }
+  &.recipe:hover .actions,
+  &.recipe:hover ~ .sub-actions,
+  &.child-recipe:hover > .sub-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .info1 {
+    font-size: 12px;
+    position: absolute;
+    padding: 2px;
+    right: 5px;
+    bottom: 5px;
     cursor: pointer;
     border-radius: 50%;
-    border: 1px solid;
     background-color: white;
-    height: 10px;
-    width: 10px;
+    height: 15px;
+    width: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .replace {
     top: auto;
@@ -288,6 +332,7 @@ export const Variant = styled.div`
     margin-top: 5px;
     cursor: pointer;
     max-width: 50px;
+    margin: 5px auto;
   }
   &.Fixed {
     border: 0;
@@ -297,11 +342,7 @@ export const Variant = styled.div`
     background-color: black;
     color: white;
   }
-  &:hover .delete {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+
   &.add-button {
     padding: 15px;
     display: flex;

@@ -15,6 +15,7 @@ import { useRef } from "react";
 import FormInput from "../../../../../elements/input";
 import { food } from "../../../../../../images";
 import { MealTimeHead } from "../../../user/patient/dietMenu/styles";
+import PopupView from "../../../../../elements/popupview";
 const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const [menuId] = useState(openData.data._id);
@@ -25,6 +26,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const [selectedDayNumber, setSelectedDayNumber] = useState(0);
   const [recipes, setRecipes] = useState([]);
   const [calories, setCalories] = useState({});
+  const [currentNutritionInfo, setCurrentNutritionInfo] = useState(null);
   const [activeTab] = useState("recipes");
   const [selctedRecipeType, setSelctedRecipeType] = useState(["All"]);
   const [weekNumber, setWeekNumber] = useState(0);
@@ -512,23 +514,34 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                               // For example, you can render a list of items like this
                                               return (
                                                 <Variant key={item._id} className={`vertical replace ${data.menuType} ${(openData.item.viewOnly ?? false) === true ? "Fixed" : ""}`}>
-                                                  <Variant key={item._id} className="vertical">
+                                                  <Variant key={item._id} className="vertical recipe">
                                                     <ProfileImage>
                                                       <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
                                                     </ProfileImage>
                                                     <span className="recipe">{item.title} </span>
                                                     <span>{getCalories(item ?? [], mealTimeCategory._id).toFixed(2)} calories</span>
+                                                    <div className="actions">
+                                                      <span
+                                                        className="info"
+                                                        onClick={() => {
+                                                          setCurrentNutritionInfo({ data: item, mealTimeCategory: mealTimeCategory._id });
+                                                        }}
+                                                      >
+                                                        <GetIcon icon={"info"} />
+                                                      </span>
+                                                      {!(openData.item.viewOnly ?? false) && (
+                                                        <span
+                                                          className="delete"
+                                                          onClick={() => {
+                                                            deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                          }}
+                                                        >
+                                                          <GetIcon icon={"delete"} />
+                                                        </span>
+                                                      )}
+                                                    </div>
                                                   </Variant>
-                                                  {!(openData.item.viewOnly ?? false) && (
-                                                    <span
-                                                      className="delete"
-                                                      onClick={() => {
-                                                        deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
-                                                      }}
-                                                    >
-                                                      <GetIcon icon={"close"} />
-                                                    </span>
-                                                  )}
+
                                                   {data.menuType === "Dynamic" && !showAllReplacable && (
                                                     <span
                                                       title="Replacable Items"
@@ -563,29 +576,39 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                               </CloseButton>
                                                             </Header>
                                                           )}
-                                                          <Variants className={showReplacable ? "vertical" : "day vertical"}>
+                                                          <Variants className={showReplacable ? "vertical" : "day vertical "}>
                                                             {item.foodmenureplacableitems?.length > 0 &&
                                                               item.foodmenureplacableitems.map((replacableItem, replacableIndex) => (
-                                                                <Variant key={replacableItem._id} className="horizontal">
+                                                                <Variant key={replacableItem._id} className="horizontal child-recipe">
                                                                   <ProfileImage>
                                                                     <img src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food} alt="icon"></img>
                                                                   </ProfileImage>
                                                                   <Details>
                                                                     <span className="recipe">{replacableItem.recipe.title}</span>
-                                                                    <span>{replacableItem.recipe.calories} calories</span>
+                                                                    <span>{replacableItem.recipe.calories.toFixed(2)} calories</span>
                                                                   </Details>
-                                                                  {!(openData.item.viewOnly ?? false) && (
+                                                                  <div className="sub-actions">
                                                                     <span
-                                                                      className="delete"
-                                                                      title="Remove Item"
+                                                                      className="info"
                                                                       onClick={() => {
-                                                                        // deleteReplcableItem(replacableItem._id, index);
-                                                                        deleteReplcableItem(replacableItem._id, replacableIndex, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                                        setCurrentNutritionInfo({ data: item, mealTimeCategory: mealTimeCategory._id });
                                                                       }}
                                                                     >
-                                                                      <GetIcon icon={"close"} />
+                                                                      <GetIcon icon={"info"} />
                                                                     </span>
-                                                                  )}
+                                                                    {!(openData.item.viewOnly ?? false) && (
+                                                                      <span
+                                                                        className="delete"
+                                                                        title="Remove Item"
+                                                                        onClick={() => {
+                                                                          // deleteReplcableItem(replacableItem._id, index);
+                                                                          deleteReplcableItem(replacableItem._id, replacableIndex, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                                        }}
+                                                                      >
+                                                                        <GetIcon icon={"delete"} />
+                                                                      </span>
+                                                                    )}
+                                                                  </div>
                                                                 </Variant>
                                                               ))}
                                                             <Variant className="vertical add-button">
@@ -700,6 +723,16 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           </RowContainer>
         )}
       </DndProvider>
+      {currentNutritionInfo && (
+        <PopupView
+          popupData={<div>{JSON.stringify(currentNutritionInfo)}</div>}
+          themeColors={themeColors}
+          closeModal={() => setCurrentNutritionInfo(null)}
+          itemTitle={{ name: "title", type: "text", collection: "" }}
+          openData={currentNutritionInfo} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+          customClass={"small"}
+        ></PopupView>
+      )}
     </ColumnContainer>
   ) : (
     <NoData>Loading</NoData>
