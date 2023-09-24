@@ -298,7 +298,7 @@ const Ingredient = (props) => {
       add: true,
       update: true,
     },
-   
+
     {
       type: "select",
       placeholder: "Yield Type",
@@ -314,14 +314,31 @@ const Ingredient = (props) => {
       selectApi: "water,fat,other",
       apiType: "CSV",
     },
+    // {
+    //   type: "multiSelect",
+    //   apiType: "API",
+    //   selectApi: "allergy/select",
+    //   placeholder: "Allergy",
+    //   name: "allergy",
+    //   showItem: "title",
+    //   validation: "",
+    //   default: "",
+    //   tag: true,
+    //   label: "Allergy",
+    //   required: false,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    //   filter: false,
+    // },
     {
       type: "multiSelect",
       apiType: "API",
       selectApi: "allergy/select",
       placeholder: "Allergy",
       name: "allergy",
-      showItem: "allergyName",
       validation: "",
+      showItem: "title",
       default: "",
       tag: true,
       label: "Allergy",
@@ -331,7 +348,6 @@ const Ingredient = (props) => {
       update: true,
       filter: false,
     },
-    
     {
       type: "checkbox",
       placeholder: "Added Sugar",
