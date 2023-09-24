@@ -1134,39 +1134,7 @@ const Patient = (props) => {
       add: true,
       update: true,
     },
-    // {
-    //   type: "checkbox",
-    //   placeholder: "Dietician Visit",
-    //   name: "dieticianVisit",
-    //   validation: "",
-    //   default: "false",
-    //   tag: true,
-    //   label: "Dietician Visit",
-    //   required: true,
-    //   view: true,
-    //   add: true,
-    //   update: true,
-    // },
-    // {
-    //   type: "date",
-    //   placeholder: "Visit Shedule",
-    //   name: "visitShedule",
-    //   condition: {
-    //     item: "dieticianVisit",
-    //     if: true,
-    //     then: "enabled",
-    //     else: "disabled",
-    //   },
-    //   showItem: "",
-    //   validation: "",
-    //   default: "",
-    //   tag: true,
-    //   label: "Visit Shedule",
-    //   required: false,
-    //   view: true,
-    //   add: true,
-    //   update: true,
-    // },
+    
   ]);
 
   const [appointment] = useState([
@@ -1240,19 +1208,7 @@ const Patient = (props) => {
       update: true,
       filter: true,
     },
-    // {
-    //   type: "date",
-    //   placeholder: "Booking Date",
-    //   name: "bookingDate",
-    //   validation: "",
-    //   default: "",
-    //   tag: true,
-    //   label: "Booking Date",
-    //   required: true,
-    //   view: true,
-    //   add: true,
-    //   update: true,
-    // },
+   
     {
       type: "date",
       placeholder: "Start Date & Time",
@@ -1304,37 +1260,8 @@ const Patient = (props) => {
       update: false,
       filter: false,
     },
-    // {
-    //   type: "select",
-    //   apiType: "API",
-    //   selectApi: "user-type/select",
-    //   placeholder: "User Type",
-    //   name: "userType",
-    //   validation: "",
-    //   showItem: "role",
-    //   default: "",
-    //   label: "User Type",
-    //   required: true,
-    //   view: true,
-    //   add: true,
-    //   update: true,
-    // },
-  ]);
-
-  // const [resetPassword] = useState([
-  //   {
-  //     type: "text",
-  //     placeholder: "New Password",
-  //     name: "newPassword",
-  //     validation: "",
-  //     default: "",
-  //     label: "New Password",
-  //     required: true,
-  //     view: true,
-  //     add: true,
-  //     update: true,
-  //   },
-  // ]);
+    
+  ]); 
 
   const [actions] = useState([
     {
@@ -1522,35 +1449,7 @@ const Patient = (props) => {
         customClass: "medium",
       },
     },
-    // {
-    //   element: "button",
-    //   type: "subList",
-    //   id: "appointment",
-    //   // itemTitle: "username",
-    //   itemTitle: {
-    //     name: "username",
-    //     type: "text",
-    //     collection: "dietician",
-    //   },
-    //   title: "Reset Password",
-    //   attributes: resetPassword,
-    //   params: {
-    //     api: `auth/update-passoword`,
-    //     parentReference: "user",
-    //     // itemTitle: "username",
-    //     itemTitle: {
-    //       name: "username",
-    //       type: "text",
-    //       collection: "dietician",
-    //     },
-    //     shortName: "Reset Password",
-    //     addPrivilege: true,
-    //     delPrivilege: true,
-    //     updatePrivilege: true,
-    //     customClass: "medium",
-    //     formMode: "double",
-    //   },
-    // },
+    
   ]);
 
   return (

@@ -222,7 +222,7 @@ const Ingredient = (props) => {
       showItem: "",
       default: "",
       tag: false,
-      label: "Calcium (mg)",
+      label: "Calcium (%)",
       required: true,
       view: true,
       add: true,

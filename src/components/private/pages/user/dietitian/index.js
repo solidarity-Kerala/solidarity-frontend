@@ -155,7 +155,7 @@ const Dietitian = (props) => {
       showItem: "",
       collection: "",
       validation: "",
-      minDate: moment().subtract(70, "years").toDate(),
+      maxDate: moment().add(10, "years").toDate(),
       default: moment().toDate(),
       tag: true,
       label: "License Validitys",
@@ -404,6 +404,7 @@ const Dietitian = (props) => {
         actions={actions}
         api={`user`}
         displayColumn="single"
+        profileImage={'userImage'}
         // itemTitle={`userDisplayName`}
         itemTitle={{ name: "userDisplayName", type: "text", collection: "" }}
         shortName={`Dietitian`}

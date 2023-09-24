@@ -187,14 +187,15 @@ const DeliveryMan = (props) => {
       <ListTable
         // actions={actions}
         api={`user`}
+        displayColumn="double"
+        formMode={`double`}
         // itemTitle={`userDisplayName`}
         itemTitle={{ name: "userDisplayName", type: "text", collection: "" }}
         shortName={`Delivery Man`}
         parentReference={"userType"}
+        profileImage={'userImage'}
         referenceId={"64815bde89e0a44fc31c53b0"}
-        // formMode={`single`}
-        displayColumn="single"
-        formMode={`double`}
+        
         {...props}
         attributes={attributes}
       ></ListTable>
