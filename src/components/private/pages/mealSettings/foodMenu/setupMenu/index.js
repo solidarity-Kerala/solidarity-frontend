@@ -18,6 +18,8 @@ import { MealTimeHead } from "../../../user/patient/dietMenu/styles";
 import PopupView from "../../../../../elements/popupview";
 import { getValue } from "../../../../../elements/list/functions";
 import AutoForm from "../../../../../elements/form";
+import { useDispatch } from "react-redux";
+import { addSelectObject } from "../../../../../../store/actions/select";
 const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const [menuId] = useState(openData.data._id);
@@ -25,15 +27,17 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const [menuData, setMenuData] = useState(null);
   const [selectedMealTime, setSelectedMealTime] = useState({});
   const [showAllReplacable, setShowAllReplacable] = useState(false);
+  const [expandAll, setExpandAll] = useState(false);
   const [selectedDayNumber, setSelectedDayNumber] = useState(0);
   const [recipes, setRecipes] = useState([]);
   const [calories, setCalories] = useState({});
-  const [currentNutritionInfo, setCurrentNutritionInfo] = useState(null);
+  const [popupData, setPopupData] = useState(null);
   const [activeTab] = useState("recipes");
   const [selctedRecipeType, setSelctedRecipeType] = useState(["All"]);
   const [weekNumber, setWeekNumber] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const searchTimeoutRef = useRef();
+  const dispatch = useDispatch();
   const searchChange = (event) => {
     clearTimeout(searchTimeoutRef.current);
     setSearchValue(event.target.value);
@@ -50,9 +54,6 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       mixedMeatPercentage = mixedMeatPercentage ?? 100;
       mixedBreadPercentage = mixedBreadPercentage ?? 100;
       const portion = (calories ?? 0) / (numberOfPortion ?? 1);
-      if (recipe.title === "Fish Sayadeih") {
-        // console.log(recipe);
-      }
       let total = 0;
       if (typeOfRecipe === "Meat") {
         total = portion * (meal || 0);
@@ -440,75 +441,128 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     apiType: "JSON",
   });
   //clone
-  const [cloneParameters] = useState([
-    {
-      type: "multiSelect",
-      placeholder: "Select Days of Week " + (weekNumber + 1),
-      listView: true,
-      name: "eligibleDays",
-      validation: "",
-      default: [0, 1, 2, 3, 4, 5, 6],
-      label: "Select Days of Week " + (weekNumber + 1),
-      required: true,
-      view: true,
-      customClass: "list",
-      add: true,
-      update: true,
-      apiType: "JSON",
-      search: false,
-      selectApi: [
-        { value: "Sunday", id: 0 },
-        { value: "Monday", id: 1 },
-        { value: "Tuesday", id: 2 },
-        { value: "Wednesday", id: 3 },
-        { value: "Thursday", id: 4 },
-        { value: "Friday", id: 5 },
-        { value: "Saturday", id: 6 },
-      ],
-    },
-    {
-      type: "multiSelect",
-      placeholder: "Select Meal Times of Week " + (weekNumber + 1),
-      name: "mealTimeCategory",
-      params: [{ name: "foodMenu", value: openData.data._id }],
-      label: "Select Meal Times of Week " + (weekNumber + 1),
-      required: true,
-      view: true,
-      default: "",
-      add: true,
-      update: true,
-      apiType: "API",
-      search: false,
-      selectApi: `mealtime-category/select-by-menu/${openData.data._id}`,
-    },
-    {
-      type: "multiSelect",
-      placeholder: "Select Destinations Weeks",
-      name: "week",
-      validation: "",
-      default: "",
-      tag: false,
-      label: "Select Destination Weeks",
-      search: false,
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-      selectApi: Array.from({ length: 52 }, (_, index) => ({ id: `${index}`, value: `Week ${index + 1}` })),
-      apiType: "JSON",
-    },
-  ]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [cloneParameters, setCloneParameters] = useState(null);
+  const [isOpen, setIsOpen] = useState(null);
   const closeEdit = () => {
-    setIsOpen(false);
+    setIsOpen(null);
+    setLoaderBox(false);
   };
   const cloneData = async (option) => {
-    setIsOpen(true);
+    setCloneParameters([
+      {
+        type: "multiSelect",
+        placeholder: "Select Days of Week " + (weekNumber + 1),
+        listView: true,
+        name: "eligibleDays",
+        validation: "",
+        default: [0, 1, 2, 3, 4, 5, 6],
+        label: "Select Days of Week " + (weekNumber + 1),
+        required: true,
+        view: true,
+        customClass: "list",
+        add: true,
+        update: true,
+        apiType: "JSON",
+        search: false,
+        selectApi: [
+          { value: "Sunday", id: 0 },
+          { value: "Monday", id: 1 },
+          { value: "Tuesday", id: 2 },
+          { value: "Wednesday", id: 3 },
+          { value: "Thursday", id: 4 },
+          { value: "Friday", id: 5 },
+          { value: "Saturday", id: 6 },
+        ],
+      },
+      {
+        type: "multiSelect",
+        placeholder: "Select Meal Times of Week " + (weekNumber + 1),
+        name: "mealTimeCategory",
+        params: [{ name: "foodMenu", value: openData.data._id }],
+        label: "Select Meal Times of Week " + (weekNumber + 1),
+        required: true,
+        view: true,
+        default: "",
+        add: true,
+        update: true,
+        apiType: "API",
+        search: false,
+        selectApi: `mealtime-category/select-by-menu/${openData.data._id}`,
+      },
+      {
+        type: "multiSelect",
+        placeholder: "Select Destinations Weeks",
+        name: "weekNumbers",
+        validation: "",
+        default: "",
+        customClass: "list",
+        tag: false,
+        label: "Select Destination Weeks",
+        search: true,
+        required: true,
+        view: true,
+        add: true,
+        update: true,
+        selectApi: Array.from({ length: 52 }, (_, index) => ({ id: index, value: `Week ${index + 1}` })).filter((item) => item.id !== parseInt(weekNumber)),
+        apiType: "JSON",
+      },
+    ]);
+    setIsOpen({ submit: "Clone Now", api: "food-menu/clone-menu", header: "Clone Setup", description: "Clone this week items to multiple weeks" });
+  };
+  const restoreData = async (option) => {
+    dispatch(addSelectObject(null, `food-menu/clone-history/${openData.data._id}`));
+    setCloneParameters([
+      {
+        type: "select",
+        placeholder: "Select Clone",
+        listView: true,
+        name: "clonedMenuTrack",
+        validation: "",
+        params: [{ name: "foodMenu", value: openData.data._id }],
+        tags: [
+          {
+            type: "text",
+            item: "days",
+            title: "Days",
+            collection: "",
+          },
+          {
+            type: "text",
+            item: "mealTimeCategory",
+            title: "Meal Times",
+            collection: "",
+          },
+          {
+            type: "datetime",
+            item: "clonedOn",
+            title: "Cloned On",
+            collection: "",
+          },
+          {
+            type: "text",
+            item: "weeks",
+            title: "Weeks To",
+            collection: "",
+          },
+        ],
+        label: "Select Clone",
+        required: true,
+        view: true,
+        customClass: "list",
+        add: true,
+        update: true,
+        apiType: "API",
+        search: false,
+        selectApi: `food-menu/clone-history/${openData.data._id}`,
+      },
+    ]);
+    setIsOpen({ submit: "Undo Now", api: "food-menu/undo-clone", header: "Undo Clone", description: "" });
   };
   const updateHandler = async (post) => {
-    await postData({ menuId: openData.data._id, weekNumber }, "food-menu/clone");
-
-    closeEdit();
+    setLoaderBox(true);
+    await postData({ foodMenu: openData.data._id, weekNumber: parseInt(weekNumber), ...post }, isOpen.api).then((response) => {
+      closeEdit();
+    });
   };
   return menuData ? (
     <ColumnContainer style={{ marginBottom: "30px", position: "relative", height: "90%" }}>
@@ -524,6 +578,15 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               </TabButton>
             </TabContainer>
             <WeekSelection>
+              <button className={expandAll ? "active" : ""} onClick={() => setExpandAll((prev) => !prev)}>
+                <span>{expandAll ? "Collapse All" : "Expand All"}</span> <GetIcon icon={"open-book"} />
+              </button>
+              <button onClick={() => cloneData()}>
+                <span>Clone</span> <GetIcon icon={"clone"} />
+              </button>
+              <button onClick={() => restoreData()}>
+                <span>Undo Clone</span> <GetIcon icon={"restoreIcon"} />
+              </button>
               <FormInput
                 customClass={"filter auto single"}
                 placeholder={`Available Colories`}
@@ -551,9 +614,6 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   }
                 }}
               />
-              <button onClick={() => cloneData()}>
-                Week <GetIcon icon={"clone"} />
-              </button>
             </WeekSelection>
           </RowContainer>
           <Table>
@@ -608,7 +668,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   <TableRow>
                     <TableCell colSpan={7}>
                       <MealTimeHead
-                        active={selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] ?? false}
+                        active={(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] ?? false) || expandAll}
                         onClick={() =>
                           setSelectedMealTime((prev) => ({
                             ...prev,
@@ -621,7 +681,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       </MealTimeHead>
                     </TableCell>
                   </TableRow>
-                  {selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] === true && (
+                  {(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] === true || expandAll) && (
                     <TableRow key={mealTimeCategory._id}>
                       {daysOfWeek.map((day, dayNumber) => {
                         if (showAllReplacable) {
@@ -654,8 +714,8 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                       <span
                                                         className="info"
                                                         onClick={() => {
-                                                          setCurrentNutritionInfo({ data: item, mealTimeCategory: mealTimeCategory._id, nutritionInfo: getNutritionInfo(item, mealTimeCategory.availableCalories[coloriePerDay]), Serving: setCaloriesItems(mealTimeCategory, true, item.typeOfRecipe) });
-                                                          console.log(currentNutritionInfo);
+                                                          setPopupData({ type: 1, data: item, mealTimeCategory: mealTimeCategory._id, nutritionInfo: getNutritionInfo(item, mealTimeCategory.availableCalories[coloriePerDay]), Serving: setCaloriesItems(mealTimeCategory, true, item.typeOfRecipe) });
+                                                          console.log(popupData);
                                                         }}
                                                       >
                                                         <GetIcon icon={"info"} />
@@ -722,7 +782,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                                     <span
                                                                       className="info"
                                                                       onClick={() => {
-                                                                        setCurrentNutritionInfo({ data: replacableItem.recipe, mealTimeCategory: mealTimeCategory._id, nutritionInfo: getNutritionInfo(replacableItem.recipe, mealTimeCategory.availableCalories[coloriePerDay]), Serving: setCaloriesItems(mealTimeCategory, true, replacableItem.recipe.typeOfRecipe) });
+                                                                        setPopupData({ type: 1, data: replacableItem.recipe, mealTimeCategory: mealTimeCategory._id, nutritionInfo: getNutritionInfo(replacableItem.recipe, mealTimeCategory.availableCalories[coloriePerDay]), Serving: setCaloriesItems(mealTimeCategory, true, replacableItem.recipe.typeOfRecipe) });
                                                                       }}
                                                                     >
                                                                       <GetIcon icon={"info"} />
@@ -854,7 +914,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           </RowContainer>
         )}
       </DndProvider>
-      {currentNutritionInfo && (
+      {popupData && popupData.type === 1 && (
         <PopupView
           popupData={
             <Table className="full short">
@@ -863,11 +923,11 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   <TableHeader colSpan={2}>Nutrition Info</TableHeader>
                 </tr>
                 <tr>
-                  <TableHeader colSpan={2}>{` Base Calori: ${coloriePerDay} | Serving: ${currentNutritionInfo.Serving}`}</TableHeader>
+                  <TableHeader colSpan={2}>{` Base Calori: ${coloriePerDay} | Serving: ${popupData.Serving}`}</TableHeader>
                 </tr>
               </thead>
               <TableBody>
-                {Object.entries(currentNutritionInfo.nutritionInfo ?? {}).map(([key, value]) => (
+                {Object.entries(popupData.nutritionInfo ?? {}).map(([key, value]) => (
                   <TableRow key={key}>
                     <TableCell>{key.charAt(0).toUpperCase() + key.slice(1)}</TableCell>
                     <TableCell>{getValue({ type: "number" }, value)}</TableCell>
@@ -877,9 +937,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             </Table>
           }
           themeColors={themeColors}
-          closeModal={() => setCurrentNutritionInfo(null)}
+          closeModal={() => setPopupData(null)}
           itemTitle={{ name: "title", type: "text", collection: "" }}
-          openData={currentNutritionInfo} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+          openData={popupData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"small"}
         ></PopupView>
       )}
@@ -889,14 +949,14 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           useCaptcha={false}
           useCheckbox={false}
           css="double"
-          description={"Clone this week items to multiple weeks"}
+          description={isOpen.description}
           formValues={{}}
-          key={"type.description"}
+          key={isOpen.description}
           formType={"post"}
-          header={`Clone Setup`}
+          header={isOpen.header}
           formInput={cloneParameters}
           submitHandler={updateHandler}
-          button={"Submit"}
+          button={isOpen.submit}
           isOpenHandler={(value) => {
             closeEdit(value);
           }}

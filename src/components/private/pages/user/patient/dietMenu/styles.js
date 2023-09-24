@@ -342,11 +342,12 @@ export const MealTimeHead = styled.div`
   border-radius: 10px;
   position: relative;
   margin-bottom: 10px;
-      margin-bottom: 0px;
+  margin-bottom: 0px;
   cursor: pointer;
   background-color: ${({ active }) => (active ? "#4b4b4b" : "#f8f8f8;")};
   color: ${({ active }) => (active ? "white" : "black")};
   transform: rotate(0deg);
+  text-align: left;
   svg {
     margin-left: auto;
     margin-right: 0;
@@ -440,7 +441,7 @@ export const ReplacableItems = styled.div`
   margin-top: 10px;
   border-radius: 10px;
   > button {
-   cursor: pointer;
+    cursor: pointer;
     border: 0px;
     background: transparent;
     width: 100%;
@@ -469,9 +470,9 @@ export const ReplacableItemsList = styled.div`
   display: flex;
   column-gap: 10px;
   row-gap: 10px;
-  margin-top:5px;
+  margin-top: 5px;
   border-top: 1px solid rgb(227 227 227);
-  padding-top:10px;
+  padding-top: 10px;
 `;
 export const UserDetails = styled.div`
   row-gap: 10px;
