@@ -9,6 +9,7 @@ import OrderStatus from "../../private/pages/dispatch/orderStatus";
 import UserList from "../../private/pages/user/userList";
 import ProteinCategory from "../../private/pages/mealSettings/proteinCategory";
 import MealTimeCategory from "../../private/pages/mealSettings/mealTimeCategory";
+import FoodExchangeCategory from "../../private/pages/mealSettings/foodExchangeCategory";
 // import RecipeTag from "../../private/pages/mealSettings/RecipeTag";
 import VariantGroup from "../../private/pages/mealSettings/variantGroup";
 import VaraiantLevel from "../../private/pages/mealSettings/varaiantLevel";
@@ -70,6 +71,7 @@ import AddRecipe from "../../private/pages/mealSettings/addRecipe";
 import DaySlot from "../../private/pages/daySlot";
 import PackageOrder from "../../private/pages/order/packageOrder";
 import AvailableCalories from "../../private/pages/Calories/availableCalories";
+import FoodExchangeData from "../../private/pages/Calories/foodExchangeData";
 import AvailableSizes from "../../private/pages/Calories/availableSizes";
 import DietPrice from "../../private/pages/Calories/dietPrice";
 import Incredientmedicalcondition from "../../private/pages/Calories/Incredientmedicalcondition";
@@ -93,6 +95,10 @@ import RestoreDeliveryMan from "../../private/pages/restoreUser/restoreDeliveryM
 import RestorePatient from "../../private/pages/restoreUser/restorePatient";
 import RestoreDietitian from "../../private/pages/restoreUser/restoreDietitian";
 import RestoreFranchiseAdmin from "../../private/pages/restoreUser/restoreFranchiseAdmin";
+import Allergy from "../../private/pages/allergy";
+import Inventory from "../../private/pages/inventory";
+
+
 /**
  * Switch component to render different pages based on the provided page prop.
  * @param {string} page - The page to be rendered.
@@ -255,6 +261,27 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
+      case "food-exchange-category":
+      return (
+        <FoodExchangeCategory
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+      case "foodexchange-data":
+      return (
+        <FoodExchangeData
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+
     case "recipe-tag":
       return (
         <RecipeTag
@@ -895,7 +922,7 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-   
+
 
     case "birthday-report":
       return (
@@ -957,7 +984,7 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
-    
+
     case "restore-delivery-man":
       return (
         <RestoreDeliveryMan
@@ -998,6 +1025,27 @@ const Switch = ({
           updatePrivilege={updatePrivilege}
         />
       );
+    case "allergy":
+      return (
+        <Allergy
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+    case "inventory":
+      return (
+        <Inventory
+          key={key}
+          exportPrivilege={exportPrivilege}
+          addPrivilege={addPrivilege}
+          delPrivilege={delPrivilege}
+          updatePrivilege={updatePrivilege}
+        />
+      );
+      
     default:
       return <Page404 key={key}></Page404>;
   }

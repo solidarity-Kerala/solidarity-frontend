@@ -162,6 +162,10 @@ export const RowContainer = styled.div`
     overflow: auto;
     padding: 2em 0 0;
     border-radius: 12px;
+  }&.popup-data.small {
+    overflow: auto;
+    padding: 0em 0 0;
+    border-radius: 12px;
   }
   &.marginright {
     margin-right: 15px;
@@ -182,8 +186,9 @@ export const RowContainer = styled.div`
   }
   &.menu-header {
     margin-left: 30px;
+    margin-right: 30px;
     flex: 0;
-    margin-bottom: 0;
+    margin-bottom: 10px;
     flex-direction: row;
     justify-content: space-between;
     margin-right: 10px;

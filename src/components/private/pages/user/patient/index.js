@@ -58,13 +58,41 @@ const Patient = (props) => {
     },
     {
       type: "text",
-      placeholder: "Name",
+      placeholder: "First Name",
       name: "username",
       showItem: "",
       tag: false,
       validation: "",
       default: "",
-      label: "Name",
+      label: "First Name",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Middle Name",
+      name: "middleName",
+      showItem: "",
+      tag: false,
+      validation: "",
+      default: "",
+      label: "Middle Name",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Last Name",
+      name: "lastName",
+      showItem: "",
+      tag: false,
+      validation: "",
+      default: "",
+      label: "Last Name",
       required: true,
       view: true,
       add: true,
@@ -585,6 +613,23 @@ const Patient = (props) => {
       default: "",
       tag: true,
       label: "Medical Condition",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+      filter: false,
+    },
+    {
+      type: "multiSelect",
+      apiType: "API",
+      selectApi: "allergy/select",
+      placeholder: "Allergy",
+      name: "allergy",
+      showItem: "title",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Allergy",
       required: false,
       view: true,
       add: true,
@@ -1228,12 +1273,7 @@ const Patient = (props) => {
       updateOn: ["bookingDate", "dietician", "physical"],
       selectApi: "day-slot/avail-slot",
       placeholder: "Time Slot",
-      params: [
-        { name: "center" },
-        { name: "bookingDate" },
-        { name: "dietician" },
-        { name: "physical" },
-      ],
+      params: [{ name: "center" }, { name: "bookingDate" }, { name: "dietician" }, { name: "physical" }],
       name: "bookingSlot",
       showItem: "availableSlots",
       validation: "",
@@ -1515,17 +1555,7 @@ const Patient = (props) => {
 
   return (
     <Container className="noshadow">
-      <ListTable
-        actions={actions}
-        api={`user`}
-        itemTitle={{ name: "username", type: "text", collection: "" }}
-        shortName={`Patient`}
-        parentReference={"userType"}
-        referenceId={"6471b3849fb2b29fe045887b"}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
+      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC

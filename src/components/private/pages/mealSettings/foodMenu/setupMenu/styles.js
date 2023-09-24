@@ -20,19 +20,38 @@ export const TabButton = styled.button`
 `;
 
 export const Table = styled.table`
-  width: 100%;
+  width: calc(100% - 40px);
+  margin-left: 30px;
+  margin-right: 10px;
   border-collapse: collapse;
+  tr.head th {
+    border-radius: 0;
+    background-color: rgb(234 234 234);
+  }
   thead {
     position: sticky;
     top: 0px;
     z-index: 1;
     background-color: rgb(234 234 234);
   }
+  &.full {
+    margin: 10px 10px;
+    width: calc(100% - 20px);
+  }
 `;
 
 export const TableHeader = styled.th`
   padding: 10px;
   text-align: center;
+  border-radius: ${({ active }) => (active ? "0px" : "0")} !important;
+  margin-bottom: 5px;
+  background-color: ${({ active }) => (active ? "#f9f9f9" : "rgb(234, 234, 234)")} !important;
+  border-left: 1px solid rgb(204, 204, 204);
+  border-bottom: 1px solid rgb(204, 204, 204);
+  border-top: 1px solid rgb(204, 204, 204);
+  &:first-child {
+    border-left: 0;
+  }
 `;
 
 export const TableBody = styled.tbody``;
@@ -61,7 +80,7 @@ export const MealCategoryCell = styled.th`
   top: 0;
   text-align: left;
   width: 0;
-  border: 1px solid #d6d6d6;
+  border-top: 1px solid #d6d6d6;
   &:first-child {
     width: 10%;
     padding: 0px 10px 0 30px;
@@ -91,12 +110,24 @@ export const Div = styled.div`
 `;
 
 export const TableCell = styled.td`
-  padding: 0px;
-  border: 1px solid #ccc;
-  background-color: white;
+  padding: 5px;
   text-align: center;
   width: 12%;
   height: 50px;
+  border-left: 1px solid #ccc;
+  &:first-child {
+    border: 0;
+  }
+  .layer {
+    border-radius: 10px;
+    background-color: white;
+  }
+  && {
+    .short & {
+      height: auto;
+      border-bottom: 1px solid #ccc;
+    }
+  }
 `;
 
 export const FoodButton = styled.button`
@@ -181,6 +212,9 @@ export const Variants = styled.div`
       }
     }
   }
+  &.day {
+    flex-direction: row;
+  }
 `;
 export const Details = styled.div`
   width: calc(100% - 60px);
@@ -239,19 +273,63 @@ export const Variant = styled.div`
   .horizontal {
     flex-direction: row;
   }
-  .delete {
+  .actions,
+  .sub-actions {
     display: none;
-    font-size: 8px;
+    font-size: 12px;
     position: absolute;
     padding: 2px;
-    right: -5px;
-    top: -5px;
+    right: 0px;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    cursor: pointer;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(204 204 204 / 32%);
+    column-gap: 5px;
+    > span {
+      box-shadow: rgb(110 113 105 / 25%) 0px 0px 12px 9px;
+      border: 1px solid gray;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+      background-color: white;
+      border: 0;
+    }
+    .delete {
+      right: 15px;
+      top: 15px;
+      background-color: red;
+      color: white;
+    }
+  }
+  &.recipe:hover .actions,
+  &.recipe:hover ~ .sub-actions,
+  &.child-recipe:hover > .sub-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .info1 {
+    font-size: 12px;
+    position: absolute;
+    padding: 2px;
+    right: 5px;
+    bottom: 5px;
     cursor: pointer;
     border-radius: 50%;
-    border: 1px solid;
     background-color: white;
-    height: 10px;
-    width: 10px;
+    height: 15px;
+    width: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .replace {
     top: auto;
@@ -264,6 +342,7 @@ export const Variant = styled.div`
     margin-top: 5px;
     cursor: pointer;
     max-width: 50px;
+    margin: 5px auto;
   }
   &.Fixed {
     border: 0;
@@ -273,11 +352,7 @@ export const Variant = styled.div`
     background-color: black;
     color: white;
   }
-  &:hover .delete {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+
   &.add-button {
     padding: 15px;
     display: flex;
@@ -323,27 +398,37 @@ export const SideHead = styled.div`
 export const WeekSelection = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 20px;
-  padding: 10px 10px;
-  background-color: rgb(249, 249, 249);
+  column-gap: 10px;
+  padding: 0px 0px;
   border: none;
   border-radius: 4px;
   align-items: center;
   font-size: 14px;
-  margin-bottom: 10px;
-  button {
-    border: 1px solid rgb(204, 204, 204);
-    border-radius: 50%;
+  > button {
+    border:0;
+    outline:none;
     display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    min-height: 40px;
+    height: 40px;
+    border-radius: 10px;
+    margin: 4px 0px;
+    min-width: 150px;
+    background: white;
+    transition: all 1s ease 0s;
     justify-content: center;
     align-items: center;
-    width: 20px;
-    height: 20px;
+    column-gap: 10px;
     cursor: pointer;
-  }
-  span{
     font-weight:bold;
-    width:70px;
-    text-align:center;
+  }
+  > button:hover {
+    transform: scale(1.02);
+  }
+  span {
+    font-weight: bold;
+    width: 70px;
+    text-align: center;
   }
 `;

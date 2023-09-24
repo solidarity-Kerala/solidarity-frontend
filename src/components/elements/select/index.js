@@ -126,9 +126,11 @@ function CustomSelect(props) {
   useEffect(() => {
     fetchData();
   }, [props.selectApi, fetchData]);
+  
   const selectRef = useRef(null);
   useEffect(() => {
     if (props.updateOn) {
+      
       const isObjectEqual = (obj1, obj2) => {
         const keys1 = Object.keys(obj1 ?? {});
         const keys2 = Object.keys(obj2 ?? {});
@@ -146,9 +148,7 @@ function CustomSelect(props) {
         return true;
       };
       const equal = isObjectEqual(updateValue, props.updateValue);
-
       if (!equal) {
-        console.log("equal1", equal, updateValue, props.updateValue);
         setUpdateValue(props.updateValue);
         let values = {};
         props.params?.forEach((item) => {
@@ -234,7 +234,6 @@ function CustomSelect(props) {
                   {props.displayValue ? option[props.displayValue] : option.value}
                   {props.tags && (
                     <TagBox>
-                      {console.log(props.iconImage)}
                       {props.iconImage && <ImgBox src={process.env.REACT_APP_CDN + (props.iconImage.collection.length > 0 ? option[props.iconImage.collection]?.[props.iconImage.item] ?? "" : option[props.iconImage.item])} />}
                       <TagData>
                         {props.tags.map((tag) => (

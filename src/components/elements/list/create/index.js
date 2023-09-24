@@ -291,6 +291,7 @@ const CrudForm = (props) => {
       // Creating an updated fieldßƒ
       // updating the formm values
       setFormValues(udpateValue);
+      // console.log("udpateValue", udpateValue);
       // Validating the fields
       if (validation(formState, udpateValue, formErrors)) {
         // Here we can write any state updation
@@ -341,15 +342,17 @@ const CrudForm = (props) => {
                 }
               }
               let updateValue = {};
-
-              if (Array.isArray(item.updateOn)) {
-                updateValue = {};
-                item.updateOn?.forEach((itemName) => {
-                  updateValue[itemName] = formValues[itemName];
-                });
-              } else {
-                updateValue = { [item.updateOn]: formValues[item.updateOn] };
+              if (item.type === "select" || item.type === "multiSelect") {
+                if (Array.isArray(item.updateOn)) {
+                  updateValue = {};
+                  item.updateOn?.forEach((itemName) => {
+                    updateValue[itemName] = formValues[itemName];
+                  });
+                } else {
+                  updateValue = { [item.updateOn]: formValues[item.updateOn] };
+                }
               }
+
               if ((props.formType === "put" && item.update) || (props.formType === "post" && item.add)) {
                 return <FormInput dynamicClass={dynamicClass} formValues={formValues} updateValue={updateValue} placeholder={item.placeHolder} key={`input` + index} id={index} error={formErrors[formState[index].name]} value={formValues[formState[index].name]} {...item} onChange={handleChange} />;
               } else {

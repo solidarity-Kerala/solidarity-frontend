@@ -90,7 +90,7 @@ const IncredientMedicalConnection = (props) => {
         api={`incredient-medical-connection`}
         displayColumn="double"
         // itemTitle={`userDisplayName`}
-        itemTitle={{ name: "ingredient", type: "text", collection: "" }}
+        itemTitle={{ name: "ingredientsName", type: "text", collection: "ingredient" }}
         shortName={`Incredient Medical Connection`}
         // parentReference={"userType"}
         // referenceId={"64815bde89e0a44fc31c53b0"}
