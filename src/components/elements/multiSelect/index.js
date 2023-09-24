@@ -33,12 +33,12 @@ function MultiSelect(props) {
     }
   };
   const fetchData = useCallback(
-    async (item = "", force = false, name = "", searchKey = "") => {
+    async (item = {}, force = false, name = "", searchKey = "", params = {}) => {
       const handleOptions = (data) => {
         if (!selectedId) {
           const selectedData = (props.value || [])
-            .map((item) => {
-              const foundItem = data.find((dataItem) => dataItem.id === item);
+            .map((itemValue) => {
+              const foundItem = data.find((dataItem) => dataItem.id === itemValue);
               return foundItem ? { id: foundItem.id, value: foundItem.value } : null;
             })
             .filter(Boolean);
@@ -52,11 +52,11 @@ function MultiSelect(props) {
           setOptions(data);
           setInitialized(true);
           try {
-            const selected = data.filter((item) => item.id === selectedId)[0].value;
+            const selected = data.filter((itemValue) => itemValue.id === selectedId)[0].value;
             setSelectedValue(selected ? selected : props.placeHolder);
           } catch {}
         };
-        await getData({ [name]: item, searchKey, limit: props.apiSearch ? 20 : 0 }, `${props.selectApi}`)
+        await getData({ ...item, searchKey, limit: props.apiSearch ? 20 : 0, ...params }, `${props.selectApi}`)
           .then((response) => {
             if (response.status === 200) {
               optionHandler(response.data);
@@ -72,10 +72,11 @@ function MultiSelect(props) {
           });
       } else if (props.apiType === "API") {
         if (selectData) {
+          console.log(props.selectApi, item, params, item);
           handleOptions(selectData);
         } else if (!initialized) {
           try {
-            const response = await getData({}, props.selectApi);
+            const response = await getData({ ...item }, props.selectApi);
             if (response.status === 200) {
               handleOptions(response.data);
               dispatch(addSelectObject(response.data, props.selectApi));
@@ -87,9 +88,9 @@ function MultiSelect(props) {
           }
         }
       } else if (props.apiType === "CSV") {
-        const options = props.selectApi.split(",").map((item) => ({
-          id: item.trim(),
-          value: item.trim().charAt(0).toUpperCase() + item.trim().slice(1),
+        const options = props.selectApi.split(",").map((itemValue) => ({
+          id: itemValue.trim(),
+          value: itemValue.trim().charAt(0).toUpperCase() + itemValue.trim().slice(1),
         }));
         setOptions(options);
         setInitialized(true);
@@ -101,14 +102,46 @@ function MultiSelect(props) {
     },
     [props.apiType, props.apiSearch, props.placeHolder, props.selectApi, selectedId, props.value, initialized, selectData, dispatch]
   );
+  // useEffect(() => {
+  //   if (props.updateOn) {
+  //     if (updateValue !== props.updateValue) {
+  //       setUpdateValue(props.updateValue);
+  //       fetchData(props.updateValue, true, props.updateOn);
+  //     }
+  //   }
+  // }, [props.updateValue, updateValue, fetchData, props.updateOn]);
   useEffect(() => {
     if (props.updateOn) {
-      if (updateValue !== props.updateValue) {
+      const isObjectEqual = (obj1, obj2) => {
+        const keys1 = Object.keys(obj1 ?? {});
+        const keys2 = Object.keys(obj2 ?? {});
+        // console.log("Keys:",keys1, keys2);
+        if (keys1.length !== keys2.length) {
+          return false;
+        }
+
+        for (let key of keys1) {
+          if (obj1[key] !== obj2[key]) {
+            return false;
+          }
+        }
+
+        return true;
+      };
+      const equal = isObjectEqual(updateValue, props.updateValue);
+      if (!equal) {
         setUpdateValue(props.updateValue);
-        fetchData(props.updateValue, true, props.updateOn);
+        let values = {};
+        props.params?.forEach((item) => {
+          if (!item.value) {
+            item.value = props.formValues?.[item.name] ?? "";
+          }
+          values[item.name] = item.value;
+        });
+        fetchData(props.updateValue, true, props.updateOn, "", values);
       }
     }
-  }, [props.updateValue, updateValue, fetchData, props.updateOn]);
+  }, [props.updateValue, updateValue, fetchData, props.updateOn, props.params, props.formValues]);
   useEffect(() => {
     try {
       setSelectedValue(selectedId.length > 0 ? `${selectedId[0].value}${selectedId.length > 1 ? " (" + (selectedId.length - 1) + " more)" : ""}` : props.label);
@@ -118,8 +151,12 @@ function MultiSelect(props) {
   }, [selectedId, props.label]);
 
   useEffect(() => {
-    fetchData();
-  }, [props.selectApi, fetchData]);
+    let values = {};
+    props.params?.forEach((item) => {
+      values[item.name] = item.value;
+    });
+    fetchData(values);
+  }, [props.selectApi, props.params, fetchData]);
 
   const selectRef = useRef(null);
 
