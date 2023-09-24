@@ -332,6 +332,8 @@ const AutoForm = (props) => {
       // console.log("additionalValues", udpateValue);
       // Creating an updated field
       // updating the formm values
+
+      console.log(udpateValue)
       setFormValues(udpateValue);
 
       // Validating the fields
@@ -435,24 +437,24 @@ const AutoForm = (props) => {
             {formState &&
               formState.map((item, index) => {
                 let dynamicClass = "";
-              if (item.condition) {
-                if (formValues[item.condition.item] === item.condition.if) {
-                  dynamicClass = item.condition.then;
-                } else {
-                  dynamicClass = item.condition.else;
+                if (item.condition) {
+                  if (formValues[item.condition.item] === item.condition.if) {
+                    dynamicClass = item.condition.then;
+                  } else {
+                    dynamicClass = item.condition.else;
+                  }
                 }
-              }
-              let updateValue = {};
-              if (item.type === "select" || item.type === "multiSelect") {
-                if (Array.isArray(item.updateOn)) {
-                  updateValue = {};
-                  item.updateOn?.forEach((itemName) => {
-                    updateValue[itemName] = formValues[itemName];
-                  });
-                } else {
-                  updateValue = { [item.updateOn]: formValues[item.updateOn] };
+                let updateValue = {};
+                if (item.type === "select" || item.type === "multiSelect") {
+                  if (Array.isArray(item.updateOn)) {
+                    updateValue = {};
+                    item.updateOn?.forEach((itemName) => {
+                      updateValue[itemName] = formValues[itemName];
+                    });
+                  } else {
+                    updateValue = { [item.updateOn]: formValues[item.updateOn] };
+                  }
                 }
-              }
                 return (props.formType === "put" && item.update) || props.formType === "post" ? (
                   item.type === "multiple" && item.forms ? (
                     <React.Fragment key={`input` + index}>
@@ -482,7 +484,7 @@ const AutoForm = (props) => {
                       )}
                     </React.Fragment>
                   ) : (
-                    <FormInput dynamicClass={dynamicClass} animation={`sub-1`} updateValue={updateValue}  placeholder={item.placeHolder} key={`input` + index} id={index} error={formErrors[formState[index].name]} value={formValues[formState[index].name]} {...item} onChange={handleChange} />
+                    <FormInput dynamicClass={dynamicClass} animation={`sub-1`} updateValue={updateValue} placeholder={item.placeHolder} key={`input` + index} id={index} error={formErrors[formState[index].name]} value={formValues[formState[index].name]} {...item} onChange={handleChange} />
                   )
                 ) : (
                   ""

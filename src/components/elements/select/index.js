@@ -124,13 +124,16 @@ function CustomSelect(props) {
   );
 
   useEffect(() => {
-    fetchData();
-  }, [props.selectApi, fetchData]);
-  
+    let values = {};
+    props.params?.forEach((item) => {
+      values[item.name] = item.value;
+    });
+    fetchData(values);
+  }, [props.selectApi, props.params, fetchData]);
+
   const selectRef = useRef(null);
   useEffect(() => {
     if (props.updateOn) {
-      
       const isObjectEqual = (obj1, obj2) => {
         const keys1 = Object.keys(obj1 ?? {});
         const keys2 = Object.keys(obj2 ?? {});
