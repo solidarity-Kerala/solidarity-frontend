@@ -6,7 +6,6 @@ import { AddIcon, GetIcon, NextIcon, PreviousIcon } from "../../../icons";
 import { useNavigate } from "react-router-dom";
 import { deleteData, getData, postData, putData } from "../../../backend/api";
 import CrudForm from "./create";
-import { useTranslation } from "react-i18next";
 import { addPageObject } from "../../../store/actions/pages";
 import FormInput from "../input";
 import Manage from "./manage";
@@ -38,7 +37,7 @@ const SetTr = (props) => {
     return <Tr {...props}></Tr>;
   }
 };
-const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list" }) => {
+const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, clonePrivilege = true, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list" }) => {
   const userData = useSelector((state) => state.pages);
   const [users, setUsers] = useState({
     data: null,
@@ -64,7 +63,6 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
   const selectedMenuItem = useSelector((state) => state.selectedMenu);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [t] = useTranslation();
   const [showLoader, setShowLoader] = useState(false);
   /**
    * Function to set the showLoader state.
@@ -187,41 +185,47 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     }
   };
   const [isEditing, setIsEditing] = useState(false);
-  const isEditingHandler = (value, callback) => {
+  const isEditingHandler = (value, callback, titleValue, clone = false) => {
     setLoaderBox(true);
     if (!isEditing) {
-      setUpdateView(() => callback);
-      const updateValues = {};
-      setUpdateId(value._id);
-      formInput.forEach((item) => {
-        const itemValue = item.collection?.length > 0 && item.showItem?.length > 0 ? value[item.collection]?.[item.showItem] : value[item.name] ?? "";
-        if (item.update) {
-          if (item.type === "checkbox") {
-            let bool = value[item.name]?.toString() === "true" ? true : false;
-            updateValues[item.name] = bool;
-          } else if (item.type === "number") {
-            updateValues[item.name] = parseInt(value[item.name]);
-          } else if (item.type === "select") {
-            updateValues[item.name] = typeof value[item.name] === "undefined" ? "" : typeof value[item.name] === "string" || typeof value[item.name] === "number" ? value[item.name] : value[item.name]?._id ? value[item.name]._id : "";
-          } else if (item.type === "multiSelect") {
-            try {
-              updateValues[item.name] = value[item.name].map((obj) => obj._id);
-            } catch (error) {
-              updateValues[item.name] = [];
+      if (!clone) {
+        setUpdateView(() => callback);
+        let updateValuesTemp = {};
+        setUpdateId(value._id);
+        formInput.forEach((item) => {
+          const itemValue = item.collection?.length > 0 && item.showItem?.length > 0 ? value[item.collection]?.[item.showItem] : value[item.name] ?? "";
+          if (item.update) {
+            if (item.type === "checkbox") {
+              let bool = value[item.name]?.toString() === "true" ? true : false;
+              updateValuesTemp[item.name] = bool;
+            } else if (item.type === "number") {
+              updateValuesTemp[item.name] = parseInt(value[item.name]);
+            } else if (item.type === "select") {
+              updateValuesTemp[item.name] = typeof value[item.name] === "undefined" ? "" : typeof value[item.name] === "string" || typeof value[item.name] === "number" ? value[item.name] : value[item.name]?._id ? value[item.name]._id : "";
+            } else if (item.type === "multiSelect") {
+              try {
+                updateValuesTemp[item.name] = value[item.name].map((obj) => obj._id);
+              } catch (error) {
+                updateValuesTemp[item.name] = [];
+              }
+            } else if (item.type === "image") {
+              updateValuesTemp["old_" + item.name] = value[item.name] ? value[item.name] : "";
+              updateValuesTemp[item.name] = [];
+            } else {
+              updateValuesTemp[item.name] = itemValue ? itemValue : "";
             }
-          } else if (item.type === "image") {
-            updateValues["old_" + item.name] = value[item.name] ? value[item.name] : "";
-            updateValues[item.name] = [];
-          } else {
-            updateValues[item.name] = itemValue ? itemValue : "";
           }
-        }
-      });
-
-      updateValues["_id"] = value._id;
-      setUpdateValues(updateValues);
-      setIsEditing(true);
-      window.location.hash = "edit";
+        });
+        updateValuesTemp["_id"] = value._id;
+        updateValuesTemp["clone"] = clone;
+        updateValuesTemp["_title"] = titleValue;
+        console.log(updateValuesTemp);
+        setUpdateValues(updateValuesTemp);
+        setIsEditing(true);
+        window.location.hash = "edit";
+      } else {
+        updateHandler({ id: value._id, _title: titleValue, clone: true });
+      }
     } else {
       setUpdateId("");
       navigate({}, "", window.location.pathname);
@@ -236,7 +240,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           setMessage({
             type: 1,
             content: `The '${item.title ? item.title : shortName}' deleted successfully!`,
-            proceed: t("okay"),
+            proceed: "Okay",
           });
           setCount((count) => count - 1);
           setIsCreating(false);
@@ -312,7 +316,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
         if (response.status === 200) {
           setMessage({
             type: 1,
-            content: `The '${shortName}' updated successfully!`,
+            content: `The '${data._title ?? shortName}' ${data.clone ? "cloned" : "updated"} successfully!`,
             proceed: "Okay",
           });
           refreshView(currentIndex);
@@ -364,7 +368,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
 
   const TableRowWithActions = ({ attributes, data, slNo }) => {
     selectRef.current[slNo] = useRef(null);
-    const titleValue = (itemTitle.collection?.length > 0 ? (data[itemTitle.collection] ? data[itemTitle.collection][itemTitle.name] : "NIl") : data[itemTitle.name]) ?? "Please udpate the itemTitle";
+    const titleValue = (itemTitle.collection?.length > 0 ? (data[itemTitle.collection] ? data[itemTitle.collection][itemTitle.name] : "NIl") : data[itemTitle.name]) ?? shortName;
     const signleRecord = viewMode === "list" || viewMode === "subList" || viewMode === "table" ? false : true;
     // data[attribute.name]?.title ? data[attribute.name]?.title : data[attribute.name]?.toString()
 
@@ -386,8 +390,8 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                           if (response.data?.message) {
                             setMessage({
                               type: 1,
-                              content: t(response.data?.message),
-                              proceed: t("okay"),
+                              content: response.data?.message,
+                              proceed: "Okay",
                             });
                           }
                           //
@@ -397,14 +401,14 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                           refreshView();
                           setMessage({
                             type: 1,
-                            content: t("error"),
+                            content: "Something Went Wrong!",
                             proceed: "Okay",
                           });
                         } else {
                           refreshView();
                           setMessage({
                             type: 1,
-                            content: t("error"),
+                            content: "Something Went Wrong!",
                             proceed: "Okay",
                           });
                         }
@@ -429,7 +433,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                 className="edit menu callBack"
               >
                 <GetIcon icon={item.icon} />
-                <span>{t(item.title)}</span>
+                <span>{item.title}</span>
               </More>
             )
           );
@@ -482,12 +486,34 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                   theme={themeColors}
                   key={`edit-${data._id}`}
                   onClick={() => {
-                    isEditingHandler(data, udpateView);
+                    isEditingHandler(data, udpateView, titleValue);
                   }}
                   className="edit menu"
                 >
                   <GetIcon icon={"edit"} />
-                  <span>{t("edit")}</span>
+                  <span>Edit</span>
+                </Button>
+              )}
+              {updatePrivilege && (
+                <Button
+                  theme={themeColors}
+                  key={`clone-${data._id}`}
+                  onClick={() => {
+                    setUpdateId(data._id);
+                    setMessage({
+                      type: 2,
+                      content: `Do you want to clone '${getValue({ type: itemTitle.type ?? "text" }, titleValue) ? getValue({ type: itemTitle.type ?? "text" }, titleValue) : "Item"}'?`,
+                      proceed: "Clone",
+                      onProceed: () => {
+                        updateHandler({ cloneId: data._id, _title: titleValue, clone: true });
+                      },
+                      data: data,
+                    });
+                  }}
+                  className="edit menu"
+                >
+                  <GetIcon icon={"clone"} />
+                  <span>Clone</span>
                 </Button>
               )}
               {actions.map((item, index) => {
@@ -511,7 +537,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                       className="edit menu"
                     >
                       <GetIcon icon={item.icon} />
-                      <span>{t(item.title)}</span>
+                      <span>{item.title}</span>
                     </Button>
                   )
                 );
@@ -523,10 +549,8 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                   onClick={() => {
                     setMessage({
                       type: 2,
-                      content: t("deleteRequest", {
-                        label: getValue({ type: itemTitle.type ?? "text" }, titleValue) ? getValue({ type: itemTitle.type ?? "text" }, titleValue) : "Item",
-                      }),
-                      proceed: t("delete"),
+                      content: `Do you want to delete '${getValue({ type: itemTitle.type ?? "text" }, titleValue) ? getValue({ type: itemTitle.type ?? "text" }, titleValue) : "Item"}'?`,
+                      proceed: "Delete",
                       onProceed: deleteHandler,
                       data: data,
                     });
@@ -534,7 +558,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                   className="delete menu"
                 >
                   <GetIcon icon={"delete"} />
-                  <span>{t("delete")}</span>
+                  <span>{"Delete"}</span>
                 </Button>
               )}
             </Actions>
@@ -748,7 +772,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
             const excelRow = {};
             attributes.forEach((attribute) => {
               if (attribute.view) {
-                const name = t(attribute.label);
+                const name = attribute.label;
                 switch (attribute.type) {
                   case "minute":
                     return (excelRow[name] = convertMinutesToHHMM(parseFloat(data[attribute.name] ?? 0)));
@@ -791,9 +815,9 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
 
           // Create workbook
           const workbook = xlsx.utils.book_new();
-          xlsx.utils.book_append_sheet(workbook, worksheet, t(shortName));
+          xlsx.utils.book_append_sheet(workbook, worksheet, shortName);
           // Convert workbook to Excel binary and download the file
-          xlsx.writeFile(workbook, t(shortName) + "-data.xlsx");
+          xlsx.writeFile(workbook, shortName + "-data.xlsx");
           setLoaderBox(false);
         }
       })
@@ -870,7 +894,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
         {(addPrivilege ? addPrivilege : false) && (
           <AddButton theme={themeColors} onClick={() => isCreatingHandler(true, refreshView)}>
             <AddIcon></AddIcon>
-            {t("addNew", { label: t(shortName) })}
+            {shortName}
           </AddButton>
         )}
       </ButtonPanel>
@@ -902,7 +926,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       ) : (
         <Table className={`table ${displayColumn}`}>{users.data?.response?.length > 0 && users.data.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}</Table>
       )}
-      {!users.data && !users.data?.response && <NoData>No {t(shortName)} found!</NoData>}
+      {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
       {users.data?.response?.length === 0 && (
         // <CrudForm
         //   api={api}
@@ -948,23 +972,8 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       ) : (
         <Count>{`No records found`}</Count>
       )}
-      {isCreating && (
-        <CrudForm
-          formMode={formMode}
-          api={api}
-          formType={"post"}
-          header={t("addNewTitle", {
-            label: t(shortName ? shortName : "Form"),
-          })}
-          formInput={formInput}
-          formValues={addValues}
-          formErrors={errroInput}
-          submitHandler={submitHandler}
-          isOpenHandler={isCreatingHandler}
-          isOpen={isCreating}
-        ></CrudForm>
-      )}
-      {isEditing && <CrudForm formMode={formMode} api={api} formType={"put"} updateId={updateId} header={t("update", { label: t(shortName ? shortName : "Form") })} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
+      {isCreating && <CrudForm formMode={formMode} api={api} formType={"post"} header={`Add New ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
+      {isEditing && <CrudForm formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
       {showLoader && <Loader></Loader>}
       {isOpen && <Popup formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Popup>}
@@ -979,31 +988,16 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           {(addPrivilege ? addPrivilege : false) && users.data?.response?.length === 0 && (
             <AddButton theme={themeColors} onClick={() => isCreatingHandler(true, refreshView)}>
               <AddIcon></AddIcon>
-              {t("addNew", { label: t(shortName) })}
+              {shortName}
             </AddButton>
           )}
         </ButtonPanel>
       )}
       <Table className={users.data?.response?.length === 0 ? "norecord" : "record"}>{users.data?.response?.length > 0 && <TableRowWithActions key={`${shortName}-${0}`} slNo={0} attributes={attributes} data={users.data?.response[0]} />}</Table>
-      {!users.data && !users.data?.response && <NoData>No {t(shortName)} found!</NoData>}
-      {users.data?.response?.length === 0 && <NoData>No {t(shortName)} found!</NoData>}
-      {isCreating && (
-        <CrudForm
-          api={api}
-          formMode={formMode}
-          formType={"post"}
-          header={t("addNewTitle", {
-            label: t(shortName ? shortName : "Form"),
-          })}
-          formInput={formInput}
-          formValues={addValues}
-          formErrors={errroInput}
-          submitHandler={submitHandler}
-          isOpenHandler={isCreatingHandler}
-          isOpen={isCreating}
-        ></CrudForm>
-      )}
-      {isEditing && <CrudForm formMode={formMode} api={api} formType={"put"} updateId={updateId} header={t("update", { label: t(shortName ? shortName : "Form") })} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
+      {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
+      {users.data?.response?.length === 0 && <NoData>No {shortName} found!</NoData>}
+      {isCreating && <CrudForm api={api} formMode={formMode} formType={"post"} header={`Add New ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
+      {isEditing && <CrudForm formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
       {isOpen && <Popup data={openData} actions={actions}></Popup>}
       {showLoader && <Loader></Loader>}

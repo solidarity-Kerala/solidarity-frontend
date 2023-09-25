@@ -18,7 +18,7 @@ const PageRouter = () => {
   const menuStatus = useSelector((state) => state.menuStatus);
   const createRouter = (router, menu = true) => {
     const role = menu ? router.menuRoles[0] : router.subMenuRoles[0];
-    return <Route key={`${router._id}`} path={`${router.path}`} element={<Switch addPrivilege={role.add ?? false} delPrivilege={role.delete ?? false} updatePrivilege={role.update ?? false} exportPrivilege={role.export ?? false} page={router.element} />} />;
+    return <Route key={`${router._id}`} path={`${router.path}`} element={<Switch addPrivilege={role.add ?? false} delPrivilege={role.delete ?? false} updatePrivilege={role.update ?? false} exportPrivilege={role.export ?? false} clonePrivilege={role.clone ?? false} page={router.element} />} />;
   };
   const themeColors = useSelector((state) => state.themeColors);
   return user.data.token ? (
