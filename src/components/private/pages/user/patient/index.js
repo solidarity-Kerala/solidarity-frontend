@@ -850,6 +850,23 @@ const Patient = (props) => {
         { value: "Saturday", id: 6 },
       ],
     },
+    {
+      type: "select",
+      apiType: "API",
+      selectApi: "delivery-slot/select",
+      placeholder: "Delivery Slot",
+      name: "slot",
+      validation: "",
+      showItem: "slot",
+      default: "",
+      tag: true,
+      label: "Delivery Slot",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+      filter: false,
+    },
   ]);
 
   const [admissionHistory] = useState([
