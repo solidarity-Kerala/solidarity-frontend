@@ -240,7 +240,7 @@ const Ingredient = (props) => {
       required: true,
       view: true,
       add: true,
-      update: false,
+      update: true,
     },
     {
       type: "number",
