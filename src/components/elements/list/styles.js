@@ -372,11 +372,10 @@ export const ButtonPanel = styled.div`
   svg {
     background-color: transparent;
   }
-  @media (max-width: 768px) {
-    flex-direction: column;
-    justify-content: left;
-    align-items: flex-start;
-    padding: 1em 1em 0.5em;
+  && {
+    .subList & {
+      top: -35px;
+    }
   }
 `;
 export const AddButton = styled.button`

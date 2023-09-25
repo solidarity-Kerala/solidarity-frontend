@@ -272,6 +272,18 @@ const Menu = (props) => {
       view: true,
       add: true,
       update: true,
+    },{
+      type: "checkbox",
+      placeholder: "Clone Permission",
+      name: "clone",
+      validation: "",
+      default: "false",
+      label: "Clone Permission",
+      tag: true,
+      required: true,
+      view: true,
+      add: true,
+      update: true,
     },
     {
       type: "checkbox",
