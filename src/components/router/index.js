@@ -10,6 +10,7 @@ import Header from "../private/common/layout/header";
 import Footer from "../private/common/layout/footer";
 import Menu from "../private/common/layout/menu";
 import Body from "../private/pages/dashboard";
+import InternetStatusPopup from "../elements/InternetStatusPopup";
 // import dietitian from "../private/pages/dashboard/dietitian";
 
 const PageRouter = () => {
@@ -49,6 +50,7 @@ const PageRouter = () => {
             </Routes>
           </Container>
         </RowContainer>
+        <InternetStatusPopup/>
       </MainContainer>
     </BrowserRouter>
   ) : (

@@ -44,7 +44,7 @@ const UserType = (props) => {
       required: true,
       view: true,
       add: true,
-      update: true,
+      update: false,
     },
   ]);
  return (

@@ -121,6 +121,11 @@ export const TableCell = styled.td`
   .layer {
     border-radius: 10px;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: 0;
+    height: -webkit-fill-available;
   }
   && {
     .short & {
@@ -248,6 +253,7 @@ export const Variant = styled.div`
   span {
     font-size: 10px;
     text-align: left;
+    font-weight: normal;
   }
   .price {
     font-size: 10px;
@@ -264,6 +270,7 @@ export const Variant = styled.div`
     font-size: 10px;
     font-weight: bolder;
     text-align: left;
+    margin-top: 5px;
   }
   &.vertical .offer {
     justify-content: left;
@@ -405,8 +412,8 @@ export const WeekSelection = styled.div`
   align-items: center;
   font-size: 14px;
   > button {
-    border:0;
-    outline:none;
+    border: 0;
+    outline: none;
     display: flex;
     -webkit-box-pack: center;
     justify-content: center;
@@ -414,19 +421,38 @@ export const WeekSelection = styled.div`
     height: 40px;
     border-radius: 10px;
     margin: 4px 0px;
-    min-width: 150px;
     background: white;
     transition: all 1s ease 0s;
     justify-content: center;
     align-items: center;
     column-gap: 10px;
     cursor: pointer;
-    font-weight:bold;
+    font-weight: bold;
+    text-wrap: nowrap;
+    padding: 0 15px;
+    position: relative;
+    span {
+      display: none;
+      transition: all 1s ease 0s;
+      position: absolute;
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      top: 45px;
+      z-index: 100;
+    }
   }
-  > button:hover {
-    transform: scale(1.02);
+  > button.active {
+    background-color: #cccccc;
+    svg {
+      transform: scale(1.2);
+    }
   }
-  span {
+  > button:hover span {
+    display: flex;
+    width: auto;
+  }
+  > span {
     font-weight: bold;
     width: 70px;
     text-align: center;

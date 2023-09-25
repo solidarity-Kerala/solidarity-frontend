@@ -13,13 +13,13 @@ const Allergy = (props) => {
     const [attributes] = useState([
         {
             type: "text",
-            placeholder: "Title",
+            placeholder: "Allergy",
             name: "title",
             validation: "",
             default: "",
-            label: "Title",
-            tag: true,
-            required: false,
+            label: "Allergy",
+            tag: false,
+            required: true,
             view: true,
             add: true,
             update: true,

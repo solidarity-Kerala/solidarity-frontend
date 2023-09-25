@@ -96,6 +96,21 @@ const SetupRecipe = ({ openData, setMessage }) => {
       update: true,
       filter: false,
     },
+    {
+      type: "hidden",
+      placeholder: "quantity",
+      name: "quantity",
+      validation: "",
+      default: "",
+      dynamicClass: "direct",
+      tag: false,
+      label: "quantity",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: false,
+    },
   ]);
   const [ingredients, setIngredients] = useState([]);
   const [nutritionInfo, setNutritionInfo] = useState(null);
@@ -103,30 +118,34 @@ const SetupRecipe = ({ openData, setMessage }) => {
   const [ingredient, setIngredient] = useState(null);
   const addIngredient = async (option) => {
     // setRefresh(!refresh);
-    if (typeof option.calories !== "number" || isNaN(option.calories)) {
+
+    if (typeof option.calories !== "number" || isNaN(option.calories) ) {
       // setMessage({ content: "You cannot add this ingredient, the calorie of this ingredient is not valid!" });
       option.measureType = "";
       option.gramOfType = 0;
+      option.quantity = 100;
       option.value = typeof option.value === "undefined" ? "" : option.value;
       option.ingredientsName = option.value ?? "";
       setIngredient(option);
       setUpdateId(option._id);
       setIsOpen(true);
       return;
-    }
-    if (option.measureType) {
-      const response = await postData({ ingredient: option.id, recipe }, "recipe-ingredients");
-      response.data.addedItems && setIngredients(response.data.addedItems);
-      response.data.recipeNutritionInfo && setNutritionInfo(response.data.recipeNutritionInfo);
     } else {
-      if (option.id) {
-        option.measureType = "";
-        option.gramOfType = 0;
-        option.value = typeof option.value === "undefined" ? "" : option.value;
-        option.ingredientsName = option.value ?? "";
-        setIngredient(option);
-        setUpdateId(option._id);
-        setIsOpen(true);
+      if (option.measureType) {
+        const response = await postData({ ingredient: option.id, recipe }, "recipe-ingredients");
+        response.data.addedItems && setIngredients(response.data.addedItems);
+        response.data.recipeNutritionInfo && setNutritionInfo(response.data.recipeNutritionInfo);
+      } else {
+        if (option.id) {
+          option.measureType = "";
+          option.gramOfType = 0;
+          option.value = typeof option.value === "undefined" ? "" : option.value;
+          option.ingredientsName = option.value ?? "";
+          option.quantity = 100;
+          setIngredient(option);
+          setUpdateId(option._id);
+          setIsOpen(true);
+        }
       }
     }
   };
@@ -335,6 +354,15 @@ const SetupRecipe = ({ openData, setMessage }) => {
                         <DataItem>
                           Calcium: {getValue({ type: "number" }, nutritionInfo.calcium / portion)}/{getValue({ type: "number" }, nutritionInfo.calcium)}
                         </DataItem>
+                        <DataItem>
+                          Sodium: {getValue({ type: "number" }, nutritionInfo.sodium / portion)}/{getValue({ type: "number" }, nutritionInfo.sodium)}
+                        </DataItem>
+                        <DataItem>
+                          Potassium: {getValue({ type: "number" }, nutritionInfo.potassium / portion)}/{getValue({ type: "number" }, nutritionInfo.potassium)}
+                        </DataItem>
+                        <DataItem>Vitamin A: {getValue({ type: "number" }, nutritionInfo.vitaminA)}</DataItem>
+                        <DataItem>Vitamin C: {getValue({ type: "number" }, nutritionInfo.vitaminC)}</DataItem>
+                        <DataItem>Vitamin E: {getValue({ type: "number" }, nutritionInfo.vitaminE)}</DataItem>
                       </DataItemContainer>
                     </TableCell>
                   </tr>
@@ -355,6 +383,11 @@ const SetupRecipe = ({ openData, setMessage }) => {
                         <DataItem>Sugars: {getValue({ type: "number" }, nutritionInfo.sugars)}</DataItem>
                         <DataItem>Iron: {getValue({ type: "number" }, nutritionInfo.iron)}</DataItem>
                         <DataItem>Calcium: {getValue({ type: "number" }, nutritionInfo.calcium)}</DataItem>
+                        <DataItem>Sodium: {getValue({ type: "number" }, nutritionInfo.sodium)}</DataItem>
+                        <DataItem>Potassium: {getValue({ type: "number" }, nutritionInfo.potassium)}</DataItem>
+                        <DataItem>Vitamin A: {getValue({ type: "number" }, nutritionInfo.vitaminA)}</DataItem>
+                        <DataItem>Vitamin C: {getValue({ type: "number" }, nutritionInfo.vitaminC)}</DataItem>
+                        <DataItem>Vitamin E: {getValue({ type: "number" }, nutritionInfo.vitaminE)}</DataItem>
                       </DataItemContainer>
                     </TableCell>
                   </tr>

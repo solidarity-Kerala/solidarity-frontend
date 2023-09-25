@@ -117,3 +117,86 @@ export const Bottom = styled.div`
   display: flex;
   flex-direction: column;
 `;
+export const ToggleInput = styled.input`
+  opacity: 0;
+  width: 100%;
+  height: 25px;
+  cu span {
+    box-shadow: 0 0 1px #2196f3;
+  }
+`;
+export const ToggleSlider = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e7f2f9;
+  transition: 0.4s;
+  box-shadow: 0 0 1px #2196f3;
+  border-radius: 34px;
+  &:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+    background-color: ${({ disable }) => disable || "red"};
+  }
+
+  ${ToggleInput}:checked + &::before {
+    transform: translateX(18px);
+    background-color: ${({ enable }) => enable || "green"};
+  }
+`;
+export const ToggleSwitchContainer = styled.label`
+  position: relative;
+  display: inline-block;
+  border: 0;
+  outline: none;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  min-height: 40px;
+  height: 40px;
+  width: 70px;
+  border-radius: 10px;
+  margin: 4px 0px;
+  background: white;
+  transition: all 1s ease 0s;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  &.list {
+    margin-right: 0;
+  }
+`;
+export const ToggleSwitch = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.1s;
+  border-radius: 10px;
+  color: ${({ disable, enable, checked }) => (checked ? (enable ? enable : "green") : disable ? disable : "red")};
+  justify-content: center;
+  background-color: ${({ checked }) => (checked ? "rgb(204, 204, 204)" : "white")};
+  align-items: center;
+  display: flex;
+  font-size: ${({ checked }) => (checked ? "20px" : "18px")};
+  svg {
+    left: 4px;
+    bottom: 3px;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+`;
