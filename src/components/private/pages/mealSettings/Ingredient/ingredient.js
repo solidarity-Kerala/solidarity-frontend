@@ -239,7 +239,7 @@ const Ingredient = (props) => {
       label: "Quantity",
       required: true,
       view: true,
-      add: false,
+      add: true,
       update: false,
     },
     {

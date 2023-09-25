@@ -89,6 +89,7 @@ const Banner = (props) => {
         shortName={`Banner`}
         // formMode={`single`}
         formMode={`double`}
+         profileImage="bannerImage"
         //
         {...props}
         attributes={attributes}
