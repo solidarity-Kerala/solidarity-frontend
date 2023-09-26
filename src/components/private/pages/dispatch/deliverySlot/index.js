@@ -34,9 +34,25 @@ const DeliverySlot = (props) => {
       // Indicates if the input field should be displayed in the update mode
       update: true,
     },
-   
+    {
+      type: "multiSelect",
+      apiType: "API",
+      selectApi: "mealtime-category/select",
+      placeholder: "Meal Time Category",
+      name: "mealTimeCategory",
+      showItem: "mealtimeCategoriesName",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Meal Time Category",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+      filter: false,
+    },
   ]);
-    return (
+  return (
     <Container className="noshadow">
       {/* Render a ListTable component */}
       <ListTable

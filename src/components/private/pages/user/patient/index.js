@@ -642,14 +642,14 @@ const Patient = (props) => {
     {
       type: "multiSelect",
       apiType: "API",
-      selectApi: "fooddislike-lists/select",
-      placeholder: "Food Dislike Like",
+      selectApi: "protein-categories/select",
+      placeholder: "Food Dislike List",
       name: "foodDisLikeList",
       validation: "",
-      showItem: "foodDislikeListName",
+      showItem: "proteinCategoriesName",
       default: "",
       tag: true,
-      label: "Food Dislike Like",
+      label: "Food Dislike List",
       required: false,
       view: true,
       add: true,
@@ -1478,7 +1478,7 @@ const Patient = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
@@ -1495,7 +1495,7 @@ const Patient = (props) => {
             <DietMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></DietMenu>
           }
           themeColors={themeColors}
@@ -1512,7 +1512,7 @@ const Patient = (props) => {
             <AppointmentMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></AppointmentMenu>
           }
           themeColors={themeColors}
