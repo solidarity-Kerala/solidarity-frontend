@@ -93,6 +93,7 @@ import RestoreDietitian from "../../private/pages/restoreUser/restoreDietitian";
 import RestoreFranchiseAdmin from "../../private/pages/restoreUser/restoreFranchiseAdmin";
 import Allergy from "../../private/pages/allergy";
 import Inventory from "../../private/pages/inventory";
+import UserLog from "../../private/pages/report/userLog";
 
 const Switch = ({ page, key, ...privileges }) => {
   switch (page) {
@@ -274,6 +275,8 @@ const Switch = ({ page, key, ...privileges }) => {
       return <Allergy key={key} {...privileges} />;
     case "inventory":
       return <Inventory key={key} {...privileges} />;
+    case "subscriber-log":
+      return <UserLog key={key} {...privileges} />;
     default:
       return <Page404 key={key}></Page404>;
   }
