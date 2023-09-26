@@ -480,20 +480,6 @@ const Patient = (props) => {
     },
     {
       type: "number",
-      placeholder: "ABW",
-      name: "abw",
-      // disabled: true,
-      validation: "",
-      default: "",
-      tag: true,
-      label: "ABW",
-      required: false,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "number",
       placeholder: "Calories",
       name: "calories",
       disabled: true,
@@ -855,8 +841,9 @@ const Patient = (props) => {
       apiType: "API",
       selectApi: "delivery-slot/select",
       placeholder: "Delivery Slot",
-      name: "slot",
+      name: "deliverySlot",
       validation: "",
+      collection: "deliverySlot",
       showItem: "slot",
       default: "",
       tag: true,
@@ -1151,7 +1138,6 @@ const Patient = (props) => {
       add: true,
       update: true,
     },
-    
   ]);
 
   const [appointment] = useState([
@@ -1225,7 +1211,7 @@ const Patient = (props) => {
       update: true,
       filter: true,
     },
-   
+
     {
       type: "date",
       placeholder: "Start Date & Time",
@@ -1246,7 +1232,12 @@ const Patient = (props) => {
       updateOn: ["bookingDate", "dietician", "physical"],
       selectApi: "day-slot/avail-slot",
       placeholder: "Time Slot",
-      params: [{ name: "center" }, { name: "bookingDate" }, { name: "dietician" }, { name: "physical" }],
+      params: [
+        { name: "center" },
+        { name: "bookingDate" },
+        { name: "dietician" },
+        { name: "physical" },
+      ],
       name: "bookingSlot",
       showItem: "availableSlots",
       validation: "",
@@ -1277,8 +1268,7 @@ const Patient = (props) => {
       update: false,
       filter: false,
     },
-    
-  ]); 
+  ]);
 
   const [actions] = useState([
     {
@@ -1307,7 +1297,7 @@ const Patient = (props) => {
     {
       element: "button",
       type: "subItem",
-      id: "user/subscriber",
+      id: "user/subscriber/web",
       itemTitle: {
         name: "username",
         type: "text",
@@ -1316,7 +1306,7 @@ const Patient = (props) => {
       title: "Medical Record",
       attributes: medicalRecord,
       params: {
-        api: `user/subscriber`,
+        api: `user/subscriber/web`,
         parentReference: "user",
         itemTitle: {
           name: "username",
@@ -1466,12 +1456,21 @@ const Patient = (props) => {
         customClass: "medium",
       },
     },
-    
   ]);
 
   return (
     <Container className="noshadow">
-      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
+      <ListTable
+        actions={actions}
+        api={`user`}
+        itemTitle={{ name: "username", type: "text", collection: "" }}
+        shortName={`Patient`}
+        parentReference={"userType"}
+        referenceId={"6471b3849fb2b29fe045887b"}
+        formMode={`double`}
+        {...props}
+        attributes={attributes}
+      ></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
