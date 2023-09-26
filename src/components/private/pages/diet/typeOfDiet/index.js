@@ -36,6 +36,19 @@ const TypeOfDiet = (props) => {
       // Indicates if the input field should be displayed in the update mode
       update: true,
     },
+    {
+      type: "image",
+      placeholder: "Image",
+      name: "image",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Image",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
   const [subDiet] = useState([
@@ -57,23 +70,23 @@ const TypeOfDiet = (props) => {
       update: true,
       filter: false,
     },
-  
-  {
-    type: "select",
-    placeholder: "Category",
-    name: "category",
-    validation: "",
-    tag: true,
-    default: "General",
-    filter: false,
-    label: "Category",
-    required: true,
-    view: true,
-    add: true,
-    update: true,
-    selectApi: "General, FoodExchange,Liquid",
-    apiType: "CSV",
-  },
+
+    {
+      type: "select",
+      placeholder: "Category",
+      name: "category",
+      validation: "",
+      tag: true,
+      default: "General",
+      filter: false,
+      label: "Category",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      selectApi: "General, FoodExchange,Liquid",
+      apiType: "CSV",
+    },
   ]);
 
   const [actions] = useState([

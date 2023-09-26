@@ -24,8 +24,21 @@ const MedicationList = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "image",
+      placeholder: "Image",
+      name: "image",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Image",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
- return (
+  return (
     <Container className="noshadow">
       {/* Render a ListTable component */}
       <ListTable

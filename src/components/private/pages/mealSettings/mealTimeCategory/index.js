@@ -53,6 +53,19 @@ const MealTimeCategory = (props) => {
       selectApi: "Same Day, Previous Day",
       apiType: "CSV",
     },
+    {
+      type: "image",
+      placeholder: "Image",
+      name: "image",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Image",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
   // Use the useTranslation hook from react-i18next to handle translations
