@@ -111,7 +111,7 @@ const PackageManagement = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
     },
     {
       type: "select",
