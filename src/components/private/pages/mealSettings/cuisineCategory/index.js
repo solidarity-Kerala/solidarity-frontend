@@ -35,6 +35,19 @@ const CuisineCategory = (props) => {
       // Indicates if the input field should be displayed in the update mode
       update: true,
     },
+    {
+      type: "image",
+      placeholder: "Image",
+      name: "image",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Image",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
   return (
     <Container className="noshadow">
@@ -54,7 +67,7 @@ const CuisineCategory = (props) => {
         }}
         // Short name or label for the menu
         shortName={`Cuisine Category`}
-        formMode={`double`}
+        // formMode={`double`}
         // Privilege flag indicating whether the user can add menu items
         {...props}
         // Additional attributes related to the menu

@@ -280,7 +280,7 @@ const DeliveryMan = (props) => {
         parentReference={"userType"}
         referenceId={"64815bde89e0a44fc31c53b0"}
         // formMode={`single`}
-        formMode={`single`}
+        formMode={`double`}
         {...props}
         attributes={attributes}
       ></ListTable>
