@@ -458,3 +458,58 @@ export const WeekSelection = styled.div`
     text-align: center;
   }
 `;
+export const ActionBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+  padding: 0px 0px;
+  border: none;
+  border-radius: 4px;
+  align-items: center;
+  font-size: 14px;
+  padding-bottom:10px;
+  position:sticky;
+  top:0;
+  background: #eaeaea;
+`;
+export const SwitchButton = styled.div`
+  border: 0;
+  outline: none;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  min-height: 40px;
+  height: 40px;
+  border-radius: 10px;
+  margin: 4px 0px;
+  transition: all 1s ease 0s;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  text-wrap: nowrap;
+  padding: 0 15px;
+  position: relative;
+  span {
+    display: none;
+    transition: all 1s ease 0s;
+    position: absolute;
+    background: white;
+    color:black;
+    padding: 10px;
+    border-radius: 10px;
+    top: 45px;
+    z-index: 100;
+  }
+  background-color: ${({ active, enableBg }) => (active ? enableBg ?? "green" : "white")};
+  color: ${({ active, enableColor }) => (active ? enableColor ?? "white" : "black")};
+  svg {
+    transform: ${({ active }) => (active ? "scale(1.2)" : "scale(1)")};
+  }
+
+  &:hover span {
+    display: flex;
+    width: auto;
+  }
+`;

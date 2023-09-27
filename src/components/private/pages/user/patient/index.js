@@ -1496,6 +1496,7 @@ const Patient = (props) => {
             <DietMenu
               openData={openItemData}
               setMessage={props.setMessage}
+              {...props}
               // Pass selected item data (Menu Title) to the popup for setting the time
             ></DietMenu>
           }
@@ -1503,7 +1504,7 @@ const Patient = (props) => {
           closeModal={closeModal}
           itemTitle={{ name: "username", type: "text", collection: "" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
-          customClass={"medium"}
+          customClass={"full-page"}
         ></PopupView>
       )}
       {openedMenu === "appointment" && openMenuSetup && openItemData && (

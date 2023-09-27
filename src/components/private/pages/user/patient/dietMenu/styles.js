@@ -5,10 +5,12 @@ export const TabContainer = styled.div`
   flex-direction: row;
   overflow: auto;
   width: 100%;
-  position: sticky;
-  top: -32px;
   background: rgb(234, 234, 234);
   z-index: 1;
+  min-height: 64px;
+  position: sticky;
+  top: -10px;
+  justify-content: space-around;
 `;
 
 export const TabButton = styled.button`
@@ -348,6 +350,9 @@ export const MealTimeHead = styled.div`
   color: ${({ active }) => (active ? "white" : "black")};
   transform: rotate(0deg);
   text-align: left;
+  &.assigned {
+    margin-bottom: 10px;
+  }
   svg {
     margin-left: auto;
     margin-right: 0;

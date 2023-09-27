@@ -130,6 +130,7 @@ export const RowContainer = styled.div`
     position: relative;
     position: sticky;
     top: 0;
+    max-height: calc(100vh - 100px);
   }
   &.menu-schedule {
     position: relative;
@@ -137,6 +138,7 @@ export const RowContainer = styled.div`
     width: calc(100% - 450px);
     flex: 1 1 calc(100% - 450px);
     padding: 0px 30px;
+    max-height: calc(100vh - 100px);overflow:auto;
   }
   &.menu {
     max-width: calc(100% - 450px);
@@ -162,7 +164,8 @@ export const RowContainer = styled.div`
     overflow: auto;
     padding: 2em 0 0;
     border-radius: 12px;
-  }&.popup-data.small {
+  }
+  &.popup-data.small {
     overflow: auto;
     padding: 0em 0 0;
     border-radius: 12px;
