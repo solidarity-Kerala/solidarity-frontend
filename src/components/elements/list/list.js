@@ -450,7 +450,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
               <GetIcon icon={"open"}></GetIcon>
             </More>
             {/* //added print button */}
-            <More
+            {/* <More
               onClick={() => {
                 setDetailView(true);
                 setOpenData({ actions, attributes, data });
@@ -458,7 +458,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
               }}
             >
               <GetIcon icon={"print"}></GetIcon>
-            </More>
+            </More> */}
           </>
         )}
         {signleRecord && (

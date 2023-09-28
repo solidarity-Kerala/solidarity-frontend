@@ -348,13 +348,26 @@ export const Count = styled.div`
   }
 `;
 export const ArrowButton = styled.button`
-  background: transparent;
-  padding: 0em;
-  margin-right: 0.5em;
+  border: 0;
   outline: none;
-  border: 0px solid #ddd;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  min-height: 40px;
+  height: 40px;
+  width: 50px;
+  border-radius: 10px;
+  margin: 4px 0px;
+  transition: all 1s ease 0s;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
   cursor: pointer;
-  font-size: 1em;
+  font-weight: bold;
+  text-wrap: nowrap;
+  padding: 0 15px;
+  position: relative;
+  background-color: rgb(248, 248, 248);
   &:hover {
     color: ${(props) => props.theme.bgPrimary};
   }
@@ -483,6 +496,11 @@ export const NoData = styled.div`
   display: flex;
   align-items: center;
   height: 100px;
+  flex-direction:column;
+  svg{
+    margin:auto;
+    font-size:30px;
+  }
 `;
 export const Img = styled.img`
   height: 50px;

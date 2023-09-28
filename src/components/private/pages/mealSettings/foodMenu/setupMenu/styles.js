@@ -491,6 +491,10 @@ export const SwitchButton = styled.div`
   text-wrap: nowrap;
   padding: 0 15px;
   position: relative;
+  &.custom{
+    margin: auto;
+    margin-right:10px;
+  }
   span {
     display: none;
     transition: all 1s ease 0s;
@@ -503,7 +507,7 @@ export const SwitchButton = styled.div`
     z-index: 100;
   }
   background-color: ${({ active, enableBg }) => (active ? enableBg ?? "green" : "white")};
-  color: ${({ active, enableColor }) => (active ? enableColor ?? "white" : "black")};
+  color: ${({ active, enableColor }) => (active ? enableColor ?? "white" : "grey")};
   svg {
     transform: ${({ active }) => (active ? "scale(1.2)" : "scale(1)")};
   }
