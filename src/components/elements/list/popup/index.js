@@ -2,7 +2,16 @@ import { Header, Overlay, Page } from "../manage/styles";
 // import FormInput from "../../input";
 import { getValue } from "../functions";
 import { GetIcon } from "../../../../icons";
-import { CloseButton, DataHead, DataItem, Head, TabContainer, Td, Title, TrBody } from "./styles";
+import {
+  CloseButton,
+  DataHead,
+  DataItem,
+  Head,
+  TabContainer,
+  Td,
+  Title,
+  TrBody,
+} from "./styles";
 import Tabs from "../../tab";
 import { useCallback, useEffect, useState } from "react";
 import { RowContainer } from "../../../styles/containers/styles";
@@ -13,7 +22,10 @@ export const DisplayInformations = ({ attributes, data, formMode }) => {
       {attributes.map((attribute, index) => {
         if (attribute.view) {
           try {
-            const itemValue = attribute.collection?.length > 0 && attribute.showItem?.length > 0 ? data[attribute.collection][attribute.showItem] : data[attribute.name];
+            const itemValue =
+              attribute.collection?.length > 0 && attribute.showItem?.length > 0
+                ? data[attribute.collection][attribute.showItem]
+                : data[attribute.name];
             // if (attribute.type === "image") {
             //   return "";
             // }
@@ -38,8 +50,20 @@ export const DisplayInformations = ({ attributes, data, formMode }) => {
     </TrBody>
   );
 };
-const Popup = ({ formMode, viewMode, themeColors, openData, setLoaderBox, setMessage, closeModal, itemTitle }) => {
-  const titleValue = (itemTitle.collection?.length > 0 ? openData?.data?.[itemTitle.collection]?.[itemTitle.name] ?? "" : openData?.data?.[itemTitle.name]) || "Please update the itemTitle.";
+const Popup = ({
+  formMode,
+  viewMode,
+  themeColors,
+  openData,
+  setLoaderBox,
+  setMessage,
+  closeModal,
+  itemTitle,
+}) => {
+  const titleValue =
+    (itemTitle.collection?.length > 0
+      ? openData?.data?.[itemTitle.collection]?.[itemTitle.name] ?? ""
+      : openData?.data?.[itemTitle.name]) || "Please update the itemTitle.";
 
   const tabHandler = useCallback(() => {
     const tempTab = openData.actions
@@ -47,7 +71,17 @@ const Popup = ({ formMode, viewMode, themeColors, openData, setLoaderBox, setMes
       .map((item, index) => ({
         name: `${item.id}-${index}`,
         title: item.title,
-        element: <ListTable viewMode={item.type ?? "subList"} setMessage={setMessage} setLoaderBox={setLoaderBox} parentReference={item?.params?.parentReference} referenceId={openData?.data?._id} attributes={item.attributes} {...item.params}></ListTable>,
+        element: (
+          <ListTable
+            viewMode={item.type ?? "subList"}
+            setMessage={setMessage}
+            setLoaderBox={setLoaderBox}
+            parentReference={item?.params?.parentReference}
+            referenceId={openData?.data?._id}
+            attributes={item.attributes}
+            {...item.params}
+          ></ListTable>
+        ),
       }));
     tempTab.unshift({
       name: `information-${titleValue}`,
@@ -60,7 +94,11 @@ const Popup = ({ formMode, viewMode, themeColors, openData, setLoaderBox, setMes
               <span>Basic Details</span>
             </DataHead>
           </Head>
-          <DisplayInformations formMode={formMode} attributes={openData.attributes} data={openData.data} />
+          <DisplayInformations
+            formMode={formMode}
+            attributes={openData.attributes}
+            data={openData.data}
+          />
         </TabContainer>
       ),
     });
@@ -75,7 +113,11 @@ const Popup = ({ formMode, viewMode, themeColors, openData, setLoaderBox, setMes
 
   return (
     <Overlay>
-      <Page className={`${openData?.item?.params?.customClass ?? "medium"} popup-child`}>
+      <Page
+        className={`${
+          openData?.item?.params?.customClass ?? "medium"
+        } popup-child`}
+      >
         <Header>
           <span>{`${getValue(itemTitle, titleValue)}`}</span>
           <CloseButton theme={themeColors} onClick={closeModal}>
