@@ -168,7 +168,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     } catch {}
   };
   const [isOpen, setIsOpen] = useState(false);
-  const [detailView, setDetailView] = useState(false);
+  const [detailView] = useState(false);
   const [isPrint, setIsPrint] = useState(false);
   const [printData, setPrintData] = useState([]);
   const [openData, setOpenData] = useState({});
