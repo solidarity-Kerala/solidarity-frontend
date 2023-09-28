@@ -13,7 +13,7 @@ const PackageManagement = (props) => {
     document.title = `PackageManagement - Diet Food Management Portal`;
   }, []);
   // Get the theme colors from the Redux store
- 
+
   const [attributes] = useState([
     {
       type: "text",
@@ -56,7 +56,7 @@ const PackageManagement = (props) => {
       add: true,
       update: true,
     },
-    
+
     {
       type: "select",
       apiType: "API",
@@ -157,7 +157,7 @@ const PackageManagement = (props) => {
       update: true,
       filter: false,
     },
-    
+
     {
       type: "image",
       placeholder: "Image",
@@ -287,7 +287,7 @@ const PackageManagement = (props) => {
       attributes: packagePrice,
       params: {
         api: `package-price`,
-        parentReference: "user",
+        parentReference: "package",
         itemTitle: {
           name: "packageName",
           type: "text",
@@ -301,7 +301,6 @@ const PackageManagement = (props) => {
         formMode: "double",
       },
     },
-   
   ]);
   // Use the useTranslation hook from react-i18next to handle translations
   // const parkingDuration = totalDuration > 120 ? (days > 0 ? days + `d, ` : ``) + (hours > 0 ? hours + `h, ` : ``) + (minutes + t("m")) : totalDuration.toFixed(0) + ` ` + t("minutes");
