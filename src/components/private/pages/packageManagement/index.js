@@ -58,45 +58,6 @@ const PackageManagement = (props) => {
     },
     
     {
-      type: "number",
-      placeholder: "Cost",
-      name: "price",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Cost",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "number",
-      placeholder: "Week Discount %",
-      name: "weekDiscount",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Week Discount %",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "number",
-      placeholder: "Month Discount %",
-      name: "monthDiscount",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Month Discount %",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
       type: "select",
       apiType: "API",
       selectApi: "diet/select",
@@ -225,6 +186,80 @@ const PackageManagement = (props) => {
       update: true,
     },
   ]);
+
+  const [packagePrice] = useState([
+    {
+      type: "text",
+      placeholder: "Title",
+      name: "title",
+      validation: "",
+      showItem: "",
+      default: "",
+      tag: true,
+      label: "Title",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "number",
+      placeholder: "Days",
+      name: "days",
+      validation: "",
+      showItem: "",
+      default: "",
+      tag: true,
+      label: "Days",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "number",
+      placeholder: "bonus Days",
+      name: "bonusDays",
+      validation: "",
+      showItem: "",
+      default: "",
+      tag: true,
+      label: "Bonus Days",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "number",
+      placeholder: "Price",
+      name: "price",
+      validation: "",
+      showItem: "",
+      default: "",
+      tag: true,
+      label: "Price",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "number",
+      placeholder: "Discount",
+      name: "discount",
+      validation: "",
+      showItem: "",
+      default: "",
+      tag: true,
+      label: "Discount",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+  ]);
+
   const themeColors = useSelector((state) => state.themeColors);
   // State to control the display of the SetupMenu popup
   const [openMenuSetup, setOpenMenuSetup] = useState(false);
@@ -237,14 +272,44 @@ const PackageManagement = (props) => {
     setOpenMenuSetup(false);
     setOpenItemData(null);
   };
-
+  const [actions] = useState([
+    {
+      element: "button",
+      type: "subList",
+      id: "packagePrice",
+      parentReference: "package",
+      itemTitle: {
+        name: "packageName",
+        type: "text",
+        collection: "package",
+      },
+      title: "Package Price",
+      attributes: packagePrice,
+      params: {
+        api: `package-price`,
+        parentReference: "user",
+        itemTitle: {
+          name: "packageName",
+          type: "text",
+          collection: "package",
+        },
+        shortName: "Package Price",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+        formMode: "double",
+      },
+    },
+   
+  ]);
   // Use the useTranslation hook from react-i18next to handle translations
   // const parkingDuration = totalDuration > 120 ? (days > 0 ? days + `d, ` : ``) + (hours > 0 ? hours + `h, ` : ``) + (minutes + t("m")) : totalDuration.toFixed(0) + ` ` + t("minutes");
   return (
     <Container className="noshadow">
       {/* Render a ListTable component */}
       <ListTable
-        // actions={actions}
+        actions={actions}
         api={`package`}
         // itemTitle={`label`}
         itemTitle={{ name: "packageName", type: "text", collection: "" }}
