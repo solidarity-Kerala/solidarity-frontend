@@ -11,6 +11,7 @@ export const TabContainer = styled.div`
   position: sticky;
   top: -10px;
   justify-content: space-around;
+  align-items: center;
 `;
 
 export const TabButton = styled.button`
@@ -18,7 +19,6 @@ export const TabButton = styled.button`
   background-color: transparent;
   border: none;
   font-size: 14px;
-  margin-bottom: 10px;
   padding: 10px 10px;
   cursor: pointer;
   border-bottom: 1px solid ${({ active }) => (active ? "#EB6B55" : "rgb(204, 204, 204)")};
@@ -198,15 +198,14 @@ export const Details = styled.article`
   margin: 0px;
   padding: 10px;
   font-size: 12px;
-  background: white;
   &.head {
     background: rgb(248, 248, 248);
     color: black;
     font-weight: 600;
     padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    border-radius: 10px 0 0;
     cursor: pointer;
+    font-size:14px;
   }
   > div {
     width: 100%;
@@ -332,6 +331,7 @@ export const SideHead = styled.div`
 `;
 export const Box = styled.div`
   padding: 0px;
+  margin-top: 5px;
   display: ${({ active }) => (active ? "block" : "none")};
 `;
 
@@ -366,11 +366,11 @@ export const Recepes = styled.div`
   .recipe {
     border-bottom: 1px solid rgb(227 227 227);
   }
-  .recipe:first-child {
+  .recipe:first-child,.recipe:first-child .actions{
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
   }
-  .recipe:last-child {
+  .recipe:last-child,.recipe:last-child .actions {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     border-bottom: 0px;
@@ -392,6 +392,7 @@ export const RecepeData = styled.div`
   padding: 0px;
   display: flex;
   flex-direction: column;
+
   .title {
     font-weight: bold;
   }
@@ -426,6 +427,50 @@ export const RecepeData = styled.div`
 export const RecepeContent = styled.div`
   display: flex;
   flex-direction: row;
+  position: relative;
+  .actions,
+  .sub-actions {
+    display: none;
+    font-size: 12px;
+    position: absolute;
+    padding: 2px;
+    right: 0px;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    cursor: pointer;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(204 204 204 / 32%);
+    column-gap: 5px;
+    > span {
+      box-shadow: rgb(110 113 105 / 25%) 0px 0px 12px 9px;
+      border: 1px solid gray;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+      background-color: white;
+      border: 0;
+    }
+    .delete {
+      right: 15px;
+      top: 15px;
+      background-color: red;
+      color: white;
+    }
+  }
+  &.recipe1:hover .actions,
+  &.recipe1:hover ~ .sub-actions,
+  &.child-recipe:hover > .sub-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: -10px;
+  }
 `;
 export const RecepeImage = styled.img`
   width: 60px;
@@ -443,7 +488,7 @@ export const RecepeImage = styled.img`
 export const ReplacableItems = styled.div`
   border: 1px solid rgb(227 227 227);
   padding: 10px;
-  margin-top: 10px;
+  margin-top: 20px;
   border-radius: 10px;
   > button {
     cursor: pointer;
@@ -480,18 +525,15 @@ export const ReplacableItemsList = styled.div`
   padding-top: 10px;
 `;
 export const UserDetails = styled.div`
-  row-gap: 10px;
   margin-bottom: 10px;
-  article {
+  border-radius:10px;
+  background: white;
+  overflow:hidden;
+  display:grid;
+   article {
     border-bottom: 1px solid rgb(227 227 227);
   }
-  article:first-child {
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
-  }
   article:last-child {
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
     border-bottom: 0px;
-  }
+  } 
 `;
