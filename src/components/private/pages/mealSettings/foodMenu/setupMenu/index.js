@@ -581,12 +581,16 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               <button className={expandAll ? "active" : ""} onClick={() => setExpandAll((prev) => !prev)}>
                 <span>{expandAll ? "Collapse All" : "Expand All"}</span> <GetIcon icon={"open-book"} />
               </button>
-              <button onClick={() => cloneData()}>
-                <span>Clone</span> <GetIcon icon={"clone"} />
-              </button>
-              <button onClick={() => restoreData()}>
-                <span>Undo Clone</span> <GetIcon icon={"restoreIcon"} />
-              </button>
+              {!(openData.item.viewOnly ?? false) && (
+                <>
+                  <button onClick={() => cloneData()}>
+                    <span>Clone</span> <GetIcon icon={"clone"} />
+                  </button>
+                  <button onClick={() => restoreData()}>
+                    <span>Undo Clone</span> <GetIcon icon={"restoreIcon"} />
+                  </button>
+                </>
+              )}
               <FormInput
                 customClass={"filter auto single"}
                 placeholder={`Available Colories`}

@@ -174,9 +174,12 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                   <RecepeData>
                                     <span className="title">{recipeItem.recipe.title}</span>
                                     <span className="light">
+                                      <span>{recipeItem.recipe.typeOfRecipe}</span>
                                       <span>{recipeItem.nutritionInfo.calorieSplit}</span>
-                                      <span>{recipeItem.calories?.toFixed(2)} Cal</span>
-                                      <span>{recipeItem.gram?.toFixed(2)} g</span>
+                                      <span>{recipeItem.gram?.toFixed(2)}g</span>
+                                      <span>{recipeItem.calories?.toFixed(2)}KCal</span>
+                                      <span>{recipeItem.nutritionInfo.Protein?.toFixed(2)}g</span>
+                                      <span>{recipeItem.nutritionInfo.TotalFat?.toFixed(2)}g</span>
                                     </span>
                                   </RecepeData>
                                 </RecepeContent>
