@@ -1478,6 +1478,7 @@ const Patient = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
+              {...props}
             // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
