@@ -107,6 +107,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   }
 
   return menuData?.user?.diet ? (
+    
     <ColumnContainer>
       <RowContainer className="menu-schedule">
         <TabContainer>
@@ -273,7 +274,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 </Details>
                 <Details>
                   <div>Dislike list </div>
-                  <div>{populateArray(menuData.user.profile.foodDisLikeList, "foodDislikeListName")}</div>
+                  <div>{populateArray(menuData.user.profile.foodDisLikeList, "proteinCategoriesName")}</div>
                 </Details>
                 <Details>
                   <div>Medical condition </div>
@@ -282,6 +283,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 <Details>
                   <div>Addiction list</div>
                   <div>{populateArray(menuData.user.profile.addictionList, "addictionListName")}</div>
+                </Details>
+                <Details>
+                  <div>Allergy list</div>
+                  <div>{populateArray(menuData.user.profile.allergyList, "title")}</div>
                 </Details>
               </UserDetails>
             )}

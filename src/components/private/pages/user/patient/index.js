@@ -610,7 +610,7 @@ const Patient = (props) => {
       apiType: "API",
       selectApi: "allergy/select",
       placeholder: "Allergy",
-      name: "allergy",
+      name: "allergyList",
       showItem: "title",
       validation: "",
       default: "",
