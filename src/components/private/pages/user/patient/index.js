@@ -215,7 +215,7 @@ const Patient = (props) => {
       default: "",
       tag: true,
       label: "Location",
-      required: true,
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -231,7 +231,7 @@ const Patient = (props) => {
       default: "",
       tag: true,
       label: "Delivery Men",
-      required: true,
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -587,6 +587,7 @@ const Patient = (props) => {
       add: true,
       update: true,
       filter: false,
+      search: true,
     },
     {
       type: "multiSelect",
@@ -604,6 +605,7 @@ const Patient = (props) => {
       add: true,
       update: true,
       filter: false,
+      search: true,
     },
     {
       type: "multiSelect",
@@ -621,6 +623,7 @@ const Patient = (props) => {
       add: true,
       update: true,
       filter: false,
+      search: true,
     },
     {
       type: "multiSelect",
@@ -638,6 +641,7 @@ const Patient = (props) => {
       add: true,
       update: true,
       filter: false,
+      search: true,
     },
     {
       type: "multiSelect",
@@ -655,6 +659,7 @@ const Patient = (props) => {
       add: true,
       update: true,
       filter: false,
+      search: true,
     },
     {
       type: "multiSelect",
@@ -672,6 +677,7 @@ const Patient = (props) => {
       add: true,
       update: true,
       filter: false,
+      search: true,
     },
     {
       type: "multiSelect",
@@ -689,6 +695,7 @@ const Patient = (props) => {
       add: true,
       update: true,
       filter: false,
+      search: true,
     },
     {
       type: "multiSelect",
@@ -815,7 +822,7 @@ const Patient = (props) => {
       type: "multiSelect",
       placeholder: "Select Days of Week",
       listView: true,
-      name: "eligibleDays",
+      name: "days",
       validation: "",
       default: [0, 1, 2, 3, 4, 5, 6],
       label: "Select Days of Week",
