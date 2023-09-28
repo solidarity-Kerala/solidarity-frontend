@@ -276,7 +276,7 @@ const PackageManagement = (props) => {
     {
       element: "button",
       type: "subList",
-      id: "package-price",
+      id: "packagePrice",
       parentReference: "package",
       itemTitle: {
         name: "packageName",
