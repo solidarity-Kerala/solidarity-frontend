@@ -58,45 +58,6 @@ const PackageManagement = (props) => {
     },
     
     {
-      type: "number",
-      placeholder: "Cost",
-      name: "price",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Cost",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "number",
-      placeholder: "Week Discount %",
-      name: "weekDiscount",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Week Discount %",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "number",
-      placeholder: "Month Discount %",
-      name: "monthDiscount",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Month Discount %",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
       type: "select",
       apiType: "API",
       selectApi: "diet/select",
@@ -225,6 +186,8 @@ const PackageManagement = (props) => {
       update: true,
     },
   ]);
+
+  
   const themeColors = useSelector((state) => state.themeColors);
   // State to control the display of the SetupMenu popup
   const [openMenuSetup, setOpenMenuSetup] = useState(false);
