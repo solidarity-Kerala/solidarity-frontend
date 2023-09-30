@@ -131,6 +131,7 @@ export const RowContainer = styled.div`
     position: sticky;
     top: 0;
     max-height: calc(100vh - 100px);
+    display:grid;
   }
   &.menu-schedule {
     position: relative;

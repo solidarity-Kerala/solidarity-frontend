@@ -972,8 +972,8 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       ) : (
         <Count>{`No records found`}</Count>
       )}
-      {isCreating && <CrudForm formMode={formMode} api={api} formType={"post"} header={`Add New ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
-      {isEditing && <CrudForm formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
+      {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"post"} header={`Add New ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
+      {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
       {showLoader && <Loader></Loader>}
       {isOpen && <Popup formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Popup>}
@@ -996,8 +996,8 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       <Table className={users.data?.response?.length === 0 ? "norecord" : "record"}>{users.data?.response?.length > 0 && <TableRowWithActions key={`${shortName}-${0}`} slNo={0} attributes={attributes} data={users.data?.response[0]} />}</Table>
       {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
       {users.data?.response?.length === 0 && <NoData>No {shortName} found!</NoData>}
-      {isCreating && <CrudForm api={api} formMode={formMode} formType={"post"} header={`Add New ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
-      {isEditing && <CrudForm formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
+      {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} api={api} formMode={formMode} formType={"post"} header={`Add New ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
+      {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
       {isOpen && <Popup data={openData} actions={actions}></Popup>}
       {showLoader && <Loader></Loader>}

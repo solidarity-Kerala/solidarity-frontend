@@ -30,6 +30,12 @@ export const Form = styled.div`
     gap: 10px;
     flex-flow: wrap;
   }
+  &.single {
+    display: flex;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    flex-flow: column;
+  }
   @media (max-width: 768px) {
     &.popup {
       border: 0;
@@ -108,6 +114,11 @@ export const Page = styled.div`
     animation-duration: 0.2s;
     margin: auto;
     padding: 1em;
+  }
+  &.single {
+    min-width: 250px;
+    width: 400px;
+    max-width: 100%;
   }
   &.plain {
     min-width: 250px;

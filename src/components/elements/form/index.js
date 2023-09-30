@@ -333,7 +333,7 @@ const AutoForm = (props) => {
       // Creating an updated field
       // updating the formm values
 
-      console.log(udpateValue)
+      console.log(udpateValue);
       setFormValues(udpateValue);
 
       // Validating the fields
@@ -419,7 +419,7 @@ const AutoForm = (props) => {
   };
   return (
     <Overlay className={props.plainForm ? "plain" : "popup"}>
-      <Page className={props.plainForm ? "plain" : "popup"}>
+      <Page className={`${props.plainForm ? "plain" : "popup"} ${props.customClass ? props.customClass : ""}`}>
         {/* when the props have the value of header then form will add the header as props.header*/}
         {props.header ? <Header className={props.plainForm ? "plain" : "popup"}>{props.header} </Header> : ""}
         {props.description && <Description dangerouslySetInnerHTML={{ __html: props.description }} />}

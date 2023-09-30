@@ -352,9 +352,9 @@ const CrudForm = (props) => {
                   updateValue = { [item.updateOn]: formValues[item.updateOn] };
                 }
               }
-
+              const params = [...(item.params ?? []), props.referenceId ? { name: [props.parentReference], value: props.referenceId } : {}];
               if ((props.formType === "put" && item.update) || (props.formType === "post" && item.add)) {
-                return <FormInput dynamicClass={dynamicClass} formValues={formValues} updateValue={updateValue} placeholder={item.placeHolder} key={`input` + index} id={index} error={formErrors[formState[index].name]} value={formValues[formState[index].name]} {...item} onChange={handleChange} />;
+                return <FormInput dynamicClass={dynamicClass} formValues={formValues} updateValue={updateValue} placeholder={item.placeHolder} key={`input` + index} id={index} error={formErrors[formState[index].name]} value={formValues[formState[index].name]} {...item} params={params} onChange={handleChange} />;
               } else {
                 return null;
               }

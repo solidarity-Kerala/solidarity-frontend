@@ -49,7 +49,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-      const { meal, bread, fruit, dessert, soup } = availableCalories[coloriePerDay];
+      const { meal, bread, fruit, dessert, soup, salad } = availableCalories[coloriePerDay];
       let { calories, typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
       mixedMeatPercentage = mixedMeatPercentage ?? 100;
       mixedBreadPercentage = mixedBreadPercentage ?? 100;
@@ -63,11 +63,13 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         total = portion * (fruit || 0);
       } else if (typeOfRecipe === "Soup") {
         total = portion * (soup || 0);
+      } else if (typeOfRecipe === "Salad") {
+        total = portion * (salad || 0);
       } else if (typeOfRecipe === "Dessert") {
         total = portion * (dessert || 0);
       } else if (typeOfRecipe === "Mixed") {
-        const mealCal = (portion * meal * mixedMeatPercentage) / 100;
-        const breadCal = (portion * bread * mixedBreadPercentage) / 100;
+        const mealCal = portion * meal * (mixedMeatPercentage / 100);
+        const breadCal = portion * bread * (mixedBreadPercentage / 100);
         total = mealCal + breadCal;
       } else {
       }
@@ -76,7 +78,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     [coloriePerDay, menuData?.mealTimeCategories]
   );
   const getNutritionInfo = (recipe, availableCalories) => {
-    const { meal, bread, fruit, dessert, soup } = availableCalories;
+    const { meal, bread, fruit, dessert, soup, salad } = availableCalories;
     let { typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
     mixedMeatPercentage = mixedMeatPercentage ?? 100;
     mixedBreadPercentage = mixedBreadPercentage ?? 100;
@@ -94,13 +96,14 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       count1 = soup || 0;
     } else if (typeOfRecipe === "Dessert") {
       count1 = dessert || 0;
+    } else if (typeOfRecipe === "Salad") {
+      count1 = salad || 0;
     } else if (typeOfRecipe === "Mixed") {
       count1 = (meal * mixedMeatPercentage) / 100;
       count2 = (bread * mixedBreadPercentage) / 100;
     }
-    console.log("mixed", count1, count2);
+
     count = parseInt(count1) + parseInt(count2);
-    console.log(numberOfPortion, count);
     nutritionInfo.calories = ((recipe.calories ?? 0) / (numberOfPortion ?? 1)) * count;
     nutritionInfo.Gram = ((recipe.gram ?? 0) / (numberOfPortion ?? 1)) * count;
     nutritionInfo.Protein = ((recipe.protein ?? 0) / (numberOfPortion ?? 1)) * count;
@@ -113,7 +116,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     nutritionInfo.Sugars = ((recipe.sugars ?? 0) / (numberOfPortion ?? 1)) * count;
     nutritionInfo.Iron = ((recipe.iron ?? 0) / (numberOfPortion ?? 1)) * count;
     nutritionInfo.Calcium = ((recipe.calcium ?? 0) / (numberOfPortion ?? 1)) * count;
-    console.log(nutritionInfo, recipe);
+
     return nutritionInfo;
   };
   useEffect(() => {
@@ -348,9 +351,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     }
   };
   const setCaloriesItems = (mealTimeCategories, single = false, recepeType = "") => {
-    const { bread, meal, fruit, dessert, soup } = mealTimeCategories.availableCalories[coloriePerDay];
+    const { bread, meal, fruit, dessert, soup, salad } = mealTimeCategories.availableCalories[coloriePerDay];
     if (!single) {
-      return `${meal && meal > 0 ? meal + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}`;
+      return `${meal && meal > 0 ? meal + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}`;
     } else {
       let count = 0;
       if (recepeType === "Meat") {
@@ -360,9 +363,11 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       } else if (recepeType === "Fruit") {
         count = (fruit || 0) + "F";
       } else if (recepeType === "Soup") {
-        count = (soup || 0) + "S";
+        count = (soup || 0) + "SP";
       } else if (recepeType === "Dessert") {
         count = (dessert || 0) + "D";
+      } else if (recepeType === "Salad") {
+        count = (salad || 0) + "SD";
       } else if (recepeType === "Mixed") {
         count = meal + "M" + bread + "B";
       } else {
@@ -447,6 +452,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     setIsOpen(null);
     setLoaderBox(false);
   };
+
   const cloneData = async (option) => {
     setCloneParameters([
       {
