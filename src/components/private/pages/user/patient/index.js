@@ -1733,6 +1733,7 @@ const Patient = (props) => {
               openData={openItemData}
               setMessage={props.setMessage}
               {...props}
+              themeColors={themeColors}
             ></DietMenu>
           }
           themeColors={themeColors}

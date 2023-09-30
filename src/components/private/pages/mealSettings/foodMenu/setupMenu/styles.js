@@ -480,6 +480,7 @@ export const SwitchButton = styled.div`
   justify-content: center;
   min-height: 40px;
   height: 40px;
+  width:20px;
   border-radius: 10px;
   margin: 4px 0px;
   transition: all 1s ease 0s;
@@ -509,7 +510,8 @@ export const SwitchButton = styled.div`
   background-color: ${({ active, enableBg }) => (active ? enableBg ?? "green" : "white")};
   color: ${({ active, enableColor }) => (active ? enableColor ?? "white" : "grey")};
   svg {
-    transform: ${({ active }) => (active ? "scale(1.2)" : "scale(1)")};
+    font-size:20px;
+    /* transform: ${({ active }) => (active ? "scale(1.2)" : "scale(1)")}; */
   }
 
   &:hover span {

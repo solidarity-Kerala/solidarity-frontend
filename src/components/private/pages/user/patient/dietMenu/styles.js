@@ -205,7 +205,11 @@ export const Details = styled.article`
     padding: 10px;
     border-radius: 10px 0 0;
     cursor: pointer;
-    font-size:14px;
+    font-size: 14px;
+    &.true {
+      background-color: #4b4b4b;
+      color: white;
+    }
   }
   > div {
     width: 100%;
@@ -225,6 +229,12 @@ export const Details = styled.article`
   }
   > div > span:last-child::after {
     content: ""; /* Empty content for the last span */
+  }
+  button {
+    background-color: transparent;
+    outline: none;
+    border: 0;
+    cursor: pointer;
   }
 `;
 export const Variant = styled.div`
@@ -350,8 +360,11 @@ export const MealTimeHead = styled.div`
   color: ${({ active }) => (active ? "white" : "black")};
   transform: rotate(0deg);
   text-align: left;
+  display: flex;
+    align-items: center;
   &.assigned {
     margin-bottom: 10px;
+    align-items: center;
   }
   svg {
     margin-left: auto;
@@ -360,17 +373,30 @@ export const MealTimeHead = styled.div`
     right: 15px;
     transform: rotate(${({ active }) => (active ? "180deg" : "0deg")});
   }
+  span {
+    margin-left: 10px;
+    font-size: 12px;
+    margin-left: 5px;
+    margin-right: 3px;
+    display: flex;
+  }
+  span::before {
+    content: " \u2022"; /* Unicode character for round dot */
+    width:10px;
+  }
 `;
 export const Recepes = styled.div`
   margin-bottom: 10px;
   .recipe {
     border-bottom: 1px solid rgb(227 227 227);
   }
-  .recipe:first-child,.recipe:first-child .actions{
+  .recipe:first-child,
+  .recipe:first-child .actions {
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
   }
-  .recipe:last-child,.recipe:last-child .actions {
+  .recipe:last-child,
+  .recipe:last-child .actions {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     border-bottom: 0px;
@@ -464,8 +490,8 @@ export const RecepeContent = styled.div`
     }
   }
   &.recipe1:hover .actions,
-  &.recipe1:hover ~ .sub-actions,
-  &.child-recipe:hover > .sub-actions {
+  &.recipe2:hover ~ .sub-actions,
+  &.child-recipe:hover .sub-actions {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -526,14 +552,14 @@ export const ReplacableItemsList = styled.div`
 `;
 export const UserDetails = styled.div`
   margin-bottom: 10px;
-  border-radius:10px;
+  border-radius: 10px;
   background: white;
-  overflow:hidden;
-  display:grid;
-   article {
+  overflow: hidden;
+  display: grid;
+  article {
     border-bottom: 1px solid rgb(227 227 227);
   }
   article:last-child {
     border-bottom: 0px;
-  } 
+  }
 `;
