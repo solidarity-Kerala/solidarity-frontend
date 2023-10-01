@@ -363,6 +363,23 @@ const Ingredient = (props) => {
       filter: false,
     },
     {
+      type: "select",
+      placeholder: "Type Of Ingredient",
+      name: "typeOfIngredient",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Type Of Ingredient",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+      selectApi:
+        "Meat,Bread,Other",
+      apiType: "CSV",
+    },
+    {
       type: "checkbox",
       placeholder: "Added Sugar",
       name: "isAddonSugar",
