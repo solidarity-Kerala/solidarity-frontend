@@ -37,7 +37,7 @@ const Ingredient = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
       selectApi:
         "Gram,Teaspoon,Tablespoon,Cup,Ounce,Piece,Milliliter,Pinch,Bunch",
       apiType: "CSV",
@@ -72,7 +72,7 @@ const Ingredient = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
     },
     {
       type: "number",
