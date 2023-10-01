@@ -506,6 +506,7 @@ export const SwitchButton = styled.div`
     border-radius: 10px;
     top: 45px;
     z-index: 100;
+    font-size:12px;
   }
   background-color: ${({ active, enableBg }) => (active ? enableBg ?? "green" : "white")};
   color: ${({ active, enableColor }) => (active ? enableColor ?? "white" : "grey")};

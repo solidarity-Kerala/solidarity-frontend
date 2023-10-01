@@ -361,10 +361,17 @@ export const MealTimeHead = styled.div`
   transform: rotate(0deg);
   text-align: left;
   display: flex;
-    align-items: center;
+  align-items: center;
   &.assigned {
     margin-bottom: 10px;
     align-items: center;
+  }
+  &.title {
+    font-size: 12px;
+    width: fit-content;
+    margin-right: auto;
+    background: #4b4b4b;
+    color: white;
   }
   svg {
     margin-left: auto;
@@ -382,7 +389,7 @@ export const MealTimeHead = styled.div`
   }
   span::before {
     content: " \u2022"; /* Unicode character for round dot */
-    width:10px;
+    width: 10px;
   }
 `;
 export const Recepes = styled.div`
@@ -413,6 +420,17 @@ export const Recepe = styled.div`
     border: 1px solid rgb(227 227 227);
     border-radius: 10px;
   }
+  &.deleted {
+    opacity: 0.5;
+    .light {
+      display: none;
+    }
+    img {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+    }
+  }
 `;
 export const RecepeData = styled.div`
   padding: 0px;
@@ -421,6 +439,17 @@ export const RecepeData = styled.div`
 
   .title {
     font-weight: bold;
+    span {
+      font-size: 12px;
+    }
+    span::before {
+      content: " \u2022"; /* Unicode character for round dot */
+      margin-right: 3px;
+    }
+    
+  }
+  .red {
+    color: red;
   }
   .light {
     font-size: 12px;
@@ -438,6 +467,9 @@ export const RecepeData = styled.div`
   .light span:last-child::after {
     content: ""; /* Empty content for the last span */
   }
+  .light span svg{
+      margin-right:5px;
+    }
 
   && {
     .horizontal & {
@@ -556,10 +588,17 @@ export const UserDetails = styled.div`
   background: white;
   overflow: hidden;
   display: grid;
+  &.double{
+   display: grid;
+  grid-template-columns: 1fr repeat(auto-fill, minmax(50%, 1fr));
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  }
   article {
     border-bottom: 1px solid rgb(227 227 227);
   }
   article:last-child {
     border-bottom: 0px;
   }
+  
 `;

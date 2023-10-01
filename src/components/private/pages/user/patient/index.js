@@ -1154,13 +1154,12 @@ const Patient = (props) => {
     },
     {
       type: "text",
-      placeholder: "Remarks",
-      name: "remarks",
+      placeholder: "Diagnose Report",
+      name: "diagnoseNote",
       showItem: "",
       validation: "",
       default: "",
-      // tag: true,
-      label: "Remarks",
+      label: "Diagnose Report",
       required: true,
       view: true,
       add: false,
@@ -1468,12 +1467,7 @@ const Patient = (props) => {
       updateOn: ["bookingDate", "dietician", "physical"],
       selectApi: "day-slot/avail-slot",
       placeholder: "Time Slot",
-      params: [
-        { name: "center" },
-        { name: "bookingDate" },
-        { name: "dietician" },
-        { name: "physical" },
-      ],
+      params: [{ name: "center" }, { name: "bookingDate" }, { name: "dietician" }, { name: "physical" }],
       name: "bookingSlot",
       showItem: "availableSlots",
       validation: "",
@@ -1696,17 +1690,7 @@ const Patient = (props) => {
 
   return (
     <Container className="noshadow">
-      <ListTable
-        actions={actions}
-        api={`user`}
-        itemTitle={{ name: "username", type: "text", collection: "" }}
-        shortName={`Patient`}
-        parentReference={"userType"}
-        referenceId={"6471b3849fb2b29fe045887b"}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
+      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
@@ -1728,14 +1712,7 @@ const Patient = (props) => {
       {openedMenu === "diet" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
-          popupData={
-            <DietMenu
-              openData={openItemData}
-              setMessage={props.setMessage}
-              {...props}
-              themeColors={themeColors}
-            ></DietMenu>
-          }
+          popupData={<DietMenu openData={openItemData} setMessage={props.setMessage} {...props} themeColors={themeColors}></DietMenu>}
           themeColors={themeColors}
           closeModal={closeModal}
           itemTitle={{ name: "username", type: "text", collection: "" }}
