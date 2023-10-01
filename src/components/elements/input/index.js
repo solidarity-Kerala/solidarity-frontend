@@ -203,6 +203,8 @@ function FormInput(props) {
             {t(props.title ?? "")}
           </SubHead>
         );
+      case "hidden":
+        return <Input disabled={props.disabled ?? false} autoComplete="on" theme={themeColors} className={`input ${props.value.toString().length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} type={props.type} value={props.value} onChange={(event) => props.onChange(event, props.id, props.type, props.sub)} />;
       default:
         return <></>;
     }

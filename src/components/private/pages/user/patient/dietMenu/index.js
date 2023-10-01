@@ -9,7 +9,7 @@ import { food } from "../../../../../../images";
 import { calculateAge, getValue } from "../../../../../elements/list/functions";
 import { GetIcon } from "../../../../../../icons";
 import { dateFormat } from "../../../../../functions/date";
-import { ActionBox, SwitchButton, Table, TableBody, TableCell, TableHeader, TableRow } from "../../../mealSettings/foodMenu/setupMenu/styles";
+import { ActionBox, SwitchButton, Table } from "../../../mealSettings/foodMenu/setupMenu/styles";
 import PopupView from "../../../../../elements/popupview";
 import AutoForm from "../../../../../elements/form";
 const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
@@ -115,7 +115,6 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       if (excludedDays.indexOf(currentDate.day()) === -1 && skippedDays.indexOf(currentDate.day()) === -1) {
         eligibleCount++;
       }
-
       // Move to the next day
       currentDate.add(1, "day");
     }
@@ -142,12 +141,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     setOpenMenuSetup(false);
     setOpenItemData(null);
   };
-  const updateHandler = async (post) => {
-    setLoaderBox(true);
-    await postData({ foodMenu: openData.data._id, weekNumber: parseInt(0), ...post }, isOpen.api).then((response) => {
-      closeEdit();
-    });
-  };
+
   const swapRecipe = async (recipeSchedule, replacableItem, date, categoryIndex, recepeIndex) => {
     const menuDataTemp = { ...menuData };
     // Find the day based on the date
@@ -344,17 +338,17 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     ]);
     setIsOpen({ submit: "Udpate Now", api: "food-menu/undo-clone", header: "Change Diet", description: "" });
   };
-  const editNotes = async (type, item) => {
+  const editNotes = async (type, item, index = { date: 0, categoryIndex: 0, recepeIndex: 0 }) => {
     switch (type) {
       case "diagnose":
         setParameters([
           {
             type: "textarea",
             placeholder: "Diagnose Report",
-            name: "remarks",
+            name: "diagnoseNote",
             showItem: "",
             validation: "",
-            default: menuData.user.diet?.remarks ?? "",
+            default: menuData.user.diet.diagnoseNote ?? "",
             // tag: true,
             label: "Remarks",
             required: true,
@@ -362,8 +356,53 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             add: false,
             update: true,
           },
+          {
+            type: "hidden",
+            placeholder: "patientDeit",
+            name: "patientDiet",
+            showItem: "",
+            validation: "",
+            default: menuData.user.diet._id,
+            label: "patientDeit",
+            required: true,
+            view: true,
+            add: false,
+            update: true,
+          },
         ]);
-        setIsOpen({ submit: "Udpate Now", api: "patient-diet/udpate-remark", header: "Edit Diagnose Report", description: "" });
+        setIsOpen({ type, submit: "Udpate Now", api: "patient-diet/update-patient-diet", header: "Edit Diagnose Report", description: "" });
+        break;
+      case "kitchen":
+        setParameters([
+          {
+            type: "textarea",
+            placeholder: "Kitchen Note",
+            name: "kitchenNote",
+            showItem: "",
+            validation: "",
+            default: menuData.user.diet?.kitchenNote ?? "",
+            label: "Kitchen Note",
+            required: true,
+            view: true,
+            add: false,
+            update: true,
+          },
+          {
+            type: "hidden",
+            placeholder: "patientDeit",
+            name: "patientDiet",
+            showItem: "",
+            validation: "",
+            default: menuData.user.diet._id,
+            // tag: true,
+            label: "patientDeit",
+            required: true,
+            view: true,
+            add: false,
+            update: true,
+          },
+        ]);
+        setIsOpen({ type, submit: "Udpate Now", api: "patient-diet/update-patient-diet", header: "Edit Kitchen Note", description: "" });
         break;
       case "recipe":
         setParameters([
@@ -381,30 +420,51 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             add: false,
             update: true,
           },
-        ]);
-        setIsOpen({ submit: "Udpate Now", api: "patient-diet/udpate-recipe-note", header: `Edit ${item.recipe.title}'s Note `, description: "" });
-        break;
-      case "kitchen":
-        setParameters([
           {
-            type: "textarea",
-            placeholder: "Kitchen Note",
-            name: "remarks",
+            type: "hidden",
+            placeholder: "recipeSchedule",
+            name: "recipeSchedule",
             showItem: "",
             validation: "",
-            default: menuData.user.diet?.kitchenNote ?? "",
-            label: "Kitchen Note",
+            default: item._id,
+            label: "recipeSchedule",
             required: true,
             view: true,
             add: false,
             update: true,
           },
         ]);
-        setIsOpen({ submit: "Udpate Now", api: "patient-diet/edit-note", header: "Edit Kitchen Note", description: "" });
+        setIsOpen({ type, index, submit: "Udpate Now", api: "patient-diet/udpate-recipe-note", header: `Edit ${item.recipe.title}'s Note `, description: "" });
         break;
+
       default:
         break;
     }
+  };
+  const updateHandler = async (post) => {
+    setLoaderBox(true);
+    await postData({ foodMenu: openData.data._id, weekNumber: parseInt(0), ...post }, isOpen.api).then((response) => {
+      if (response.status === 200) {
+        switch (isOpen.type) {
+          case "diagnose":
+            updateDiet("diagnoseNote", response.data.response.diagnoseNote);
+            break;
+          case "kitchen":
+            updateDiet("kitchenNote", response.data.response.kitchenNote);
+            break;
+          case "recipe":
+            updateRecipe(isOpen.index.categoryIndex, isOpen.index.recepeIndex, isOpen.index.date, "recipeNote", response.data.response.recipeNote);
+            break;
+          case "pause":
+            break;
+          case "restart":
+            break;
+          default:
+            break;
+        }
+      }
+      closeEdit();
+    });
   };
   const pauseStartDiet = () => {
     pause
@@ -474,7 +534,177 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             update: true,
           },
         ]);
-    setIsOpen({ customClass: "single", submit: pause ? "Restart" : "Pause", api: "patient-diet/udpate-status", header: pause ? "Restarting the diet?" : "Pausing the diet?", description: "" });
+    setIsOpen({ type: pause ? "pause" : "restart", customClass: "single", submit: pause ? "Restart" : "Pause", api: "patient-diet/udpate-status", header: pause ? "Restarting the diet?" : "Pausing the diet?", description: "" });
+  };
+  const updateRecipe = (categoryIndex, recepeIndex, date, item, value) => {
+    const menuDataTemp = { ...menuData };
+    // Find the day based on the date
+    let day = menuDataTemp.result.find((item) => item._id === date.format("YYYY-MM-DD"));
+    day.menu[categoryIndex].recipes[recepeIndex][item] = value; // Fixed splice syntax
+    // Update the menuData
+    setMenuData(menuDataTemp);
+  };
+  const updateDiet = (item, value) => {
+    const menuDataTemp = { ...menuData };
+    // Find the day based on the date
+    let diet = menuDataTemp.user.diet;
+    diet[item] = value; // Fixed splice syntax
+    // Update the menuData
+    setMenuData(menuDataTemp);
+  };
+  const renderRecipe = (recipes, index, date, categoryIndex, isDeleted) => {
+    return recipes.map((recipeItem, recepeIndex) => {
+      return (
+        (recipeItem.isDeleted ?? false) === isDeleted && (
+          <>
+            <Recepe className={isDeleted ? "recipe deleted" : "recipe"}>
+              <RecepeContent className="recipe1">
+                <RecepeImage src={recipeItem.recipe.photo ? process.env.REACT_APP_CDN + recipeItem.recipe.photo : food}></RecepeImage>
+                <RecepeData className="recipe2">
+                  <span className="title">
+                    {recipeItem.recipe.title}
+                    {isDeleted && (
+                      <>
+                        {recipeItem.isDislike && <span className="red">Don't Like</span>}
+                        {recipeItem.isAllergy && <span className="red">Has Allergy</span>}
+                        <span>{recipeItem.recipe.typeOfRecipe}</span>
+                        <span>{recipeItem.calories?.toFixed(2)}KCal</span>
+                        <span>{recipeItem.gram?.toFixed(2)}g</span>
+                        <span className="red">Removed</span>
+                      </>
+                    )}
+                  </span>
+                  <span className="light">
+                    {recipeItem.isDislike && <span className="red">Don't Like</span>}
+                    {recipeItem.isAllergy && <span className="red">Has Allergy</span>}
+                    <span>{recipeItem.recipe.typeOfRecipe}</span>
+                    <span>{recipeItem.nutritionInfo.calorieSplit}</span>
+                    <span>{recipeItem.calories?.toFixed(2)}KCal</span>
+                    <span>{recipeItem.gram?.toFixed(2)}g</span>
+                    <span>Protein {recipeItem.nutritionInfo.Protein?.toFixed(2)}g</span>
+                    <span>Fat {recipeItem.nutritionInfo.TotalFat?.toFixed(2)}g</span>
+                    {/* <span>{recipeItem.isDeleted && "Deleted"}</span> */}
+                  </span>
+                  <div className="actions">
+                    <span
+                      className="info"
+                      title="View Recipe Info"
+                      onClick={() => {
+                        setPopupData({ nutritionInfo: recipeItem.nutritionInfo, data: recipeItem.recipe, recipe: recipeItem, availablecalories: recipeItem.availablecalories });
+                      }}
+                    >
+                      <GetIcon icon={"info"} />
+                    </span>
+                    {!isDeleted && (
+                      <span
+                        className="edit"
+                        title="Modify Recipe Note"
+                        onClick={() => {
+                          // deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                          editNotes("recipe", recipeItem, { date, categoryIndex, recepeIndex });
+                        }}
+                      >
+                        <GetIcon icon={"edit"} />
+                      </span>
+                    )}
+                    {recipeItem.foodmenuitem.replacableItems > 0 && (recipeItem.isReplaced ?? false) && (
+                      <span
+                        className="edit"
+                        onClick={() => {
+                          swapRecipe(recipeItem._id, 0, date, categoryIndex, recepeIndex);
+                        }}
+                      >
+                        <GetIcon icon={"swap"} />
+                      </span>
+                    )}
+                    <span
+                      title={isDeleted ? "Restore Recipe" : "Delete Recipe"}
+                      className={isDeleted ? "" : "delete"}
+                      onClick={() => {
+                        setMessage({
+                          type: 2,
+                          content: isDeleted ? "Do you want to restore the recipe?" : "Are you sure you want to delete?",
+                          proceed: isDeleted ? "Restore" : "Delete",
+                          onProceed: async () => {
+                            try {
+                              const response = await postData({ isDeleted: !isDeleted, recipeSchedule: recipeItem._id }, "patient-diet/delete-recipe");
+                              if (response.status === 200) {
+                                // Update the item with the response data
+                                console.log(response?.data?.response?.isDeleted);
+                                if (response?.data?.response) {
+                                  // const menuDataTemp = { ...menuData };
+                                  // // Find the day based on the date
+                                  // let day = menuDataTemp.result.find((item) => item._id === date.format("YYYY-MM-DD"));
+                                  // day.menu[categoryIndex].recipes[recepeIndex].isDeleted = response.data.response.isDeleted; // Fixed splice syntax
+                                  // // Update the menuData
+                                  // setMenuData(menuDataTemp);
+                                  updateRecipe(categoryIndex, recepeIndex, date, "isDeleted", response.data.response.isDeleted);
+                                }
+                              }
+                            } catch (error) {
+                              // Handle any errors that occur during the deletion process
+                              console.log(error);
+                            }
+                          },
+                          data: { id: recipeItem._id },
+                        });
+                      }}
+                    >
+                      <GetIcon icon={isDeleted ? "restoreIcon" : "delete"} />
+                    </span>
+                  </div>
+                </RecepeData>
+              </RecepeContent>
+              {recipeItem.foodmenuitem.replacableItems > 0 && !isDeleted && (
+                <ReplacableItems className="horizontal" active={selectedDayNumber === index}>
+                  <button onClick={() => getReplacableItems(recipeItem.foodmenuitem._id, recipeItem._id)}>
+                    <div>Replacable Options ({recipeItem.foodmenuitem.replacableItems}) </div> <GetIcon icon={"down"}></GetIcon>
+                  </button>
+                  {replacableItems[recipeItem.foodmenuitem._id] && (
+                    <ReplacableItemsList>
+                      {replacableItems[recipeItem.foodmenuitem._id]?.map((replacableItem) => (
+                        <Recepe className="horizontal">
+                          <RecepeContent className="child-recipe">
+                            <RecepeImage src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food}></RecepeImage>
+                            <RecepeData>
+                              <span className="title">{replacableItem.recipe.title}</span>
+                              <span className="light">
+                                <span>{replacableItem.calories?.toFixed(2)}KCal</span>
+                                <span>{replacableItem.gram?.toFixed(2)}g</span>
+                                <span>Protein {replacableItem.nutritionInfo.Protein?.toFixed(2)}g</span>
+                                <span>Fat {replacableItem.nutritionInfo.TotalFat?.toFixed(2)}g</span>
+                              </span>
+                              <div className="sub-actions">
+                                <span
+                                  className="info"
+                                  onClick={() => {
+                                    setPopupData({ nutritionInfo: replacableItem.nutritionInfo, data: recipeItem.recipe, availablecalories: recipeItem.availablecalories });
+                                  }}
+                                >
+                                  <GetIcon icon={"info"} />
+                                </span>
+                                <span
+                                  className="edit"
+                                  onClick={() => {
+                                    swapRecipe(recipeItem._id, replacableItem._id, date, categoryIndex, recepeIndex);
+                                  }}
+                                >
+                                  <GetIcon icon={"swap"} />
+                                </span>
+                              </div>
+                            </RecepeData>
+                          </RecepeContent>
+                        </Recepe>
+                      ))}
+                    </ReplacableItemsList>
+                  )}
+                </ReplacableItems>
+              )}
+            </Recepe>
+          </>
+        )
+      );
+    });
   };
   return menuData?.user?.diet ? (
     <ColumnContainer>
@@ -487,6 +717,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             <span>{expandAll ? "Collapse All" : "Expand All"}</span> <GetIcon icon={"open-book"} />
           </SwitchButton> */}
           <ArrowButton
+            className="normal"
             onClick={() => {
               ChangeDate(-1);
             }}
@@ -514,6 +745,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             })}
           </TabContainer>
           <ArrowButton
+            className="normal"
             onClick={() => {
               ChangeDate(1);
             }}
@@ -529,7 +761,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             const formattedDay = date.format("YYYY-MM-DD");
             const calories = day?.menu?.reduce((sumMenu, menu) => {
               const mealtimeCalories = menu.recipes.reduce((sumMealtime, mealtime) => {
-                return sumMealtime + (mealtime.calories || 0);
+                return sumMealtime + (mealtime.isDeleted ?? false ? 0 : mealtime.calories || 0);
               }, 0);
 
               return sumMenu + mealtimeCalories;
@@ -537,7 +769,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             return day?.menu ? (
               <Box active={selectedDayNumber === formattedDay} key={day._id}>
                 <DayData>
-                  <MealTimeHead className="assigned">
+                  <MealTimeHead className="assigned title">
                     {`Total Calori`}
                     <span>{calories.toFixed(2)}KCal </span>
                   </MealTimeHead>
@@ -561,112 +793,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                           <span>{mealtimeCalories.toFixed(2)}Kcal</span> <GetIcon icon={"down"}></GetIcon>
                         </MealTimeHead>
                         {(selectedMealTime[`${menuItem.mealTimeCategory._id}-${day._id}`] === true || expandAll) && (
-                          <Recepes>
-                            {menuItem.recipes.map((recipeItem, recepeIndex) => {
-                              return (
-                                <>
-                                  <Recepe className="recipe">
-                                    <RecepeContent className="recipe1">
-                                      <RecepeImage src={recipeItem.recipe.photo ? process.env.REACT_APP_CDN + recipeItem.recipe.photo : food}></RecepeImage>
-                                      <RecepeData className="recipe2">
-                                        <span className="title">{recipeItem.recipe.title}</span>
-                                        <span className="light">
-                                          <span>{recipeItem.recipe.typeOfRecipe}</span>
-                                          <span>{recipeItem.nutritionInfo.calorieSplit}</span>
-                                          <span>{recipeItem.calories?.toFixed(2)}KCal</span>
-                                          <span>{recipeItem.gram?.toFixed(2)}g</span>
-                                          <span>{recipeItem.nutritionInfo.Protein?.toFixed(2)}g Protein</span>
-                                          <span>{recipeItem.nutritionInfo.TotalFat?.toFixed(2)}g Fat</span>
-                                        </span>
-                                        <div className="actions">
-                                          <span
-                                            className="info"
-                                            onClick={() => {
-                                              setPopupData({ nutritionInfo: recipeItem.nutritionInfo, data: recipeItem.recipe, availablecalories: recipeItem.availablecalories });
-                                            }}
-                                          >
-                                            <GetIcon icon={"info"} />
-                                          </span>
-                                          <span
-                                            className="edit"
-                                            onClick={() => {
-                                              // deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
-                                              editNotes("recipe", recipeItem);
-                                            }}
-                                          >
-                                            <GetIcon icon={"edit"} />
-                                          </span>
-                                          {recipeItem.foodmenuitem.replacableItems > 0 && (recipeItem.isReplaced ?? false) && (
-                                            <span
-                                              className="edit"
-                                              onClick={() => {
-                                                swapRecipe(recipeItem._id, 0, date, categoryIndex, recepeIndex);
-                                              }}
-                                            >
-                                              <GetIcon icon={"swap"} />
-                                            </span>
-                                          )}
-                                          <span
-                                            className="delete"
-                                            onClick={() => {
-                                              // deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
-                                            }}
-                                          >
-                                            <GetIcon icon={"delete"} />
-                                          </span>
-                                        </div>
-                                      </RecepeData>
-                                    </RecepeContent>
-                                    {recipeItem.foodmenuitem.replacableItems > 0 && (
-                                      <ReplacableItems className="horizontal" active={selectedDayNumber === index}>
-                                        <button onClick={() => getReplacableItems(recipeItem.foodmenuitem._id, recipeItem._id)}>
-                                          <div>Replacable Options ({recipeItem.foodmenuitem.replacableItems}) </div> <GetIcon icon={"down"}></GetIcon>
-                                        </button>
-                                        {replacableItems[recipeItem.foodmenuitem._id] && (
-                                          <ReplacableItemsList>
-                                            {replacableItems[recipeItem.foodmenuitem._id]?.map((replacableItem) => (
-                                              <Recepe className="horizontal">
-                                                <RecepeContent className="child-recipe">
-                                                  <RecepeImage src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food}></RecepeImage>
-                                                  <RecepeData>
-                                                    <span className="title">{replacableItem.recipe.title}</span>
-                                                    <span className="light">
-                                                      <span>{replacableItem.calories?.toFixed(2)}KCal</span>
-                                                      <span>{replacableItem.gram?.toFixed(2)}g</span>
-                                                      <span>{replacableItem.nutritionInfo.Protein?.toFixed(2)}g Protein</span>
-                                                      <span>{replacableItem.nutritionInfo.TotalFat?.toFixed(2)}g Fat</span>
-                                                    </span>
-                                                    <div className="sub-actions">
-                                                      <span
-                                                        className="info"
-                                                        onClick={() => {
-                                                          setPopupData({ nutritionInfo: replacableItem.nutritionInfo, data: recipeItem.recipe, availablecalories: recipeItem.availablecalories });
-                                                        }}
-                                                      >
-                                                        <GetIcon icon={"info"} />
-                                                      </span>
-                                                      <span
-                                                        className="edit"
-                                                        onClick={() => {
-                                                          swapRecipe(recipeItem._id, replacableItem._id, date, categoryIndex, recepeIndex);
-                                                        }}
-                                                      >
-                                                        <GetIcon icon={"swap"} />
-                                                      </span>
-                                                    </div>
-                                                  </RecepeData>
-                                                </RecepeContent>
-                                              </Recepe>
-                                            ))}
-                                          </ReplacableItemsList>
-                                        )}
-                                      </ReplacableItems>
-                                    )}
-                                  </Recepe>
-                                </>
-                              );
-                            })}
-                          </Recepes>
+                          <>
+                            <Recepes>{renderRecipe(menuItem.recipes, index, date, categoryIndex, false)}</Recepes>
+                            <Recepes>{renderRecipe(menuItem.recipes, index, date, categoryIndex, true)}</Recepes>
+                          </>
                         )}
                       </Box>
                     );
@@ -685,22 +815,51 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           <PopupView
             popupData={
               <Table className="full short">
-                <thead>
-                  <tr>
-                    <TableHeader colSpan={2}>Nutrition Info</TableHeader>
-                  </tr>
-                  <tr>
-                    <TableHeader colSpan={2}>{` Base Calori: ${popupData.availablecalories.calories} KCal`}</TableHeader>
-                  </tr>
-                </thead>
-                <TableBody>
+                {popupData.recipe.isAllergy && (
+                  <UserDetails>
+                    <Details className="head true">
+                      <div>{`Alergy on Ingrediens`} </div>
+                    </Details>
+
+                    {popupData.recipe.recipe.recipeingredients.map((item) => {
+                      return (
+                        item.isAllergy && (
+                          <Details>
+                            <div>{item.data.ingredientsName}</div>
+                          </Details>
+                        )
+                      );
+                    })}
+                  </UserDetails>
+                )}
+                {popupData.recipe.isDislike && (
+                  <UserDetails>
+                    <Details className="head true">
+                      <div>{`Dislike Ingredients`}</div>
+                    </Details>
+
+                    {popupData.recipe.recipe.recipeingredients.map((item) => {
+                      return (
+                        item.isDislike && (
+                          <Details>
+                            <div>{item.data.ingredientsName}</div>
+                          </Details>
+                        )
+                      );
+                    })}
+                  </UserDetails>
+                )}
+                <UserDetails>
+                  <Details className="head true">
+                    <div>{`Nutrition Info based on ${popupData.availablecalories.calories} KCal`} </div>
+                  </Details>
                   {Object.entries(popupData.nutritionInfo ?? {}).map(([key, value]) => (
-                    <TableRow key={key}>
-                      <TableCell>{addSpaceBeforeCaps(key)}</TableCell>
-                      <TableCell>{isNaN(value) ? value : getValue({ type: "number" }, value)}</TableCell>
-                    </TableRow>
+                    <Details>
+                      <div>{addSpaceBeforeCaps(key)}</div>
+                      <div>{isNaN(value) ? value : getValue({ type: "number" }, value)}</div>
+                    </Details>
                   ))}
-                </TableBody>
+                </UserDetails>
               </Table>
             }
             themeColors={themeColors}
@@ -838,7 +997,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               </Details>
               {selectedMealTime[`diagnose`] === true && (
                 <Details>
-                  <div>{menuData.user.diet?.remarks.length > 0 ? menuData.user.diet?.remarks : "No diagnose found!"}</div>
+                  <div>{menuData.user.diet?.diagnoseNote?.length > 0 ? menuData.user.diet?.diagnoseNote : "No diagnose found!"}</div>
                   <button onClick={() => editNotes("diagnose")}>
                     <GetIcon icon={"edit"}></GetIcon>
                   </button>
@@ -860,7 +1019,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               </Details>
               {selectedMealTime[`remarks`] === true && (
                 <Details>
-                  <div>{menuData.user.diet?.remarks.length > 0 ? menuData.user.diet?.remarks : "No remarks found!"}</div>
+                  <div>{menuData.user.diet?.kitchenNote?.length > 0 ? menuData.user.diet?.kitchenNote : "No diagnose found!"}</div>
                   <button onClick={() => editNotes("kitchen")}>
                     <GetIcon icon={"edit"}></GetIcon>
                   </button>

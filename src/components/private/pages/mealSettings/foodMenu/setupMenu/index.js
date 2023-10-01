@@ -49,24 +49,24 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-      const { meal, bread, fruit, dessert, soup, salad } = availableCalories[coloriePerDay];
+      const { meal=1, bread=1, fruit=1, dessert=1, soup=1, salad=1 } = availableCalories[coloriePerDay];
       let { calories, typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
       mixedMeatPercentage = mixedMeatPercentage ?? 100;
       mixedBreadPercentage = mixedBreadPercentage ?? 100;
       const portion = (calories ?? 0) / (numberOfPortion ?? 1);
       let total = 0;
       if (typeOfRecipe === "Meat") {
-        total = portion * (meal || 0);
+        total = portion * ((meal === 0 ? 1 : meal) || 1);
       } else if (typeOfRecipe === "Bread") {
-        total = portion * (bread || 0);
+        total = portion * ((bread === 0 ? 1 : bread) || 1);
       } else if (typeOfRecipe === "Fruit") {
-        total = portion * (fruit || 0);
+        total = portion * ((fruit === 0 ? 1 : fruit) || 1);
       } else if (typeOfRecipe === "Soup") {
-        total = portion * (soup || 0);
+        total = portion * ((soup === 0 ? 1 : soup) || 1);
       } else if (typeOfRecipe === "Salad") {
-        total = portion * (salad || 0);
+        total = portion * ((salad === 0 ? 1 : salad) || 1);
       } else if (typeOfRecipe === "Dessert") {
-        total = portion * (dessert || 0);
+        total = portion * ((dessert === 0 ? 1 : dessert) || 1);
       } else if (typeOfRecipe === "Mixed") {
         const mealCal = portion * meal * (mixedMeatPercentage / 100);
         const breadCal = portion * bread * (mixedBreadPercentage / 100);
@@ -87,17 +87,17 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       count2 = 0,
       nutritionInfo = {};
     if (typeOfRecipe === "Meat") {
-      count1 = meal || 0;
+      count1 = meal || 1;
     } else if (typeOfRecipe === "Bread") {
-      count1 = bread || 0;
+      count1 = bread || 1;
     } else if (typeOfRecipe === "Fruit") {
-      count1 = fruit || 0;
+      count1 = fruit || 1;
     } else if (typeOfRecipe === "Soup") {
-      count1 = soup || 0;
+      count1 = soup || 1;
     } else if (typeOfRecipe === "Dessert") {
-      count1 = dessert || 0;
+      count1 = dessert || 1;
     } else if (typeOfRecipe === "Salad") {
-      count1 = salad || 0;
+      count1 = salad || 1;
     } else if (typeOfRecipe === "Mixed") {
       count1 = (meal * mixedMeatPercentage) / 100;
       count2 = (bread * mixedBreadPercentage) / 100;
@@ -125,9 +125,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         const { dayNumber, recipes, meals, mealTimeCategory } = item;
         const availableCalories = menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
         const key = "day_" + dayNumber;
-        if (item.optionNo > 1) {
-          return accumulator;
-        }
+        console.log("item.optionNo",item.optionNo)
         if (!accumulator[key]) {
           accumulator[key] = 0;
         }

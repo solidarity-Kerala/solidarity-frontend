@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Table, Button, Td, Tr, Count, ArrowButton, AddButton, ButtonPanel, Filter, Filters, ToggleContainer, ToggleInput, ToggleSlider, NoData, FilterBox, More, Actions, Title, DataItem, ToolTipContainer, Head, TrBody, TableView, TrView, ThView, TdView, TableContaner, ProfileImage } from "./styles";
+import { Table, Button, Td, Tr, Count, AddButton, ButtonPanel, Filter, Filters, ToggleContainer, ToggleInput, ToggleSlider, NoData, FilterBox, More, Actions, Title, DataItem, ToolTipContainer, Head, TrBody, TableView, TrView, ThView, TdView, TableContaner, ProfileImage, ArrowPagination } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { RowContainer } from "../../styles/containers/styles";
 import { AddIcon, GetIcon, NextIcon, PreviousIcon } from "../../../icons";
@@ -948,23 +948,23 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       {count > 0 ? (
         count > 10 ? (
           <Count>
-            <ArrowButton
+            <ArrowPagination
               theme={themeColors}
               onClick={() => {
                 setCurrentIndex((prev) => (prev > 9 ? prev - 10 : 0));
               }}
             >
               <PreviousIcon />
-            </ArrowButton>
+            </ArrowPagination>
             {`Showing ${currentIndex + 1} - ${currentIndex + 10 > count ? count : currentIndex + 10} out of ${count} records`}
-            <ArrowButton
+            <ArrowPagination
               theme={themeColors}
               onClick={() => {
                 setCurrentIndex((prev) => (prev + 10 > count ? currentIndex : currentIndex + 10));
               }}
             >
               <NextIcon />
-            </ArrowButton>
+            </ArrowPagination>
           </Count>
         ) : (
           <Count>{`Showing ${count} record${count > 1 ? "s" : ""}`}</Count>

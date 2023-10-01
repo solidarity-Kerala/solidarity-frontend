@@ -350,24 +350,37 @@ export const Count = styled.div`
 export const ArrowButton = styled.button`
   border: 0;
   outline: none;
+  cursor: pointer;
+  font-weight: bold;
+  text-wrap: nowrap;
+  position: relative;
   display: flex;
   -webkit-box-pack: center;
   justify-content: center;
+  transition: all 1s ease 0s;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  padding: 0 15px;
   min-height: 40px;
   height: 40px;
   width: 50px;
   border-radius: 10px;
   margin: 4px 0px;
-  transition: all 1s ease 0s;
-  justify-content: center;
-  align-items: center;
-  column-gap: 10px;
+  background-color: rgb(248, 248, 248);
+  &:hover {
+    color: ${(props) => props.theme.bgPrimary};
+  }
+`;
+export const ArrowPagination = styled.button`
+  border: 0;
+  outline: none;
   cursor: pointer;
   font-weight: bold;
   text-wrap: nowrap;
-  padding: 0 15px;
   position: relative;
-  background-color: rgb(248, 248, 248);
+  background-color: transparent;
+  margin-left: 0 !important;
   &:hover {
     color: ${(props) => props.theme.bgPrimary};
   }
@@ -496,10 +509,10 @@ export const NoData = styled.div`
   display: flex;
   align-items: center;
   height: 100px;
-  flex-direction:column;
-  svg{
-    margin:auto;
-    font-size:30px;
+  flex-direction: column;
+  svg {
+    margin: auto;
+    font-size: 30px;
   }
 `;
 export const Img = styled.img`
