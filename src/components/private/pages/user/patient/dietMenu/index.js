@@ -60,7 +60,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   };
 
   const getReplacableItems = (foodMenuItem, recipeSchedule) => {
-    getData({ foodMenuItem, calories: menuData.user.diet.calories, recipeSchedule }, "patient-diet/replacable-items").then((response) => {
+    getData({ foodMenuItem, calories: menuData.user.diet.calories, recipeSchedule, userId }, "patient-diet/replacable-items").then((response) => {
       if (response.status === 200) {
         setReplacableItems((prev) => ({
           ...prev,
@@ -69,7 +69,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       }
     });
   };
-  const populateArray = (items, value) => {
+  const populateArray = (items, value, element = "span") => {
     if (value === "days") {
       const days = [
         { value: "Sunday", id: 0 },
@@ -81,9 +81,9 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         { value: "Saturday", id: 6 },
       ];
       const filteredDays = days.filter((day) => days.includes(day));
-      return filteredDays?.map((item, index) => <span key={index}>{item["value"]}</span>);
+      return filteredDays?.map((item, index) => (element === "span" ? <span key={index}>{item["value"]}</span> : <div key={index}>{item["value"]}</div>));
     } else {
-      return items?.map((item, index) => <span key={index}>{item[value]}</span>);
+      return items?.map((item, index) => (element === "span" ? <span key={index}>{item[value]}</span> : <div key={index}>{item[value]}</div>));
     }
   };
   const getRelativeDay = (date) => {
@@ -436,14 +436,13 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         ]);
         setIsOpen({ type, index, submit: "Udpate Now", api: "patient-diet/udpate-recipe-note", header: `Edit ${item.recipe.title}'s Note `, description: "" });
         break;
-
       default:
         break;
     }
   };
   const updateHandler = async (post) => {
     setLoaderBox(true);
-    await postData({ foodMenu: openData.data._id, weekNumber: parseInt(0), ...post }, isOpen.api).then((response) => {
+    await postData({ foodMenu: menuData.user.diet.foodMenu, weekNumber: parseInt(0), ...post }, isOpen.api).then((response) => {
       if (response.status === 200) {
         switch (isOpen.type) {
           case "diagnose":
@@ -456,8 +455,32 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             updateRecipe(isOpen.index.categoryIndex, isOpen.index.recepeIndex, isOpen.index.date, "recipeNote", response.data.response.recipeNote);
             break;
           case "pause":
+            if (response.data.response) {
+              updateDiet("isPaused", response.data.response.isPaused);
+              updateDiet("pausedOn", response.data.response.pausedOn);
+              updateDiet("pausedOn", response.data.response.pausedOn);
+              setPause(response.data.response.isPaused);
+              setCurrentDate(moment());
+              setMessage({
+                content: response.data.message,
+              });
+            } else {
+              setMessage({
+                content: response.data.message,
+              });
+            }
             break;
           case "restart":
+            if (response.data.response) {
+              updateDiet("isPaused", response.data.response.isPaused);
+              updateDiet("pausedOn", response.data.response.pausedOn);
+              updateDiet("pausedOn", response.data.response.pausedOn);
+              setPause(response.data.response.isPaused);
+              setCurrentDate(moment());
+              setMessage({
+                content: response.data.message,
+              });
+            }
             break;
           default:
             break;
@@ -471,25 +494,11 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       ? setParameters([
           {
             type: "date",
-            placeholder: "Pause start date?",
-            name: "restartDate",
-            showItem: "",
-            validation: "",
-            default: "",
-            tag: true,
-            label: "Pause start date?",
-            required: true,
-            view: true,
-            add: true,
-            update: true,
-          },
-          {
-            type: "date",
             placeholder: "When do you want to restart?",
             name: "restartDate",
+            minDate1: moment().add(1, "days").toDate(),
             showItem: "",
             validation: "",
-            default: "",
             tag: true,
             label: "When do you want to restart?",
             required: false,
@@ -497,17 +506,46 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             add: true,
             update: true,
           },
+          {
+            type: "hidden",
+            placeholder: "patientDeit",
+            name: "patientDiet",
+            showItem: "",
+            validation: "",
+            default: menuData.user.diet._id,
+            // tag: true,
+            label: "patientDeit",
+            required: true,
+            view: true,
+            add: false,
+            update: true,
+          },
         ])
       : setParameters([
           {
+            type: "date",
+            placeholder: "Pause Starts From?",
+            name: "pauseDate",
+            minDate: moment().add(1, "days").toDate(),
+            showItem: "",
+            validation: "",
+            default: "",
+            tag: true,
+            label: "Pause Starts From?",
+            required: false,
+            view: true,
+            add: true,
+            update: true,
+          },
+          {
             type: "checkbox",
-            placeholder: "Do you want to reshcedule?",
+            placeholder: "Do you want to add restart date?",
             name: "reschedule",
             showItem: "",
             validation: "",
             default: "",
             tag: true,
-            label: "Do you want to reshcedule?",
+            label: "Do you want to add restart date?",
             required: false,
             view: true,
             add: true,
@@ -515,8 +553,9 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           },
           {
             type: "date",
-            placeholder: "When would you like to reschedule the diet?",
+            placeholder: "Restart Date",
             name: "restartDate",
+            minDate: moment().add(1, "days").toDate(),
             condition: {
               item: "reschedule",
               if: true,
@@ -527,14 +566,28 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             validation: "",
             default: "",
             tag: true,
-            label: "When would you like to reschedule the diet?",
+            label: "Restart Date",
             required: false,
             view: true,
             add: true,
             update: true,
           },
+          {
+            type: "hidden",
+            placeholder: "patientDeit",
+            name: "patientDiet",
+            showItem: "",
+            validation: "",
+            default: menuData.user.diet._id,
+            // tag: true,
+            label: "patientDeit",
+            required: true,
+            view: true,
+            add: false,
+            update: true,
+          },
         ]);
-    setIsOpen({ type: pause ? "pause" : "restart", customClass: "single", submit: pause ? "Restart" : "Pause", api: "patient-diet/udpate-status", header: pause ? "Restarting the diet?" : "Pausing the diet?", description: "" });
+    setIsOpen({ type: pause ? "pause" : "restart", customClass: "single", submit: pause ? "Restart" : "Pause", api: "patient-diet/" + (pause ? "restart" : "pause") + "-patient-diet", header: pause ? "Restarting the diet?" : "Pausing the diet?", description: "" });
   };
   const updateRecipe = (categoryIndex, recepeIndex, date, item, value) => {
     const menuDataTemp = { ...menuData };
@@ -545,13 +598,23 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     setMenuData(menuDataTemp);
   };
   const updateDiet = (item, value) => {
-    const menuDataTemp = { ...menuData };
-    // Find the day based on the date
-    let diet = menuDataTemp.user.diet;
-    diet[item] = value; // Fixed splice syntax
-    // Update the menuData
-    setMenuData(menuDataTemp);
+    // Create a copy of menuData, including a copy of the user and diet objects
+    const updatedMenuData = {
+      ...menuData,
+      user: {
+        ...menuData.user,
+        diet: {
+          ...menuData.user.diet,
+          [item]: value, // Update the specific item in the diet
+        },
+      },
+    };
+
+    console.log({ [item]: value }, updatedMenuData);
+    // Update the state with the updatedMenuData
+    setMenuData(updatedMenuData);
   };
+
   const renderRecipe = (recipes, index, date, categoryIndex, isDeleted) => {
     return recipes.map((recipeItem, recepeIndex) => {
       return (
@@ -669,6 +732,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                             <RecepeData>
                               <span className="title">{replacableItem.recipe.title}</span>
                               <span className="light">
+                                {replacableItem.isDislike && <span className="red">Don't Like</span>}
+                                {replacableItem.isAllergy && <span className="red">Has Allergy</span>}
+                              </span>
+                              <span className="light">
                                 <span>{replacableItem.calories?.toFixed(2)}KCal</span>
                                 <span>{replacableItem.gram?.toFixed(2)}g</span>
                                 <span>Protein {replacableItem.nutritionInfo.Protein?.toFixed(2)}g</span>
@@ -678,7 +745,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                 <span
                                   className="info"
                                   onClick={() => {
-                                    setPopupData({ nutritionInfo: replacableItem.nutritionInfo, data: recipeItem.recipe, availablecalories: recipeItem.availablecalories });
+                                    setPopupData({ nutritionInfo: replacableItem.nutritionInfo, data: replacableItem.recipe, recipe: replacableItem, availablecalories: recipeItem.availablecalories });
                                   }}
                                 >
                                   <GetIcon icon={"info"} />
@@ -753,7 +820,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             <GetIcon icon={"next"} />
           </ArrowButton>
         </TabContainer>
-        {menuData && menuData.result?.length === 0 && <NoData>No menu set for this week!</NoData>}
+        {menuData && menuData.result?.length === 0 && <NoData className="white">No menu set for this week!</NoData>}
         {menuData &&
           getWeekDays().map((date, index) => {
             // const date = moment(day._id);
@@ -805,7 +872,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               </Box>
             ) : (
               <Box active={selectedDayNumber === formattedDay} key={formattedDay}>
-                <NoData>
+                <NoData className="white">
                   <GetIcon icon={"recipe"}></GetIcon> <span>No menu for the day</span>
                 </NoData>
               </Box>
@@ -818,7 +885,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 {popupData.recipe.isAllergy && (
                   <UserDetails>
                     <Details className="head true">
-                      <div>{`Alergy on Ingrediens`} </div>
+                      <div>{`Allergy on Ingredients`} </div>
                     </Details>
 
                     {popupData.recipe.recipe.recipeingredients.map((item) => {
@@ -835,7 +902,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 {popupData.recipe.isDislike && (
                   <UserDetails>
                     <Details className="head true">
-                      <div>{`Dislike Ingredients`}</div>
+                      <div>{`Disliked Ingredients`}</div>
                     </Details>
 
                     {popupData.recipe.recipe.recipeingredients.map((item) => {
@@ -912,26 +979,36 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                     <div>Age</div>
                     <div>{calculateAge(menuData.user.profile.dateOfBirth)}</div>
                   </Details>
+                  <Details>
+                    <div className="second">
+                      <div>Foodlike list </div>
+                      {populateArray(menuData.user.profile.foodLikeList, "foodLikeListName", "div")}
+                    </div>
+                  </Details>
 
                   <Details>
-                    <div>Foodlike list </div>
-                    <div>{populateArray(menuData.user.profile.foodLikeList, "foodLikeListName")}</div>
+                    <div className="second">
+                      <div>Dislike list </div>
+                      {populateArray(menuData.user.profile.foodDisLikeList, "proteinCategoriesName", "div")}
+                    </div>
                   </Details>
                   <Details>
-                    <div>Dislike list </div>
-                    <div>{populateArray(menuData.user.profile.foodDisLikeList, "proteinCategoriesName")}</div>
+                    <div className="second">
+                      <div>Medical condition </div>
+                      {populateArray(menuData.user.profile.medicalCondition, "medicalConditionsName", "div")}
+                    </div>
                   </Details>
                   <Details>
-                    <div>Medical condition </div>
-                    <div>{populateArray(menuData.user.profile.medicalCondition, "medicalConditionsName")}</div>
+                    <div className="second">
+                      <div>Addiction list</div>
+                      {populateArray(menuData.user.profile.addictionList, "addictionListName", "div")}
+                    </div>
                   </Details>
                   <Details>
-                    <div>Addiction list</div>
-                    <div>{populateArray(menuData.user.profile.addictionList, "addictionListName")}</div>
-                  </Details>
-                  <Details>
-                    <div>Allergy list</div>
-                    <div>{populateArray(menuData.user.profile.allergyList, "title")}</div>
+                    <div className="second">
+                      <div>Allergy list</div>
+                      {populateArray(menuData.user.profile.allergyList, "title", "div")}
+                    </div>
                   </Details>
                 </>
               }
@@ -1032,7 +1109,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       {isOpen && (
         <AutoForm
           userId={openData.data._id}
-          useCaptcha={false}
+          useCaptcha={true}
           useCheckbox={false}
           customClass={isOpen.customClass ?? ""}
           description={isOpen.description}
@@ -1064,7 +1141,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       )}
     </ColumnContainer>
   ) : (
-    <NoData>{isLoaded ? "No Diet Schedule Found" : "Loading"}</NoData>
+    <NoData className="white">{isLoaded ? "No Diet Schedule Found" : "Loading"}</NoData>
   );
 };
 

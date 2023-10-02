@@ -510,6 +510,14 @@ export const NoData = styled.div`
   align-items: center;
   height: 100px;
   flex-direction: column;
+  &.white {
+    background: #f8f8f8;
+    border-radius: 10px;
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   svg {
     margin: auto;
     font-size: 30px;

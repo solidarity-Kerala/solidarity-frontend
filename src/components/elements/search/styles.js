@@ -40,7 +40,6 @@ export const SearchInput = styled.div`
   }
   &.sticky {
     position: sticky;
-    top: 50px;
   }
   && {
     /* .popup-child & {

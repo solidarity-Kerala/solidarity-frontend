@@ -216,9 +216,28 @@ export const Details = styled.article`
     display: flex;
     flex-wrap: wrap;
   }
-  div:nth-child(2) {
+  div:nth-child(2),
+  .second {
     font-size: 13px;
     font-weight: bold;
+  }
+  .second {
+    font-weight: bold;
+    gap: 5px;
+  }
+  .second div {
+    border: 1px solid;
+    border-radius: 6px;
+    padding: 2px 5px;
+    font-size: 12px;
+  }
+  .second div:first-child {
+    border: 0px solid;
+    border-radius: 6px;
+    padding: 2px 0px;
+    font-size: 12px;
+    width: 100%;
+    font-weight: normal;
   }
   > div > span {
     display: flex;
@@ -446,7 +465,6 @@ export const RecepeData = styled.div`
       content: " \u2022"; /* Unicode character for round dot */
       margin-right: 3px;
     }
-    
   }
   .red {
     color: red;
@@ -467,9 +485,9 @@ export const RecepeData = styled.div`
   .light span:last-child::after {
     content: ""; /* Empty content for the last span */
   }
-  .light span svg{
-      margin-right:5px;
-    }
+  .light span svg {
+    margin-right: 5px;
+  }
 
   && {
     .horizontal & {
@@ -588,11 +606,11 @@ export const UserDetails = styled.div`
   background: white;
   overflow: hidden;
   display: grid;
-  &.double{
-   display: grid;
-  grid-template-columns: 1fr repeat(auto-fill, minmax(50%, 1fr));
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  &.double {
+    display: grid;
+    grid-template-columns: 1fr repeat(auto-fill, minmax(50%, 1fr));
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
   article {
     border-bottom: 1px solid rgb(227 227 227);
@@ -600,5 +618,4 @@ export const UserDetails = styled.div`
   article:last-child {
     border-bottom: 0px;
   }
-  
 `;

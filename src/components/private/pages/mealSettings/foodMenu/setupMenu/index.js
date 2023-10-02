@@ -574,10 +574,10 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         <RowContainer className={`menu ${openData.item.viewOnly}`}>
           <RowContainer className="menu-header">
             <TabContainer>
-              <TabButton active={showAllReplacable === true} onClick={() => setShowAllReplacable(false)}>
+              <TabButton className={showAllReplacable === true} onClick={() => setShowAllReplacable(false)}>
                 Week View
               </TabButton>
-              <TabButton active={showAllReplacable === false} onClick={() => setShowAllReplacable(true)}>
+              <TabButton className={showAllReplacable === false} onClick={() => setShowAllReplacable(true)}>
                 Day View
               </TabButton>
             </TabContainer>

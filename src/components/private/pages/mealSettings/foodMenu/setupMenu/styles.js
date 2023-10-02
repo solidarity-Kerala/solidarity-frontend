@@ -11,12 +11,22 @@ export const TabContainer = styled.div`
 
 export const TabButton = styled.button`
   padding: 10px 20px;
-  background-color: ${({ active }) => (active ? "#f9f9f9" : "#ccc")};
+  background-color: white;
+  font-weight: bold;
+  &.true {
+    background-color: #ccc;
+    font-weight: normal;
+  }
   border: none;
-  border-radius: 4px;
   font-size: 14px;
   margin-bottom: 10px;
   cursor: pointer;
+  &:first-child{
+    border-radius: 10px 0 0 10px;
+  }
+  &:last-child{
+    border-radius: 0 10px 10px 0;
+  }
 `;
 
 export const Table = styled.table`
@@ -467,9 +477,9 @@ export const ActionBox = styled.div`
   border-radius: 4px;
   align-items: center;
   font-size: 14px;
-  padding-bottom:10px;
-  position:sticky;
-  top:0;
+  padding-bottom: 10px;
+  position: sticky;
+  top: 0;
   background: #eaeaea;
 `;
 export const SwitchButton = styled.div`
@@ -480,7 +490,7 @@ export const SwitchButton = styled.div`
   justify-content: center;
   min-height: 40px;
   height: 40px;
-  width:20px;
+  width: 20px;
   border-radius: 10px;
   margin: 4px 0px;
   transition: all 1s ease 0s;
@@ -492,26 +502,26 @@ export const SwitchButton = styled.div`
   text-wrap: nowrap;
   padding: 0 15px;
   position: relative;
-  &.custom{
+  &.custom {
     margin: auto;
-    margin-right:10px;
+    margin-right: 10px;
   }
   span {
     display: none;
     transition: all 1s ease 0s;
     position: absolute;
     background: white;
-    color:black;
+    color: black;
     padding: 10px;
     border-radius: 10px;
     top: 45px;
     z-index: 100;
-    font-size:12px;
+    font-size: 12px;
   }
   background-color: ${({ active, enableBg }) => (active ? enableBg ?? "green" : "white")};
   color: ${({ active, enableColor }) => (active ? enableColor ?? "white" : "grey")};
   svg {
-    font-size:20px;
+    font-size: 20px;
     /* transform: ${({ active }) => (active ? "scale(1.2)" : "scale(1)")}; */
   }
 
