@@ -103,7 +103,7 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-      selectApi: "1",
+      selectApi: "0,1",
       apiType: "CSV",
     },
     {
@@ -119,7 +119,7 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-      selectApi: "1,2,3",
+      selectApi: "0,1,2,3",
       apiType: "CSV",
     },
   ]);
