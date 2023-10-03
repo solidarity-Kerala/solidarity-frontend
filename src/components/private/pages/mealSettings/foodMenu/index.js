@@ -48,7 +48,7 @@ const FoodMenu = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
     },
     // TYPE OF DIET IS A DIET //
     // DIET PLAN IS A SUB DIET //
@@ -77,7 +77,7 @@ const FoodMenu = (props) => {
       name: "menuType",
       validation: "",
       default: "",
-      tag: true,
+      tag: false,
       label: "Menu Type",
       required: true,
       view: true,
@@ -92,7 +92,7 @@ const FoodMenu = (props) => {
       name: "enable",
       validation: "",
       default: "",
-      tag: true,
+      tag: false,
       label: "Enable",
       required: true,
       view: true,
@@ -140,11 +140,14 @@ const FoodMenu = (props) => {
           type: "text",
           collection: "meal",
         },
+      
         shortName: "Recipe Items",
         addPrivilege: true,
         delPrivilege: true,
         updatePrivilege: true,
         customClass: "medium",
+        
+        
         // formMode: "double",
       },
     },
@@ -172,6 +175,12 @@ const FoodMenu = (props) => {
         {...props}
         // Additional attributes related to the menu
         attributes={attributes}
+        highlight={{
+          name: "menuType",
+          type: "text",
+         
+        }}
+        
       ></ListTable>
       {/* Render the SetupMenu popup when openMenuSetup is true and openItemData is not null */}
       {openMenuSetup && openItemData && (
@@ -191,6 +200,7 @@ const FoodMenu = (props) => {
           itemTitle={{ name: "title", type: "text", collection: "" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"full-page"}
+          
         ></PopupView>
       )}
     </Container>

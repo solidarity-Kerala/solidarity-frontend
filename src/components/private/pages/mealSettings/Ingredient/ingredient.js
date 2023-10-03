@@ -37,7 +37,7 @@ const Ingredient = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
       selectApi:
         "Gram,Teaspoon,Tablespoon,Cup,Ounce,Piece,Milliliter,Pinch,Bunch",
       apiType: "CSV",
@@ -72,7 +72,7 @@ const Ingredient = (props) => {
       view: true,
       add: true,
       update: true,
-      filter: false,
+      filter: true,
     },
     {
       type: "number",
@@ -361,6 +361,23 @@ const Ingredient = (props) => {
       add: true,
       update: true,
       filter: false,
+    },
+    {
+      type: "select",
+      placeholder: "Type Of Ingredient",
+      name: "typeOfIngredient",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Type Of Ingredient",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+      selectApi:
+        "Meat,Bread,other",
+      apiType: "CSV",
     },
     {
       type: "checkbox",

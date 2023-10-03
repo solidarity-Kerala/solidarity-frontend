@@ -569,10 +569,10 @@ const Patient = (props) => {
       name: "ibw",
       // disabled: true,
       validation: "",
-      default: "",
+      default: "0",
       tag: true,
       label: "IBW",
-      required: false,
+      required: true,
       view: true,
       add: true,
       update: true,
@@ -1694,7 +1694,7 @@ const Patient = (props) => {
               openData={openItemData}
               setMessage={props.setMessage}
               {...props}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
@@ -1722,7 +1722,7 @@ const Patient = (props) => {
             <AppointmentMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></AppointmentMenu>
           }
           themeColors={themeColors}
