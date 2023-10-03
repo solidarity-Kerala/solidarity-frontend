@@ -1168,68 +1168,47 @@ const Patient = (props) => {
   ]);
 
   const [patientDiet] = useState([
-    // TYPE OF DIET IS A DIET //
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "diet/select",
-      placeholder: "Diet",
-      name: "diet",
-      validation: "",
-      showItem: "title",
-      default: "",
-      tag: true,
-      label: "Diet",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-      filter: false,
-    },
-    // TYPE OF DIET IS A DIET //
-    // DIET PLAN IS A SUB DIET //
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "sub-diet/get-sub-diet-by-diet",
-      updateOn: "diet",
-      placeholder: "Sub Diet",
-      name: "subDiet",
-      validation: "",
-      collection: "subDiet",
-      showItem: "title",
-      default: "",
-      tag: true,
-      label: "Sub Diet",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-      filter: false,
-    },
     {
       type: "select",
       apiType: "API",
       selectApi: "package/select",
-      updateOn: "subDiet",
-      updateFields: [{ id: "foodMenu", value: "_id", collection: "foodMenu" }],
       placeholder: "Package",
+      name: "package",
+      validation: "",
+      collection: "package",
+      showItem: "title",
+      default: "",
+      tag: true,
+      label: "Package",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: false,
+    },
+    {
+      type: "select",
+      apiType: "API",
+      selectApi: "package/food-menu",
+      updateOn: "package",
+      // updateFields: [{ id: "foodMenu", value: "_id", collection: "foodMenu" }],
+      placeholder: "Menu",
       tags: [
         {
           type: "text",
           item: "menuType",
           title: "Menu Type",
-          collection: "foodMenu",
+          collection: "",
         },
       ],
       viewButton: {
         title: "View Menu",
         callback: (item, data) => {
-          console.log(item);
+          console.log("popup item",item);
           setOpenedMenu("menu");
           // Set the data for the clicked item and open the SetupMenu popup
           setOpenItemData({
-            data: { ...item, ...item.foodMenu, _id: item.foodMenu._id },
+            data: { ...item },
             item: {
               viewOnly: true,
               itemTitle: {
@@ -1261,13 +1240,14 @@ const Patient = (props) => {
           setOpenMenuSetup(true);
         },
       },
-      name: "package",
+      name: "foodMenu",
       validation: "",
       showItem: "value",
-      collection: "diet",
+      collection: "foodMenu",
+      params: [{ name: "package" }],
       default: "",
       tag: true,
-      label: "Package",
+      label: "Menu",
       required: false,
       view: true,
       add: true,
@@ -1275,37 +1255,17 @@ const Patient = (props) => {
       filter: false,
     },
     {
-      type: "date",
-      placeholder: "Start Date & Time",
-      name: "startDate",
-      showItem: "",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Start Date",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "number",
-      placeholder: "Number of Days",
-      name: "numberofDays",
-      showItem: "",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Number of Days",
-      required: true,
-      view: true,
+      type: "title",
+      title: "Menu Settings",
+      name: "menuSettings",
       add: true,
       update: true,
     },
     {
       type: "select",
-      selectApi: "900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000",
-      apiType: "CSV",
+      selectApi: "package/calories",
+      updateOn: "package",
+      apiType: "API",
       placeholder: "Calories",
       name: "calories",
       showItem: "",
@@ -1348,7 +1308,7 @@ const Patient = (props) => {
       type: "multiSelect",
       placeholder: "Select Meal Times",
       name: "mealTimeCategory",
-      updateOn: "package",
+      updateOn: "foodMenu",
       label: "Select Meal Times",
       required: true,
       view: true,
@@ -1358,6 +1318,41 @@ const Patient = (props) => {
       apiType: "API",
       search: false,
       selectApi: "mealtime-category/select-by-menu",
+    },
+    {
+      type: "title",
+      title: "Time & Duration",
+      name: "menuSettings",
+      add: true,
+      update: true,
+    },
+    {
+      type: "date",
+      placeholder: "Start Date & Time",
+      name: "startDate",
+      showItem: "",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Start Date",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "number",
+      placeholder: "Number of Days",
+      name: "numberofDays",
+      showItem: "",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Number of Days",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
     },
     {
       type: "textarea",
@@ -1606,14 +1601,14 @@ const Patient = (props) => {
     {
       element: "button",
       type: "subList",
-      id: "patient-diet",
+      id: "patient-package",
       itemTitle: {
         name: "title",
         type: "text",
         collection: "diet",
       },
       // itemTitle: "username",
-      title: "Diet",
+      title: "Diet Package",
       attributes: patientDiet,
       params: {
         api: `patient-diet`,
@@ -1624,7 +1619,7 @@ const Patient = (props) => {
           collection: "diet",
         },
         // itemTitle: "username",
-        shortName: "Diet",
+        shortName: "Diet Package",
         addPrivilege: true,
         delPrivilege: true,
         updatePrivilege: true,
@@ -1704,7 +1699,7 @@ const Patient = (props) => {
           }
           themeColors={themeColors}
           closeModal={closeModal}
-          itemTitle={{ name: "title", type: "text", collection: "foodMenu" }}
+          itemTitle={{ name: "value", type: "text", collection: "" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"full-page"}
         ></PopupView>

@@ -288,7 +288,7 @@ const CrudForm = (props) => {
           });
         }
       }
-      // Creating an updated fieldßƒ
+      // Creating an updated field
       // updating the formm values
       setFormValues(udpateValue);
       // console.log("udpateValue", udpateValue);
@@ -320,7 +320,7 @@ const CrudForm = (props) => {
     props.isOpenHandler(false);
   };
   return (
-    <Overlay className={props.css ?? ""}>
+    <Overlay key={props.referenceId} className={props.css ?? ""}>
       <Page className={`${props.css ?? ""} ${props.formMode ?? "single"}`}>
         <Header className="form">
           <span>{props.header ? props.header : "Login"}</span>

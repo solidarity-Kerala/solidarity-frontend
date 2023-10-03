@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../../backend/api";
-import { Label, SelectBox } from "./styles";
+import { ItemBox, Label, SelectBox } from "./styles";
 import { DownIcon, TickIcon } from "../../../icons";
 import { useTranslation } from "react-i18next";
 import { addSelectObject } from "../../../store/actions/select";
 import { ErrorMessage } from "../form/styles";
 import Search from "../search";
+import { Button, ImgBox, TagBox, TagData, TagItem, TagTitle } from "../select/styles";
+import { getValue } from "../list/functions";
 
 function MultiSelect(props) {
   const [optionsVisible, setOptionsVisible] = useState(false);
@@ -38,8 +40,8 @@ function MultiSelect(props) {
         if (!selectedId) {
           const selectedData = (props.value || [])
             .map((itemValue) => {
-              const foundItem = data.find((dataItem) => dataItem.id === itemValue);
-              return foundItem ? { id: foundItem.id, value: foundItem.value } : null;
+              const foundItem = data.find((dataItem) => dataItem.id.toString() === itemValue?.toString());
+              return foundItem ? { id: foundItem.id??'', value: foundItem.value } : itemValue ? { id: itemValue??'', value: "Other" } : null;
             })
             .filter(Boolean);
           setSelectedId(selectedData);
@@ -72,7 +74,6 @@ function MultiSelect(props) {
           });
       } else if (props.apiType === "API") {
         if (selectData) {
-          console.log(props.selectApi, item, params, item);
           handleOptions(selectData);
         } else if (!initialized) {
           try {
@@ -195,43 +196,108 @@ function MultiSelect(props) {
       {optionsVisible && initialized && (
         <ul className="options">
           {(props.search ?? true) && <Search className={"select"} title={"Search"} theme={props.theme} placeholder="Search" value={searchValue} onChange={handleChange}></Search>}
-          {options.length &&
-            (searchValue.length > 0 ? filteredOptions : options).map((option) => {
-              const selectedIndex = selectedId.findIndex((item) => item.id === option.id);
-              return (
-                <li
-                  value={selectedIndex > -1}
-                  className={`${selectedIndex > -1}`}
-                  key={option.id}
-                  onClick={() => {
-                    props.onSelect(option, props.id, props.type);
-                    // setSelectedValue(option.value);
-                    // setSelectedId(option.id);
 
-                    const items = selectedId;
-                    const index = items.findIndex((item) => item.id === option.id);
+          {selectedId.length > 0 ? (
+            <ItemBox>
+              {selectedId.map((option) => {
+                const selectedIndex = selectedId.findIndex((item) => item.id === option.id);
+                return (
+                  <li
+                    value={selectedIndex > -1}
+                    className={`${selectedIndex > -1}`}
+                    key={option.id}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      props.onSelect(option, props.id, props.type);
+                      // setSelectedValue(option.value);
+                      // setSelectedId(option.id);
 
-                    if (index === -1) {
-                      // If event._id doesn't exist, push it to the items array
-                      items.push(option);
-                    } else {
-                      // If event._id already exists, remove it from the items array
-                      items.splice(index, 1);
-                    }
-                    console.log(items);
-                    setSelectedId(items);
+                      const items = selectedId;
+                      const index = items.findIndex((item) => item.id === option.id);
 
-                    setSelectedValue(items.length > 0 ? `${items[0].value} ${items.length > 1 ? " (" + (items.length - 1) + " more)" : ""}` : props.label);
-                    // toggleOptions();
-                  }}
-                >
-                  {option.value}
-                </li>
-              );
-            })}
+                      if (index === -1) {
+                        // If event._id doesn't exist, push it to the items array
+                        items.push(option);
+                      } else {
+                        // If event._id already exists, remove it from the items array
+                        items.splice(index, 1);
+                      }
+                      setSelectedId(items);
+
+                      setSelectedValue(items.length > 0 ? `${items[0].value} ${items.length > 1 ? " (" + (items.length - 1) + " more)" : ""}` : props.label);
+                      // toggleOptions();
+                    }}
+                  >
+                    {props.displayValue ? option[props.displayValue] : option.value} <TickIcon />
+                  </li>
+                );
+              })}
+            </ItemBox>
+          ) : null}
+
+          {options.length > 0
+            ? (searchValue.length > 0 ? filteredOptions : options).map((option) => {
+                const selectedIndex = selectedId.findIndex((item) => item.id === option.id);
+                return (
+                  selectedIndex === -1 && (
+                    <li
+                      value={selectedIndex > -1}
+                      className={`${selectedIndex > -1}`}
+                      key={option.id}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        props.onSelect(option, props.id, props.type);
+                        // setSelectedValue(option.value);
+                        // setSelectedId(option.id);
+
+                        const items = selectedId;
+                        const index = items.findIndex((item) => item.id === option.id);
+
+                        if (index === -1) {
+                          // If event._id doesn't exist, push it to the items array
+                          items.push(option);
+                        } else {
+                          // If event._id already exists, remove it from the items array
+                          items.splice(index, 1);
+                        }
+                        setSelectedId(items);
+
+                        setSelectedValue(items.length > 0 ? `${items[0].value} ${items.length > 1 ? " (" + (items.length - 1) + " more)" : ""}` : props.label);
+                        // toggleOptions();
+                      }}
+                    >
+                      {props.displayValue ? option[props.displayValue] : option.value}
+                      {props.tags && (
+                        <TagBox>
+                          {props.iconImage && <ImgBox src={process.env.REACT_APP_CDN + (props.iconImage.collection.length > 0 ? option[props.iconImage.collection]?.[props.iconImage.item] ?? "" : option[props.iconImage.item])} />}
+                          <TagData>
+                            {props.tags.map((tag) => (
+                              <React.Fragment key={tag.item}>
+                                {tag.title.length > 0 && <TagTitle>{`${tag.title}`}</TagTitle>}
+                                <TagItem className={tag.type}>{getValue(tag, tag.collection.length > 0 ? option[tag.collection]?.[tag.item] ?? "" : option[tag.item])}</TagItem>
+                              </React.Fragment>
+                            ))}
+                          </TagData>
+                        </TagBox>
+                      )}
+                      {props.viewButton && (
+                        <Button
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            props.viewButton?.callback(option);
+                          }}
+                        >
+                          View Menu
+                        </Button>
+                      )}
+                    </li>
+                  )
+                );
+              })
+            : null}
         </ul>
       )}
-      {initialized && options.length === 0 && (
+      {optionsVisible && initialized && (selectedId.length === 0 && options.length) === 0 && (
         <ul key={0} className="options">
           <li
             onClick={() => {

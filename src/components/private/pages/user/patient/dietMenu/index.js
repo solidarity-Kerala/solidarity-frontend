@@ -141,7 +141,9 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     setOpenMenuSetup(false);
     setOpenItemData(null);
   };
-
+  useEffect(() => {
+    console.log("parameters updated", parameters);
+  }, [parameters]);
   const swapRecipe = async (recipeSchedule, replacableItem, date, categoryIndex, recepeIndex) => {
     const menuDataTemp = { ...menuData };
     // Find the day based on the date
@@ -336,7 +338,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         selectApi: "mealtime-category/select-by-menu",
       },
     ]);
-    setIsOpen({ submit: "Udpate Now", api: "food-menu/undo-clone", header: "Change Diet", description: "" });
+    setIsOpen({ submit: "Udpate Now", api: "food-menu/undo-clone", header: "Mofify Diet", description: "" });
   };
   const editNotes = async (type, item, index = { date: 0, categoryIndex: 0, recepeIndex: 0 }) => {
     switch (type) {
@@ -820,7 +822,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             <GetIcon icon={"next"} />
           </ArrowButton>
         </TabContainer>
-        {menuData && menuData.result?.length === 0 && <NoData className="white">No menu set for this week!</NoData>}
+        {menuData && menuData.result?.length === 0 && <NoData className="white">  <GetIcon icon={"recipe"}></GetIcon>No menu set for this week!</NoData>}
         {menuData &&
           getWeekDays().map((date, index) => {
             // const date = moment(day._id);
@@ -837,7 +839,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               <Box active={selectedDayNumber === formattedDay} key={day._id}>
                 <DayData>
                   <MealTimeHead className="assigned title">
-                    {`Total Calori`}
+                    {`Calori for the day`}
                     <span>{calories.toFixed(2)}KCal </span>
                   </MealTimeHead>
                   {day.menu.map((menuItem, categoryIndex) => {
@@ -871,11 +873,13 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 </DayData>
               </Box>
             ) : (
-              <Box active={selectedDayNumber === formattedDay} key={formattedDay}>
-                <NoData className="white">
-                  <GetIcon icon={"recipe"}></GetIcon> <span>No menu for the day</span>
-                </NoData>
-              </Box>
+              menuData.result?.length > 0 && (
+                <Box active={selectedDayNumber === formattedDay} key={formattedDay}>
+                  <NoData className="white">
+                    <GetIcon icon={"recipe"}></GetIcon> <span>No menu for the day</span>
+                  </NoData>
+                </Box>
+              )
             );
           })}
         {popupData && (
@@ -1115,7 +1119,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           description={isOpen.description}
           formValues={{}}
           css={isOpen.customClass ?? "double"}
-          key={isOpen.description}
+          key={isOpen.header}
           formType={"post"}
           header={isOpen.header}
           formInput={parameters}
@@ -1141,7 +1145,11 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       )}
     </ColumnContainer>
   ) : (
-    <NoData className="white">{isLoaded ? "No Diet Schedule Found" : "Loading"}</NoData>
+    <ColumnContainer>
+      <NoData className="white">
+        <GetIcon icon={"recipe"}></GetIcon> {isLoaded ? "No Diet Schedule Found" : "Loading"}
+      </NoData>
+    </ColumnContainer>
   );
 };
 

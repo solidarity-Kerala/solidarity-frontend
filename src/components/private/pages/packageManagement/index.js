@@ -13,7 +13,7 @@ const PackageManagement = (props) => {
     document.title = `PackageManagement - Diet Food Management Portal`;
   }, []);
   // Get the theme colors from the Redux store
- 
+
   const [attributes] = useState([
     {
       type: "text",
@@ -43,73 +43,89 @@ const PackageManagement = (props) => {
       update: true,
     },
     {
-      type: "number",
+      type: "multiSelect",
       placeholder: "Calories",
+      listView: true,
       name: "calories",
       validation: "",
-      showItem: "",
-      default: "",
-      tag: true,
+      default: [900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000],
       label: "Calories",
       required: true,
       view: true,
       add: true,
+      tag:true,
       update: true,
+      apiType: "JSON",
+      search: false,
+      selectApi: [
+        { value: "900", id: 900 },
+        { value: "1000", id: 1000 },
+        { value: "1100", id: 1100 },
+        { value: "1200", id: 1200 },
+        { value: "1300", id: 1300 },
+        { value: "1400", id: 1400 },
+        { value: "1500", id: 1500 },
+        { value: "1600", id: 1600 },
+        { value: "1700", id: 1700 },
+        { value: "1800", id: 1800 },
+        { value: "1900", id: 1900 },
+        { value: "2000", id: 2000 },
+      ],
     },
-    
+
+    // {
+    //   type: "select",
+    //   apiType: "API",
+    //   selectApi: "diet/select",
+    //   placeholder: "Diet",
+    //   name: "diet",
+    //   validation: "",
+    //   showItem: "title",
+    //   default: "",
+    //   tag: true,
+    //   label: "Diet",
+    //   required: true,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    //   filter: true,
+    // },
+    // {
+    //   type: "select",
+    //   apiType: "API",
+    //   selectApi: "sub-diet/get-sub-diet-by-diet",
+    //   updateOn: "diet",
+    //   placeholder: "Sub Diet",
+    //   name: "subDiet",
+    //   validation: "",
+    //   showItem: "title",
+    //   default: "",
+    //   tag: true,
+    //   label: "Sub Diet",
+    //   required: true,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    //   filter: false,
+    // },
     {
-      type: "select",
+      type: "multiSelect",
       apiType: "API",
-      selectApi: "diet/select",
-      placeholder: "Diet",
-      name: "diet",
-      validation: "",
-      showItem: "title",
-      default: "",
-      tag: true,
-      label: "Diet",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-      filter: true,
-    },
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "sub-diet/get-sub-diet-by-diet",
-      updateOn: "diet",
-      placeholder: "Sub Diet",
-      name: "subDiet",
-      validation: "",
-      showItem: "title",
-      default: "",
-      tag: true,
-      label: "Sub Diet",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-      filter: false,
-    },
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "food-menu/getfoodmenu-typeofdiet",
-      updateOn: "subDiet",
+      selectApi: "food-menu/select",
       placeholder: "Food Menu",
+      search: false,
       tags: [
         {
           type: "text",
-          item: "menuType",
-          title: "Menu Type",
+          item: "description",
+          title: "",
           collection: "",
         },
       ],
       viewButton: {
         title: "View Menu",
         callback: (item, data) => {
-          console.log(item);
+          console.log(item,data);
           // Set the data for the clicked item and open the SetupMenu popup
           setOpenItemData({
             data: { ...item, _id: item.id },
@@ -147,17 +163,16 @@ const PackageManagement = (props) => {
       name: "foodMenu",
       validation: "",
       showItem: "title",
-      collection: "foodMenu",
       default: "",
       tag: true,
       label: "Food Menu",
-      required: false,
+      required: true,
       view: true,
       add: true,
       update: true,
       filter: false,
     },
-    
+
     {
       type: "image",
       placeholder: "Image",
@@ -301,7 +316,6 @@ const PackageManagement = (props) => {
         formMode: "double",
       },
     },
-   
   ]);
   // Use the useTranslation hook from react-i18next to handle translations
   // const parkingDuration = totalDuration > 120 ? (days > 0 ? days + `d, ` : ``) + (hours > 0 ? hours + `h, ` : ``) + (minutes + t("m")) : totalDuration.toFixed(0) + ` ` + t("minutes");
@@ -325,6 +339,7 @@ const PackageManagement = (props) => {
             <SetupMenu
               openData={openItemData}
               setMessage={props.setMessage}
+              setLoaderBox={props.setLoaderBox}
               // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
