@@ -168,3 +168,28 @@ export const Label = styled.label`
     display: none;
   }
 `;
+
+export const Selected = styled.label`
+  padding: 10px;
+  font-weight: bold;
+`;
+
+export const ItemBox = styled.div`
+  margin: 5px 5px 0;
+  border-radius: 10px;
+  font-size: 14px;
+  && {
+    .list & {
+      margin: 5px 5px 0px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: flex;
+      flex-flow: wrap;
+      gap: 0px 5px;
+    }
+  }
+  li {
+    border-radius: 10px;
+    margin-bottom: 5px !important;
+  }
+`;

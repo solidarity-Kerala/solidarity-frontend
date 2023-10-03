@@ -510,6 +510,9 @@ export const NoData = styled.div`
   align-items: center;
   height: 100px;
   flex-direction: column;
+  &.small {
+    height: auto;
+  }
   &.white {
     background: #f8f8f8;
     border-radius: 10px;

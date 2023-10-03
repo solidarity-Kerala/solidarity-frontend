@@ -23,7 +23,11 @@ export const getValue = (attribute, itemValue, display = false) => {
       response = dateTimeFormat(itemValue);
       break;
     case "multiSelect":
-      response = itemValue.map((item) => item[attribute.showItem].toString()).join(", ");
+      if (attribute.apiType === "API") {
+        response = itemValue.map((item) => item[attribute.showItem].toString()).join(", ");
+      } else {
+        response = itemValue.map((item) =>attribute.selectApi.find((label)=>label.id===item).value.toString()).join(", ");
+      }
       break;
     case "number":
       if (Number.isInteger(itemValue ? itemValue : 0)) {

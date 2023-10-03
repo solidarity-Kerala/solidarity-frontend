@@ -204,7 +204,11 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
               updateValuesTemp[item.name] = typeof value[item.name] === "undefined" ? "" : typeof value[item.name] === "string" || typeof value[item.name] === "number" ? value[item.name] : value[item.name]?._id ? value[item.name]._id : "";
             } else if (item.type === "multiSelect") {
               try {
-                updateValuesTemp[item.name] = value[item.name].map((obj) => obj._id);
+                if (item.apiType === "API") {
+                  updateValuesTemp[item.name] = value[item.name].map((obj) => obj._id);
+                } else {
+                  updateValuesTemp[item.name] = value[item.name].map((obj) => obj);
+                }
               } catch (error) {
                 updateValuesTemp[item.name] = [];
               }
@@ -219,7 +223,6 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
         updateValuesTemp["_id"] = value._id;
         updateValuesTemp["clone"] = clone;
         updateValuesTemp["_title"] = titleValue;
-        console.log(updateValuesTemp);
         setUpdateValues(updateValuesTemp);
         setIsEditing(true);
         window.location.hash = "edit";
@@ -339,7 +342,6 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
   };
 
   const filterChange = (option, name, type) => {
-    console.log(type);
     const updateValue = {
       ...filterView,
       [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : null,
@@ -675,7 +677,6 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                             const temp = { ...editable };
                             temp[`${index}-${attribute.name}`] = temp[`${index}-${attribute.name}`] ? !temp[`${index}-${attribute.name}`] : true;
                             setEditable(temp);
-                            console.log(temp);
                           }
                         }}
                         style={{ color: itemColor }}
@@ -972,7 +973,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       ) : (
         <Count>{`No records found`}</Count>
       )}
-      {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"post"} header={`Add New ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
+      {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"post"} header={`Add a ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
       {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
       {showLoader && <Loader></Loader>}
@@ -996,7 +997,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       <Table className={users.data?.response?.length === 0 ? "norecord" : "record"}>{users.data?.response?.length > 0 && <TableRowWithActions key={`${shortName}-${0}`} slNo={0} attributes={attributes} data={users.data?.response[0]} />}</Table>
       {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
       {users.data?.response?.length === 0 && <NoData>No {shortName} found!</NoData>}
-      {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} api={api} formMode={formMode} formType={"post"} header={`Add New ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
+      {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} api={api} formMode={formMode} formType={"post"} header={`Add a ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
       {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
       {isOpen && <Popup data={openData} actions={actions}></Popup>}

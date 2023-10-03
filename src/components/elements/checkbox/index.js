@@ -35,7 +35,6 @@ const CheckboxLabel = styled.span`
 `;
 
 const Checkbox = ({ label, checked, onChange, theme }) => {
-  console.log(checked);
   return (
     <CheckboxWrapper>
       <CheckboxInput type="checkbox" checked={checked} onChange={onChange} />
