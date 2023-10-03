@@ -375,8 +375,7 @@ const Ingredient = (props) => {
       add: true,
       update: true,
       filter: true,
-      selectApi:
-        "Meat,Bread,other",
+      selectApi: "Meat,Bread,Other",
       apiType: "CSV",
     },
     {

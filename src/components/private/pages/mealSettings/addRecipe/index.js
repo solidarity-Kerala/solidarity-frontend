@@ -29,6 +29,18 @@ const AddRecipe = (props) => {
     },
     {
       type: "text",
+      placeholder: "Arabic Name",
+      name: "arTitle",
+      validation: "",
+      default: "",
+      label: "Arabic Name",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
       placeholder: "Recipe ID",
       name: "recipeID",
       validation: "",
