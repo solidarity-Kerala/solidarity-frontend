@@ -112,14 +112,14 @@ const SetupRecipe = ({ openData, setMessage }) => {
       filter: false,
     },
   ]);
-  const [ingredients, setIngredients] = useState([]);
+  const [ingredients, setIngredients] = useState(null);
   const [nutritionInfo, setNutritionInfo] = useState(null);
   const [updateId, setUpdateId] = useState(null);
   const [ingredient, setIngredient] = useState(null);
   const addIngredient = async (option) => {
     // setRefresh(!refresh);
 
-    if (typeof option.calories !== "number" || isNaN(option.calories) ) {
+    if (typeof option.calories !== "number" || isNaN(option.calories)) {
       // setMessage({ content: "You cannot add this ingredient, the calorie of this ingredient is not valid!" });
       option.measureType = "";
       option.gramOfType = 0;
@@ -224,178 +224,192 @@ const SetupRecipe = ({ openData, setMessage }) => {
   return (
     <ColumnContainer className="custom">
       <RowContainer className="quarter">
-        <FormInput animation={`sub-1`} placeholder={"Search Ingredient"} key={1} id={0} error={null} value={search} {...mealIngredient} onChange={addIngredient} />
+        <FormInput customClass="menu" animation={`sub-1`} placeholder={"Search Ingredient"} key={1} id={0} error={null} value={search} {...mealIngredient} onChange={addIngredient} />
       </RowContainer>
       <RowContainer>
-        <Table>
-          <thead>
-            <tr>
-              <TableCell className="left">
-                <Div className="variants">Ingredients ({ingredients?.length ?? 0})</Div>
-              </TableCell>
-              {/* <TableCell className="left">
-                <Div className="variants">Measurement</Div>
-              </TableCell> */}
-              <TableCell className="left">
-                <Div className="variants">Quantity (based on 1M/1B etc) / Calculate?</Div>
-              </TableCell>
-              <TableCell className="left">
-                <Div className="variants">Total Gram</Div>
-              </TableCell>
-            </tr>
-          </thead>
-          <tbody>
-            {ingredients?.length > 0 &&
-              ingredients.map((item, index) => (
-                <tr key={index}>
-                  <TableCell className="padding left">
-                    <Title>
-                      <GetIcon icon={"recepe"}></GetIcon>
-                      {item.ingredient.ingredientsName ?? "Nil"}
-                    </Title>
-                    <DataItemContainer>
-                      <DataItem>
-                        {item.ingredient.gramOfType}g/{item.ingredient.measureType}
-                      </DataItem>
-                      <DataItem>{((item.ingredient.calories * item.ingredient.gramOfType) / 100)?.toFixed(2)} cal</DataItem>
-                      <DataItem>{((item.ingredient.protein * item.ingredient.gramOfType) / 100)?.toFixed(2)} g protein</DataItem>
-                      <DataItem>{((item.ingredient.totalFat * item.ingredient.gramOfType) / 100)?.toFixed(2)} g fat</DataItem>
-                      <DataItem>{((item.ingredient.carbohydrate * item.ingredient.gramOfType) / 100)?.toFixed(2)} g carbs</DataItem>
-                    </DataItemContainer>
-                  </TableCell>
-                  {/* <TableCell>{`${item.ingredient.gramOfType}g ${item.ingredient.measureType !== "Gram" ? ` per ${item.ingredient.measureType} = ` : ""} | ${item.ingredient.calories?.toFixed(2)} cal`}</TableCell> */}
-
-                  <TableCell>
-                    <StyledInput
-                      placeholder="1"
-                      type="number"
-                      value={item.quantity}
-                      onChange={(event) => {
-                        textChange(event, index);
-                      }}
-                    />
-                    <Checkbox
-                      onChange={(event) => {
-                        checkChange(event, index);
-                      }}
-                      checked={item.isCalculated}
-                      theme={themeColors}
-                    />
-                  </TableCell>
-
-                  <TableCell>{`${(item.ingredient.gramOfType * item.quantity).toFixed(2)}g / ${((item.ingredient.calories * (item.ingredient.gramOfType * item.quantity)) / 100)?.toFixed(2)}cal`}</TableCell>
-
-                  <TableCell>
-                    <Button
-                      onClick={() => {
-                        setMessage({
-                          type: 2,
-                          content: "Do you want to delete?",
-                          proceed: "Delete",
-                          data: index,
-                          onProceed: async () => {
-                            const response = await deleteData({ id: item._id }, "recipe-ingredients");
-                            setNutritionInfo(response.data.recipeNutritionInfo);
-                            setIngredients(response.data.addedItems);
-                          },
-                        });
-                      }}
-                    >
-                      <GetIcon icon={"delete"} />
-                    </Button>
-                  </TableCell>
-                </tr>
-              ))}
-            {ingredients.length === 0 && (
-              <TableCell colSpan={4}>
-                <NoData>No recipe added!</NoData>
-              </TableCell>
-            )}
-            {nutritionInfo && (
-              <>
-                {portion > 1 ? (
-                  <tr key={0}>
-                    <TableCell>Total Nutrition Info {portion > 1 && ` of ${1}/${portion}`}</TableCell>
-                    <TableCell colSpan={4}>
-                      <DataItemContainer>
+        {ingredients ? (
+          <Table>
+            <thead>
+              <tr>
+                <TableCell className="left head">
+                  <Div className="variants left">Ingredients You have added ({ingredients?.length ?? 0})</Div>
+                </TableCell>
+                <TableCell className="left head">
+                  <Div className="variants">Quantity / Calculate?</Div>
+                </TableCell>
+                <TableCell className="left head">
+                  <Div className="variants">Total Gram / Calori</Div>
+                </TableCell>
+                <TableCell className="left head">
+                  <Div className="variants">Remove</Div>
+                </TableCell>
+              </tr>
+            </thead>
+            <tbody>
+              {ingredients?.length > 0 &&
+                ingredients.map((item, index) => (
+                  <tr key={index}>
+                    <TableCell className="padding left">
+                      <Title>
+                        <GetIcon icon={"recepe"}></GetIcon>
+                        {item.ingredient.ingredientsName ?? "Nil"}
+                      </Title>
+                      <DataItemContainer className="nowrp">
+                        <DataItem>{item.ingredient.typeOfIngredient}</DataItem>
                         <DataItem>
-                          Gram:{getValue({ type: "number" }, nutritionInfo.gram / portion)}/{getValue({ type: "number" }, nutritionInfo.gram)}
+                          {item.ingredient.gramOfType}g/{item.ingredient.measureType}
                         </DataItem>
-                        <DataItem>
-                          Calories:{getValue({ type: "number" }, nutritionInfo.calories / portion)}/{getValue({ type: "number" }, nutritionInfo.calories)}
-                        </DataItem>
-                        <DataItem>
-                          Protein: {getValue({ type: "number" }, nutritionInfo.protein / portion)}/ {getValue({ type: "number" }, nutritionInfo.protein)}
-                        </DataItem>
-                        <DataItem>
-                          Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat / portion)}/{getValue({ type: "number" }, nutritionInfo.satFat)}
-                        </DataItem>
-                        <DataItem>
-                          Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat / portion)}/{getValue({ type: "number" }, nutritionInfo.unSatFat)}
-                        </DataItem>
-                        <DataItem>
-                          Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat / portion)}/{getValue({ type: "number" }, nutritionInfo.totalFat)}
-                        </DataItem>
-                        <DataItem>
-                          Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol / portion)}/{getValue({ type: "number" }, nutritionInfo.cholesterol)}
-                        </DataItem>
-                        <DataItem>
-                          Fiber: {getValue({ type: "number" }, nutritionInfo.fiber / portion)}/{getValue({ type: "number" }, nutritionInfo.fiber)}
-                        </DataItem>
-                        <DataItem>
-                          Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate / portion)}/{getValue({ type: "number" }, nutritionInfo.carbohydrate)}
-                        </DataItem>
-                        <DataItem>
-                          Sugars: {getValue({ type: "number" }, nutritionInfo.sugars / portion)}/{getValue({ type: "number" }, nutritionInfo.sugars)}
-                        </DataItem>
-                        <DataItem>
-                          Iron: {getValue({ type: "number" }, nutritionInfo.iron / portion)}/{getValue({ type: "number" }, nutritionInfo.iron)}
-                        </DataItem>
-                        <DataItem>
-                          Calcium: {getValue({ type: "number" }, nutritionInfo.calcium / portion)}/{getValue({ type: "number" }, nutritionInfo.calcium)}
-                        </DataItem>
-                        <DataItem>
-                          Sodium: {getValue({ type: "number" }, nutritionInfo.sodium / portion)}/{getValue({ type: "number" }, nutritionInfo.sodium)}
-                        </DataItem>
-                        <DataItem>
-                          Potassium: {getValue({ type: "number" }, nutritionInfo.potassium / portion)}/{getValue({ type: "number" }, nutritionInfo.potassium)}
-                        </DataItem>
-                        <DataItem>Vitamin A: {getValue({ type: "number" }, nutritionInfo.vitaminA)}</DataItem>
-                        <DataItem>Vitamin C: {getValue({ type: "number" }, nutritionInfo.vitaminC)}</DataItem>
-                        <DataItem>Vitamin E: {getValue({ type: "number" }, nutritionInfo.vitaminE)}</DataItem>
+                        <DataItem>{((item.ingredient.calories * item.ingredient.gramOfType) / 100)?.toFixed(2)}KCal</DataItem>
+                        <DataItem>{((item.ingredient.protein * item.ingredient.gramOfType) / 100)?.toFixed(2)}g Protein</DataItem>
+                        <DataItem>{((item.ingredient.totalFat * item.ingredient.gramOfType) / 100)?.toFixed(2)}g Fat</DataItem>
+                        <DataItem>{((item.ingredient.carbohydrate * item.ingredient.gramOfType) / 100)?.toFixed(2)}g Carbs</DataItem>
                       </DataItemContainer>
                     </TableCell>
-                  </tr>
-                ) : (
-                  <tr key={0}>
-                    <TableCell>Total Nutrition Info</TableCell>
-                    <TableCell colSpan={4}>
-                      <DataItemContainer>
-                        <DataItem>Gram: {getValue({ type: "number" }, nutritionInfo.gram)}</DataItem>
-                        <DataItem>Calories: {getValue({ type: "number" }, nutritionInfo.calories)}</DataItem>
-                        <DataItem>Protein: {getValue({ type: "number" }, nutritionInfo.protein)}</DataItem>
-                        <DataItem>Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat)}</DataItem>
-                        <DataItem>Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat)}</DataItem>
-                        <DataItem>Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat)}</DataItem>
-                        <DataItem>Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol)}</DataItem>
-                        <DataItem>Fiber: {getValue({ type: "number" }, nutritionInfo.fiber)}</DataItem>
-                        <DataItem>Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate)}</DataItem>
-                        <DataItem>Sugars: {getValue({ type: "number" }, nutritionInfo.sugars)}</DataItem>
-                        <DataItem>Iron: {getValue({ type: "number" }, nutritionInfo.iron)}</DataItem>
-                        <DataItem>Calcium: {getValue({ type: "number" }, nutritionInfo.calcium)}</DataItem>
-                        <DataItem>Sodium: {getValue({ type: "number" }, nutritionInfo.sodium)}</DataItem>
-                        <DataItem>Potassium: {getValue({ type: "number" }, nutritionInfo.potassium)}</DataItem>
-                        <DataItem>Vitamin A: {getValue({ type: "number" }, nutritionInfo.vitaminA)}</DataItem>
-                        <DataItem>Vitamin C: {getValue({ type: "number" }, nutritionInfo.vitaminC)}</DataItem>
-                        <DataItem>Vitamin E: {getValue({ type: "number" }, nutritionInfo.vitaminE)}</DataItem>
-                      </DataItemContainer>
+                    {/* <TableCell>{`${item.ingredient.gramOfType}g ${item.ingredient.measureType !== "Gram" ? ` per ${item.ingredient.measureType} = ` : ""} | ${item.ingredient.calories?.toFixed(2)} cal`}</TableCell> */}
+
+                    <TableCell>
+                      <StyledInput
+                        placeholder="1"
+                        type="number"
+                        value={item.quantity}
+                        onChange={(event) => {
+                          textChange(event, index);
+                        }}
+                      />
+                      <Checkbox
+                        onChange={(event) => {
+                          checkChange(event, index);
+                        }}
+                        checked={item.isCalculated}
+                        theme={themeColors}
+                      />
+                    </TableCell>
+
+                    <TableCell>{`${(item.ingredient.gramOfType * item.quantity).toFixed(2)}g / ${((item.ingredient.calories * (item.ingredient.gramOfType * item.quantity)) / 100)?.toFixed(2)}cal`}</TableCell>
+
+                    <TableCell>
+                      <Button
+                        onClick={() => {
+                          setMessage({
+                            type: 2,
+                            content: "Do you want to delete?",
+                            proceed: "Delete",
+                            data: index,
+                            onProceed: async () => {
+                              const response = await deleteData({ id: item._id }, "recipe-ingredients");
+                              setNutritionInfo(response.data.recipeNutritionInfo);
+                              setIngredients(response.data.addedItems);
+                            },
+                          });
+                        }}
+                      >
+                        <GetIcon icon={"delete"} />
+                      </Button>
                     </TableCell>
                   </tr>
-                )}
-              </>
-            )}
-          </tbody>
-        </Table>
+                ))}
+              {ingredients.length === 0 && (
+                <TableCell colSpan={4}>
+                  <NoData>
+                    <GetIcon icon={"recipe"}></GetIcon>No recipe added!
+                  </NoData>
+                </TableCell>
+              )}
+              {nutritionInfo && (
+                <>
+                  {portion > 1 ? (
+                    <tr key={0}>
+                      <TableCell colSpan={4}>
+                        <DataItemContainer>
+                          <DataItem className="head"><GetIcon icon={'info'}></GetIcon>Total Nutrition Info {portion > 1 && ` of ${1}/${portion}`}</DataItem>
+                          <DataItem>
+                            Gram:{getValue({ type: "number" }, nutritionInfo.gram / portion)}/{getValue({ type: "number" }, nutritionInfo.gram)}
+                          </DataItem>
+                          <DataItem>
+                            Calories:{getValue({ type: "number" }, nutritionInfo.calories / portion)}/{getValue({ type: "number" }, nutritionInfo.calories)}
+                          </DataItem>
+                          <DataItem>
+                            Protein: {getValue({ type: "number" }, nutritionInfo.protein / portion)}/ {getValue({ type: "number" }, nutritionInfo.protein)}
+                          </DataItem>
+                          <DataItem>
+                            Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat / portion)}/{getValue({ type: "number" }, nutritionInfo.satFat)}
+                          </DataItem>
+                          <DataItem>
+                            Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat / portion)}/{getValue({ type: "number" }, nutritionInfo.unSatFat)}
+                          </DataItem>
+                          <DataItem>
+                            Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat / portion)}/{getValue({ type: "number" }, nutritionInfo.totalFat)}
+                          </DataItem>
+                          <DataItem>
+                            Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol / portion)}/{getValue({ type: "number" }, nutritionInfo.cholesterol)}
+                          </DataItem>
+                          <DataItem>
+                            Fiber: {getValue({ type: "number" }, nutritionInfo.fiber / portion)}/{getValue({ type: "number" }, nutritionInfo.fiber)}
+                          </DataItem>
+                          <DataItem>
+                            Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate / portion)}/{getValue({ type: "number" }, nutritionInfo.carbohydrate)}
+                          </DataItem>
+                          <DataItem>
+                            Sugars: {getValue({ type: "number" }, nutritionInfo.sugars / portion)}/{getValue({ type: "number" }, nutritionInfo.sugars)}
+                          </DataItem>
+                          <DataItem>
+                            Iron: {getValue({ type: "number" }, nutritionInfo.iron / portion)}/{getValue({ type: "number" }, nutritionInfo.iron)}
+                          </DataItem>
+                          <DataItem>
+                            Calcium: {getValue({ type: "number" }, nutritionInfo.calcium / portion)}/{getValue({ type: "number" }, nutritionInfo.calcium)}
+                          </DataItem>
+                          <DataItem>
+                            Sodium: {getValue({ type: "number" }, nutritionInfo.sodium / portion)}/{getValue({ type: "number" }, nutritionInfo.sodium)}
+                          </DataItem>
+                          <DataItem>
+                            Potassium: {getValue({ type: "number" }, nutritionInfo.potassium / portion)}/{getValue({ type: "number" }, nutritionInfo.potassium)}
+                          </DataItem>
+                          <DataItem>Vitamin A: {getValue({ type: "number" }, nutritionInfo.vitaminA)}</DataItem>
+                          <DataItem>Vitamin C: {getValue({ type: "number" }, nutritionInfo.vitaminC)}</DataItem>
+                          <DataItem>Vitamin E: {getValue({ type: "number" }, nutritionInfo.vitaminE)}</DataItem>
+                        </DataItemContainer>
+                      </TableCell>
+                    </tr>
+                  ) : (
+                    <tr key={0}>
+                      <TableCell colSpan={4}>
+                        <DataItemContainer>
+                          <DataItem className="head"><GetIcon icon={'info'}></GetIcon>Total Nutrition Info</DataItem>
+                          <DataItem>Gram: {getValue({ type: "number" }, nutritionInfo.gram)}</DataItem>
+                          <DataItem className="span">
+                            <span>Bread: {getValue({ type: "percentage" }, nutritionInfo.breadGram)}</span>
+                            <span>Meat: {getValue({ type: "percentage" }, nutritionInfo.breadGram)}</span>
+                            <span>Other: {getValue({ type: "percentage" }, nutritionInfo.breadGram)}</span>
+                          </DataItem>
+                          <DataItem>Calories: {getValue({ type: "number" }, nutritionInfo.calories)}</DataItem>
+                          <DataItem>Protein: {getValue({ type: "number" }, nutritionInfo.protein)}</DataItem>
+                          <DataItem>Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat)}</DataItem>
+                          <DataItem>Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat)}</DataItem>
+                          <DataItem>Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat)}</DataItem>
+                          <DataItem>Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol)}</DataItem>
+                          <DataItem>Fiber: {getValue({ type: "number" }, nutritionInfo.fiber)}</DataItem>
+                          <DataItem>Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate)}</DataItem>
+                          <DataItem>Sugars: {getValue({ type: "number" }, nutritionInfo.sugars)}</DataItem>
+                          <DataItem>Iron: {getValue({ type: "number" }, nutritionInfo.iron)}</DataItem>
+                          <DataItem>Calcium: {getValue({ type: "number" }, nutritionInfo.calcium)}</DataItem>
+                          <DataItem>Sodium: {getValue({ type: "number" }, nutritionInfo.sodium)}</DataItem>
+                          <DataItem>Potassium: {getValue({ type: "number" }, nutritionInfo.potassium)}</DataItem>
+                          <DataItem>Vitamin A: {getValue({ type: "number" }, nutritionInfo.vitaminA)}</DataItem>
+                          <DataItem>Vitamin C: {getValue({ type: "number" }, nutritionInfo.vitaminC)}</DataItem>
+                          <DataItem>Vitamin E: {getValue({ type: "number" }, nutritionInfo.vitaminE)}</DataItem>
+                        </DataItemContainer>
+                      </TableCell>
+                    </tr>
+                  )}
+                </>
+              )}
+            </tbody>
+          </Table>
+        ) : (
+          <NoData>
+            <GetIcon icon={"recipe"}></GetIcon>Loading
+          </NoData>
+        )}
       </RowContainer>
       {isOpen && (
         <AutoForm

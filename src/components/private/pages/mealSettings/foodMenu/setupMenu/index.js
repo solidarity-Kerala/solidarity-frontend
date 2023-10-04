@@ -49,7 +49,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-      const { meal=1, bread=1, fruit=1, dessert=1, soup=1, salad=1 } = availableCalories[coloriePerDay];
+      const { meal = 1, bread = 1, fruit = 1, dessert = 1, soup = 1, salad = 1 } = availableCalories[coloriePerDay];
       let { calories, typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
       mixedMeatPercentage = mixedMeatPercentage ?? 100;
       mixedBreadPercentage = mixedBreadPercentage ?? 100;
@@ -125,7 +125,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         const { dayNumber, recipes, meals, mealTimeCategory } = item;
         const availableCalories = menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
         const key = "day_" + dayNumber;
-        console.log("item.optionNo",item.optionNo)
+        console.log("item.optionNo", item.optionNo);
         if (!accumulator[key]) {
           accumulator[key] = 0;
         }
@@ -916,7 +916,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   ))}
                 </TabDataItem>
               ) : (
-                <NoData>No Recipes Found!</NoData>
+                <NoData>
+                  <GetIcon icon={"recipe"}></GetIcon>No Recipes Found!
+                </NoData>
               )}
             </TabData>
           </RowContainer>
