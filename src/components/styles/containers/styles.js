@@ -107,6 +107,8 @@ export const RowContainer = styled.div`
     width: 300px;
     flex: 1 1 300px;
     min-width: 300px;
+    position:sticky;
+    top:0px;
   }
   &.mealSelection {
     padding-right: 30px;
