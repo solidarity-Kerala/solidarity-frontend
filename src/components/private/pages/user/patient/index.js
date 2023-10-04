@@ -9,6 +9,8 @@ import PopupView from "../../../../elements/popupview";
 import DietMenu from "./dietMenu";
 import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
 import AppointmentMenu from "./appointment";
+import SetupRecipe from "./setupRecipe";
+
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
 const Patient = (props) => {
@@ -1204,7 +1206,7 @@ const Patient = (props) => {
       viewButton: {
         title: "View Menu",
         callback: (item, data) => {
-          console.log("popup item",item);
+          console.log("popup item", item);
           setOpenedMenu("menu");
           // Set the data for the clicked item and open the SetupMenu popup
           setOpenItemData({
@@ -1462,7 +1464,12 @@ const Patient = (props) => {
       updateOn: ["bookingDate", "dietician", "physical"],
       selectApi: "day-slot/avail-slot",
       placeholder: "Time Slot",
-      params: [{ name: "center" }, { name: "bookingDate" }, { name: "dietician" }, { name: "physical" }],
+      params: [
+        { name: "center" },
+        { name: "bookingDate" },
+        { name: "dietician" },
+        { name: "physical" },
+      ],
       name: "bookingSlot",
       showItem: "availableSlots",
       validation: "",
@@ -1681,11 +1688,54 @@ const Patient = (props) => {
         customClass: "medium",
       },
     },
+    {
+      element: "button",
+      type: "callback",
+      callback: (item, data) => {
+        // Set the data for the clicked item and open the SetupMenu popup
+        console.log(item, data);
+        setOpenItemData({ item, data });
+        setOpenMenuSetup(true);
+      },
+      itemTitle: {
+        name: "mealName",
+        type: "text",
+        collection: "meal",
+      },
+      icon: "menu",
+      title: "Recipe Settings",
+      params: {
+        api: `food-group-item`,
+        parentReference: "",
+        // itemTitle: "username",
+        itemTitle: {
+          name: "mealName",
+          type: "text",
+          collection: "meal",
+        },
+        shortName: "Recipe Items",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+        // formMode: "double",
+      },
+    },
   ]);
 
   return (
     <Container className="noshadow">
-      <ListTable actions={actions} api={`user`} itemTitle={{ name: "username", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
+      <ListTable
+        actions={actions}
+        api={`user`}
+        itemTitle={{ name: "username", type: "text", collection: "" }}
+        shortName={`Patient`}
+        parentReference={"userType"}
+        referenceId={"6471b3849fb2b29fe045887b"}
+        formMode={`double`}
+        {...props}
+        attributes={attributes}
+      ></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
@@ -1694,7 +1744,7 @@ const Patient = (props) => {
               openData={openItemData}
               setMessage={props.setMessage}
               {...props}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
@@ -1707,7 +1757,14 @@ const Patient = (props) => {
       {openedMenu === "diet" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
-          popupData={<DietMenu openData={openItemData} setMessage={props.setMessage} {...props} themeColors={themeColors}></DietMenu>}
+          popupData={
+            <DietMenu
+              openData={openItemData}
+              setMessage={props.setMessage}
+              {...props}
+              themeColors={themeColors}
+            ></DietMenu>
+          }
           themeColors={themeColors}
           closeModal={closeModal}
           itemTitle={{ name: "username", type: "text", collection: "" }}
@@ -1722,7 +1779,7 @@ const Patient = (props) => {
             <AppointmentMenu
               openData={openItemData}
               setMessage={props.setMessage}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             ></AppointmentMenu>
           }
           themeColors={themeColors}
@@ -1730,6 +1787,23 @@ const Patient = (props) => {
           itemTitle={{ name: "username", type: "text", collection: "" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"medium"}
+        ></PopupView>
+      )}
+      {openMenuSetup && openItemData && (
+        <PopupView
+          // Popup data is a JSX element which is binding to the Popup Data Area like HOC
+          popupData={
+            <SetupRecipe
+              openData={openItemData}
+              setMessage={props.setMessage}
+              // Pass selected item data (Menu Title) to the popup for setting the time
+            ></SetupRecipe>
+          }
+          themeColors={themeColors}
+          closeModal={closeModal}
+          itemTitle={{ name: "title", type: "text", collection: "" }}
+          openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+          customClass={"full-page"}
         ></PopupView>
       )}
     </Container>

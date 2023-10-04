@@ -38,7 +38,7 @@ const AddRecipe = (props) => {
       view: true,
       add: true,
       update: true,
-      tag:true,
+      tag: true,
     },
     {
       type: "text",
