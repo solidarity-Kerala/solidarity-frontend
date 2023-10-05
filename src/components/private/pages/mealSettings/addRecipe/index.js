@@ -174,7 +174,7 @@ const AddRecipe = (props) => {
       update: true,
     },
     {
-      type: "select",
+      type: "multiSelect",
       apiType: "API",
       selectApi: "protein-categories/select",
       placeholder: "Ingredient Category",
@@ -207,7 +207,23 @@ const AddRecipe = (props) => {
       update: true,
       filter: true,
     },
-
+    {
+      type: "multiSelect",
+      apiType: "API",
+      selectApi: "mealtime-category/select",
+      placeholder: "Mealtime Category",
+      name: "mealTimeCategory",
+      validation: "",
+      showItem: "mealtimeCategoriesName",
+      default: "",
+      tag: true,
+      label: "Mealtime Category",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+    },
     {
       type: "image",
       placeholder: "Recipe",

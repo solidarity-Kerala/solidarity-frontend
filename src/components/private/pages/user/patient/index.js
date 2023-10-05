@@ -10,6 +10,7 @@ import DietMenu from "./dietMenu";
 import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
 import AppointmentMenu from "./appointment";
 import SetupRecipe from "./setupRecipe";
+import SelfOrder from "./selfOrder";
 
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
@@ -1688,6 +1689,39 @@ const Patient = (props) => {
         customClass: "medium",
       },
     },
+    // {
+    //   element: "button",
+    //   type: "callback",
+    //   callback: (item, data) => {
+    //     // Set the data for the clicked item and open the SetupMenu popup
+    //     console.log(item, data);
+    //     setOpenItemData({ item, data });
+    //     setOpenMenuSetup(true);
+    //   },
+    //   itemTitle: {
+    //     name: "mealName",
+    //     type: "text",
+    //     collection: "meal",
+    //   },
+    //   icon: "menu",
+    //   title: "Recipe Settings",
+    //   params: {
+    //     api: `food-group-item`,
+    //     parentReference: "",
+    //     // itemTitle: "username",
+    //     itemTitle: {
+    //       name: "mealName",
+    //       type: "text",
+    //       collection: "meal",
+    //     },
+    //     shortName: "Recipe Items",
+    //     addPrivilege: true,
+    //     delPrivilege: true,
+    //     updatePrivilege: true,
+    //     customClass: "medium",
+    //     // formMode: "double",
+    //   },
+    // },
     {
       element: "button",
       type: "callback",
@@ -1703,7 +1737,7 @@ const Patient = (props) => {
         collection: "meal",
       },
       icon: "menu",
-      title: "Recipe Settings",
+      title: "Self Order",
       params: {
         api: `food-group-item`,
         parentReference: "",
@@ -1789,7 +1823,7 @@ const Patient = (props) => {
           customClass={"medium"}
         ></PopupView>
       )}
-      {openMenuSetup && openItemData && (
+      {/* {openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
           popupData={
@@ -1798,6 +1832,23 @@ const Patient = (props) => {
               setMessage={props.setMessage}
               // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupRecipe>
+          }
+          themeColors={themeColors}
+          closeModal={closeModal}
+          itemTitle={{ name: "title", type: "text", collection: "" }}
+          openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+          customClass={"full-page"}
+        ></PopupView>
+      )} */}
+      {openMenuSetup && openItemData && (
+        <PopupView
+          // Popup data is a JSX element which is binding to the Popup Data Area like HOC
+          popupData={
+            <SelfOrder
+              openData={openItemData}
+              setMessage={props.setMessage}
+              // Pass selected item data (Menu Title) to the popup for setting the time
+            ></SelfOrder>
           }
           themeColors={themeColors}
           closeModal={closeModal}
