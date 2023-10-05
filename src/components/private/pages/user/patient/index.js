@@ -25,8 +25,8 @@ const Patient = (props) => {
   const [openedMenu, setOpenedMenu] = useState("");
   // State to store the data for the item that was clicked on in the ListTable
   const [openItemData, setOpenItemData] = useState(null);
-  const [openSelftOrderSetup, setSelfOrderSetup] = useState("");
-  const [openSelfItemData, setSelfItemData] = useState(null);
+ // const [openSelftOrderSetup, setSelfOrderSetup] = useState("");
+  //const [openSelfItemData, setSelfItemData] = useState(null);
 
   // Function to close the SetupMenu popup
   const closeModal = () => {
