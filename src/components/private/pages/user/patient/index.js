@@ -1763,7 +1763,7 @@ const Patient = (props) => {
     },
   ]);
 
-  console.log({ openSelftOrderSetup }, { openSelfItemData }, { openedMenu });
+ // console.log({ openSelftOrderSetup }, { openSelfItemData }, { openedMenu });
 
   return (
     <Container className="noshadow">
