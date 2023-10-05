@@ -1722,39 +1722,39 @@ const Patient = (props) => {
     //     // formMode: "double",
     //   },
     // },
-    {
-      element: "button",
-      type: "callback",
-      callback: (item, data) => {
-        // Set the data for the clicked item and open the SetupMenu popup
-        console.log(item, data);
-        setOpenItemData({ item, data });
-        setOpenMenuSetup(true);
-      },
-      itemTitle: {
-        name: "mealName",
-        type: "text",
-        collection: "meal",
-      },
-      icon: "menu",
-      title: "Self Order",
-      params: {
-        api: `food-group-item`,
-        parentReference: "",
-        // itemTitle: "username",
-        itemTitle: {
-          name: "mealName",
-          type: "text",
-          collection: "meal",
-        },
-        shortName: "Recipe Items",
-        addPrivilege: true,
-        delPrivilege: true,
-        updatePrivilege: true,
-        customClass: "medium",
-        // formMode: "double",
-      },
-    },
+    // {
+    //   element: "button",
+    //   type: "callback",
+    //   callback: (item, data) => {
+    //     // Set the data for the clicked item and open the SetupMenu popup
+    //     console.log(item, data);
+    //     setOpenItemData({ item, data });
+    //     setOpenMenuSetup(true);
+    //   },
+    //   itemTitle: {
+    //     name: "mealName",
+    //     type: "text",
+    //     collection: "meal",
+    //   },
+    //   icon: "menu",
+    //   title: "Self Order",
+    //   params: {
+    //     api: `food-group-item`,
+    //     parentReference: "",
+    //     // itemTitle: "username",
+    //     itemTitle: {
+    //       name: "mealName",
+    //       type: "text",
+    //       collection: "meal",
+    //     },
+    //     shortName: "Recipe Items",
+    //     addPrivilege: true,
+    //     delPrivilege: true,
+    //     updatePrivilege: true,
+    //     customClass: "medium",
+    //     // formMode: "double",
+    //   },
+    // },
   ]);
 
   return (
@@ -1840,7 +1840,7 @@ const Patient = (props) => {
           customClass={"full-page"}
         ></PopupView>
       )} */}
-      {openMenuSetup && openItemData && (
+      {/* {openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
           popupData={
@@ -1856,7 +1856,7 @@ const Patient = (props) => {
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"full-page"}
         ></PopupView>
-      )}
+      )} */}
     </Container>
   );
 };
