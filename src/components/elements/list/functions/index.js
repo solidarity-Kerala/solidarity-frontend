@@ -26,7 +26,7 @@ export const getValue = (attribute, itemValue, display = false) => {
       if (attribute.apiType === "API") {
         response = itemValue.map((item) => item[attribute.showItem].toString()).join(", ");
       } else {
-        response = itemValue.map((item) =>attribute.selectApi.find((label)=>label.id===item).value.toString()).join(", ");
+        response = itemValue.map((item) => attribute.selectApi.find((label) => label.id === item).value.toString()).join(", ");
       }
       break;
     case "number":
@@ -34,6 +34,13 @@ export const getValue = (attribute, itemValue, display = false) => {
         response = (itemValue ? itemValue : 0).toString(); // Return as whole number
       } else {
         response = (itemValue ? itemValue : 0).toFixed(2); // Format with two decimal places
+      }
+      break;
+    case "percentage":
+      if (Number.isInteger(itemValue ? itemValue : 0)) {
+        response = (itemValue ? itemValue : 0).toString() + "%"; // Return as whole number
+      } else {
+        response = (itemValue ? itemValue : 0).toFixed(2) + "%"; // Format with two decimal places
       }
       break;
     case "date":

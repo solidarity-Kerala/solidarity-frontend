@@ -1354,7 +1354,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   ))}
                 </TabDataItem>
               ) : (
-                <NoData>No Recipes Found!</NoData>
+                <NoData>
+                  <GetIcon icon={"recipe"}></GetIcon>No Recipes Found!
+                </NoData>
               )}
             </TabData>
           </RowContainer>
