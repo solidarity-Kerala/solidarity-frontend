@@ -9,8 +9,8 @@ import PopupView from "../../../../elements/popupview";
 import DietMenu from "./dietMenu";
 import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
 import AppointmentMenu from "./appointment";
-import SetupRecipe from "./setupRecipe";
-import SelfOrder from "./selfOrder";
+// import SetupRecipe from "./setupRecipe";
+// import SelfOrder from "./selfOrder";
 
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
