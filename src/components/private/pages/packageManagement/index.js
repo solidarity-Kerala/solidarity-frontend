@@ -48,12 +48,14 @@ const PackageManagement = (props) => {
       listView: true,
       name: "calories",
       validation: "",
-      default: [900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000],
+      default: [
+        900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000,
+      ],
       label: "Calories",
       required: true,
       view: true,
       add: true,
-      tag:true,
+      tag: true,
       update: true,
       apiType: "JSON",
       search: false,
@@ -89,7 +91,7 @@ const PackageManagement = (props) => {
       viewButton: {
         title: "View Menu",
         callback: (item, data) => {
-          console.log(item,data);
+          console.log(item, data);
           // Set the data for the clicked item and open the SetupMenu popup
           setOpenItemData({
             data: { ...item, _id: item.id },
@@ -266,7 +268,7 @@ const PackageManagement = (props) => {
       attributes: packagePrice,
       params: {
         api: `package-price`,
-        parentReference: "user",
+        parentReference: "package",
         itemTitle: {
           name: "packageName",
           type: "text",

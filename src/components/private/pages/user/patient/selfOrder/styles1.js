@@ -21,10 +21,6 @@ export const TabButton = styled.button`
 export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  thead {
-    position: sticky;
-    top: -33px;
-  }
 `;
 
 export const TableHeader = styled.th`
@@ -59,19 +55,13 @@ export const Div = styled.div`
   padding: 5px;
   font-size: 12px;
   &.variants {
-    min-height: 40px;
+   height: 50px;
     padding: 2px 10px;
     font-size: 15px;
     font-weight: 500;
+    background: rgb(243, 243, 243);
     text-align: left;
     margin: -5px;
-  }
-  &.left {
-    text-align: left;
-    align-items: self-start;
-  }
-  &.nowrap {
-    white-space: nowrap;
   }
   &:first-child {
     border-top: 0px solid rgb(204, 204, 204);
@@ -82,18 +72,13 @@ export const Div = styled.div`
 `;
 
 export const TableCell = styled.td`
-  padding: 5px;
-  border: 4px solid rgb(234 234 234);
+  padding: 5px ;
+  border: 1px solid #ccc;
   background-color: white;
   text-align: center;
-  width: auto;
-  border-radius: 15px;
+  min-width: 50px;
   &.padding {
     padding: 10px;
-  }
-  &.head {
-    background-color: rgb(75, 75, 75);
-    color: white;
   }
   &.left {
     text-align: left;
@@ -134,10 +119,6 @@ export const DataItemContainer = styled.div`
   column-gap: 5px;
   row-gap: 5px;
   margin-top: 5px;
-  &.nowrap {
-    white-space: nowrap;
-    width: max-content;
-  }
 `;
 export const DataItem = styled.div`
   padding: 5px;
@@ -145,24 +126,7 @@ export const DataItem = styled.div`
   font-size: 12px;
   line-height: 14px;
   border: 1px solid #ddd;
-  font-weight: normal;
-  &.span {
-    display: flex;
-    gap: 5px;
-  }
-  svg {
-    margin-right: 5px;
-  }
-  span::after {
-    content: " •";
-  }
-  &.head {
-    background-color: rgb(75, 75, 75);
-    color: white;
-  }
-  span:last-child:after {
-    content: "";
-  }
+  font-weight:normal;
   p {
     text-align: center;
     white-space: pre-line;
@@ -188,7 +152,7 @@ export const MealItem = styled.div`
 `;
 export const Title = styled.div`
   width: 100%;
-  font-weight: bold;
+  font-weight:bold;
   span {
     font-size: 10px;
   }
@@ -206,8 +170,8 @@ export const Title = styled.div`
     font-size: 14px;
     margin-left: 5px;
   }
-  svg {
-    margin-right: 5px;
+  svg{
+    margin-right:5px;
   }
 `;
 export const Variants = styled.div`

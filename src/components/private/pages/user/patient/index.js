@@ -25,6 +25,8 @@ const Patient = (props) => {
   const [openedMenu, setOpenedMenu] = useState("");
   // State to store the data for the item that was clicked on in the ListTable
   const [openItemData, setOpenItemData] = useState(null);
+  const [openSelftOrderSetup, setSelfOrderSetup] = useState("");
+  const [openSelfItemData, setSelfItemData] = useState(null);
 
   // Function to close the SetupMenu popup
   const closeModal = () => {
@@ -1725,9 +1727,13 @@ const Patient = (props) => {
     {
       element: "button",
       type: "callback",
+      // id: "selfOrder",
       callback: (item, data) => {
         // Set the data for the clicked item and open the SetupMenu popup
-        console.log(item, data);
+        setOpenedMenu("selfOrders");
+        console.log("adfadfadfadfadf fadsfadsf 111", item, data);
+        // setSelfItemData({ item, data });
+        // setSelfOrderSetup(true);
         setOpenItemData({ item, data });
         setOpenMenuSetup(true);
       },
@@ -1756,6 +1762,8 @@ const Patient = (props) => {
       },
     },
   ]);
+
+  console.log({ openSelftOrderSetup }, { openSelfItemData }, { openedMenu });
 
   return (
     <Container className="noshadow">
@@ -1840,7 +1848,7 @@ const Patient = (props) => {
           customClass={"full-page"}
         ></PopupView>
       )} */}
-      {openMenuSetup && openItemData && (
+      {openedMenu === "selfOrders" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
           popupData={
