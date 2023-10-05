@@ -151,7 +151,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     } else if (typeOfRecipe === "Soup") {
       count1 = soup || 1;
     } else if (typeOfRecipe === "Dessert") {
-      count1 = dessert || 1;
+      count1 = dessert || 1;  
     } else if (typeOfRecipe === "Salad") {
       count1 = salad || 1;
     } else if (typeOfRecipe === "Mixed") {
