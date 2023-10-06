@@ -6,7 +6,10 @@ import { CloseButton } from "../popup/styles";
 import { GetIcon } from "../../../../icons";
 import { useSelector } from "react-redux";
 import { Header } from "../manage/styles";
-import { updateCaloriDetails, updateHealthDetails } from "../../../functions/health";
+import {
+  updateCaloriDetails,
+  updateHealthDetails,
+} from "../../../functions/health";
 const CrudForm = (props) => {
   // Use the useTranslation hook from react-i18next to handle translations
   const { t } = useTranslation();
@@ -32,7 +35,13 @@ const CrudForm = (props) => {
    * @returns {number} flags - The number of validation errors for the field
    */
 
-  const validation = (fields, udpatedValue, formErrors, agreement, useCheckbox) => {
+  const validation = (
+    fields,
+    udpatedValue,
+    formErrors,
+    agreement,
+    useCheckbox
+  ) => {
     const tempformErrors = { ...formErrors };
     let flags = 0;
     fields.forEach((item) => {
@@ -40,17 +49,42 @@ const CrudForm = (props) => {
         if (item.type === "multiple") {
           item.forms.forEach((form, multipleIndex) => {
             form.forEach((inputs, index) => {
-              const res = fieldValidation(inputs, typeof udpatedValue[item.name][multipleIndex][inputs.name] === "undefined" ? "" : udpatedValue[item.name][multipleIndex][inputs.name], null, udpatedValue);
-              tempformErrors[item.name][multipleIndex][inputs.name] = res.tempformError;
+              const res = fieldValidation(
+                inputs,
+                typeof udpatedValue[item.name][multipleIndex][inputs.name] ===
+                  "undefined"
+                  ? ""
+                  : udpatedValue[item.name][multipleIndex][inputs.name],
+                null,
+                udpatedValue
+              );
+              tempformErrors[item.name][multipleIndex][inputs.name] =
+                res.tempformError;
               flags += res.flag; //?res.flag:0;
             });
           });
         } else if (item.validation === "greater") {
-          const res = fieldValidation(item, typeof udpatedValue[item.name] === "undefined" ? "" : udpatedValue[item.name], typeof udpatedValue[item.reference] === "undefined" ? new Date() : udpatedValue[item.reference], udpatedValue);
+          const res = fieldValidation(
+            item,
+            typeof udpatedValue[item.name] === "undefined"
+              ? ""
+              : udpatedValue[item.name],
+            typeof udpatedValue[item.reference] === "undefined"
+              ? new Date()
+              : udpatedValue[item.reference],
+            udpatedValue
+          );
           tempformErrors[item.name] = res.tempformError;
           flags += res.flag; //?res.flag:0;
         } else {
-          const res = fieldValidation(item, typeof udpatedValue[item.name] === "undefined" ? "" : udpatedValue[item.name], null, udpatedValue);
+          const res = fieldValidation(
+            item,
+            typeof udpatedValue[item.name] === "undefined"
+              ? ""
+              : udpatedValue[item.name],
+            null,
+            udpatedValue
+          );
           tempformErrors[item.name] = res.tempformError;
           flags += res.flag; //?res.flag:0;
         }
@@ -70,7 +104,12 @@ const CrudForm = (props) => {
     }
   };
 
-  const fieldValidation = (field, value, ref = new Date(), udpatedValue = {}) => {
+  const fieldValidation = (
+    field,
+    value,
+    ref = new Date(),
+    udpatedValue = {}
+  ) => {
     let flag = 0;
     let tempformError = "";
 
@@ -184,23 +223,35 @@ const CrudForm = (props) => {
       default:
         break;
     }
-    if ((field.type === "image" || field.type === "file") && props.formType === "post") {
+    if (
+      (field.type === "image" || field.type === "file") &&
+      props.formType === "post"
+    ) {
       if (value.length === 0) {
         tempformError = t("validContent", { label: t(field.label) });
         flag += 1;
       }
-    } else if ((field.type === "image" || field.type === "file") && props.formType === "put") {
+    } else if (
+      (field.type === "image" || field.type === "file") &&
+      props.formType === "put"
+    ) {
       return { flag, tempformError };
     } else {
       if (field.required && value.length === 0) {
         tempformError = t("required", { label: t(field.label) });
         flag += 1;
       } else if (field.minimum > value.length) {
-        tempformError = t("requiredMinimum", { minimum: field.minimum, label: t(field.label) });
+        tempformError = t("requiredMinimum", {
+          minimum: field.minimum,
+          label: t(field.label),
+        });
 
         flag += 1;
       } else if (field.maximum < value.length) {
-        tempformError = t("maxLimit", { maximum: field.maximum, label: t(field.label) });
+        tempformError = t("maxLimit", {
+          maximum: field.maximum,
+          label: t(field.label),
+        });
         flag += 1;
       }
     }
@@ -255,7 +306,12 @@ const CrudForm = (props) => {
         }
 
         value = items;
-      } else if (type === "email" || type === "text" || type === "number" || type === "password") {
+      } else if (
+        type === "email" ||
+        type === "text" ||
+        type === "number" ||
+        type === "password"
+      ) {
         value = event.target.value;
       } else if (type === "search") {
         value = JSON.stringify(event);
@@ -275,7 +331,20 @@ const CrudForm = (props) => {
         ...formValues,
         [field.name]: value,
       };
-      if (["gender", "presentWeight", "userActivenessStatus", "dateOfBirth", "height", "age", "wrist", "waist", "hip", "forearm"].includes(field.name)) {
+      if (
+        [
+          "gender",
+          "presentWeight",
+          "userActivenessStatus",
+          "dateOfBirth",
+          "height",
+          "age",
+          "wrist",
+          "waist",
+          "hip",
+          "forearm",
+        ].includes(field.name)
+      ) {
         updateHealthDetails(udpateValue);
       }
       if (["calories"].includes(field.name)) {
@@ -284,7 +353,9 @@ const CrudForm = (props) => {
       if (type === "select") {
         if (field.updateFields) {
           field.updateFields?.forEach((element) => {
-            udpateValue[element.id] = element.collection ? event[element.collection]?.[element.value] : event[element.value];
+            udpateValue[element.id] = element.collection
+              ? event[element.collection]?.[element.value]
+              : event[element.value];
           });
         }
       }
@@ -300,7 +371,8 @@ const CrudForm = (props) => {
       const main = formState[sub.index];
       const field = main.forms[sub.multipleIndex][id];
       const udpateValue = { ...formValues };
-      udpateValue[main.name][sub.multipleIndex][field.name] = event.target.value;
+      udpateValue[main.name][sub.multipleIndex][field.name] =
+        event.target.value;
 
       setFormValues(udpateValue);
       // Validating the fields
@@ -352,9 +424,31 @@ const CrudForm = (props) => {
                   updateValue = { [item.updateOn]: formValues[item.updateOn] };
                 }
               }
-              const params = [...(item.params ?? []), props.referenceId ? { name: [props.parentReference], value: props.referenceId } : {}];
-              if ((props.formType === "put" && item.update) || (props.formType === "post" && item.add)) {
-                return <FormInput dynamicClass={dynamicClass} formValues={formValues} updateValue={updateValue} placeholder={item.placeHolder} key={`input` + index} id={index} error={formErrors[formState[index].name]} value={formValues[formState[index].name]} {...item} params={params} onChange={handleChange} />;
+              const params = [
+                ...(item.params ?? []),
+                props.referenceId
+                  ? { name: [props.parentReference], value: props.referenceId }
+                  : {},
+              ];
+              if (
+                (props.formType === "put" && item.update) ||
+                (props.formType === "post" && item.add)
+              ) {
+                return (
+                  <FormInput
+                    dynamicClass={dynamicClass}
+                    formValues={formValues}
+                    updateValue={updateValue}
+                    placeholder={item.placeHolder}
+                    key={`input` + index}
+                    id={index}
+                    error={formErrors[formState[index].name]}
+                    value={formValues[formState[index].name]}
+                    {...item}
+                    params={params}
+                    onChange={handleChange}
+                  />
+                );
               } else {
                 return null;
               }
@@ -362,8 +456,16 @@ const CrudForm = (props) => {
         </Form>
 
         <Footer>
-          {(props.css ?? "") === "" && <FormInput type="close" value={"Cancel"} onChange={closeModal} />}
-          <FormInput disabled={submitDisabled} type="submit" name="submit" value={props.button ? props.button : "Submit"} onChange={submitChange} />
+          {(props.css ?? "") === "" && (
+            <FormInput type="close" value={"Cancel"} onChange={closeModal} />
+          )}
+          <FormInput
+            disabled={submitDisabled}
+            type="submit"
+            name="submit"
+            value={props.button ? props.button : "Submit"}
+            onChange={submitChange}
+          />
         </Footer>
       </Page>
     </Overlay>

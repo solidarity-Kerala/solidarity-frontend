@@ -308,7 +308,7 @@ const Dietitian = (props) => {
     //   update: true,
     // },
     {
-      type: "text",
+      type: "number",
       placeholder: "Max Booking Slots",
       name: "maxBookingsPerSlot",
       validation: "",

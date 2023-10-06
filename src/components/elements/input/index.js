@@ -2,7 +2,17 @@ import React, { useRef } from "react";
 import CustomSelect from "../select";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { Button, DatetimeInput, FileContainer, Info, Input, InputContainer, Label, SubHead, TextArea } from "./styles";
+import {
+  Button,
+  DatetimeInput,
+  FileContainer,
+  Info,
+  Input,
+  InputContainer,
+  Label,
+  SubHead,
+  TextArea,
+} from "./styles";
 import { ErrorMessage } from "../form/styles";
 import { GetIcon, TickIcon, UploadIcon } from "../../../icons";
 import Checkbox from "../checkbox";
@@ -25,36 +35,101 @@ function FormInput(props) {
       case "password":
       case "email":
         return (
-          <InputContainer className={`${props.dynamicClass ?? ""}`} animation={props.animation}>
+          <InputContainer
+            className={`${props.dynamicClass ?? ""}`}
+            animation={props.animation}
+          >
             {props.error?.length ? (
-              <Label theme={themeColors} className={`${!props.value.toString().length > 0 ? "error shrink" : "error"}`}>
+              <Label
+                theme={themeColors}
+                className={`${
+                  !props.value.toString().length > 0 ? "error shrink" : "error"
+                }`}
+              >
                 {props.error}
               </Label>
             ) : (
-              <Label theme={themeColors} className={`${!props.value.toString().length > 0 ? "shrink" : ""}`}>
+              <Label
+                theme={themeColors}
+                className={`${
+                  !props.value.toString().length > 0 ? "shrink" : ""
+                }`}
+              >
                 <TickIcon />
                 {`${t(props.label)}${props.required ? " *" : ""}`}
               </Label>
             )}
-            <Input disabled={props.disabled ?? false} autoComplete="on" theme={themeColors} className={`input ${props.value.toString().length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} type={props.type} value={props.value} onChange={(event) => props.onChange(event, props.id, props.type, props.sub)} />
-            {props.error?.length > 0 && <ErrorMessage dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
+            <Input
+              disabled={props.disabled ?? false}
+              autoComplete="on"
+              theme={themeColors}
+              className={`input ${
+                props.value.toString().length > 0 ? "shrink" : ""
+              }`}
+              placeholder={`${t(props.placeholder)}${
+                props.required ? " *" : ""
+              }`}
+              type={props.type}
+              value={props.value}
+              onChange={(event) =>
+                props.onChange(event, props.id, props.type, props.sub)
+              }
+            />
+            {props.error?.length > 0 && (
+              <ErrorMessage
+                dangerouslySetInnerHTML={{ __html: props.error }}
+              ></ErrorMessage>
+            )}
           </InputContainer>
         );
       case "number":
         return (
-          <InputContainer className={`${props.dynamicClass ?? ""}`} animation={props.animation}>
+          <InputContainer
+            className={`${props.dynamicClass ?? ""}`}
+            animation={props.animation}
+          >
             {props.error?.length ? (
-              <Label theme={themeColors} className={`${!props.value.toString().length > 0 ? "error shrink" : "error"}`}>
+              <Label
+                theme={themeColors}
+                className={`${
+                  !props.value.toString().length > 0 ? "error shrink" : "error"
+                }`}
+              >
                 {props.error}
               </Label>
             ) : (
-              <Label theme={themeColors} className={`${!props.value.toString().length > 0 ? "shrink" : ""}`}>
+              <Label
+                theme={themeColors}
+                className={`${
+                  !props.value.toString().length > 0 ? "shrink" : ""
+                }`}
+              >
                 <TickIcon />
                 {`${t(props.label)}${props.required ? " *" : ""}`}
               </Label>
             )}
-            <Input min={0} disabled={props.disabled ?? false} autoComplete="on" theme={themeColors} className={`input ${props.value.toString().length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} type={props.type} value={props.value} onChange={(event) => props.onChange(event, props.id, props.type, props.sub)} />
-            {props.error?.length > 0 && <ErrorMessage dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
+            <Input
+              min={0}
+              disabled={props.disabled ?? false}
+              autoComplete="on"
+              theme={themeColors}
+              className={`input ${
+                props.value.toString().length > 0 ? "shrink" : ""
+              }`}
+              placeholder={`${t(props.placeholder)}${
+                props.required ? " *" : ""
+              }`}
+              type={props.type}
+              value={props.value}
+              onChange={(event) =>
+                props.onChange(event, props.id, props.type, props.sub)
+              }
+            />
+            {props.error?.length > 0 && (
+              <ErrorMessage
+                dangerouslySetInnerHTML={{ __html: props.error }}
+              ></ErrorMessage>
+            )}
           </InputContainer>
         );
       // Render a time input with time picker
@@ -62,51 +137,130 @@ function FormInput(props) {
         let userFriendlyTime = new Date(props.value);
         return (
           <InputContainer className={`${props.dynamicClass ?? ""}`}>
-            <DatetimeInput theme={themeColors} showTimeSelect showTimeSelectOnly timeIntervals={15} timeCaption="Time" selected={userFriendlyTime} dateFormat="h:mm aa" className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholder={t(props.placeholder)} type={props.type} onChange={(event) => props.onChange(event, props.id, props.type)} />
-            <Label theme={themeColors} className={`${!props.value.length > 0 ? "shrink" : ""}`}>
+            <DatetimeInput
+              theme={themeColors}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              timeCaption="Time"
+              selected={userFriendlyTime}
+              dateFormat="h:mm aa"
+              className={`input ${props.value.length > 0 ? "shrink" : ""}`}
+              placeholder={t(props.placeholder)}
+              type={props.type}
+              onChange={(event) => props.onChange(event, props.id, props.type)}
+            />
+            <Label
+              theme={themeColors}
+              className={`${!props.value.length > 0 ? "shrink" : ""}`}
+            >
               {t(props.label)}
             </Label>
-            {props.error?.length > 0 && <ErrorMessage dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
+            {props.error?.length > 0 && (
+              <ErrorMessage
+                dangerouslySetInnerHTML={{ __html: props.error }}
+              ></ErrorMessage>
+            )}
           </InputContainer>
         );
       // Render a date input with date picker
       case "date":
-        console.log(props);
-        let userFriendlyDate = typeof props.value === "undefined" || props.value === null ? null : props.value.length > 0 ? new Date(props.value) : null;
+        console.log("all data", props);
+        let userFriendlyDate =
+          typeof props.value === "undefined" || props.value === null
+            ? null
+            : props.value.length > 0
+            ? new Date(props.value)
+            : null;
         return (
-          <InputContainer className={`${props.dynamicClass ?? ""} ${props.customClass ?? ""}`}>
-            <DatetimeInput showYearDropdown yearDropdownItemNumber={70} minDate={props.minDate ?? moment().toDate()} maxDate={props.maxDate ?? moment().add(1, "year").toDate()} dateFormat={"yyyy-MM-dd"} theme={themeColors} className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholderText={`${t(props.label)}${props.required ? " *" : ""}`} type={props.type} value={userFriendlyDate} selected={userFriendlyDate} onChange={(event) => props.onChange(event, props.id, props.type)} />
+          <InputContainer
+            className={`${props.dynamicClass ?? ""} ${props.customClass ?? ""}`}
+          >
+            <DatetimeInput
+              showYearDropdown
+              yearDropdownItemNumber={70}
+              minDate={props.minDate ?? moment().toDate()}
+              maxDate={props.maxDate ?? moment().add(1, "year").toDate()}
+              dateFormat={"yyyy-MM-dd"}
+              theme={themeColors}
+              className={`input ${props.value.length > 0 ? "shrink" : ""}`}
+              placeholderText={`${t(props.label)}${props.required ? " *" : ""}`}
+              type={props.type}
+              value={userFriendlyDate}
+              selected={userFriendlyDate}
+              onChange={(event) => props.onChange(event, props.id, props.type)}
+            />
             {props.error?.length ? (
-              <Label theme={themeColors} className={`${!props.value.length > 0 ? "error shrink" : "error"}`}>
+              <Label
+                theme={themeColors}
+                className={`${
+                  !props.value.length > 0 ? "error shrink" : "error"
+                }`}
+              >
                 {props.error}
               </Label>
             ) : (
-              <Label theme={themeColors} className={`${!props.value.length > 0 ? "shrink" : ""}`}>
+              <Label
+                theme={themeColors}
+                className={`${!props.value.length > 0 ? "shrink" : ""}`}
+              >
                 <TickIcon />
                 {`${t(props.label)}${props.required ? " *" : ""}`}
               </Label>
             )}
-            {props.error?.length > 0 && <ErrorMessage dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
+            {props.error?.length > 0 && (
+              <ErrorMessage
+                dangerouslySetInnerHTML={{ __html: props.error }}
+              ></ErrorMessage>
+            )}
           </InputContainer>
         );
       // Render a datetime input with date and time pickers
       case "datetime":
-        let userFriendlyDateTime = props.value.length > 0 ? new Date(props.value) : null;
+        let userFriendlyDateTime =
+          props.value.length > 0 ? new Date(props.value) : null;
 
         return (
           <InputContainer className={`${props.dynamicClass ?? ""}`}>
-            <DatetimeInput showYearDropdown yearDropdownItemNumber={70} minDate={props.minDate ?? moment().toDate()} maxDate={props.maxDate ?? moment().add(1, "year").toDate()} theme={themeColors} showTimeSelect timeIntervals={1} className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholderText={`${t(props.label)}${props.required ? " *" : ""}`} type={props.type} value={userFriendlyDateTime} selected={userFriendlyDateTime} dateFormat={"yyyy-MM-dd hh:mm a"} onChange={(event) => props.onChange(event, props.id, props.type)} />
+            <DatetimeInput
+              showYearDropdown
+              yearDropdownItemNumber={70}
+              minDate={props.minDate ?? moment().toDate()}
+              maxDate={props.maxDate ?? moment().add(1, "year").toDate()}
+              theme={themeColors}
+              showTimeSelect
+              timeIntervals={1}
+              className={`input ${props.value.length > 0 ? "shrink" : ""}`}
+              placeholderText={`${t(props.label)}${props.required ? " *" : ""}`}
+              type={props.type}
+              value={userFriendlyDateTime}
+              selected={userFriendlyDateTime}
+              dateFormat={"yyyy-MM-dd hh:mm a"}
+              onChange={(event) => props.onChange(event, props.id, props.type)}
+            />
             {props.error?.length ? (
-              <Label theme={themeColors} className={`${!props.value.length > 0 ? "error shrink" : "error"}`}>
+              <Label
+                theme={themeColors}
+                className={`${
+                  !props.value.length > 0 ? "error shrink" : "error"
+                }`}
+              >
                 {props.error}
               </Label>
             ) : (
-              <Label theme={themeColors} className={`${!props.value.length > 0 ? "shrink" : ""}`}>
+              <Label
+                theme={themeColors}
+                className={`${!props.value.length > 0 ? "shrink" : ""}`}
+              >
                 <TickIcon />
                 {`${t(props.label)}${props.required ? " *" : ""}`}
               </Label>
             )}
-            {props.error?.length > 0 && <ErrorMessage dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
+            {props.error?.length > 0 && (
+              <ErrorMessage
+                dangerouslySetInnerHTML={{ __html: props.error }}
+              ></ErrorMessage>
+            )}
           </InputContainer>
         );
       // Render a file and image
@@ -126,13 +280,34 @@ function FormInput(props) {
           fileInputRef.current.click();
         };
         return (
-          <FileContainer className={`${props.dynamicClass ?? ""}`} theme={themeColors}>
+          <FileContainer
+            className={`${props.dynamicClass ?? ""}`}
+            theme={themeColors}
+          >
             <button onClick={handleButtonClick}>
               <UploadIcon />
-              {t("upload", { label: t(props.label) }) + (props.required ? " *" : "") + (props.value.length > 0 ? ` : ${props.value[0].name} (${size})` : "")}
+              {t("upload", { label: t(props.label) }) +
+                (props.required ? " *" : "") +
+                (props.value.length > 0
+                  ? ` : ${props.value[0].name} (${size})`
+                  : "")}
             </button>
-            <Input ref={fileInputRef} style={{ display: "none" }} theme={themeColors} accept={props.type === "image" ? `image/*` : ``} className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholder={t(props.placeholder)} type={`file`} onChange={(event) => props.onChange(event, props.id, props.type)} />
-            {props.error?.length > 0 && <ErrorMessage className="image" dangerouslySetInnerHTML={{ __html: props.error }} />}
+            <Input
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              theme={themeColors}
+              accept={props.type === "image" ? `image/*` : ``}
+              className={`input ${props.value.length > 0 ? "shrink" : ""}`}
+              placeholder={t(props.placeholder)}
+              type={`file`}
+              onChange={(event) => props.onChange(event, props.id, props.type)}
+            />
+            {props.error?.length > 0 && (
+              <ErrorMessage
+                className="image"
+                dangerouslySetInnerHTML={{ __html: props.error }}
+              />
+            )}
           </FileContainer>
         );
       // Render a textarea
@@ -140,31 +315,68 @@ function FormInput(props) {
         return (
           <InputContainer className={`textarea ${props.dynamicClass ?? ""}`}>
             {props.error?.length ? (
-              <Label theme={themeColors} className={`${!props.value.length > 0 ? "error shrink" : "error"}`}>
+              <Label
+                theme={themeColors}
+                className={`${
+                  !props.value.length > 0 ? "error shrink" : "error"
+                }`}
+              >
                 {props.error}
               </Label>
             ) : (
-              <Label theme={themeColors} className={`${!props.value.length > 0 ? "shrink" : ""}`}>
+              <Label
+                theme={themeColors}
+                className={`${!props.value.length > 0 ? "shrink" : ""}`}
+              >
                 <TickIcon />
                 {`${t(props.label)}${props.required ? " *" : ""}`}
               </Label>
             )}
-            <TextArea theme={themeColors} className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} value={props.value} onChange={(event) => props.onChange(event, props.id)} />
+            <TextArea
+              theme={themeColors}
+              className={`input ${props.value.length > 0 ? "shrink" : ""}`}
+              placeholder={`${t(props.placeholder)}${
+                props.required ? " *" : ""
+              }`}
+              value={props.value}
+              onChange={(event) => props.onChange(event, props.id)}
+            />
           </InputContainer>
         );
       case "htmleditor":
-        return <EditorNew className={`${props.dynamicClass ?? ""}`} key={props.id} type={props.type} placeholder={props.placeholder} value={props.value} id={props.id} onChange={props.onChange}></EditorNew>;
+        return (
+          <EditorNew
+            className={`${props.dynamicClass ?? ""}`}
+            key={props.id}
+            type={props.type}
+            placeholder={props.placeholder}
+            value={props.value}
+            id={props.id}
+            onChange={props.onChange}
+          ></EditorNew>
+        );
       // Render a submit button
       case "submit":
         return (
-          <Button theme={themeColors} className="submit" disabled={props.disabled} type={props.type} onClick={props.onChange}>
+          <Button
+            theme={themeColors}
+            className="submit"
+            disabled={props.disabled}
+            type={props.type}
+            onClick={props.onChange}
+          >
             {props.value}
           </Button>
         );
       // Render a close button
       case "close":
         return (
-          <Button theme={themeColors} className="close" type={props.type} onClick={props.onChange}>
+          <Button
+            theme={themeColors}
+            className="close"
+            type={props.type}
+            onClick={props.onChange}
+          >
             {props.value}
           </Button>
         );
@@ -180,7 +392,11 @@ function FormInput(props) {
                 checked={props.value}
                 onChange={(event) => {
                   console.log(event.target.checked === false ? false : true);
-                  props.onChange(event.target.checked === false ? false : true, props.id, props.type);
+                  props.onChange(
+                    event.target.checked === false ? false : true,
+                    props.id,
+                    props.type
+                  );
                 }}
               ></Checkbox>
               {/* <span dangerouslySetInnerHTML={{ __html: t(props.placeholder) }}></span> */}
@@ -189,9 +405,25 @@ function FormInput(props) {
         );
       // Render a select box
       case "select":
-        return <CustomSelect theme={themeColors} {...props} name={props.id} selected={props.value} onSelect={props.onChange}></CustomSelect>;
+        return (
+          <CustomSelect
+            theme={themeColors}
+            {...props}
+            name={props.id}
+            selected={props.value}
+            onSelect={props.onChange}
+          ></CustomSelect>
+        );
       case "multiSelect":
-        return <MultiSelect theme={themeColors} {...props} name={props.id} selected={props.value} onSelect={props.onChange}></MultiSelect>;
+        return (
+          <MultiSelect
+            theme={themeColors}
+            {...props}
+            name={props.id}
+            selected={props.value}
+            onSelect={props.onChange}
+          ></MultiSelect>
+        );
       case "info":
         return (
           <Info className={` ${props.dynamicClass}`}>
@@ -200,12 +432,30 @@ function FormInput(props) {
         );
       case "title":
         return (
-          <SubHead theme={themeColors} className={`title ${props.dynamicClass}`}>
+          <SubHead
+            theme={themeColors}
+            className={`title ${props.dynamicClass}`}
+          >
             {t(props.title ?? "")}
           </SubHead>
         );
       case "hidden":
-        return <Input disabled={props.disabled ?? false} autoComplete="on" theme={themeColors} className={`input ${props.value.toString().length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} type={props.type} value={props.value} onChange={(event) => props.onChange(event, props.id, props.type, props.sub)} />;
+        return (
+          <Input
+            disabled={props.disabled ?? false}
+            autoComplete="on"
+            theme={themeColors}
+            className={`input ${
+              props.value.toString().length > 0 ? "shrink" : ""
+            }`}
+            placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`}
+            type={props.type}
+            value={props.value}
+            onChange={(event) =>
+              props.onChange(event, props.id, props.type, props.sub)
+            }
+          />
+        );
       default:
         return <></>;
     }

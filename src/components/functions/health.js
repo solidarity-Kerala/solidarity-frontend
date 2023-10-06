@@ -28,10 +28,13 @@ export const updateHealthDetails = (data = {}) => {
 
     // Calculate BMR (Basal Metabolic Rate)
     let bmr;
+    let ibw;
     if (gender === "Male") {
       bmr = 10 * presentWeight + 6.25 * height - 5 * age + 5;
+      ibw = height - 100 - (height - 150) / 4 + (presentWeight - 20) / 4;
     } else {
       bmr = 10 * presentWeight + 6.25 * height - 5 * age - 161;
+      ibw = height - 100 - (height - 150) / 2 + (presentWeight - 20) / 4;
     }
 
     // Define activity factors and their corresponding values
@@ -64,6 +67,7 @@ export const updateHealthDetails = (data = {}) => {
     // Update the data object with the calculated values
     data.bmi = isNaN(bmi) ? 0 : bmi;
     data.bmr = isNaN(bmr) ? 0 : bmr;
+    data.ibw = isNaN(ibw) ? 0 : ibw;
     data.calories = isNaN(calories) ? 0 : calories;
     data.percentageOfCarbs = isNaN(percentageOfCarbs) ? 0 : percentageOfCarbs;
     data.percentageOfFat = isNaN(percentageOfFat) ? 0 : percentageOfFat;
