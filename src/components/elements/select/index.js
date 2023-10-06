@@ -205,7 +205,7 @@ function CustomSelect(props) {
 
       <ul className="options">
         {props.search && options.length > 8 && <Search key={`search-inside${props.key}`} className="select" title="Search" theme={props.theme} placeholder="Search" value={searchValue} onChange={handleChange} />}
-        {props.apiSearch && <Search key="search-api-2" className={"select "+props.customClass} title="Search" theme={props.theme} placeholder="Search" value={searchKey} onChange={handleChange} />}
+        {props.apiSearch && <Search key="search-api-2" className={"select "+props.customClass} title="Search" theme={props.theme} placeholder={`Search ${props.label}`} value={searchKey} onChange={handleChange} />}
         {optionsVisible && initialized && (
           <>
             {options.length > 0 &&

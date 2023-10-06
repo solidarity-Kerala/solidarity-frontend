@@ -175,68 +175,31 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   };
 
   const editDiet = async (option) => {
+    console.log(menuData.user.diet.mealTimeCategory.map((item) => item._id));
     setParameters([
-      // TYPE OF DIET IS A DIET //
       {
         type: "select",
         apiType: "API",
-        selectApi: "diet/select",
-        placeholder: "Diet",
-        name: "diet",
-        validation: "",
-        showItem: "title",
-        default: "",
-        tag: true,
-        label: "Diet",
-        required: true,
-        view: true,
-        add: true,
-        update: true,
-        filter: false,
-      },
-      // TYPE OF DIET IS A DIET //
-      // DIET PLAN IS A SUB DIET //
-      {
-        type: "select",
-        apiType: "API",
-        selectApi: "sub-diet/get-sub-diet-by-diet",
-        updateOn: "diet",
-        placeholder: "Sub Diet",
-        name: "subDiet",
-        validation: "",
-        collection: "subDiet",
-        showItem: "title",
-        default: "",
-        tag: true,
-        label: "Sub Diet",
-        required: true,
-        view: true,
-        add: true,
-        update: true,
-        filter: false,
-      },
-      {
-        type: "select",
-        apiType: "API",
-        selectApi: "package/select",
-        updateOn: "subDiet",
-        updateFields: [{ id: "foodMenu", value: "_id", collection: "foodMenu" }],
-        placeholder: "Package",
+        selectApi: "package/food-menu",
+        updateOn: "package",
+        params: [{ name: "package", value: menuData.user.diet.package }],
+        placeholder: "Menu",
         tags: [
           {
             type: "text",
             item: "menuType",
             title: "Menu Type",
-            collection: "foodMenu",
+            collection: "",
           },
         ],
         viewButton: {
           title: "View Menu",
           callback: (item, data) => {
+            console.log("popup item", item);
             setOpenedMenu("menu");
             // Set the data for the clicked item and open the SetupMenu popup
             setOpenItemData({
-              data: { ...item, ...item.foodMenu, _id: item.foodMenu._id },
+              data: { ...item },
               item: {
                 viewOnly: true,
                 itemTitle: {
@@ -264,16 +227,17 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 },
               },
             });
+
             setOpenMenuSetup(true);
           },
         },
-        name: "package",
+        name: "foodMenu",
         validation: "",
         showItem: "value",
-        collection: "diet",
-        default: "",
+        collection: "foodMenu",
+        default: menuData.user.diet.foodMenu,
         tag: true,
-        label: "Package",
+        label: "Menu",
         required: false,
         view: true,
         add: true,
@@ -282,13 +246,15 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       },
       {
         type: "select",
-        selectApi: "900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000",
-        apiType: "CSV",
+        selectApi: "package/calories",
+        params: [{ name: "package", value: menuData.user.diet.package }],
+        updateOn: "package",
+        apiType: "API",
         placeholder: "Calories",
         name: "calories",
         showItem: "",
         validation: "",
-        default: "",
+        default: menuData.user.diet.calories,
         tag: true,
         label: "Calories",
         filter: false,
@@ -303,7 +269,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         listView: true,
         name: "eligibleDays",
         validation: "",
-        default: [0, 1, 2, 3, 4, 5, 6],
+        default: menuData.user.diet.eligibleDays.map((item) => parseInt(item)),
         label: "Select Days of Week",
         required: true,
         view: true,
@@ -326,11 +292,11 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         type: "multiSelect",
         placeholder: "Select Meal Times",
         name: "mealTimeCategory",
-        updateOn: "package",
+        default: menuData.user.diet.mealTimeCategory.map((item) => item._id),
+        updateOn: "foodMenu",
         label: "Select Meal Times",
         required: true,
         view: true,
-        default: "",
         add: true,
         update: true,
         apiType: "API",
@@ -338,7 +304,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         selectApi: "mealtime-category/select-by-menu",
       },
     ]);
-    setIsOpen({ submit: "Udpate Now", api: "food-menu/undo-clone", header: "Mofify Diet", description: "" });
+    setIsOpen({ submit: "Udpate Now", api: "patient-diet/modify-diet", header: "Mofify Diet", description: "" });
   };
   const editNotes = async (type, item, index = { date: 0, categoryIndex: 0, recepeIndex: 0 }) => {
     switch (type) {
@@ -822,7 +788,12 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             <GetIcon icon={"next"} />
           </ArrowButton>
         </TabContainer>
-        {menuData && menuData.result?.length === 0 && <NoData className="white">  <GetIcon icon={"recipe"}></GetIcon>No menu set for this week!</NoData>}
+        {menuData && menuData.result?.length === 0 && (
+          <NoData className="white">
+            {" "}
+            <GetIcon icon={"recipe"}></GetIcon>No menu set for this week!
+          </NoData>
+        )}
         {menuData &&
           getWeekDays().map((date, index) => {
             // const date = moment(day._id);
@@ -922,15 +893,41 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 )}
                 <UserDetails>
                   <Details className="head true">
-                    <div>{`Nutrition Info based on ${popupData.availablecalories.calories} KCal`} </div>
+                    <div>{`Nutrition Info based on ${popupData.availablecalories.calories} KCal`}</div>
                   </Details>
-                  {Object.entries(popupData.nutritionInfo ?? {}).map(([key, value]) => (
-                    <Details>
-                      <div>{addSpaceBeforeCaps(key)}</div>
-                      <div>{isNaN(value) ? value : getValue({ type: "number" }, value)}</div>
-                    </Details>
-                  ))}
+                  {(() => {
+                    try {
+                      return Object.entries(popupData.nutritionInfo || {}).map(([key, value]) => {
+                        if (key === "nutritionInfoDetails") {
+                          return null;
+                        }
+                        return (
+                          <Details key={key}>
+                            <div>{addSpaceBeforeCaps(key)}</div>
+                            <div>{isNaN(value) ? value : getValue({ type: "number" }, value)}</div>
+                          </Details>
+                        );
+                      });
+                    } catch (error) {
+                      return null;
+                    }
+                  })()}
                 </UserDetails>
+                {popupData.recipe.isDislike && (
+                  <UserDetails>
+                    <Details className="head true">
+                      <div>{`All Ingredients`}</div>
+                    </Details>
+
+                    {popupData.recipe.recipe.recipeingredients.map((item) => {
+                      return (
+                        <Details>
+                          <div>{item.data.ingredientsName}</div>
+                        </Details>
+                      );
+                    })}
+                  </UserDetails>
+                )}
               </Table>
             }
             themeColors={themeColors}
@@ -1135,7 +1132,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       {openedMenu === "diet" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
-          popupData={<DietMenu openData={openItemData} setMessage={setMessage} themeColors={themeColors}></DietMenu>}
+          popupData={<DietMenu openData={openItemData} setLoaderBox={setLoaderBox} setMessage={setMessage} themeColors={themeColors}></DietMenu>}
           themeColors={themeColors}
           closeModal={closeModal}
           itemTitle={{ name: "username", type: "text", collection: "" }}

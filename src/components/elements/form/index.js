@@ -61,7 +61,10 @@ const AutoForm = (props) => {
       } else if (item.type === "image" || item.type === "file") {
         formVal[item.name] = [];
       } else if (item.type === "multiSelect") {
-        formVal[item.name] = [];
+        formVal[item.name] = item.default?.length > 0 ? item.default : [];
+      } else if (item.type === "select") {
+        formVal[item.name] = item.default?.toString()?.length > 0 ? item.default : "";
+        console.log("select", item.name, formVal[item.name]);
       } else if (item.type === "date") {
         item.default ? (date = new Date(item.default)) : (date = new Date());
         formVal[item.name] = date.toISOString();
@@ -329,6 +332,7 @@ const AutoForm = (props) => {
         ...additionalValues,
         [field.name]: value,
       };
+      console.log(udpateValue);
       // console.log("additionalValues", udpateValue);
       // Creating an updated field
       // updating the formm values
