@@ -520,10 +520,20 @@ export const NoData = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex: inherit;
+    gap: 10px;
   }
   svg {
     margin: auto;
     font-size: 30px;
+  }
+  button {
+    padding: 10px;
+    font-size: 12px;
+    border: 1px solid #a5a5a5;
+  }
+  button svg {
+    font-size: 15px;
   }
 `;
 export const Img = styled.img`
