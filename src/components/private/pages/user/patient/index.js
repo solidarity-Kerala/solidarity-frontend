@@ -1805,6 +1805,7 @@ const Patient = (props) => {
               setMessage={props.setMessage}
               {...props}
               themeColors={themeColors}
+              key={'patient-diet'}
             ></DietMenu>
           }
           themeColors={themeColors}

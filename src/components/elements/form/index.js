@@ -99,7 +99,7 @@ const AutoForm = (props) => {
         }
       });
     }
-
+console.log(formVal);
     setFormValues(formVal);
     setFormErrors(tempFormErrors);
     // validation(props.formInput, formVal);
