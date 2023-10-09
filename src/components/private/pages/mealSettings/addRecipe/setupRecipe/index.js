@@ -321,7 +321,9 @@ const SetupRecipe = ({ openData, setMessage }) => {
                     <tr key={0}>
                       <TableCell colSpan={4}>
                         <DataItemContainer>
-                          <DataItem className="head"><GetIcon icon={'info'}></GetIcon>Total Nutrition Info {portion > 1 && ` of ${1}/${portion}`}</DataItem>
+                          <DataItem className="head">
+                            <GetIcon icon={"info"}></GetIcon>Total Nutrition Info {portion > 1 && ` of ${1}/${portion}`}
+                          </DataItem>
                           <DataItem>
                             Gram:{getValue({ type: "number" }, nutritionInfo.gram / portion)}/{getValue({ type: "number" }, nutritionInfo.gram)}
                           </DataItem>
@@ -374,12 +376,14 @@ const SetupRecipe = ({ openData, setMessage }) => {
                     <tr key={0}>
                       <TableCell colSpan={4}>
                         <DataItemContainer>
-                          <DataItem className="head"><GetIcon icon={'info'}></GetIcon>Total Nutrition Info</DataItem>
+                          <DataItem className="head">
+                            <GetIcon icon={"info"}></GetIcon>Total Nutrition Info
+                          </DataItem>
                           <DataItem>Gram: {getValue({ type: "number" }, nutritionInfo.gram)}</DataItem>
                           <DataItem className="span">
                             <span>Bread: {getValue({ type: "percentage" }, nutritionInfo.breadGram)}</span>
-                            <span>Meat: {getValue({ type: "percentage" }, nutritionInfo.breadGram)}</span>
-                            <span>Other: {getValue({ type: "percentage" }, nutritionInfo.breadGram)}</span>
+                            <span>Meat: {getValue({ type: "percentage" }, nutritionInfo.meatGram)}</span>
+                            <span>Other: {getValue({ type: "percentage" }, nutritionInfo.otherGram)}</span>
                           </DataItem>
                           <DataItem>Calories: {getValue({ type: "number" }, nutritionInfo.calories)}</DataItem>
                           <DataItem>Protein: {getValue({ type: "number" }, nutritionInfo.protein)}</DataItem>

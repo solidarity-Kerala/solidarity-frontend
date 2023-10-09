@@ -24,6 +24,7 @@ export const Table = styled.table`
   thead {
     position: sticky;
     top: -33px;
+    z-index: 1;
   }
 `;
 
@@ -159,6 +160,7 @@ export const DataItem = styled.div`
   &.head {
     background-color: rgb(75, 75, 75);
     color: white;
+    font-weight: bold;
   }
   span:last-child:after {
     content: "";

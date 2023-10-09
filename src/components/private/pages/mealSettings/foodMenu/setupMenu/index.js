@@ -82,11 +82,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const [coloriePerDay, setColoriePerDay] = useState("900");
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories) => {
-      availableCalories =
-        availableCalories ??
-        menuData.mealTimeCategories.find(
-          (item) => mealTimeCategory === item._id
-        )?.availableCalories;
+      availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
       const {
         meal = 1,
         bread = 1,
@@ -102,8 +98,8 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         mixedBreadPercentage,
         numberOfPortion,
       } = recipe;
-      mixedMeatPercentage = mixedMeatPercentage ?? 100;
-      mixedBreadPercentage = mixedBreadPercentage ?? 100;
+      // mixedMeatPercentage = mixedMeatPercentage ?? 100;
+      // mixedBreadPercentage = mixedBreadPercentage ?? 100;
       const portion = (calories ?? 0) / (numberOfPortion ?? 1);
       let total = 0;
       if (typeOfRecipe === "Meat") {

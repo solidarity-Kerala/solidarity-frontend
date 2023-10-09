@@ -41,7 +41,7 @@ function MultiSelect(props) {
           const selectedData = (props.value || [])
             .map((itemValue) => {
               const foundItem = data.find((dataItem) => dataItem.id.toString() === itemValue?.toString());
-              return foundItem ? { id: foundItem.id??'', value: foundItem.value } : itemValue ? { id: itemValue??'', value: "Other" } : null;
+              return foundItem ? { id: foundItem.id ?? "", value: foundItem.value } : itemValue ? { id: itemValue ?? "", value: "Other" } : null;
             })
             .filter(Boolean);
           setSelectedId(selectedData);
@@ -56,12 +56,22 @@ function MultiSelect(props) {
           try {
             const selected = data.filter((itemValue) => itemValue.id === selectedId)[0].value;
             setSelectedValue(selected ? selected : props.placeHolder);
-          } catch {}
+          } catch (error) {
+            console.log(error);
+          }
         };
         await getData({ ...item, searchKey, limit: props.apiSearch ? 20 : 0, ...params }, `${props.selectApi}`)
           .then((response) => {
             if (response.status === 200) {
               optionHandler(response.data);
+              console.log(response.data);
+              const selectedData = (props.value || [])
+                .map((itemValue) => {
+                  const foundItem = response.data.find((dataItem) => dataItem.id.toString() === itemValue?.toString());
+                  return foundItem ? { id: foundItem.id ?? "", value: foundItem.value } : itemValue ? { id: itemValue ?? "", value: "Other" } : null;
+                })
+                .filter(Boolean);
+              setSelectedId(selectedData);
               dispatch(addSelectObject(response.data, props.selectApi));
             } else if (response.status === 404) {
               setInitialized(false);

@@ -22,7 +22,7 @@ const CrudForm = (props) => {
 
   // State to store the form values
   const [formValues, setFormValues] = useState(props.formValues);
-
+  
   // State to store the validation messages
   const [formErrors, setFormErrors] = useState(props.formErrors);
   const themeColors = useSelector((state) => state.themeColors);

@@ -34,7 +34,10 @@ import {
   Table,
 } from "../../../mealSettings/foodMenu/setupMenu/styles";
 import PopupView from "../../../../../elements/popupview";
-import AutoForm from "../../../../../elements/form";
+// import AutoForm from "../../../../../elements/form";
+import { Button } from "../../../../../elements/input/styles";
+import AutoForm from "../../../../../elements/autoform/AutoForm";
+import SetupMenu from "../../../mealSettings/foodMenu/setupMenu";
 const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const [userId] = useState(openData.data._id);
   const [menuData, setMenuData] = useState(0);
@@ -121,20 +124,23 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         { value: "Friday", id: 5 },
         { value: "Saturday", id: 6 },
       ];
-      const filteredDays = days.filter((day) => days.includes(day));
+      console.log(items);
+      const filteredDays = days.filter((day) =>
+        items.includes(day.id.toString())
+      );
       return filteredDays?.map((item, index) =>
         element === "span" ? (
-          <span key={index}>{item["value"]}</span>
+          <span key={index + element}>{item["value"]}</span>
         ) : (
-          <div key={index}>{item["value"]}</div>
+          <div key={index + element}>{item["value"]}</div>
         )
       );
     } else {
       return items?.map((item, index) =>
         element === "span" ? (
-          <span key={index}>{item[value]}</span>
+          <span key={index + element}>{item[value]}</span>
         ) : (
-          <div key={index}>{item[value]}</div>
+          <div key={index + element}>{item[value]}</div>
         )
       );
     }
@@ -250,72 +256,49 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       }
     }
   };
-
-  const editDiet = async (option) => {
+  const addDiet = async () => {
     setParameters([
-      // TYPE OF DIET IS A DIET //
-      {
-        type: "select",
-        apiType: "API",
-        selectApi: "diet/select",
-        placeholder: "Diet",
-        name: "diet",
-        validation: "",
-        showItem: "title",
-        default: "",
-        tag: true,
-        label: "Diet",
-        required: true,
-        view: true,
-        add: true,
-        update: true,
-        filter: false,
-      },
-      // TYPE OF DIET IS A DIET //
-      // DIET PLAN IS A SUB DIET //
-      {
-        type: "select",
-        apiType: "API",
-        selectApi: "sub-diet/get-sub-diet-by-diet",
-        updateOn: "diet",
-        placeholder: "Sub Diet",
-        name: "subDiet",
-        validation: "",
-        collection: "subDiet",
-        showItem: "title",
-        default: "",
-        tag: true,
-        label: "Sub Diet",
-        required: true,
-        view: true,
-        add: true,
-        update: true,
-        filter: false,
-      },
       {
         type: "select",
         apiType: "API",
         selectApi: "package/select",
-        updateOn: "subDiet",
-        updateFields: [
-          { id: "foodMenu", value: "_id", collection: "foodMenu" },
-        ],
         placeholder: "Package",
+        name: "package",
+        validation: "",
+        collection: "package",
+        showItem: "title",
+        default: "",
+        tag: true,
+        label: "Package",
+        required: true,
+        view: true,
+        add: true,
+        update: true,
+        filter: false,
+      },
+      {
+        type: "select",
+        apiType: "API",
+        selectApi: "package/food-menu",
+        updateOn: "package",
+        // updateFields: [{ id: "foodMenu", value: "_id", collection: "foodMenu" }],
+        placeholder: "Menu",
         tags: [
           {
             type: "text",
             item: "menuType",
             title: "Menu Type",
-            collection: "foodMenu",
+            collection: "",
           },
         ],
         viewButton: {
           title: "View Menu",
           callback: (item, data) => {
-            setOpenedMenu("menu");
+            console.log("popup item diet", item);
+            setOpenedMenu("diet");
             // Set the data for the clicked item and open the SetupMenu popup
             setOpenItemData({
-              data: { ...item, ...item.foodMenu, _id: item.foodMenu._id },
+              data: { ...item },
               item: {
                 viewOnly: true,
                 itemTitle: {
@@ -343,16 +326,18 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 },
               },
             });
+
             setOpenMenuSetup(true);
           },
         },
-        name: "package",
+        name: "foodMenu",
         validation: "",
         showItem: "value",
-        collection: "diet",
+        collection: "foodMenu",
+        params: [{ name: "package" }],
         default: "",
         tag: true,
-        label: "Package",
+        label: "Menu",
         required: false,
         view: true,
         add: true,
@@ -360,9 +345,17 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         filter: false,
       },
       {
+        type: "title",
+        title: "Menu Settings",
+        name: "menuSettings",
+        add: true,
+        update: true,
+      },
+      {
         type: "select",
-        selectApi: "900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000",
-        apiType: "CSV",
+        selectApi: "package/calories",
+        updateOn: "package",
+        apiType: "API",
         placeholder: "Calories",
         name: "calories",
         showItem: "",
@@ -405,7 +398,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         type: "multiSelect",
         placeholder: "Select Meal Times",
         name: "mealTimeCategory",
-        updateOn: "package",
+        updateOn: "foodMenu",
         label: "Select Meal Times",
         required: true,
         view: true,
@@ -416,10 +409,212 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         search: false,
         selectApi: "mealtime-category/select-by-menu",
       },
+      {
+        type: "title",
+        title: "Time & Duration",
+        name: "menuSettings",
+        add: true,
+        update: true,
+      },
+      {
+        type: "date",
+        placeholder: "Start Date & Time",
+        name: "startDate",
+        showItem: "",
+        validation: "",
+        default: "",
+        tag: true,
+        label: "Start Date",
+        required: true,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Number of Days",
+        name: "numberofDays",
+        showItem: "",
+        validation: "",
+        default: "",
+        tag: true,
+        label: "Number of Days",
+        required: true,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "textarea",
+        placeholder: "Remarks",
+        name: "remarks",
+        showItem: "",
+        validation: "",
+        default: "",
+        tag: true,
+        label: "Remarks",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
     ]);
     setIsOpen({
+      type: "addDiet",
+      submit: "Submit Now",
+      api: "patient-diet",
+      header: "Add Diet",
+      description: "",
+    });
+  };
+  const editDiet = async (option) => {
+    console.log(menuData.user.diet.mealTimeCategory.map((item) => item._id));
+    setParameters([
+      {
+        type: "select",
+        apiType: "API",
+        selectApi: "package/food-menu",
+        updateOn: "package",
+        params: [{ name: "package", value: menuData.user.diet.package }],
+        placeholder: "Menu",
+        tags: [
+          {
+            type: "text",
+            item: "menuType",
+            title: "Menu Type",
+            collection: "",
+          },
+        ],
+        viewButton: {
+          title: "View Menu",
+          callback: (item, data) => {
+            console.log("popup item diet", item);
+            setOpenedMenu("diet");
+            // Set the data for the clicked item and open the SetupMenu popup
+            setOpenItemData({
+              data: { ...item },
+              item: {
+                viewOnly: true,
+                itemTitle: {
+                  name: "value",
+                  type: "text",
+                  collection: "",
+                },
+                icon: "menu",
+                title: "Setup Menu",
+                params: {
+                  api: `food-group-item`,
+                  parentReference: "",
+                  // itemTitle: "username",
+                  itemTitle: {
+                    name: "value",
+                    type: "text",
+                    collection: "",
+                  },
+                  shortName: "Recipe Items",
+                  addPrivilege: true,
+                  delPrivilege: true,
+                  updatePrivilege: true,
+                  customClass: "medium",
+                  // formMode: "double",
+                },
+              },
+            });
+
+            setOpenMenuSetup(true);
+          },
+        },
+        name: "foodMenu",
+        validation: "",
+        showItem: "value",
+        collection: "foodMenu",
+        default: menuData.user.diet.foodMenu,
+        tag: true,
+        label: "Menu",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+        filter: false,
+      },
+      {
+        type: "select",
+        selectApi: "package/calories",
+        params: [{ name: "package", value: menuData.user.diet.package }],
+        updateOn: "package",
+        apiType: "API",
+        placeholder: "Calories",
+        name: "calories",
+        showItem: "",
+        validation: "",
+        default: menuData.user.diet.calories,
+        tag: true,
+        label: "Calories",
+        filter: false,
+        required: true,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "multiSelect",
+        placeholder: "Select Days of Week",
+        listView: true,
+        name: "eligibleDays",
+        validation: "",
+        default: menuData.user.diet.eligibleDays.map((item) => parseInt(item)),
+        label: "Select Days of Week",
+        required: true,
+        view: true,
+        customClass: "list",
+        add: true,
+        update: true,
+        apiType: "JSON",
+        search: false,
+        selectApi: [
+          { value: "Sunday", id: 0 },
+          { value: "Monday", id: 1 },
+          { value: "Tuesday", id: 2 },
+          { value: "Wednesday", id: 3 },
+          { value: "Thursday", id: 4 },
+          { value: "Friday", id: 5 },
+          { value: "Saturday", id: 6 },
+        ],
+      },
+      {
+        type: "multiSelect",
+        placeholder: "Select Meal Times",
+        name: "mealTimeCategory",
+        default: menuData.user.diet.mealTimeCategory.map((item) => item._id),
+        updateOn: "foodMenu",
+        label: "Select Meal Times",
+        required: true,
+        view: true,
+        add: true,
+        update: true,
+        apiType: "API",
+        search: false,
+        selectApi: "mealtime-category/select-by-menu",
+      },
+      {
+        type: "hidden",
+        placeholder: "patientDeit",
+        name: "patientDiet",
+        showItem: "",
+        validation: "",
+        default: menuData.user.diet._id,
+        // tag: true,
+        label: "patientDeit",
+        required: true,
+        view: true,
+        add: false,
+        update: true,
+      },
+    ]);
+    setIsOpen({
+      type: "editDiet",
       submit: "Udpate Now",
-      api: "food-menu/undo-clone",
+      api: "patient-diet/modify-diet",
       header: "Mofify Diet",
       description: "",
     });
@@ -443,7 +638,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             label: "Remarks",
             required: true,
             view: true,
-            add: false,
+            add: true,
             update: true,
           },
           {
@@ -480,7 +675,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             label: "Kitchen Note",
             required: true,
             view: true,
-            add: false,
+            add: true,
             update: true,
           },
           {
@@ -553,7 +748,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     setLoaderBox(true);
     await postData(
       {
-        foodMenu: menuData.user.diet.foodMenu,
+        ...(menuData.user.diet
+          ? { foodMenu: menuData.user.diet.foodMenu }
+          : {}),
+        user: menuData.user.profile.user._id,
         weekNumber: parseInt(0),
         ...post,
       },
@@ -563,6 +761,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         switch (isOpen.type) {
           case "diagnose":
             updateDiet("diagnoseNote", response.data.response.diagnoseNote);
+            break;
+          case "addDiet":
+          case "editDiet":
+            setCurrentDate(moment());
             break;
           case "kitchen":
             updateDiet("kitchenNote", response.data.response.kitchenNote);
@@ -750,7 +952,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     return recipes.map((recipeItem, recepeIndex) => {
       return (
         (recipeItem.isDeleted ?? false) === isDeleted && (
-          <>
+          <React.Fragment key={`recipe-${recepeIndex}`}>
             <Recepe className={isDeleted ? "recipe deleted" : "recipe"}>
               <RecepeContent className="recipe1">
                 <RecepeImage
@@ -842,7 +1044,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                             );
                           }}
                         >
-                          <GetIcon icon={"swap"} />
+                          <GetIcon icon={"redo"} />
                         </span>
                       )}
                     <span
@@ -1007,518 +1209,590 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 </ReplacableItems>
               )}
             </Recepe>
-          </>
+          </React.Fragment>
         )
       );
     });
   };
-  return menuData?.user?.diet ? (
-    <ColumnContainer>
-      <RowContainer className="menu-schedule">
-        <TabContainer>
-          <SwitchButton
-            className="custom"
-            enableBg={"rgb(239 239 239)"}
-            enableColor={"black"}
-            active={expandAll}
-            onClick={() => setExpandAll((prev) => !prev)}
-          >
-            <GetIcon icon={"open-book"} />
-          </SwitchButton>
-          {/* <SwitchButton enableBg={"#cccccc;"} enableColor={"black"} active={expandAll} onClick={() => setExpandAll((prev) => !prev)}>
+  return (
+    menuData?.user && (
+      <ColumnContainer>
+        <RowContainer className="menu-schedule">
+          {menuData?.user.diet ? (
+            <>
+              <TabContainer>
+                <SwitchButton
+                  className="custom"
+                  enableBg={"rgb(239 239 239)"}
+                  enableColor={"black"}
+                  active={expandAll}
+                  onClick={() => setExpandAll((prev) => !prev)}
+                >
+                  <GetIcon icon={"open-book"} />
+                </SwitchButton>
+                {/* <SwitchButton enableBg={"#cccccc;"} enableColor={"black"} active={expandAll} onClick={() => setExpandAll((prev) => !prev)}>
             <span>{expandAll ? "Collapse All" : "Expand All"}</span> <GetIcon icon={"open-book"} />
           </SwitchButton> */}
-          <ArrowButton
-            className="normal"
-            onClick={() => {
-              ChangeDate(-1);
-            }}
-          >
-            <GetIcon icon={"previous"} />
-          </ArrowButton>
-          <TabContainer>
-            {getWeekDays().map((day, index) => {
-              const dateName = getRelativeDay(day);
-              const formattedDay = day.format("YYYY-MM-DD");
-              return (
-                <TabButton
-                  key={day}
-                  active={selectedDayNumber === formattedDay}
+                <ArrowButton
+                  className="normal"
                   onClick={() => {
-                    setSelectedDayNumber(formattedDay);
+                    ChangeDate(-1);
                   }}
                 >
-                  <DayHead key={day}>
-                    {dateName === "Unknown" ? (
-                      <div className="dayName">{`${day.format("ddd")}`}</div>
-                    ) : (
-                      <div className="dayName">{dateName}</div>
-                    )}
-                    <div className="day">{day.format("D MMM")}</div>
-                  </DayHead>
-                </TabButton>
-              );
-            })}
-          </TabContainer>
-          <ArrowButton
-            className="normal"
-            onClick={() => {
-              ChangeDate(1);
-            }}
-          >
-            <GetIcon icon={"next"} />
-          </ArrowButton>
-        </TabContainer>
-        {menuData && menuData.result?.length === 0 && (
-          <NoData className="white">
-            {" "}
-            <GetIcon icon={"recipe"}></GetIcon>No menu set for this week!
-          </NoData>
-        )}
-        {menuData &&
-          getWeekDays().map((date, index) => {
-            // const date = moment(day._id);
-            const day = menuData.result.find(
-              (item) => item._id === date.format("YYYY-MM-DD")
-            );
-            const formattedDay = date.format("YYYY-MM-DD");
-            const calories = day?.menu?.reduce((sumMenu, menu) => {
-              const mealtimeCalories = menu.recipes.reduce(
-                (sumMealtime, mealtime) => {
-                  return (
-                    sumMealtime +
-                    (mealtime.isDeleted ?? false ? 0 : mealtime.calories || 0)
+                  <GetIcon icon={"previous"} />
+                </ArrowButton>
+                <TabContainer>
+                  {getWeekDays().map((day, index) => {
+                    const dateName = getRelativeDay(day);
+                    const formattedDay = day.format("YYYY-MM-DD");
+                    return (
+                      <TabButton
+                        key={`${index}-${day}`}
+                        active={selectedDayNumber === formattedDay}
+                        onClick={() => {
+                          setSelectedDayNumber(formattedDay);
+                        }}
+                      >
+                        <DayHead>
+                          {dateName === "Unknown" ? (
+                            <div className="dayName">{`${day.format(
+                              "ddd"
+                            )}`}</div>
+                          ) : (
+                            <div className="dayName">{dateName}</div>
+                          )}
+                          <div className="day">{day.format("D MMM")}</div>
+                        </DayHead>
+                      </TabButton>
+                    );
+                  })}
+                </TabContainer>
+                <ArrowButton
+                  className="normal"
+                  onClick={() => {
+                    ChangeDate(1);
+                  }}
+                >
+                  <GetIcon icon={"next"} />
+                </ArrowButton>
+              </TabContainer>
+              {menuData && menuData.result?.length === 0 && (
+                <NoData className="white">
+                  {" "}
+                  <GetIcon icon={"recipe"}></GetIcon>No menu set for this week!
+                </NoData>
+              )}
+              {menuData &&
+                getWeekDays().map((date, index) => {
+                  // const date = moment(day._id);
+                  const day = menuData.result.find(
+                    (item) => item._id === date.format("YYYY-MM-DD")
                   );
-                },
-                0
-              );
-
-              return sumMenu + mealtimeCalories;
-            }, 0);
-            return day?.menu ? (
-              <Box active={selectedDayNumber === formattedDay} key={day._id}>
-                <DayData>
-                  <MealTimeHead className="assigned title">
-                    {`Calori for the day`}
-                    <span>{calories.toFixed(2)}KCal </span>
-                  </MealTimeHead>
-                  {day.menu.map((menuItem, categoryIndex) => {
-                    const mealtimeCalories = menuItem.recipes.reduce(
+                  const formattedDay = date.format("YYYY-MM-DD");
+                  const calories = day?.menu?.reduce((sumMenu, menu) => {
+                    const mealtimeCalories = menu.recipes.reduce(
                       (sumMealtime, mealtime) => {
-                        return sumMealtime + (mealtime.calories || 0);
+                        return (
+                          sumMealtime +
+                          (mealtime.isDeleted ?? false
+                            ? 0
+                            : mealtime.calories || 0)
+                        );
                       },
                       0
                     );
-                    return (
+
+                    return sumMenu + mealtimeCalories;
+                  }, 0);
+                  return day?.menu ? (
+                    <Box
+                      active={selectedDayNumber === formattedDay}
+                      key={day._id}
+                    >
+                      <DayData>
+                        <MealTimeHead className="assigned title">
+                          {`Calori for the day`}
+                          <span>{calories.toFixed(2)}KCal </span>
+                        </MealTimeHead>
+                        {day.menu.map((menuItem, categoryIndex) => {
+                          const mealtimeCalories = menuItem.recipes.reduce(
+                            (sumMealtime, mealtime) => {
+                              return sumMealtime + (mealtime.calories || 0);
+                            },
+                            0
+                          );
+                          return (
+                            <Box
+                              active={selectedDayNumber === formattedDay}
+                              key={menuItem.id}
+                            >
+                              <MealTimeHead
+                                className="assigned"
+                                active={
+                                  (selectedMealTime[
+                                    `${menuItem.mealTimeCategory._id}-${day._id}`
+                                  ] ??
+                                    false) ||
+                                  expandAll
+                                }
+                                onClick={() =>
+                                  setSelectedMealTime((prev) => ({
+                                    ...prev,
+                                    [`${menuItem.mealTimeCategory._id}-${day._id}`]:
+                                      !prev[
+                                        `${menuItem.mealTimeCategory._id}-${day._id}`
+                                      ] ?? true,
+                                  }))
+                                }
+                              >
+                                {`${menuItem.mealTimeCategory.mealtimeCategoriesName}`}
+                                <span>{mealtimeCalories.toFixed(2)}Kcal</span>{" "}
+                                <GetIcon icon={"down"}></GetIcon>
+                              </MealTimeHead>
+                              {(selectedMealTime[
+                                `${menuItem.mealTimeCategory._id}-${day._id}`
+                              ] === true ||
+                                expandAll) && (
+                                <>
+                                  <Recepes>
+                                    {renderRecipe(
+                                      menuItem.recipes,
+                                      index,
+                                      date,
+                                      categoryIndex,
+                                      false
+                                    )}
+                                  </Recepes>
+                                  <Recepes>
+                                    {renderRecipe(
+                                      menuItem.recipes,
+                                      index,
+                                      date,
+                                      categoryIndex,
+                                      true
+                                    )}
+                                  </Recepes>
+                                </>
+                              )}
+                            </Box>
+                          );
+                        })}
+                      </DayData>
+                    </Box>
+                  ) : (
+                    menuData.result?.length > 0 && (
                       <Box
                         active={selectedDayNumber === formattedDay}
-                        key={menuItem.id}
+                        key={formattedDay}
                       >
-                        <MealTimeHead
-                          className="assigned"
-                          active={
-                            (selectedMealTime[
-                              `${menuItem.mealTimeCategory._id}-${day._id}`
-                            ] ??
-                              false) ||
-                            expandAll
-                          }
-                          onClick={() =>
-                            setSelectedMealTime((prev) => ({
-                              ...prev,
-                              [`${menuItem.mealTimeCategory._id}-${day._id}`]:
-                                !prev[
-                                  `${menuItem.mealTimeCategory._id}-${day._id}`
-                                ] ?? true,
-                            }))
-                          }
-                        >
-                          {`${menuItem.mealTimeCategory.mealtimeCategoriesName}`}
-                          <span>{mealtimeCalories.toFixed(2)}Kcal</span>{" "}
-                          <GetIcon icon={"down"}></GetIcon>
-                        </MealTimeHead>
-                        {(selectedMealTime[
-                          `${menuItem.mealTimeCategory._id}-${day._id}`
-                        ] === true ||
-                          expandAll) && (
-                          <>
-                            <Recepes>
-                              {renderRecipe(
-                                menuItem.recipes,
-                                index,
-                                date,
-                                categoryIndex,
-                                false
-                              )}
-                            </Recepes>
-                            <Recepes>
-                              {renderRecipe(
-                                menuItem.recipes,
-                                index,
-                                date,
-                                categoryIndex,
-                                true
-                              )}
-                            </Recepes>
-                          </>
-                        )}
+                        <NoData className="white">
+                          <GetIcon icon={"recipe"}></GetIcon>{" "}
+                          <span>No menu for the day</span>
+                        </NoData>
                       </Box>
-                    );
-                  })}
-                </DayData>
-              </Box>
-            ) : (
-              menuData.result?.length > 0 && (
-                <Box
-                  active={selectedDayNumber === formattedDay}
-                  key={formattedDay}
-                >
-                  <NoData className="white">
-                    <GetIcon icon={"recipe"}></GetIcon>{" "}
-                    <span>No menu for the day</span>
-                  </NoData>
-                </Box>
-              )
-            );
-          })}
-        {popupData && (
-          <PopupView
-            popupData={
-              <Table className="full short">
-                {popupData.recipe.isAllergy && (
-                  <UserDetails>
-                    <Details className="head true">
-                      <div>{`Allergy on Ingredients`} </div>
-                    </Details>
-
-                    {popupData.recipe.recipe.recipeingredients.map((item) => {
-                      return (
-                        item.isAllergy && (
-                          <Details>
-                            <div>{item.data.ingredientsName}</div>
-                          </Details>
-                        )
-                      );
-                    })}
-                  </UserDetails>
-                )}
-                {popupData.recipe.isDislike && (
-                  <UserDetails>
-                    <Details className="head true">
-                      <div>{`Disliked Ingredients`}</div>
-                    </Details>
-
-                    {popupData.recipe.recipe.recipeingredients.map((item) => {
-                      return (
-                        item.isDislike && (
-                          <Details>
-                            <div>{item.data.ingredientsName}</div>
-                          </Details>
-                        )
-                      );
-                    })}
-                  </UserDetails>
-                )}
-                <UserDetails>
-                  <Details className="head true">
-                    <div>
-                      {`Nutrition Info based on ${popupData.availablecalories.calories} KCal`}{" "}
-                    </div>
-                  </Details>
-                  {Object.entries(popupData.nutritionInfo ?? {}).map(
-                    ([key, value]) => (
-                      <Details>
-                        <div>{addSpaceBeforeCaps(key)}</div>
-                        <div>
-                          {isNaN(value)
-                            ? value
-                            : getValue({ type: "number" }, value)}
-                        </div>
-                      </Details>
                     )
-                  )}
-                </UserDetails>
-              </Table>
+                  );
+                })}
+              {popupData && (
+                <PopupView
+                  popupData={
+                    <Table className="full short">
+                      {popupData.recipe.isAllergy && (
+                        <UserDetails>
+                          <Details className="head true">
+                            <div>{`Allergy on Ingredients`} </div>
+                          </Details>
+
+                          {popupData.recipe.recipe.recipeingredients.map(
+                            (item, index) => {
+                              return (
+                                item.isAllergy && (
+                                  <Details key={`details-${index}`}>
+                                    <div>{item.data.ingredientsName}</div>
+                                  </Details>
+                                )
+                              );
+                            }
+                          )}
+                        </UserDetails>
+                      )}
+                      {popupData.recipe.isDislike && (
+                        <UserDetails>
+                          <Details className="head true">
+                            <div>{`Disliked Ingredients`}</div>
+                          </Details>
+
+                          {popupData.recipe.recipe.recipeingredients.map(
+                            (item, index) => {
+                              return (
+                                item.isDislike && (
+                                  <Details key={`details-1-${index}`}>
+                                    <div>{item.data.ingredientsName}</div>
+                                  </Details>
+                                )
+                              );
+                            }
+                          )}
+                        </UserDetails>
+                      )}
+                      <UserDetails>
+                        <Details className="head true">
+                          <div>{`Nutrition Info based on ${popupData.availablecalories.calories} KCal`}</div>
+                        </Details>
+                        {(() => {
+                          try {
+                            return Object.entries(
+                              popupData.nutritionInfo || {}
+                            ).map(([key, value]) => {
+                              if (key === "nutritionInfoDetails") {
+                                return null;
+                              }
+                              return (
+                                <Details key={key}>
+                                  <div>{addSpaceBeforeCaps(key)}</div>
+                                  <div>
+                                    {isNaN(value)
+                                      ? value
+                                      : getValue({ type: "number" }, value)}
+                                  </div>
+                                </Details>
+                              );
+                            });
+                          } catch (error) {
+                            return null;
+                          }
+                        })()}
+                      </UserDetails>
+                      {popupData.recipe.isDislike && (
+                        <UserDetails>
+                          <Details className="head true">
+                            <div>{`All Ingredients`}</div>
+                          </Details>
+
+                          {popupData.recipe.recipe.recipeingredients.map(
+                            (item, index) => {
+                              return (
+                                <Details key={`details-2-${index}`}>
+                                  <div>{item.data.ingredientsName}</div>
+                                </Details>
+                              );
+                            }
+                          )}
+                        </UserDetails>
+                      )}
+                    </Table>
+                  }
+                  themeColors={themeColors}
+                  closeModal={() => setPopupData(null)}
+                  itemTitle={{ name: "title", type: "text", collection: "" }}
+                  openData={popupData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+                  customClass={"small"}
+                ></PopupView>
+              )}
+            </>
+          ) : (
+            <RowContainer>
+              <NoData className="white">
+                <GetIcon icon={"recipe"}></GetIcon>{" "}
+                {isLoaded ? "No Diet Schedule Found" : "Loading"}
+                <Button onClick={() => addDiet()}>
+                  <GetIcon icon={"add"}></GetIcon>
+                </Button>
+              </NoData>
+            </RowContainer>
+          )}
+        </RowContainer>
+
+        <RowContainer className="user-details">
+          {menuData?.user.diet && (
+            <ActionBox>
+              <SwitchButton
+                enableBg={"white"}
+                enableColor={"black"}
+                active={pause}
+                onClick={() => pauseStartDiet()}
+              >
+                <span>{pause ? "Restart Diet" : "Pause Diet"}</span>{" "}
+                <GetIcon icon={pause ? "play" : "pause"} />
+              </SwitchButton>
+              <SwitchButton
+                enableBg={"white"}
+                enableColor={"black"}
+                active={pause}
+                onClick={() => editDiet()}
+              >
+                <span>{"Modify Diet"}</span> <GetIcon icon={"edit"} />
+              </SwitchButton>
+            </ActionBox>
+          )}
+          {menuData && menuData.user && (
+            <>
+              <UserDetails>
+                <Details
+                  className="head true"
+                  onClick={() =>
+                    setSelectedMealTime((prev) => ({
+                      ...prev,
+                      [`patient-diet`]: !prev[`patient-diet`] ?? true,
+                    }))
+                  }
+                >
+                  <div>
+                    {menuData.user.profile.user.username}'s Medical Records
+                  </div>
+                </Details>
+                {
+                  <>
+                    <Details>
+                      <div>Height</div>
+                      <div>{menuData.user.profile.height}</div>
+                    </Details>
+                    <Details>
+                      <div>Weight</div>
+                      <div>{menuData.user.profile.presentWeight}</div>
+                    </Details>
+                    <Details>
+                      <div>Gender</div>
+                      <div>{menuData.user.profile.gender}</div>
+                    </Details>
+                    <Details>
+                      <div>Age</div>
+                      <div>
+                        {calculateAge(menuData.user.profile.dateOfBirth)}
+                      </div>
+                    </Details>
+                    <Details>
+                      <div className="second">
+                        <div>Foodlike list </div>
+                        {populateArray(
+                          menuData.user.profile.foodLikeList,
+                          "foodLikeListName",
+                          "div"
+                        )}
+                      </div>
+                    </Details>
+
+                    <Details>
+                      <div className="second">
+                        <div>Dislike list </div>
+                        {populateArray(
+                          menuData.user.profile.foodDisLikeList,
+                          "proteinCategoriesName",
+                          "div"
+                        )}
+                      </div>
+                    </Details>
+                    <Details>
+                      <div className="second">
+                        <div>Medical condition </div>
+                        {populateArray(
+                          menuData.user.profile.medicalCondition,
+                          "medicalConditionsName",
+                          "div"
+                        )}
+                      </div>
+                    </Details>
+                    <Details>
+                      <div className="second">
+                        <div>Addiction list</div>
+                        {populateArray(
+                          menuData.user.profile.addictionList,
+                          "addictionListName",
+                          "div"
+                        )}
+                      </div>
+                    </Details>
+                    <Details>
+                      <div className="second">
+                        <div>Allergy list</div>
+                        {populateArray(
+                          menuData.user.profile.allergyList,
+                          "title",
+                          "div"
+                        )}
+                      </div>
+                    </Details>
+                  </>
+                }
+              </UserDetails>
+              <UserDetails>
+                <Details
+                  className={`head ${selectedMealTime[`active-diet`] ?? ""}`}
+                  onClick={() =>
+                    setSelectedMealTime((prev) => ({
+                      ...prev,
+                      [`active-diet`]: !prev[`active-diet`] ?? true,
+                    }))
+                  }
+                >
+                  <div>Active Diet</div>
+                  <GetIcon icon={"down"}></GetIcon>
+                </Details>
+                {selectedMealTime[`active-diet`] === true && (
+                  <>
+                    <Details>
+                      <div>Diet, Sub diet </div>
+                      <div>{`${menuData.user.diet.diet?.title}, ${menuData.user.diet.subDiet?.title}`}</div>
+                    </Details>
+                    <Details>
+                      <div>Choosen Days</div>
+                      <div>
+                        {populateArray(menuData.user.diet.eligibleDays, "days")}
+                      </div>
+                    </Details>
+                    <Details>
+                      <div>Selected Meal Times</div>
+                      <div>
+                        {populateArray(
+                          menuData.user.diet.mealTimeCategory,
+                          "mealtimeCategoriesName"
+                        )}
+                      </div>
+                    </Details>
+                    <Details>
+                      <div>Start Date</div>
+                      <div>{dateFormat(menuData.user.diet.startDate)}</div>
+                    </Details>
+                    <Details>
+                      <div>No of Days</div>
+                      <div>{menuData.user.diet.numberofDays}</div>
+                    </Details>
+                    <Details>
+                      <div>Calorie Intake</div>
+                      <div>{menuData.user.diet.calories} (Per day)</div>
+                    </Details>
+                    <Details>
+                      <div>End Date</div>
+                      <div>
+                        {calculateExpiryDate(
+                          menuData.user.diet.startDate,
+                          menuData.user.diet.numberofDays,
+                          menuData.user.diet.eligibleDays,
+                          []
+                        )}
+                      </div>
+                    </Details>
+                  </>
+                )}
+              </UserDetails>
+              <UserDetails>
+                <Details
+                  className={`head ${selectedMealTime[`diagnose`] ?? ""}`}
+                  onClick={() =>
+                    setSelectedMealTime((prev) => ({
+                      ...prev,
+                      [`diagnose`]: !prev[`diagnose`] ?? true,
+                    }))
+                  }
+                >
+                  <div>Diagnose Report</div>
+                  <GetIcon icon={"down"}></GetIcon>
+                </Details>
+                {selectedMealTime[`diagnose`] === true && (
+                  <Details>
+                    <div>
+                      {menuData.user.diet?.diagnoseNote?.length > 0
+                        ? menuData.user.diet?.diagnoseNote
+                        : "No diagnose found!"}
+                    </div>
+                    <button onClick={() => editNotes("diagnose")}>
+                      <GetIcon icon={"edit"}></GetIcon>
+                    </button>
+                  </Details>
+                )}
+              </UserDetails>
+              <UserDetails>
+                <Details
+                  className={`head ${selectedMealTime[`remarks`] ?? ""}`}
+                  onClick={() =>
+                    setSelectedMealTime((prev) => ({
+                      ...prev,
+                      [`remarks`]: !prev[`remarks`] ?? true,
+                    }))
+                  }
+                >
+                  <div>Kitchen Note</div>
+                  <GetIcon icon={"down"}></GetIcon>
+                </Details>
+                {selectedMealTime[`remarks`] === true && (
+                  <Details>
+                    <div>
+                      {menuData.user.diet?.kitchenNote?.length > 0
+                        ? menuData.user.diet?.kitchenNote
+                        : "No diagnose found!"}
+                    </div>
+                    <button onClick={() => editNotes("kitchen")}>
+                      <GetIcon icon={"edit"}></GetIcon>
+                    </button>
+                  </Details>
+                )}
+              </UserDetails>
+            </>
+          )}
+        </RowContainer>
+        {isOpen && (
+          // <AutoForm
+          //   userId={openData.data._id}
+          //   useCaptcha={true}
+          //   useCheckbox={false}
+          //   customClass={isOpen.customClass ?? ""}
+          //   description={isOpen.description}
+          //   formValues={{}}
+          //   css={isOpen.customClass ?? "double"}
+          //   key={isOpen.header}
+          //   formType={"post"}
+          //   header={isOpen.header}
+          //   formInput={parameters}
+          //   submitHandler={updateHandler}
+          //   button={isOpen.submit}
+          //   isOpenHandler={(value) => {
+          //     closeEdit(value);
+          //   }}
+          //   isOpen={true}
+          //   plainForm={false}
+          // ></AutoForm>
+          <AutoForm
+            userId={openData.data._id}
+            useCaptcha={true}
+            useCheckbox={false}
+            customClass={isOpen.customClass ?? ""}
+            description={isOpen.description}
+            formValues={{}}
+            formMode={isOpen.customClass ?? "double"}
+            key={isOpen.header}
+            formType={"post"}
+            header={isOpen.header}
+            formInput={parameters}
+            submitHandler={updateHandler}
+            button={isOpen.submit}
+            isOpenHandler={(value) => {
+              closeEdit(value);
+            }}
+            isOpen={true}
+            plainForm={false}
+          ></AutoForm>
+        )}
+        {openedMenu === "diet" && openMenuSetup && openItemData && (
+          <PopupView
+            // Popup data is a JSX element which is binding to the Popup Data Area like HOC
+            popupData={
+              <SetupMenu
+                key="setup-menu"
+                openData={openItemData}
+                setMessage={setMessage}
+                setLoaderBox={setLoaderBox}
+                // Pass selected item data (Menu Title) to the popup for setting the time
+              ></SetupMenu>
             }
             themeColors={themeColors}
-            closeModal={() => setPopupData(null)}
-            itemTitle={{ name: "title", type: "text", collection: "" }}
-            openData={popupData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
-            customClass={"small"}
+            closeModal={closeModal}
+            itemTitle={{ name: "value", type: "text", collection: "" }}
+            openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+            customClass={"full-page"}
           ></PopupView>
         )}
-      </RowContainer>
-
-      <RowContainer className="user-details">
-        <ActionBox>
-          <SwitchButton
-            enableBg={"white"}
-            enableColor={"black"}
-            active={pause}
-            onClick={() => pauseStartDiet()}
-          >
-            <span>{pause ? "Restart Diet" : "Pause Diet"}</span>{" "}
-            <GetIcon icon={pause ? "play" : "pause"} />
-          </SwitchButton>
-          <SwitchButton
-            enableBg={"white"}
-            enableColor={"black"}
-            active={pause}
-            onClick={() => editDiet()}
-          >
-            <span>{"Modify Diet"}</span> <GetIcon icon={"edit"} />
-          </SwitchButton>
-        </ActionBox>
-        {menuData && menuData.user && (
-          <>
-            <UserDetails>
-              <Details
-                className="head true"
-                onClick={() =>
-                  setSelectedMealTime((prev) => ({
-                    ...prev,
-                    [`patient-diet`]: !prev[`patient-diet`] ?? true,
-                  }))
-                }
-              >
-                <div>
-                  {menuData.user.profile.user.username}'s Medical Records
-                </div>
-              </Details>
-              {
-                <>
-                  <Details>
-                    <div>Height</div>
-                    <div>{menuData.user.profile.height}</div>
-                  </Details>
-                  <Details>
-                    <div>Weight</div>
-                    <div>{menuData.user.profile.presentWeight}</div>
-                  </Details>
-                  <Details>
-                    <div>Gender</div>
-                    <div>{menuData.user.profile.gender}</div>
-                  </Details>
-                  <Details>
-                    <div>Age</div>
-                    <div>{calculateAge(menuData.user.profile.dateOfBirth)}</div>
-                  </Details>
-                  <Details>
-                    <div className="second">
-                      <div>Foodlike list </div>
-                      {populateArray(
-                        menuData.user.profile.foodLikeList,
-                        "foodLikeListName",
-                        "div"
-                      )}
-                    </div>
-                  </Details>
-
-                  <Details>
-                    <div className="second">
-                      <div>Dislike list </div>
-                      {populateArray(
-                        menuData.user.profile.foodDisLikeList,
-                        "proteinCategoriesName",
-                        "div"
-                      )}
-                    </div>
-                  </Details>
-                  <Details>
-                    <div className="second">
-                      <div>Medical condition </div>
-                      {populateArray(
-                        menuData.user.profile.medicalCondition,
-                        "medicalConditionsName",
-                        "div"
-                      )}
-                    </div>
-                  </Details>
-                  <Details>
-                    <div className="second">
-                      <div>Addiction list</div>
-                      {populateArray(
-                        menuData.user.profile.addictionList,
-                        "addictionListName",
-                        "div"
-                      )}
-                    </div>
-                  </Details>
-                  <Details>
-                    <div className="second">
-                      <div>Allergy list</div>
-                      {populateArray(
-                        menuData.user.profile.allergyList,
-                        "title",
-                        "div"
-                      )}
-                    </div>
-                  </Details>
-                </>
-              }
-            </UserDetails>
-            <UserDetails>
-              <Details
-                className={`head ${selectedMealTime[`active-diet`] ?? ""}`}
-                onClick={() =>
-                  setSelectedMealTime((prev) => ({
-                    ...prev,
-                    [`active-diet`]: !prev[`active-diet`] ?? true,
-                  }))
-                }
-              >
-                <div>Active Diet</div>
-                <GetIcon icon={"down"}></GetIcon>
-              </Details>
-              {selectedMealTime[`active-diet`] === true && (
-                <>
-                  <Details>
-                    <div>Diet, Sub diet </div>
-                    <div>{`${menuData.user.diet.diet?.title}, ${menuData.user.diet.subDiet?.title}`}</div>
-                  </Details>
-                  <Details>
-                    <div>Choosen Days</div>
-                    <div>
-                      {populateArray(menuData.user.diet.eligibleDays, "days")}
-                    </div>
-                  </Details>
-                  <Details>
-                    <div>Selected Meal Times</div>
-                    <div>
-                      {populateArray(
-                        menuData.user.diet.mealTimeCategory,
-                        "mealtimeCategoriesName"
-                      )}
-                    </div>
-                  </Details>
-                  <Details>
-                    <div>Start Date</div>
-                    <div>{dateFormat(menuData.user.diet.startDate)}</div>
-                  </Details>
-                  <Details>
-                    <div>No of Days</div>
-                    <div>{menuData.user.diet.numberofDays}</div>
-                  </Details>
-                  <Details>
-                    <div>Calorie Intake</div>
-                    <div>{menuData.user.diet.calories} (Per day)</div>
-                  </Details>
-                  <Details>
-                    <div>End Date</div>
-                    <div>
-                      {calculateExpiryDate(
-                        menuData.user.diet.startDate,
-                        menuData.user.diet.numberofDays,
-                        menuData.user.diet.eligibleDays,
-                        []
-                      )}
-                    </div>
-                  </Details>
-                </>
-              )}
-            </UserDetails>
-            <UserDetails>
-              <Details
-                className={`head ${selectedMealTime[`diagnose`] ?? ""}`}
-                onClick={() =>
-                  setSelectedMealTime((prev) => ({
-                    ...prev,
-                    [`diagnose`]: !prev[`diagnose`] ?? true,
-                  }))
-                }
-              >
-                <div>Diagnose Report</div>
-                <GetIcon icon={"down"}></GetIcon>
-              </Details>
-              {selectedMealTime[`diagnose`] === true && (
-                <Details>
-                  <div>
-                    {menuData.user.diet?.diagnoseNote?.length > 0
-                      ? menuData.user.diet?.diagnoseNote
-                      : "No diagnose found!"}
-                  </div>
-                  <button onClick={() => editNotes("diagnose")}>
-                    <GetIcon icon={"edit"}></GetIcon>
-                  </button>
-                </Details>
-              )}
-            </UserDetails>
-            <UserDetails>
-              <Details
-                className={`head ${selectedMealTime[`remarks`] ?? ""}`}
-                onClick={() =>
-                  setSelectedMealTime((prev) => ({
-                    ...prev,
-                    [`remarks`]: !prev[`remarks`] ?? true,
-                  }))
-                }
-              >
-                <div>Kitchen Note</div>
-                <GetIcon icon={"down"}></GetIcon>
-              </Details>
-              {selectedMealTime[`remarks`] === true && (
-                <Details>
-                  <div>
-                    {menuData.user.diet?.kitchenNote?.length > 0
-                      ? menuData.user.diet?.kitchenNote
-                      : "No diagnose found!"}
-                  </div>
-                  <button onClick={() => editNotes("kitchen")}>
-                    <GetIcon icon={"edit"}></GetIcon>
-                  </button>
-                </Details>
-              )}
-            </UserDetails>
-          </>
-        )}
-      </RowContainer>
-      {isOpen && (
-        <AutoForm
-          userId={openData.data._id}
-          useCaptcha={true}
-          useCheckbox={false}
-          customClass={isOpen.customClass ?? ""}
-          description={isOpen.description}
-          formValues={{}}
-          css={isOpen.customClass ?? "double"}
-          key={isOpen.header}
-          formType={"post"}
-          header={isOpen.header}
-          formInput={parameters}
-          submitHandler={updateHandler}
-          button={isOpen.submit}
-          isOpenHandler={(value) => {
-            closeEdit(value);
-          }}
-          isOpen={true}
-          plainForm={false}
-        ></AutoForm>
-      )}
-      {openedMenu === "diet" && openMenuSetup && openItemData && (
-        <PopupView
-          // Popup data is a JSX element which is binding to the Popup Data Area like HOC
-          popupData={
-            <DietMenu
-              openData={openItemData}
-              setMessage={setMessage}
-              themeColors={themeColors}
-            ></DietMenu>
-          }
-          themeColors={themeColors}
-          closeModal={closeModal}
-          itemTitle={{ name: "username", type: "text", collection: "" }}
-          openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
-          customClass={"full-page"}
-        ></PopupView>
-      )}
-    </ColumnContainer>
-  ) : (
-    <ColumnContainer>
-      <NoData className="white">
-        <GetIcon icon={"recipe"}></GetIcon>{" "}
-        {isLoaded ? "No Diet Schedule Found" : "Loading"}
-      </NoData>
-    </ColumnContainer>
+      </ColumnContainer>
+    )
   );
 };
 
