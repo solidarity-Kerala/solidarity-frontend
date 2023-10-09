@@ -7,14 +7,19 @@ import "./style.css";
 import { dataURLToBlob } from "blob-util";
 import styled, { keyframes } from "styled-components";
 import { GetAccessToken } from "../../../../helpers/authentication";
-import ImageResize from 'react-quill-image-resize-module';
+import ImageResize from "react-quill-image-resize-module";
 Quill.register("modules/image-resize", ImageResize);
 const modules = {
   toolbar: [
     [{ header: "1" }, { header: "2" }, { font: [] }],
     [{ size: [] }],
     ["bold", "italic", "underline", "strike", "blockquote"],
-    [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
     ["link", "image"],
     ["clean"],
   ],
@@ -58,12 +63,16 @@ const Editor = (props) => {
     formData.append("image", file);
     const token = GetAccessToken();
     try {
-      const response = await axios.post("http://localhost:8000/api/common/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "x-access-token": token,
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:8000/api/common/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "x-access-token": token,
+          },
+        }
+      );
       const imageUrl = "http://localhost:8000/" + response.data.imageUrl;
       return imageUrl;
     } catch (error) {
@@ -81,7 +90,9 @@ const Editor = (props) => {
       // delete the previous character in the Quill editor
       quill.deleteText(quill.getSelection().index - 1, 1);
       // insert the new image
-      const delta = new Delta().retain(quill.getSelection().index || 0).insert({ image: imageUrl });
+      const delta = new Delta()
+        .retain(quill.getSelection().index || 0)
+        .insert({ image: imageUrl });
       quill.updateContents(delta);
     }
   };
@@ -204,7 +215,7 @@ const Page = styled.div`
   max-height: 300px;
   width: 100%;
   &.open {
-    width: 30%; 
+    width: 30%;
     min-width: 1200px;
     max-width: 100%;
     height: auto;

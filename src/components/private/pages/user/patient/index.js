@@ -1856,6 +1856,7 @@ const Patient = (props) => {
               openData={openItemData}
               setMessage={props.setMessage}
               // Pass selected item data (Menu Title) to the popup for setting the time
+              closeModal={closeModal}
             ></SelfOrder>
           }
           themeColors={themeColors}
