@@ -25,7 +25,7 @@ const Patient = (props) => {
   const [openedMenu, setOpenedMenu] = useState("");
   // State to store the data for the item that was clicked on in the ListTable
   const [openItemData, setOpenItemData] = useState(null);
- // const [openSelftOrderSetup, setSelfOrderSetup] = useState("");
+  // const [openSelftOrderSetup, setSelfOrderSetup] = useState("");
   //const [openSelfItemData, setSelfItemData] = useState(null);
 
   // Function to close the SetupMenu popup
@@ -487,7 +487,7 @@ const Patient = (props) => {
       // maximum: 150,
       tag: true,
       label: "Target Weight(kg)",
-      required: true,
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -936,13 +936,13 @@ const Patient = (props) => {
     },
     {
       type: "text",
-      placeholder: "Area",
-      name: "area",
+      placeholder: "Flat",
+      name: "flat",
       showItem: "",
       validation: "",
       default: "",
       tag: true,
-      label: "Area",
+      label: "Flat",
       required: true,
       view: true,
       add: true,
@@ -978,13 +978,13 @@ const Patient = (props) => {
     },
     {
       type: "text",
-      placeholder: "Floor",
-      name: "floor",
+      placeholder: "Area",
+      name: "area",
       showItem: "",
       validation: "",
       default: "",
       tag: true,
-      label: "Floor",
+      label: "Area",
       required: true,
       view: true,
       add: true,
@@ -992,14 +992,14 @@ const Patient = (props) => {
     },
     {
       type: "text",
-      placeholder: "Flat",
-      name: "flat",
+      placeholder: "Floor",
+      name: "floor",
       showItem: "",
       validation: "",
       default: "",
       tag: true,
-      label: "Flat",
-      required: true,
+      label: "Floor",
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -1763,7 +1763,7 @@ const Patient = (props) => {
     },
   ]);
 
- // console.log({ openSelftOrderSetup }, { openSelfItemData }, { openedMenu });
+  // console.log({ openSelftOrderSetup }, { openSelfItemData }, { openedMenu });
 
   return (
     <Container className="noshadow">
@@ -1786,7 +1786,7 @@ const Patient = (props) => {
               openData={openItemData}
               setMessage={props.setMessage}
               {...props}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
@@ -1821,7 +1821,7 @@ const Patient = (props) => {
             <AppointmentMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></AppointmentMenu>
           }
           themeColors={themeColors}
@@ -1855,7 +1855,7 @@ const Patient = (props) => {
             <SelfOrder
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></SelfOrder>
           }
           themeColors={themeColors}

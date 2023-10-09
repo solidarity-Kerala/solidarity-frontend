@@ -37,19 +37,19 @@ const ProteinCategory = (props) => {
       add: true,
       update: true,
     },
-    {
-      type: "image",
-      placeholder: "Image",
-      name: "protienImage",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Image",
-      required: false,
-      view: true,
-      add: true,
-      update: true,
-    },
+    // {
+    //   type: "image",
+    //   placeholder: "Image",
+    //   name: "protienImage",
+    //   validation: "",
+    //   default: "",
+    //   tag: true,
+    //   label: "Image",
+    //   required: false,
+    //   view: true,
+    //   add: true,
+    //   update: true,
+    // },
 
   ]);
 
