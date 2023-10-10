@@ -25,7 +25,7 @@ const Patient = (props) => {
   const [openedMenu, setOpenedMenu] = useState("");
   // State to store the data for the item that was clicked on in the ListTable
   const [openItemData, setOpenItemData] = useState(null);
- // const [openSelftOrderSetup, setSelfOrderSetup] = useState("");
+  // const [openSelftOrderSetup, setSelfOrderSetup] = useState("");
   //const [openSelfItemData, setSelfItemData] = useState(null);
 
   // Function to close the SetupMenu popup
@@ -1763,7 +1763,7 @@ const Patient = (props) => {
     },
   ]);
 
- // console.log({ openSelftOrderSetup }, { openSelfItemData }, { openedMenu });
+  // console.log({ openSelftOrderSetup }, { openSelfItemData }, { openedMenu });
 
   return (
     <Container className="noshadow">
@@ -1805,7 +1805,7 @@ const Patient = (props) => {
               setMessage={props.setMessage}
               {...props}
               themeColors={themeColors}
-              key={'patient-diet'}
+              key={"patient-diet"}
             ></DietMenu>
           }
           themeColors={themeColors}
@@ -1862,7 +1862,7 @@ const Patient = (props) => {
           }
           themeColors={themeColors}
           closeModal={closeModal}
-          itemTitle={{ name: "title", type: "text", collection: "" }}
+          itemTitle={{ name: "title", type: "text", collection: "recipe" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"full-page"}
         ></PopupView>

@@ -138,15 +138,31 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
   const [updateId, setUpdateId] = useState(null);
   const [ingredient, setIngredient] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
+  const [mealTimeCategory, setMealTimeCatogory] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("");
+  const [lastInvoiceNumber, setLastInvoiceNumber] = useState("");
+
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
+    getData({ deliverydate: event.target.value }, "direct-order").then(
+      (response) => {
+        console.log({ response });
+        setLastInvoiceNumber(response?.data?.ordersCount);
+      }
+    );
   };
+
+  console.log({ lastInvoiceNumber });
 
   const addIngredient = async (option) => {
     // setRefresh(!refresh);
 
-    if (typeof option.calories !== "number" || isNaN(option.calories)) {
+    // if (typeof option.calories !== "number" || isNaN(option.calories)) {
+    if (!option) {
       // setMessage({ content: "You cannot add this ingredient, the calorie of this ingredient is not valid!" });
       option.measureType = "";
       option.gramOfType = 0;
@@ -165,8 +181,9 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
       if (!exists) {
         // If the option doesn't exist, add it to the array
         option.quantity = 1;
-        option.totalPrice = option.price;
-        option.taxTotalPrice = (option.price / 100) * 5 + option.price;
+        option.totalPrice = option?.recipe?.price;
+        option.taxTotalPrice =
+          (option?.recipe?.price / 100) * 5 + option?.recipe?.price;
         setIngredients([...ingredients, option]);
       }
 
@@ -216,49 +233,64 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
   const [mealIngredient] = useState({
     type: "select",
     apiType: "API",
-    selectApi: "recipe/select",
-    placeholder: "Ingredient",
+    // selectApi: "recipe/select",
+    selectApi: "available-direct-orders/select",
+    placeholder: "Recipe",
     apiSearch: true,
     listBox: true,
+    iconImage: { collection: "recipe", item: "photo" },
     tags: [
-      {
-        type: "image",
-        item: "photo",
-        title: "Image",
-        collection: "",
-      },
+      // {
+      //   type: "image",
+      //   showItem: "photo",
+      //   item: "photo",
+      //   title: "Image",
+      //   collection: "recipe",
+      // },
+
+      // {
+      //   type: "text",
+      //   item: "protein",
+      //   title: "Protein",
+      //   collection: "",
+      // },
+      // {
+      //   type: "text",
+      //   item: "calories",
+      //   title: "Calories",
+      //   collection: "",
+      // },
       {
         type: "text",
-        item: "protein",
-        title: "Protein",
-        collection: "",
-      },
-      {
-        type: "text",
-        item: "calories",
-        title: "Calories",
-        collection: "",
-      },
-      {
-        type: "text",
+        showItem: "price",
         item: "price",
         title: "Price",
-        collection: "",
+        collection: "recipe",
       },
     ],
-    name: "ingredient",
-    collection: "ingredient",
+    name: "recipe",
+    collection: "recipe",
     validation: "",
-    showItem: "ingredientsName",
+    showItem: "title",
     default: "",
     tag: false,
-    label: "Ingredient",
+    label: "Recipe",
     required: true,
     view: true,
     add: true,
     update: true,
     filter: false,
   });
+
+  useEffect(() => {
+    getData({}, "mealtime-category/select").then((response) => {
+      setMealTimeCatogory(response.data);
+    });
+    getData({ deliverydate: new Date() }, "direct-order").then((response) => {
+      console.log({ response });
+      setLastInvoiceNumber(response?.data?.ordersCount);
+    });
+  }, []);
 
   useEffect(() => {
     getData({ recipe }, "recipe-ingredients").then((response) => {
@@ -272,9 +304,9 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
 
     const updatedIngredients = ingredients.map((ingredient, i) => {
       if (i === index) {
-        const totalPrice = newQuantity * ingredient.price;
+        const totalPrice = newQuantity * ingredient?.recipe?.price;
         const taxTotalPrice =
-          totalPrice + ((newQuantity * ingredient.price) / 100) * 5;
+          totalPrice + ((newQuantity * ingredient?.recipe?.price) / 100) * 5;
         return {
           ...ingredient,
           quantity: newQuantity,
@@ -326,7 +358,13 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
     const orderDate = selectedDate;
     const responsess = await axios.post(
       `${process.env.REACT_APP_API}direct-order`,
-      { recipe: ingredients, deliverydate: orderDate, grandTotal }
+      {
+        recipe: ingredients,
+        deliverydate: orderDate,
+        grandTotal,
+        mealTimeCategory: selectedOption,
+        inovice: lastInvoiceNumber,
+      }
       // {
       //   headers: {
       //     "Content-Type": "multipart/form-data",
@@ -353,7 +391,7 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
         <FormInput
           customClass="menu"
           animation={`sub-1`}
-          placeholder={"Search Ingredient"}
+          placeholder={"Search Recipe"}
           key={1}
           id={0}
           error={null}
@@ -387,6 +425,20 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
           name="order"
           onChange={handleDateChange}
         />
+        <h3>Invoice: {`INV-${lastInvoiceNumber + 1}`}</h3>
+        <div>
+          <h3>Delivery time</h3>
+          <select value={selectedOption} onChange={handleOptionChange}>
+            <option value="">Select an option</option>
+            {mealTimeCategory.map((option, index) => (
+              <option key={index} value={option?.id}>
+                {option?.value}
+              </option>
+            ))}
+          </select>
+
+          {/* {selectedOption && <p>You selected: {selectedOption}</p>} */}
+        </div>
         {ingredients ? (
           <Table>
             <thead>
@@ -420,13 +472,13 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
                     <TableCell className="padding left">
                       <Title>
                         <GetIcon icon={"recepe"}></GetIcon>
-                        {item?.title ?? "Nil"}
+                        {item?.recipe?.title ?? "Nil"}
                       </Title>
                       <RecepeImage
                         // src="https://www.seiu1000.org/sites/main/files/main-images/camera_lense_0.jpeg"
                         src={
-                          item.photo
-                            ? process.env.REACT_APP_CDN + item.photo
+                          item?.recipe?.photo
+                            ? process.env.REACT_APP_CDN + item?.recipe?.photo
                             : null
                         }
                       ></RecepeImage>
@@ -491,7 +543,7 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
                     </TableCell>
 
                     <TableCell>
-                      {item?.price}
+                      {item?.recipe?.price}
                       {/* {`${(
                         item?.ingredient?.gramOfType * item?.quantity
                       ).toFixed(2)}g / ${(
