@@ -993,7 +993,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
           popupData={
             <TabContainer className="custom">
-              {[10, 20, 30, 50, 100, 150].map((num) => (
+              {[10, 25, 50, 100, 250].map((num) => (
                 <TabButton
                   className={"nomargin " + (perPage === num)}
                   onClick={() => {
