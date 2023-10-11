@@ -1805,7 +1805,7 @@ const Patient = (props) => {
               setMessage={props.setMessage}
               {...props}
               themeColors={themeColors}
-              key={'patient-diet'}
+              key={"patient-diet"}
             ></DietMenu>
           }
           themeColors={themeColors}
@@ -1862,7 +1862,7 @@ const Patient = (props) => {
           }
           themeColors={themeColors}
           closeModal={closeModal}
-          itemTitle={{ name: "title", type: "text", collection: "" }}
+          itemTitle={{ name: "title", type: "text", collection: "recipe" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"full-page"}
         ></PopupView>
