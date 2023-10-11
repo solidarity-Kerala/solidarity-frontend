@@ -44,19 +44,7 @@ export const SelectBox = styled.div`
     margin-right: 5px;
   }
   flex: calc(50% - 10px);
-  @media screen and (max-width: 768px) {
-    &.half:nth-child(odd) {
-      width: 100%;
-      margin-left: 0px;
-    }
-    &.half:nth-child(even) {
-      width: 100%;
-      margin-right: 0px;
-    }
-    &.filter {
-      width: calc(50% - 7px);
-    }
-  }
+
   && {
     /* Styles to apply when parent has class shrink */
     .nowrap & {
@@ -91,7 +79,9 @@ export const SelectBox = styled.div`
     background: ${(props) => props.theme.background};
   }
   &.filter {
-    margin-right: 0.5em;
+    margin: 0px;
+    flex: 1 1 200px; /* flex-grow, flex-shrink, flex-basis */
+    max-width: 200px; /* Maximum width for flexibility */
   }
   &.single {
     margin-right: 0em;
@@ -123,6 +113,8 @@ export const SelectBox = styled.div`
   }
   &.filter .options {
     top: 31px;
+    position: initial;
+    margin: 0;
   }
   &.open svg.down {
     transition: all 0.2s ease-out 0s;
@@ -187,6 +179,20 @@ export const SelectBox = styled.div`
     color: #0f0f0f;
     transform: scale(1.005);
     transition: all 0.4s;
+  }
+  @media screen and (max-width: 768px) {
+    &.half:nth-child(odd) {
+      width: 100%;
+      margin-left: 0px;
+    }
+    &.half:nth-child(even) {
+      width: 100%;
+      margin-right: 0px;
+    }
+    &.filter {
+      flex: 1 1 100%; /* flex-grow, flex-shrink, flex-basis */
+    max-width: 200px; /* Maximum width for flexibility */
+    }
   }
 `;
 export const Label = styled.label`
