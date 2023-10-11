@@ -407,6 +407,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
                   )}
                 </>
               )}
+              {}
             </tbody>
           </Table>
         ) : (

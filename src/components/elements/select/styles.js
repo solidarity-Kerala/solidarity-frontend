@@ -116,6 +116,11 @@ export const SelectBox = styled.div`
     position: initial;
     margin: 0;
   }
+  &.single .options{
+    top: 47px;
+    position: absolute;
+    margin: 0px;
+  }
   &.open svg.down {
     transition: all 0.2s ease-out 0s;
     transform: rotate(180deg);
