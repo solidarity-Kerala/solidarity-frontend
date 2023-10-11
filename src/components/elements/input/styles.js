@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./datepicker.css";
+
 export const InputContainer = styled.div`
   position: relative;
   display: flex;
@@ -17,10 +18,10 @@ export const InputContainer = styled.div`
   &.textarea {
     flex: calc(100% - 10px);
   }
-  &.direct input{
+  &.direct input {
     /* background-color:transparent; */
-    margin-bottom:0;
-    border-radius:0;
+    margin-bottom: 0;
+    border-radius: 0;
   }
   && {
     /* Styles to apply when parent has class shrink */
@@ -56,7 +57,9 @@ export const InputContainer = styled.div`
       input[type="date"]:not(:focus):invalid ~ .floating-label,
       .filter input[type="date"]:not(:focus):invalid ~ .floating-label,
       input[type="datetime-local"]:not(:focus):invalid ~ .floating-label,
-      .filter input[type="datetime-local"]:not(:focus):invalid ~ .floating-label {
+      .filter
+        input[type="datetime-local"]:not(:focus):invalid
+        ~ .floating-label {
         top: -1px;
         left: 13px;
         right: 6px;
@@ -188,6 +191,25 @@ export const DatetimeInput = styled(DatePicker)`
   box-sizing: border-box;
   outline: none !important;
   width: 100%;
+  border-radius: 10px;
+  border: 0px solid ${(props) => props.theme.border};
+  margin: 0 0px 10px 0;
+  height: 50px;
+  padding-left: 1em;
+  font-weight: 700;
+  box-shadow: none;
+  transition: all 0.2s ease-out 0s;
+  color: ${(props) => props.theme.secForeground};
+  background: ${(props) => props.theme.secBackground};
+  &.shrink {
+    padding: 1.6em 13px 0;
+    color: black;
+  }
+`;
+export const DatetimeInputDirectOrder = styled(DatePicker)`
+  box-sizing: border-box;
+  outline: none !important;
+  width: fit-content;
   border-radius: 10px;
   border: 0px solid ${(props) => props.theme.border};
   margin: 0 0px 10px 0;

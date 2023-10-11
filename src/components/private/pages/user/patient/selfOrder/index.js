@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
+
 import {
   ColumnContainer,
   RowContainer,
@@ -15,22 +17,18 @@ import {
 } from "./styles";
 import styled from "styled-components";
 import AutoForm from "../../../../../elements/form";
-import {
-  deleteData,
-  getData,
-  postData,
-  putData,
-} from "../../../../../../backend/api";
+import { getData, postData, putData } from "../../../../../../backend/api";
 import { useDispatch, useSelector } from "react-redux";
 import { addSelectObject } from "../../../../../../store/actions/select";
 import { GetIcon } from "../../../../../../icons";
-import Checkbox from "../../../../../elements/checkbox";
+// import Checkbox from "../../../../../elements/checkbox";
 import { NoData } from "../../../../../elements/list/styles";
 import { getValue } from "../../../../../elements/list/functions";
 import axios from "axios";
-import { GetAccessToken } from "../../../../../../backend/authentication";
-import { DatetimeInput } from "../../../../../elements/input/styles";
+// import { GetAccessToken } from "../../../../../../backend/authentication";
+import { DatetimeInputDirectOrder } from "../../../../../elements/input/styles";
 import { RecepeImage } from "../dietMenu/styles";
+import { ButtonContanter } from "../../../../../elements/form/styles";
 
 const SetupRecipe = ({ openData, setMessage, closeModal }) => {
   const [search] = useState("");
@@ -38,7 +36,7 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
   const [recipe] = useState(openData.data._id);
   const [portion] = useState(openData.data.numberOfPortion ?? 1);
   const selectData = useSelector((state) => state.select["ingredient/select"]);
-  const themeColors = useSelector((state) => state.themeColors);
+  // const themeColors = useSelector((state) => state.themeColors);
   const [updateIngredient] = useState([
     {
       type: "text",
@@ -146,14 +144,12 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
     setSelectedOption(event.target.value);
   };
 
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
-    getData({ deliverydate: event.target.value }, "direct-order").then(
-      (response) => {
-        console.log({ response });
-        setLastInvoiceNumber(response?.data?.ordersCount);
-      }
-    );
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    getData({ deliverydate: date }, "direct-order").then((response) => {
+      console.log({ response });
+      setLastInvoiceNumber(response?.data?.ordersCount);
+    });
   };
 
   console.log({ lastInvoiceNumber });
@@ -330,33 +326,33 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
 
   const grandTotal = calculateGrandTotal();
 
-  const checkChange = async (event, index) => {
-    const ingredientTest = [...ingredients];
-    ingredientTest[index].isCalculated = event.target.checked;
-    setIngredients(ingredientTest);
-    const response = await putData(
-      {
-        id: ingredientTest[index]._id,
-        ingredient: ingredientTest[index].ingredient._id,
-        isCalculated: ingredientTest[index].isCalculated,
-        quantity: ingredientTest[index].quantity,
-      },
-      "recipe-ingredients"
-    );
-    setNutritionInfo(response.data.recipeNutritionInfo);
-  };
+  // const checkChange = async (event, index) => {
+  //   const ingredientTest = [...ingredients];
+  //   ingredientTest[index].isCalculated = event.target.checked;
+  //   setIngredients(ingredientTest);
+  //   const response = await putData(
+  //     {
+  //       id: ingredientTest[index]._id,
+  //       ingredient: ingredientTest[index].ingredient._id,
+  //       isCalculated: ingredientTest[index].isCalculated,
+  //       quantity: ingredientTest[index].quantity,
+  //     },
+  //     "recipe-ingredients"
+  //   );
+  //   setNutritionInfo(response.data.recipeNutritionInfo);
+  // };
 
   const [isOpen, setIsOpen] = useState(false);
   const closeEdit = () => {
     setIsOpen(false);
   };
 
-  const token = GetAccessToken();
+  // const token = GetAccessToken();
 
   const submitOrder = async () => {
     // const response = await postData({ ingredients }, "direct-order");
     const orderDate = selectedDate;
-    const responsess = await axios.post(
+    await axios.post(
       `${process.env.REACT_APP_API}direct-order`,
       {
         recipe: ingredients,
@@ -384,6 +380,9 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
     // Update the state with the updated list of ingredients
     setIngredients(updatedIngredients);
   };
+
+  const today = moment();
+  const maxDate = moment().add(1, "year");
 
   return (
     <ColumnContainer className="custom">
@@ -418,8 +417,11 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
           //  onChange={(event) => props.onChange(event, props.id, props.type)}
         /> */}
         <label for="order">Order Date:</label>
-        <input
-          style={{ width: "fit-content" }}
+        <DatetimeInputDirectOrder
+          showYearDropdown
+          yearDropdownItemNumber={70}
+          minDate={today ?? moment().toDate()}
+          maxDate={maxDate ?? moment().add(1, "year").toDate()}
           type="date"
           id="order"
           name="order"
@@ -912,20 +914,16 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
         ) : null}
 
         {ingredients?.length ? (
-          <button
+          <ButtonContanter
             style={{
-              padding: "5px 5px",
-              background: "rgb(75, 75, 75)",
-              color: "#fff",
-              borderRadius: "5px",
-              marginTop: 10,
+              width: "max-content",
               marginLeft: "auto",
               cursor: "pointer",
             }}
             onClick={submitOrder}
           >
             Place Order
-          </button>
+          </ButtonContanter>
         ) : null}
       </RowContainer>
 

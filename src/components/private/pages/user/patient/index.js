@@ -1770,7 +1770,7 @@ const Patient = (props) => {
       <ListTable
         actions={actions}
         api={`user`}
-        itemTitle={{ name: "username", type: "text", collection: "" }}
+        itemTitle={{ name: "fullName", type: "text", collection: "" }}
         shortName={`Patient`}
         parentReference={"userType"}
         referenceId={"6471b3849fb2b29fe045887b"}
