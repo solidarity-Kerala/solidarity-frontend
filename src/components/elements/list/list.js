@@ -44,7 +44,6 @@ import SubPage from "./subPage";
 import DateRangeSelector from "../daterange";
 import * as xlsx from "xlsx";
 import { ToolTip } from "../../styles/list/styles";
-// import { convertMinutesToHHMM } from "../../functions/minuteToHour";
 import { dateFormat, dateTimeFormat } from "../../functions/date";
 import { convertMinutesToHHMM, getValue } from "./functions";
 import Popup, { DisplayInformations } from "./popup";
@@ -52,6 +51,9 @@ import Print from "./print/print";
 import Highlight from "./highlight";
 import Editable from "./editable";
 import Details from "./details";
+import PopupView from "../popupview";
+import { TabContainer } from "./popup/styles";
+import { TabButton } from "../../private/pages/mealSettings/foodMenu/setupMenu/styles";
 const SetTd = (props) => {
   if (props.viewMode === "table") {
     return <TdView {...props}></TdView>;
@@ -108,6 +110,9 @@ const ListTable = ({
   const [currentApi] = useState(`${api}`);
   const [subAttributes, setSubAttributes] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [perPage, setPerPage] = useState(10);
+  const [showPageCount, setShowPageCount] = useState(false);
+  const [shoFilter, setShowFilter] = useState(false);
   const [count, setCount] = useState(0);
   const [editable, setEditable] = useState({});
   const themeColors = useSelector((state) => state.themeColors);
@@ -235,12 +240,12 @@ const ListTable = ({
 
   useEffect(() => {
     if (initialized) {
-      dispatch(addPageObject(currentApi, currentIndex, filterView));
+      dispatch(addPageObject(currentApi, currentIndex, filterView, perPage));
     }
-  }, [initialized, currentApi, currentIndex, dispatch, filterView]);
+  }, [initialized, currentApi, currentIndex, dispatch, filterView, perPage]);
   const refreshView = (currentIndex) => {
     try {
-      dispatch(addPageObject(currentApi, currentIndex, filterView));
+      dispatch(addPageObject(currentApi, currentIndex, filterView, perPage));
     } catch {}
   };
   const [isOpen, setIsOpen] = useState(false);
@@ -1107,56 +1112,23 @@ const ListTable = ({
               <GetIcon icon={"print"} />
             </Filter>
           )}
-          {datefilter && (
-            <DateRangeSelector
-              onChange={dateRangeChange}
-              themeColors={themeColors}
-            ></DateRangeSelector>
-          )}
+          <Filter
+            theme={themeColors}
+            onClick={() => {
+              setShowFilter(true);
+            }}
+          >
+            <GetIcon icon={"filter"} />
+          </Filter>
         </FilterBox>
-        <Filters>
-          {formInput.map((item, index) => {
-            switch (item.type) {
-              case "select":
-                return (
-                  (item.filter ?? true) === true && (
-                    <FormInput
-                      customClass={"filter"}
-                      placeholder={item.placeHolder}
-                      value={filterView[item.name]}
-                      key={`input` + index}
-                      id={item.name}
-                      {...item}
-                      onChange={filterChange}
-                    />
-                  )
-                );
-              case "date":
-                return (
-                  (item.filter ?? false) === true && (
-                    <FormInput
-                      customClass={"filter"}
-                      placeholder={item.placeHolder}
-                      value={filterView[item.name]}
-                      key={`input` + index}
-                      id={item.name}
-                      {...item}
-                      onChange={filterChange}
-                    />
-                  )
-                );
-              default:
-                return null;
-            }
-          })}
-        </Filters>
+
         {(addPrivilege ? addPrivilege : false) && (
           <AddButton
             theme={themeColors}
             onClick={() => isCreatingHandler(true, refreshView)}
           >
             <AddIcon></AddIcon>
-            {shortName}
+            <span>{shortName}</span>
           </AddButton>
         )}
       </ButtonPanel>
@@ -1233,29 +1205,35 @@ const ListTable = ({
         <NoData>No records found for {shortName}.</NoData>
       )}
       {count > 0 ? (
-        count > 10 ? (
+        count > perPage ? (
           <Count>
             <ArrowPagination
               theme={themeColors}
               onClick={() => {
-                setCurrentIndex((prev) => (prev > 9 ? prev - 10 : 0));
+                setCurrentIndex((prev) => (prev > 9 ? prev - perPage : 0));
               }}
             >
               <PreviousIcon />
             </ArrowPagination>
             {`Showing ${currentIndex + 1} - ${
-              currentIndex + 10 > count ? count : currentIndex + 10
+              currentIndex + perPage > count ? count : currentIndex + perPage
             } out of ${count} records`}
             <ArrowPagination
               theme={themeColors}
               onClick={() => {
                 setCurrentIndex((prev) =>
-                  prev + 10 > count ? currentIndex : currentIndex + 10
+                  prev + perPage > count ? currentIndex : currentIndex + perPage
                 );
               }}
             >
               <NextIcon />
             </ArrowPagination>
+            <ArrowPagination
+              className="button"
+              onClick={() => {
+                setShowPageCount(true);
+              }}
+            >{`${perPage} per Page`}</ArrowPagination>
           </Count>
         ) : (
           <Count>{`Showing ${count} record${count > 1 ? "s" : ""}`}</Count>
@@ -1352,6 +1330,86 @@ const ListTable = ({
           shortName={shortName}
           attributes={attributes}
         ></Print>
+      )}
+      {showPageCount && (
+        <PopupView
+          // Popup data is a JSX element which is binding to the Popup Data Area like HOC
+          popupData={
+            <TabContainer className="custom">
+              {[10, 25, 50, 100, 250].map((num) => (
+                <TabButton
+                  className={"nomargin " + (perPage === num)}
+                  onClick={() => {
+                    setPerPage(num);
+                  }}
+                >
+                  {num}
+                </TabButton>
+              ))}
+            </TabContainer>
+          }
+          themeColors={themeColors}
+          closeModal={() => setShowPageCount(false)}
+          itemTitle={{ name: "title", type: "text", collection: "" }}
+          openData={{ data: { _id: "", title: "Set Items per page!" } }} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+          customClass={"small"}
+        ></PopupView>
+      )}
+      {shoFilter && (
+        <PopupView
+          // Popup data is a JSX element which is binding to the Popup Data Area like HOC
+          popupData={
+            <Filters>
+              {datefilter && (
+                <DateRangeSelector
+                  onChange={dateRangeChange}
+                  themeColors={themeColors}
+                ></DateRangeSelector>
+              )}
+              {formInput.map((item, index) => {
+                switch (item.type) {
+                  case "select":
+                    return (
+                      (item.filter ?? true) === true && (
+                        <FormInput
+                          customClass={"filter"}
+                          placeholder={item.placeHolder}
+                          value={filterView[item.name]}
+                          key={`input` + index}
+                          id={item.name}
+                          {...item}
+                          onChange={filterChange}
+                          required={false}
+                        />
+                      )
+                    );
+                  case "date":
+                    return (
+                      (item.filter ?? false) === true && (
+                        <FormInput
+                          customClass={"filter"}
+                          placeholder={item.placeHolder}
+                          value={filterView[item.name]}
+                          key={`input` + index}
+                          id={item.name}
+                          {...item}
+                          onChange={filterChange}
+                          required={false}
+                        />
+                      )
+                    );
+                  default:
+                    return null;
+                }
+              })}
+            </Filters>
+          }
+          themeColors={themeColors}
+          closeModal={() => setShowFilter(false)}
+          itemTitle={{ name: "title", type: "text", collection: "" }}
+          openData={{ data: { _id: "", title: "Filters" } }} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+          customClass={"medium"}
+        ></PopupView>
       )}
     </RowContainer>
   ) : (

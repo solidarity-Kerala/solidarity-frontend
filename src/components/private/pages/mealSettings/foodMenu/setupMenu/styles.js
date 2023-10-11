@@ -20,6 +20,9 @@ export const TabButton = styled.button`
   border: none;
   font-size: 14px;
   margin-bottom: 10px;
+  &.nomargin{
+    margin:0;
+  }
   cursor: pointer;
   &:first-child{
     border-radius: 10px 0 0 10px;

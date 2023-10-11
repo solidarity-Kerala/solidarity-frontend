@@ -59,28 +59,13 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       [("Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Other")].map((typeOfIngredient) => {
         let info = { typeOfIngredient, ingredients: 0 };
         const typeOfIngredientLower = typeOfIngredient.toLowerCase();
-       
+
         let count = availableCalorie[typeOfIngredientLower === "meat" ? "meal" : typeOfIngredientLower];
         count = count ? (count === 0 ? 1 : count) : 1;
         recipeIngredients.forEach((ingredient) => {
           if (ingredient.isCalculated) {
             if (typeOfIngredient === ingredient.data.typeOfIngredient) {
-              [
-                "calories",
-                "gram",
-                "protein",
-                "saturatedFat",
-                "totalFat",
-                "cholesterol",
-                "fiber",
-                "carbohydrate",
-                "sugars",
-                "iron",
-                "calcium",
-                "potassium",
-                "sodium",
-                "vitaminA", "vitaminE", "vitaminC"
-              ].map((nutrition) => {
+              ["calories", "gram", "protein", "saturatedFat", "totalFat", "cholesterol", "fiber", "carbohydrate", "sugars", "iron", "calcium", "potassium", "sodium", "vitaminA", "vitaminE", "vitaminC"].map((nutrition) => {
                 const nutritionLower = nutrition.toLowerCase();
                 info[nutrition] = info[nutrition] ?? 0 + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
                 nutritionInfo[nutrition] = nutritionInfo[nutrition] ?? 0 + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;

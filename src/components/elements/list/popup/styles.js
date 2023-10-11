@@ -128,6 +128,11 @@ export const DataItem = styled.span`
 `;
 export const TabContainer = styled.div`
   border-radius: 12px;
-  background-color:white;
+  background-color: white;
   margin: 20px 30px 30px;
+  &.custom {
+    justify-content: center;
+    display: flex;
+    width: fit-content;
+  }
 `;

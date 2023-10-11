@@ -29,7 +29,7 @@ const Login = (props) => {
       placeholder: "email",
       name: "email",
       validation: "email",
-      default: "admin@gmail.com",
+      default: "",
       label: "email",
       minimum: 5,
       maximum: 40,
@@ -40,7 +40,7 @@ const Login = (props) => {
       placeholder: "password",
       name: "password",
       validation: "password",
-      default: "111",
+      default: "",
       label: "password",
       minimum: 0,
       maximum: 16,
@@ -75,18 +75,7 @@ const Login = (props) => {
         }}
       >
         <FormContainer>
-          <AutoForm
-            useCaptcha={false}
-            formType={"post"}
-            description={t("loginDescription")}
-            header={t("loginHead")}
-            formInput={formInput}
-            submitHandler={submitChange}
-            button={t("validate")}
-            isOpenHandler={isCreatingHandler}
-            isOpen={true}
-            plainForm={true}
-          ></AutoForm>
+          <AutoForm useCaptcha={false} formType={"post"} description={t("loginDescription")} header={t("loginHead")} formInput={formInput} submitHandler={submitChange} button={t("validate")} isOpenHandler={isCreatingHandler} isOpen={true} plainForm={true}></AutoForm>
         </FormContainer>
       </ColumnContainer>
       <Footer />

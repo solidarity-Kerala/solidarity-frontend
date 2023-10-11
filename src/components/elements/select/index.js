@@ -166,14 +166,16 @@ function CustomSelect(props) {
   }, [props.updateValue, updateValue, fetchData, props.updateOn, props.params, props.formValues]);
   useEffect(() => {
     function handleClick(event) {
-      if (!selectRef.current.contains(event.target)) {
-        const listBox = props.listBox ?? false;
-        if (!listBox) {
-          setOptionsVisible(false);
-        }
-        if (listBox) {
-          setOptionsVisible(true);
-          setInitialized(true);
+      if (props.customClass !== "filter") {
+        if (!selectRef.current.contains(event.target)) {
+          const listBox = props.listBox ?? false;
+          if (!listBox) {
+            setOptionsVisible(false);
+          }
+          if (listBox) {
+            setOptionsVisible(true);
+            setInitialized(true);
+          }
         }
       }
     }
@@ -181,7 +183,7 @@ function CustomSelect(props) {
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [props.listBox]);
+  }, [props.listBox, props.customClass]);
   return (
     <SelectBox key={props.key} theme={props.theme} className={`custom-select ${props.listBox ? "list-box" : ""} ${optionsVisible ? "open" : "close"} ${props.customClass} ${props.dynamicClass}`} ref={selectRef}>
       <button className={`${selectedId !== null && selectedId?.length !== 0 ? "has" : ""}`} onClick={toggleOptions}>
@@ -205,7 +207,7 @@ function CustomSelect(props) {
 
       <ul className="options">
         {props.search && options.length > 8 && <Search key={`search-inside${props.key}`} className="select" title="Search" theme={props.theme} placeholder="Search" value={searchValue} onChange={handleChange} />}
-        {props.apiSearch && <Search key="search-api-2" className={"select "+props.customClass} title="Search" theme={props.theme} placeholder={`Search ${props.label}`} value={searchKey} onChange={handleChange} />}
+        {props.apiSearch && <Search key="search-api-2" className={"select " + props.customClass} title="Search" theme={props.theme} placeholder={`Search ${props.label}`} value={searchKey} onChange={handleChange} />}
         {optionsVisible && initialized && (
           <>
             {options.length > 0 &&

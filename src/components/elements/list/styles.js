@@ -381,6 +381,13 @@ export const ArrowPagination = styled.button`
   position: relative;
   background-color: transparent;
   margin-left: 0 !important;
+  &.button {
+    border: 1px solid lightgray;
+    font-weight: normal;
+    border-radius: 8px;
+    padding: 0px 10px;
+    background-color: white;
+  }
   &:hover {
     color: ${(props) => props.theme.bgPrimary};
   }
@@ -429,6 +436,14 @@ export const AddButton = styled.button`
   & > svg {
     margin-right: 10px;
   }
+  @media (max-width: 768px) {
+    margin-right: 0px;
+    justify-content: center;
+    align-items: center;
+    span {
+      display: none;
+    }
+  }
 `;
 export const FilterBox = styled.div`
   flex-direction: row;
@@ -474,9 +489,12 @@ export const Filter = styled.button`
   }
 `;
 export const Filters = styled.div`
-  margin-right: auto;
   display: flex;
-  max-width: 80%;
+  margin: 0 20px 20px;
+  flex-flow: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 10px;
   &.center {
     margin-left: auto;
   }
@@ -729,7 +747,17 @@ export const TrView = styled.tr`
     border-bottom: 0;
   }
 `;
-
+export const CoutSelector = styled.td`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10001;
+  background: white;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  padding: 10px;
+`;
 export const TdView = styled.td`
   text-align: left;
   background-color: white;
