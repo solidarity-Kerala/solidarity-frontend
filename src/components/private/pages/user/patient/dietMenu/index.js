@@ -825,8 +825,8 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                         {recipeItem.isDislike && <span className="red">Don't Like</span>}
                         {recipeItem.isAllergy && <span className="red">Has Allergy</span>}
                         <span>{recipeItem.recipe.typeOfRecipe}</span>
-                        <span>{recipeItem.calories?.toFixed(2)}KCal</span>
-                        <span>{recipeItem.gram?.toFixed(2)}g</span>
+                        <span>{recipeItem.nutritionInfo.calories?.toFixed(2)}KCal</span>
+                        <span>{recipeItem.nutritionInfo.gram?.toFixed(2)}g</span>
                         <span className="red">Removed</span>
                       </>
                     )}
@@ -836,10 +836,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                     {recipeItem.isAllergy && <span className="red">Has Allergy</span>}
                     <span>{recipeItem.recipe.typeOfRecipe}</span>
                     <span>{recipeItem.nutritionInfo.calorieSplit}</span>
-                    <span>{recipeItem.calories?.toFixed(2)}KCal</span>
-                    <span>{recipeItem.gram?.toFixed(2)}g</span>
-                    <span>Protein {recipeItem.nutritionInfo.Protein?.toFixed(2)}g</span>
-                    <span>Fat {recipeItem.nutritionInfo.TotalFat?.toFixed(2)}g</span>
+                    <span>{recipeItem.nutritionInfo.calories?.toFixed(2)}KCal</span>
+                    <span>{recipeItem.nutritionInfo.gram?.toFixed(2)}g</span>
+                    <span>Protein {recipeItem.nutritionInfo.protein?.toFixed(2)}g</span>
+                    <span>Fat {recipeItem.nutritionInfo.totalFat?.toFixed(2)}g</span>
                     {/* <span>{recipeItem.isDeleted && "Deleted"}</span> */}
                   </span>
                   <div className="actions">
@@ -930,10 +930,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                 {replacableItem.isAllergy && <span className="red">Has Allergy</span>}
                               </span>
                               <span className="light">
-                                <span>{replacableItem.calories?.toFixed(2)}KCal</span>
-                                <span>{replacableItem.gram?.toFixed(2)}g</span>
-                                <span>Protein {replacableItem.nutritionInfo.Protein?.toFixed(2)}g</span>
-                                <span>Fat {replacableItem.nutritionInfo.TotalFat?.toFixed(2)}g</span>
+                                <span>{replacableItem.nutritionInfo.calories?.toFixed(2)}KCal</span>
+                                <span>{replacableItem.nutritionInfo.gram?.toFixed(2)}g</span>
+                                <span>Protein {replacableItem.nutritionInfo.protein?.toFixed(2)}g</span>
+                                <span>Fat {replacableItem.nutritionInfo.totalFat?.toFixed(2)}g</span>
                               </span>
                               <div className="sub-actions">
                                 <span
@@ -1019,7 +1019,6 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               </TabContainer>
               {menuData && menuData.result?.length === 0 && (
                 <NoData className="white">
-                  {" "}
                   <GetIcon icon={"recipe"}></GetIcon>No menu set for this week!
                 </NoData>
               )}
@@ -1030,10 +1029,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   const formattedDay = date.format("YYYY-MM-DD");
                   const calories = day?.menu?.reduce((sumMenu, menu) => {
                     const mealtimeCalories = menu.recipes.reduce((sumMealtime, mealtime) => {
-                      return sumMealtime + (mealtime.isDeleted ?? false ? 0 : mealtime.calories || 0);
+                      return sumMealtime + (mealtime.nutritionInfo.calories ?? 0);
                     }, 0);
 
-                    return sumMenu + mealtimeCalories;
+                    return sumMenu + mealtimeCalories ?? 0;
                   }, 0);
                   return day?.menu ? (
                     <Box active={selectedDayNumber === formattedDay} key={day._id}>
@@ -1044,7 +1043,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                         </MealTimeHead>
                         {day.menu.map((menuItem, categoryIndex) => {
                           const mealtimeCalories = menuItem.recipes.reduce((sumMealtime, mealtime) => {
-                            return sumMealtime + (mealtime.calories || 0);
+                            return sumMealtime + (mealtime.nutritionInfo.calories || 0);
                           }, 0);
                           return (
                             <Box active={selectedDayNumber === formattedDay} key={menuItem.id}>
