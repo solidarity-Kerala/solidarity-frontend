@@ -4,7 +4,7 @@ import { deleteData, getData, postData } from "../../../../../../backend/api";
 import { FilterBox, NoData, ProfileImage } from "../../../../../elements/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import Search from "../../../../../elements/search";
-import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection } from "./styles"; // Import styles from styles.js
+import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection, ShowCalorie } from "./styles"; // Import styles from styles.js
 import DraggableItem from "./dragdrop/drag";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
@@ -56,10 +56,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       if (numberOfPortion === 0) {
         numberOfPortion = 1;
       }
-      [("Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Other")].map((typeOfIngredient) => {
+      ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Other"].map((typeOfIngredient) => {
         let info = { typeOfIngredient, ingredients: 0 };
         const typeOfIngredientLower = typeOfIngredient.toLowerCase();
-
         let count = availableCalorie[typeOfIngredientLower === "meat" ? "meal" : typeOfIngredientLower];
         count = count ? (count === 0 ? 1 : count) : 1;
         recipeIngredients.forEach((ingredient) => {
@@ -73,9 +72,6 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               });
               info["ingredients"] += 1;
             }
-            if (recipe.title === "Spicy Chicken Slice") {
-              console.log(ingredient.data.ingredientsName, numberOfPortion, info);
-            }
           }
           return null;
         });
@@ -83,15 +79,12 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         nutritionInfoDetails.push(info);
         return null;
       });
-      if (recipe.title === "Spicy Chicken Slice") {
-        console.log(recipe.title, recipeIngredients, nutritionInfo ?? 0);
-      }
       return nutritionInfo.calories ?? 0;
     },
     [coloriePerDay, menuData?.mealTimeCategories]
   );
   const getNutritionInfo = (recipe, availableCalories) => {
-    const { meal, bread, fruit, dessert, soup, salad } = availableCalories;
+    const { meal: meat, bread, fruit, dessert, soup, salad } = availableCalories;
     let { typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
     mixedMeatPercentage = mixedMeatPercentage ?? 100;
     mixedBreadPercentage = mixedBreadPercentage ?? 100;
@@ -100,7 +93,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       count2 = 0,
       nutritionInfo = {};
     if (typeOfRecipe === "Meat") {
-      count1 = meal || 1;
+      count1 = meat || 1;
     } else if (typeOfRecipe === "Bread") {
       count1 = bread || 1;
     } else if (typeOfRecipe === "Fruit") {
@@ -112,7 +105,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     } else if (typeOfRecipe === "Salad") {
       count1 = salad || 1;
     } else if (typeOfRecipe === "Mixed") {
-      count1 = (meal * mixedMeatPercentage) / 100;
+      count1 = (meat * mixedMeatPercentage) / 100;
       count2 = (bread * mixedBreadPercentage) / 100;
     }
 
@@ -141,7 +134,6 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         if (!accumulator[key]) {
           accumulator[key] = 0;
         }
-
         const recipeCalories = recipes.reduce((totalCalories, recipe) => {
           const recipeCalories = totalCalories + getCalories(recipe, mealTimeCategory, availableCalories);
           if (recipe.title === "Fish Sayadeih") {
@@ -365,13 +357,13 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     }
   };
   const setCaloriesItems = (mealTimeCategories, single = false, recepeType = "") => {
-    const { bread, meal, fruit, dessert, soup, salad } = mealTimeCategories.availableCalories[coloriePerDay];
+    const { bread, meal: meat, fruit, dessert, soup, salad } = mealTimeCategories.availableCalories[coloriePerDay];
     if (!single) {
-      return `${meal && meal > 0 ? meal + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}`;
+      return `${meat && meat > 0 ? meat + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}`;
     } else {
       let count = 0;
       if (recepeType === "Meat") {
-        count = (meal || 0) + "M";
+        count = (meat || 0) + "M";
       } else if (recepeType === "Bread") {
         count = (bread || 0) + "B";
       } else if (recepeType === "Fruit") {
@@ -383,7 +375,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       } else if (recepeType === "Salad") {
         count = (salad || 0) + "SD";
       } else if (recepeType === "Mixed") {
-        count = meal + "M" + bread + "B";
+        count = meat + "M" + bread + "B";
       } else {
         count = "0";
       }
@@ -737,6 +729,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                           }
                         }
                         const options = menuData.foodMenu.filter((item) => item.mealTimeCategory === mealTimeCategory._id && item.dayNumber === dayNumber && (item.meals.length > 0 || item.recipes.length > 0));
+                        let mealtimeCalories = 0;
                         return (
                           <TableCell colSpan={showAllReplacable ? 7 : 0} className={dayNumber === 0 ? "first" : ""} key={dayNumber}>
                             <div className="layer">
@@ -747,6 +740,8 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                       <Variants className="vertical">
                                         {items?.recipes?.length > 0
                                           ? items.recipes.map((item, recipeIndex) => {
+                                              let recipeCalories = getCalories(item ?? [], mealTimeCategory._id);
+                                              mealtimeCalories += recipeCalories;
                                               // Render your items inside the FoodButton here
                                               // For example, you can render a list of items like this
                                               return (
@@ -756,7 +751,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                       <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
                                                     </ProfileImage>
                                                     <span className="recipe">{item.title} </span>
-                                                    <span>{getCalories(item ?? [], mealTimeCategory._id).toFixed(2)} calories</span>
+                                                    <span>{recipeCalories.toFixed(2)} calories</span>
                                                     <div className="actions">
                                                       <span
                                                         className="info"
@@ -897,6 +892,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                 </Div>
                               )}
                             </div>
+                            <ShowCalorie>
+                              <span className="calories">{mealtimeCalories.toFixed(2)} calories</span>
+                            </ShowCalorie>
                           </TableCell>
                         );
                       })}

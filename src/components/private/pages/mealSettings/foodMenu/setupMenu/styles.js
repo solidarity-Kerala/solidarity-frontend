@@ -20,14 +20,14 @@ export const TabButton = styled.button`
   border: none;
   font-size: 14px;
   margin-bottom: 10px;
-  &.nomargin{
-    margin:0;
+  &.nomargin {
+    margin: 0;
   }
   cursor: pointer;
-  &:first-child{
+  &:first-child {
     border-radius: 10px 0 0 10px;
   }
-  &:last-child{
+  &:last-child {
     border-radius: 0 10px 10px 0;
   }
 `;
@@ -87,6 +87,24 @@ export const DayHead = styled.div`
     font-size: 15px;
   }
 `;
+export const ShowCalorie = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  .calories {
+    font-size: 12px;
+    background-color: #4b4b4b;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    width: auto;
+    align-self: center;
+    margin: 5px;
+  }
+  .day {
+    font-size: 15px;
+  }
+`;
 export const MealCategoryCell = styled.th`
   /* position: sticky; */
   left: 0;
@@ -126,7 +144,7 @@ export const TableCell = styled.td`
   padding: 5px;
   text-align: center;
   width: 12%;
-  height: 50px;
+  /* height: 50px; */
   border-left: 1px solid #ccc;
   &:first-child {
     border: 0;
