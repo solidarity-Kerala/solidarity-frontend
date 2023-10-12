@@ -25,7 +25,7 @@ const Patient = (props) => {
   const [openedMenu, setOpenedMenu] = useState("");
   // State to store the data for the item that was clicked on in the ListTable
   const [openItemData, setOpenItemData] = useState(null);
- // const [openSelftOrderSetup, setSelfOrderSetup] = useState("");
+  // const [openSelftOrderSetup, setSelfOrderSetup] = useState("");
   //const [openSelfItemData, setSelfItemData] = useState(null);
 
   // Function to close the SetupMenu popup
@@ -1763,14 +1763,14 @@ const Patient = (props) => {
     },
   ]);
 
- // console.log({ openSelftOrderSetup }, { openSelfItemData }, { openedMenu });
+  // console.log({ openSelftOrderSetup }, { openSelfItemData }, { openedMenu });
 
   return (
     <Container className="noshadow">
       <ListTable
         actions={actions}
         api={`user`}
-        itemTitle={{ name: "username", type: "text", collection: "" }}
+        itemTitle={{ name: "fullName", type: "text", collection: "" }}
         shortName={`Patient`}
         parentReference={"userType"}
         referenceId={"6471b3849fb2b29fe045887b"}
@@ -1805,7 +1805,7 @@ const Patient = (props) => {
               setMessage={props.setMessage}
               {...props}
               themeColors={themeColors}
-              key={'patient-diet'}
+              key={"patient-diet"}
             ></DietMenu>
           }
           themeColors={themeColors}
@@ -1857,11 +1857,12 @@ const Patient = (props) => {
               openData={openItemData}
               setMessage={props.setMessage}
               // Pass selected item data (Menu Title) to the popup for setting the time
+              closeModal={closeModal}
             ></SelfOrder>
           }
           themeColors={themeColors}
           closeModal={closeModal}
-          itemTitle={{ name: "title", type: "text", collection: "" }}
+          itemTitle={{ name: "title", type: "text", collection: "recipe" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"full-page"}
         ></PopupView>

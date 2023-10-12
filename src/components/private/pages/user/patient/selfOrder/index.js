@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
+
 import {
   ColumnContainer,
   RowContainer,
@@ -15,27 +17,26 @@ import {
 } from "./styles";
 import styled from "styled-components";
 import AutoForm from "../../../../../elements/form";
-import {
-  deleteData,
-  getData,
-  postData,
-  putData,
-} from "../../../../../../backend/api";
+import { getData, postData, putData } from "../../../../../../backend/api";
 import { useDispatch, useSelector } from "react-redux";
 import { addSelectObject } from "../../../../../../store/actions/select";
 import { GetIcon } from "../../../../../../icons";
-import Checkbox from "../../../../../elements/checkbox";
+// import Checkbox from "../../../../../elements/checkbox";
 import { NoData } from "../../../../../elements/list/styles";
 import { getValue } from "../../../../../elements/list/functions";
+import axios from "axios";
+// import { GetAccessToken } from "../../../../../../backend/authentication";
+import { DatetimeInputDirectOrder } from "../../../../../elements/input/styles";
+import { RecepeImage } from "../dietMenu/styles";
+import { ButtonContanter } from "../../../../../elements/form/styles";
 
-const SetupRecipe = ({ openData, setMessage }) => {
-  console.log("check open data", openData);
+const SetupRecipe = ({ openData, setMessage, closeModal }) => {
   const [search] = useState("");
   const dispatch = useDispatch();
   const [recipe] = useState(openData.data._id);
   const [portion] = useState(openData.data.numberOfPortion ?? 1);
   const selectData = useSelector((state) => state.select["ingredient/select"]);
-  const themeColors = useSelector((state) => state.themeColors);
+  // const themeColors = useSelector((state) => state.themeColors);
   const [updateIngredient] = useState([
     {
       type: "text",
@@ -44,7 +45,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
       tag: false,
       name: "ingredientsName",
       label: "Ingredient Name",
-      required: true,
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -58,7 +59,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
       default: "",
       tag: false,
       label: "Measurement Type",
-      required: true,
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -76,7 +77,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
       dynamicClass: "direct",
       tag: false,
       label: "Gram Per Measurement Type",
-      required: true,
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -108,7 +109,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
       dynamicClass: "direct",
       tag: false,
       label: "id",
-      required: true,
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -123,7 +124,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
       dynamicClass: "direct",
       tag: false,
       label: "quantity",
-      required: true,
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -134,10 +135,30 @@ const SetupRecipe = ({ openData, setMessage }) => {
   const [nutritionInfo, setNutritionInfo] = useState(null);
   const [updateId, setUpdateId] = useState(null);
   const [ingredient, setIngredient] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [mealTimeCategory, setMealTimeCatogory] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("");
+  const [lastInvoiceNumber, setLastInvoiceNumber] = useState("");
+
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    getData({ deliverydate: date }, "direct-order").then((response) => {
+      console.log({ response });
+      setLastInvoiceNumber(response?.data?.ordersCount);
+    });
+  };
+
+  console.log({ lastInvoiceNumber });
+
   const addIngredient = async (option) => {
     // setRefresh(!refresh);
 
-    if (typeof option.calories !== "number" || isNaN(option.calories)) {
+    // if (typeof option.calories !== "number" || isNaN(option.calories)) {
+    if (!option) {
       // setMessage({ content: "You cannot add this ingredient, the calorie of this ingredient is not valid!" });
       option.measureType = "";
       option.gramOfType = 0;
@@ -149,29 +170,43 @@ const SetupRecipe = ({ openData, setMessage }) => {
       setIsOpen(true);
       return;
     } else {
-      if (option.measureType) {
-        const response = await postData(
-          { ingredient: option.id, recipe },
-          "recipe-ingredients"
-        );
-        response.data.addedItems && setIngredients(response.data.addedItems);
-        response.data.recipeNutritionInfo &&
-          setNutritionInfo(response.data.recipeNutritionInfo);
-      } else {
-        if (option.id) {
-          option.measureType = "";
-          option.gramOfType = 0;
-          option.value =
-            typeof option.value === "undefined" ? "" : option.value;
-          option.ingredientsName = option.value ?? "";
-          option.quantity = 100;
-          setIngredient(option);
-          setUpdateId(option._id);
-          setIsOpen(true);
-        }
+      const exists = ingredients.some(
+        (ingredient) => ingredient._id === option._id
+      );
+
+      if (!exists) {
+        // If the option doesn't exist, add it to the array
+        option.quantity = 1;
+        option.totalPrice = option?.recipe?.price;
+        option.taxTotalPrice =
+          (option?.recipe?.price / 100) * 5 + option?.recipe?.price;
+        setIngredients([...ingredients, option]);
       }
+
+      // if (option.measureType) {
+      //   const response = await postData(
+      //     { ingredient: option.id, recipe },
+      //     "recipe-ingredients"
+      //   );
+      //   response.data.addedItems && setIngredients(response.data.addedItems);
+      //   response.data.recipeNutritionInfo &&
+      //     setNutritionInfo(response.data.recipeNutritionInfo);
+      // } else {
+      //   if (option.id) {
+      //     option.measureType = "";
+      //     option.gramOfType = 0;
+      //     option.value =
+      //       typeof option.value === "undefined" ? "" : option.value;
+      //     option.ingredientsName = option.value ?? "";
+      //     option.quantity = 100;
+      //     setIngredient(option);
+      //     setUpdateId(option._id);
+      //     setIsOpen(true);
+      //   }
+      // }
     }
   };
+
   const updateHandler = async (post) => {
     await putData(post, "ingredient");
     const response = await postData(
@@ -190,86 +225,172 @@ const SetupRecipe = ({ openData, setMessage }) => {
     dispatch(addSelectObject(data, "ingredient/select"));
     closeEdit();
   };
+
   const [mealIngredient] = useState({
     type: "select",
     apiType: "API",
-    selectApi: "ingredient/select",
-    placeholder: "Ingredient",
+    // selectApi: "recipe/select",
+    selectApi: "available-direct-orders/select",
+    placeholder: "Recipe",
     apiSearch: true,
     listBox: true,
+    iconImage: { collection: "recipe", item: "photo" },
     tags: [
+      // {
+      //   type: "image",
+      //   showItem: "photo",
+      //   item: "photo",
+      //   title: "Image",
+      //   collection: "recipe",
+      // },
+
+      // {
+      //   type: "text",
+      //   item: "protein",
+      //   title: "Protein",
+      //   collection: "",
+      // },
+      // {
+      //   type: "text",
+      //   item: "calories",
+      //   title: "Calories",
+      //   collection: "",
+      // },
       {
         type: "text",
-        item: "gram",
-        title: "Gram",
-        collection: "",
-      },
-      {
-        type: "text",
-        item: "calories",
-        title: "Calories",
-        collection: "",
+        showItem: "price",
+        item: "price",
+        title: "Price",
+        collection: "recipe",
       },
     ],
-    name: "ingredient",
-    collection: "ingredient",
+    name: "recipe",
+    collection: "recipe",
     validation: "",
-    showItem: "ingredientsName",
+    showItem: "title",
     default: "",
     tag: false,
-    label: "Ingredient",
+    label: "Recipe",
     required: true,
     view: true,
     add: true,
     update: true,
     filter: false,
   });
+
+  useEffect(() => {
+    getData({}, "mealtime-category/select").then((response) => {
+      setMealTimeCatogory(response.data);
+    });
+    getData({ deliverydate: new Date() }, "direct-order").then((response) => {
+      console.log({ response });
+      setLastInvoiceNumber(response?.data?.ordersCount);
+    });
+  }, []);
+
   useEffect(() => {
     getData({ recipe }, "recipe-ingredients").then((response) => {
       setIngredients(response.data.response);
       setNutritionInfo(response.data.recipeNutritionInfo);
     });
   }, [recipe]);
-  const textChange = async (event, index) => {
-    const ingredientTest = [...ingredients];
-    ingredientTest[index].quantity = event.target.value;
-    setIngredients(ingredientTest);
-    const response = await putData(
-      {
-        id: ingredientTest[index]._id,
-        ingredient: ingredientTest[index].ingredient._id,
-        quantity: ingredientTest[index].quantity,
-      },
-      "recipe-ingredients"
-    );
-    setNutritionInfo(response.data.recipeNutritionInfo);
+
+  const textChange = (event, index) => {
+    const newQuantity = parseInt(event.target.value);
+
+    const updatedIngredients = ingredients.map((ingredient, i) => {
+      if (i === index) {
+        const totalPrice = newQuantity * ingredient?.recipe?.price;
+        const taxTotalPrice =
+          totalPrice + ((newQuantity * ingredient?.recipe?.price) / 100) * 5;
+        return {
+          ...ingredient,
+          quantity: newQuantity,
+          totalPrice,
+          taxTotalPrice,
+        };
+      } else {
+        return ingredient;
+      }
+    });
+
+    setIngredients(updatedIngredients);
   };
-  const checkChange = async (event, index) => {
-    const ingredientTest = [...ingredients];
-    ingredientTest[index].isCalculated = event.target.checked;
-    setIngredients(ingredientTest);
-    const response = await putData(
-      {
-        id: ingredientTest[index]._id,
-        ingredient: ingredientTest[index].ingredient._id,
-        isCalculated: ingredientTest[index].isCalculated,
-        quantity: ingredientTest[index].quantity,
-      },
-      "recipe-ingredients"
+
+  const calculateGrandTotal = () => {
+    return ingredients?.reduce(
+      (total, ingredient) => total + ingredient?.taxTotalPrice,
+      0
     );
-    setNutritionInfo(response.data.recipeNutritionInfo);
   };
+
+  const grandTotal = calculateGrandTotal();
+
+  // const checkChange = async (event, index) => {
+  //   const ingredientTest = [...ingredients];
+  //   ingredientTest[index].isCalculated = event.target.checked;
+  //   setIngredients(ingredientTest);
+  //   const response = await putData(
+  //     {
+  //       id: ingredientTest[index]._id,
+  //       ingredient: ingredientTest[index].ingredient._id,
+  //       isCalculated: ingredientTest[index].isCalculated,
+  //       quantity: ingredientTest[index].quantity,
+  //     },
+  //     "recipe-ingredients"
+  //   );
+  //   setNutritionInfo(response.data.recipeNutritionInfo);
+  // };
+
   const [isOpen, setIsOpen] = useState(false);
   const closeEdit = () => {
     setIsOpen(false);
   };
+
+  // const token = GetAccessToken();
+
+  const submitOrder = async () => {
+    // const response = await postData({ ingredients }, "direct-order");
+    const orderDate = selectedDate;
+    await axios.post(
+      `${process.env.REACT_APP_API}direct-order`,
+      {
+        recipe: ingredients,
+        deliverydate: orderDate,
+        grandTotal,
+        mealTimeCategory: selectedOption,
+        inovice: lastInvoiceNumber,
+      }
+      // {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //     "x-access-token": token,
+      //   },
+      // }
+    );
+    closeModal();
+  };
+
+  const deleteItem = (ingredientId) => {
+    // Filter out the ingredient with the specified ID
+    const updatedIngredients = ingredients.filter(
+      (ingredient) => ingredient._id !== ingredientId
+    );
+
+    // Update the state with the updated list of ingredients
+    setIngredients(updatedIngredients);
+  };
+
+  const today = moment();
+  const maxDate = moment().add(1, "year");
+
   return (
     <ColumnContainer className="custom">
       <RowContainer className="quarter">
         <FormInput
           customClass="menu"
           animation={`sub-1`}
-          placeholder={"Search Ingredient"}
+          placeholder={"Search Recipe"}
           key={1}
           id={0}
           error={null}
@@ -279,6 +400,47 @@ const SetupRecipe = ({ openData, setMessage }) => {
         />
       </RowContainer>
       <RowContainer>
+        {/* <DatetimeInput
+          showYearDropdown
+          yearDropdownItemNumber={70}
+          //  minDate={props.minDate ?? moment().toDate()}
+          //  maxDate={props.maxDate ?? moment().add(1, "year").toDate()}
+          theme={themeColors}
+          // showTimeSelect
+          timeIntervals={1}
+          //  className={`input ${props.value.length > 0 ? "shrink" : ""}`}
+          //  placeholderText={`${t(props.label)}${props.required ? " *" : ""}`}
+          //  type={props.type}
+          //  value={userFriendlyDateTime}
+          //  selected={userFriendlyDateTime}
+          dateFormat={"yyyy-MM-dd hh:mm a"}
+          //  onChange={(event) => props.onChange(event, props.id, props.type)}
+        /> */}
+        <label for="order">Order Date:</label>
+        <DatetimeInputDirectOrder
+          showYearDropdown
+          yearDropdownItemNumber={70}
+          minDate={today ?? moment().toDate()}
+          maxDate={maxDate ?? moment().add(1, "year").toDate()}
+          type="date"
+          id="order"
+          name="order"
+          onChange={handleDateChange}
+        />
+        <h3>Invoice: {`INV-${lastInvoiceNumber + 1}`}</h3>
+        <div>
+          <h3>Delivery time</h3>
+          <select value={selectedOption} onChange={handleOptionChange}>
+            <option value="">Select an option</option>
+            {mealTimeCategory.map((option, index) => (
+              <option key={index} value={option?.id}>
+                {option?.value}
+              </option>
+            ))}
+          </select>
+
+          {/* {selectedOption && <p>You selected: {selectedOption}</p>} */}
+        </div>
         {ingredients ? (
           <Table>
             <thead>
@@ -289,10 +451,16 @@ const SetupRecipe = ({ openData, setMessage }) => {
                   </Div>
                 </TableCell>
                 <TableCell className="left head">
-                  <Div className="variants">Quantity / Calculate?</Div>
+                  <Div className="variants">Quantity</Div>
                 </TableCell>
                 <TableCell className="left head">
-                  <Div className="variants">Total Gram / Calori</Div>
+                  <Div className="variants">Price</Div>
+                </TableCell>
+                <TableCell className="left head">
+                  <Div className="variants">Tax (5%)</Div>
+                </TableCell>
+                <TableCell className="left head">
+                  <Div className="variants">Tax Price</Div>
                 </TableCell>
                 <TableCell className="left head">
                   <Div className="variants">Remove</Div>
@@ -306,97 +474,95 @@ const SetupRecipe = ({ openData, setMessage }) => {
                     <TableCell className="padding left">
                       <Title>
                         <GetIcon icon={"recepe"}></GetIcon>
-                        {item.ingredient.ingredientsName ?? "Nil"}
+                        {item?.recipe?.title ?? "Nil"}
                       </Title>
+                      <RecepeImage
+                        // src="https://www.seiu1000.org/sites/main/files/main-images/camera_lense_0.jpeg"
+                        src={
+                          item?.recipe?.photo
+                            ? process.env.REACT_APP_CDN + item?.recipe?.photo
+                            : null
+                        }
+                      ></RecepeImage>
                       <DataItemContainer className="nowrp">
-                        <DataItem>{item.ingredient.typeOfIngredient}</DataItem>
-                        <DataItem>
-                          {item.ingredient.gramOfType}g/
-                          {item.ingredient.measureType}
+                        {/* <DataItem>
+                          {item?.ingredient?.typeOfIngredient}
                         </DataItem>
                         <DataItem>
-                          {(
-                            (item.ingredient.calories *
-                              item.ingredient.gramOfType) /
+                          {item?.ingredient?.gramOfType}g/
+                          {item?.ingredient?.measureType}
+                        </DataItem> */}
+                        <DataItem>
+                          {/* {(
+                            (item?.ingredient?.calories *
+                              item?.ingredient?.gramOfType) /
                             100
-                          )?.toFixed(2)}
-                          KCal
+                          )?.toFixed(2)} */}
+                          {item?.carbohydrate}
+                          Carbohydrate
                         </DataItem>
                         <DataItem>
-                          {(
-                            (item.ingredient.protein *
-                              item.ingredient.gramOfType) /
-                            100
-                          )?.toFixed(2)}
-                          g Protein
+                          {/* {(item?.protein / 100)?.toFixed(2)}g Protein */}
+                          {item?.protein}g Protein
                         </DataItem>
                         <DataItem>
-                          {(
-                            (item.ingredient.totalFat *
-                              item.ingredient.gramOfType) /
+                          {/* {(
+                            (item?.ingredient?.totalFat *
+                              item?.ingredient?.gramOfType) /
                             100
-                          )?.toFixed(2)}
-                          g Fat
+                          )?.toFixed(2)} */}
+                          {item?.calories}Calories
                         </DataItem>
                         <DataItem>
-                          {(
-                            (item.ingredient.carbohydrate *
-                              item.ingredient.gramOfType) /
+                          {/* {(
+                            (item?.ingredient?.carbohydrate *
+                              item?.ingredient?.gramOfType) /
                             100
-                          )?.toFixed(2)}
-                          g Carbs
+                          )?.toFixed(2)} */}
+                          {item?.totalFat}
+                          Total Fat
                         </DataItem>
                       </DataItemContainer>
                     </TableCell>
-                    {/* <TableCell>{`${item.ingredient.gramOfType}g ${item.ingredient.measureType !== "Gram" ? ` per ${item.ingredient.measureType} = ` : ""} | ${item.ingredient.calories?.toFixed(2)} cal`}</TableCell> */}
+                    {/* <TableCell>{`${item?.ingredient?.gramOfType}g ${item?.ingredient?.measureType !== "Gram" ? ` per ${item?.ingredient?.measureType} = ` : ""} | ${item?.ingredient?.calories?.toFixed(2)} cal`}</TableCell> */}
 
                     <TableCell>
                       <StyledInput
                         placeholder="1"
                         type="number"
-                        value={item.quantity}
+                        value={item?.quantity}
                         onChange={(event) => {
-                          textChange(event, index);
+                          textChange(event, index, item);
                         }}
                       />
-                      <Checkbox
+                      {/* <Checkbox
                         onChange={(event) => {
                           checkChange(event, index);
                         }}
-                        checked={item.isCalculated}
+                        checked={item?.isCalculated}
                         theme={themeColors}
-                      />
+                      /> */}
                     </TableCell>
 
-                    <TableCell>{`${(
-                      item.ingredient.gramOfType * item.quantity
-                    ).toFixed(2)}g / ${(
-                      (item.ingredient.calories *
-                        (item.ingredient.gramOfType * item.quantity)) /
-                      100
-                    )?.toFixed(2)}cal`}</TableCell>
+                    <TableCell>
+                      {item?.recipe?.price}
+                      {/* {`${(
+                        item?.ingredient?.gramOfType * item?.quantity
+                      ).toFixed(2)}g / ${(
+                        (item?.ingredient?.calories *
+                          (item?.ingredient?.gramOfType * item?.quantity)) /
+                        100
+                      )?.toFixed(2)}cal`} */}
+                    </TableCell>
+
+                    <TableCell>{(item?.totalPrice / 100) * 5}</TableCell>
 
                     <TableCell>
-                      <Button
-                        onClick={() => {
-                          setMessage({
-                            type: 2,
-                            content: "Do you want to delete?",
-                            proceed: "Delete",
-                            data: index,
-                            onProceed: async () => {
-                              const response = await deleteData(
-                                { id: item._id },
-                                "recipe-ingredients"
-                              );
-                              setNutritionInfo(
-                                response.data.recipeNutritionInfo
-                              );
-                              setIngredients(response.data.addedItems);
-                            },
-                          });
-                        }}
-                      >
+                      {item?.totalPrice + (item?.totalPrice / 100) * 5}
+                    </TableCell>
+
+                    <TableCell>
+                      <Button onClick={() => deleteItem(item?._id)}>
                         <GetIcon icon={"delete"} />
                       </Button>
                     </TableCell>
@@ -735,7 +901,32 @@ const SetupRecipe = ({ openData, setMessage }) => {
             <GetIcon icon={"recipe"}></GetIcon>Loading
           </NoData>
         )}
+        {ingredients?.length ? (
+          <>
+            <TableCell
+              style={{
+                width: 80,
+              }}
+            >
+              {grandTotal}
+            </TableCell>
+          </>
+        ) : null}
+
+        {ingredients?.length ? (
+          <ButtonContanter
+            style={{
+              width: "max-content",
+              marginLeft: "auto",
+              cursor: "pointer",
+            }}
+            onClick={submitOrder}
+          >
+            Place Order
+          </ButtonContanter>
+        ) : null}
       </RowContainer>
+
       {isOpen && (
         <AutoForm
           userId={updateId}
