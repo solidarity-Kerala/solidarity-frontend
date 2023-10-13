@@ -66,11 +66,11 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             if (typeOfIngredient === ingredient.data.typeOfIngredient) {
               ["calories", "gram", "protein", "saturatedFat", "totalFat", "cholesterol", "fiber", "carbohydrate", "sugars", "iron", "calcium", "potassium", "sodium", "vitaminA", "vitaminE", "vitaminC"].map((nutrition) => {
                 const nutritionLower = nutrition.toLowerCase();
-                info[nutrition] = info[nutrition] ?? 0 + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
-                nutritionInfo[nutrition] = nutritionInfo[nutrition] ?? 0 + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
+                info[nutrition] = (info[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
+                nutritionInfo[nutrition] = (nutritionInfo[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
                 return null;
               });
-              info["ingredients"] += 1;
+              nutritionInfo["ingredients"] += (nutritionInfo["ingredients"] ?? 0) + 1;
             }
           }
           return null;
