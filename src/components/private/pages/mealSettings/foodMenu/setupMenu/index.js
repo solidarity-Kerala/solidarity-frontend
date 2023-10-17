@@ -47,7 +47,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   };
   const [coloriePerDay, setColoriePerDay] = useState("900");
   const getCalories = useCallback(
-    (recipe, mealTimeCategory, availableCalories) => {
+    (recipe, mealTimeCategory, availableCalories, calorieOnly = true) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
       const availableCalorie = availableCalories[coloriePerDay];
       let { numberOfPortion, recipeIngredients } = recipe;
@@ -79,7 +79,8 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         nutritionInfoDetails.push(info);
         return null;
       });
-      return nutritionInfo.calories ?? 0;
+
+      return calorieOnly ? nutritionInfo.calories ?? 0 : nutritionInfo;
     },
     [coloriePerDay, menuData?.mealTimeCategories]
   );
@@ -599,6 +600,10 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       closeEdit();
     });
   };
+  function addSpaceBeforeCaps(str) {
+    str = str.replace(/([a-z])([A-Z])/g, "$1 $2");
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
   return menuData ? (
     <ColumnContainer style={{ marginBottom: "30px", position: "relative", height: "90%" }}>
       <DndProvider backend={HTML5Backend}>
@@ -760,7 +765,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                             type: 1,
                                                             data: item,
                                                             mealTimeCategory: mealTimeCategory._id,
-                                                            nutritionInfo: getNutritionInfo(item, mealTimeCategory.availableCalories[coloriePerDay]),
+                                                            nutritionInfo: getCalories(item, "", mealTimeCategory.availableCalories, false),
                                                             Serving: setCaloriesItems(mealTimeCategory, true, item.typeOfRecipe),
                                                           });
                                                           console.log(popupData);
@@ -834,7 +839,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                                           type: 1,
                                                                           data: replacableItem.recipe,
                                                                           mealTimeCategory: mealTimeCategory._id,
-                                                                          nutritionInfo: getNutritionInfo(replacableItem.recipe, mealTimeCategory.availableCalories[coloriePerDay]),
+                                                                          nutritionInfo: getCalories(replacableItem.recipe, "", mealTimeCategory.availableCalories, false),
                                                                           Serving: setCaloriesItems(mealTimeCategory, true, replacableItem.recipe.typeOfRecipe),
                                                                         });
                                                                       }}
@@ -988,7 +993,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               <TableBody>
                 {Object.entries(popupData.nutritionInfo ?? {}).map(([key, value]) => (
                   <TableRow key={key}>
-                    <TableCell>{key.charAt(0).toUpperCase() + key.slice(1)}</TableCell>
+                    <TableCell>{addSpaceBeforeCaps(key)}</TableCell>
                     <TableCell>{getValue({ type: "number" }, value)}</TableCell>
                   </TableRow>
                 ))}
