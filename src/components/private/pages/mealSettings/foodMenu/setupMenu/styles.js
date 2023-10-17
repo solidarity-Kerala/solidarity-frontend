@@ -31,7 +31,21 @@ export const TabButton = styled.button`
     border-radius: 0 10px 10px 0;
   }
 `;
-
+export const PageNumber = styled.button`
+  padding: 10px 5px;
+  background-color: white;
+  font-weight: bold;
+  border: none;
+  font-size: 14px;
+  margin-bottom: 0px;
+  cursor: pointer;
+  border-radius: 10px;
+  min-width: 40px;
+  &.true {
+    background-color: #ccc;
+    font-weight: normal;
+  }
+`;
 export const Table = styled.table`
   width: calc(100% - 40px);
   margin-left: 30px;

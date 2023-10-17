@@ -38,7 +38,11 @@ export const InputContainer = styled.div`
       }
     }
   }
-
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
   @media (max-width: 768px) {
     flex: 100%;
     margin: 0px !important;
@@ -57,9 +61,7 @@ export const InputContainer = styled.div`
       input[type="date"]:not(:focus):invalid ~ .floating-label,
       .filter input[type="date"]:not(:focus):invalid ~ .floating-label,
       input[type="datetime-local"]:not(:focus):invalid ~ .floating-label,
-      .filter
-        input[type="datetime-local"]:not(:focus):invalid
-        ~ .floating-label {
+      .filter input[type="datetime-local"]:not(:focus):invalid ~ .floating-label {
         top: -1px;
         left: 13px;
         right: 6px;
@@ -186,6 +188,7 @@ export const Input = styled.input`
   &.shrink {
     padding: 1.6em 13px 0;
   }
+  -webkit-appearance: none;
 `;
 export const DatetimeInput = styled(DatePicker)`
   box-sizing: border-box;
