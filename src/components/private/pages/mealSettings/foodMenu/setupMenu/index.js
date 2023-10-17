@@ -84,48 +84,48 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     },
     [coloriePerDay, menuData?.mealTimeCategories]
   );
-  const getNutritionInfo = (recipe, availableCalories) => {
-    const { meal: meat, bread, fruit, dessert, soup, salad } = availableCalories;
-    let { typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
-    mixedMeatPercentage = mixedMeatPercentage ?? 100;
-    mixedBreadPercentage = mixedBreadPercentage ?? 100;
-    let count = 0,
-      count1 = 0,
-      count2 = 0,
-      nutritionInfo = {};
-    if (typeOfRecipe === "Meat") {
-      count1 = meat || 1;
-    } else if (typeOfRecipe === "Bread") {
-      count1 = bread || 1;
-    } else if (typeOfRecipe === "Fruit") {
-      count1 = fruit || 1;
-    } else if (typeOfRecipe === "Soup") {
-      count1 = soup || 1;
-    } else if (typeOfRecipe === "Dessert") {
-      count1 = dessert || 1;
-    } else if (typeOfRecipe === "Salad") {
-      count1 = salad || 1;
-    } else if (typeOfRecipe === "Mixed") {
-      count1 = (meat * mixedMeatPercentage) / 100;
-      count2 = (bread * mixedBreadPercentage) / 100;
-    }
+  // const getNutritionInfo = (recipe, availableCalories) => {
+  //   const { meal: meat, bread, fruit, dessert, soup, salad } = availableCalories;
+  //   let { typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
+  //   mixedMeatPercentage = mixedMeatPercentage ?? 100;
+  //   mixedBreadPercentage = mixedBreadPercentage ?? 100;
+  //   let count = 0,
+  //     count1 = 0,
+  //     count2 = 0,
+  //     nutritionInfo = {};
+  //   if (typeOfRecipe === "Meat") {
+  //     count1 = meat || 1;
+  //   } else if (typeOfRecipe === "Bread") {
+  //     count1 = bread || 1;
+  //   } else if (typeOfRecipe === "Fruit") {
+  //     count1 = fruit || 1;
+  //   } else if (typeOfRecipe === "Soup") {
+  //     count1 = soup || 1;
+  //   } else if (typeOfRecipe === "Dessert") {
+  //     count1 = dessert || 1;
+  //   } else if (typeOfRecipe === "Salad") {
+  //     count1 = salad || 1;
+  //   } else if (typeOfRecipe === "Mixed") {
+  //     count1 = (meat * mixedMeatPercentage) / 100;
+  //     count2 = (bread * mixedBreadPercentage) / 100;
+  //   }
 
-    count = parseInt(count1) + parseInt(count2);
-    nutritionInfo.calories = ((recipe.calories ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Gram = ((recipe.gram ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Protein = ((recipe.protein ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.SaturatedFat = ((recipe.satFat ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.UnsaturatedFat = ((recipe.unSatFat ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.TotalFat = ((recipe.totalFat ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Cholesterol = ((recipe.cholesterol ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Fiber = ((recipe.fiber ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Carbohydrate = ((recipe.carbohydrate ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Sugars = ((recipe.sugars ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Iron = ((recipe.iron ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Calcium = ((recipe.calcium ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   count = parseInt(count1) + parseInt(count2);
+  //   nutritionInfo.calories = ((recipe.calories ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Gram = ((recipe.gram ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Protein = ((recipe.protein ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.SaturatedFat = ((recipe.satFat ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.UnsaturatedFat = ((recipe.unSatFat ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.TotalFat = ((recipe.totalFat ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Cholesterol = ((recipe.cholesterol ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Fiber = ((recipe.fiber ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Carbohydrate = ((recipe.carbohydrate ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Sugars = ((recipe.sugars ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Iron = ((recipe.iron ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Calcium = ((recipe.calcium ?? 0) / (numberOfPortion ?? 1)) * count;
 
-    return nutritionInfo;
-  };
+  //   return nutritionInfo;
+  // };
   useEffect(() => {
     if (menuData?.foodMenu) {
       const reducedResult = menuData.foodMenu.reduce((accumulator, item) => {
