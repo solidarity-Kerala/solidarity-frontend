@@ -47,6 +47,14 @@ const zoomAnimation = keyframes`
     transform: scale(1);
   }
 `;
+const slideRightToLeft = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+`;
 
 export const Page = styled.div`
   display: flex;
@@ -58,13 +66,13 @@ export const Page = styled.div`
   max-width: 100%;
   height: auto;
   /* animation: ${fadeIn} 1s ease-in-out; */
-  animation: ${zoomAnimation} .3s ease-in-out;
+  animation: ${zoomAnimation} 0.3s ease-in-out;
   margin: 5vh auto auto auto;
   padding: 0em 0;
   background-color: white;
   max-height: 90%;
   box-shadow: 0px 0px 3px 1px rgb(181 181 181 / 45%);
-  &.print{
+  &.print {
     width: 70%;
   }
   &.medium {
@@ -72,24 +80,35 @@ export const Page = styled.div`
     min-width: 250px;
     max-width: 100%;
   }
+  &.filter {
+    right: 0px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    max-height: 100%;
+    margin: 0;
+    border-radius: 0;
+    animation: ${slideRightToLeft} 0.3s ease-in-out;
+    box-shadow: rgb(237, 237, 237) -2px -1px 11px 3px;
+  }
   &.large {
     width: 80%;
     min-width: 250px;
     max-width: 100%;
-  }&.small {
+  }
+  &.small {
     width: 30%;
     min-width: 250px;
     max-width: 100%;
   }
-  &.full-page
-  {
-    position:fixed;
-    top:0;
+  &.full-page {
+    position: fixed;
+    top: 0;
     bottom: 0;
-    height:100vh;
-    max-height:100vh;
-     margin: 0;
-     width:100%;
+    height: 100vh;
+    max-height: 100vh;
+    margin: 0;
+    width: 100%;
   }
   @media (max-width: 768px) {
     width: 100%;
@@ -108,7 +127,7 @@ export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5em 30px 0.5em;
+  padding: 0.4em 30px;
   font-weight: 500;
   font-size: 1.3em;
   &.form {
@@ -118,12 +137,12 @@ export const Header = styled.div`
     padding: 5px;
     padding: 5px;
     border-bottom: 1px solid rgb(243, 243, 243);
-    margin-bottom:10px;
+    margin-bottom: 10px;
   }
   &.small button {
     background-color: rgb(243, 243, 243);
     height: 30px;
-    padding:5px;
+    padding: 5px;
     width: 30px;
     display: flex;
     justify-content: center;

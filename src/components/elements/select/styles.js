@@ -80,8 +80,8 @@ export const SelectBox = styled.div`
   }
   &.filter {
     margin: 0px;
-    flex: 1 1 200px; /* flex-grow, flex-shrink, flex-basis */
-    max-width: 200px; /* Maximum width for flexibility */
+    flex: 1 1 250px; /* flex-grow, flex-shrink, flex-basis */
+    max-width: 250px; /* Maximum width for flexibility */
   }
   &.single {
     margin-right: 0em;
