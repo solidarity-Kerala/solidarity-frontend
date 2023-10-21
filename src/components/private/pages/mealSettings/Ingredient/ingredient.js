@@ -38,8 +38,7 @@ const Ingredient = (props) => {
       add: true,
       update: true,
       filter: true,
-      selectApi:
-        "Gram,Teaspoon,Tablespoon,Cup,Ounce,Piece,Milliliter,Pinch,Bunch",
+      selectApi: "Gram,Teaspoon,Tablespoon,Cup,Ounce,Piece,Milliliter,Pinch,Bunch",
       apiType: "CSV",
     },
     {
@@ -391,6 +390,19 @@ const Ingredient = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "image",
+      placeholder: "Ingredient",
+      name: "photo",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Ingredient",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
   return (
@@ -405,6 +417,7 @@ const Ingredient = (props) => {
           type: "text",
           collection: "",
         }}
+        profileImage="photo"
         shortName={`Ingredient`}
         // formMode={`single`}
         formMode={`double`}

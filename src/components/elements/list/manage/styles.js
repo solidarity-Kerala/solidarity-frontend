@@ -130,6 +130,11 @@ export const Header = styled.div`
   padding: 0.4em 30px;
   font-weight: 500;
   font-size: 1.3em;
+  && {
+    .filter & {
+      padding:5px 10px;
+    }
+  }
   &.form {
     padding: 0.5em 0.5em;
   }
