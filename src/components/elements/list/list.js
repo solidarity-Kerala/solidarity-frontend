@@ -896,7 +896,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           <Filter
             theme={themeColors}
             onClick={() => {
-              setShowFilter(true);
+              setShowFilter(!shoFilter);
             }}
           >
             <GetIcon icon={"filter"} />
@@ -910,6 +910,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           </AddButton>
         )}
       </ButtonPanel>
+
       {viewMode === "table" ? (
         <TableContaner>
           <TableView>
@@ -1042,31 +1043,29 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           customClass={"small"}
         ></PopupView>
       )}
-      {shoFilter && (
-        <PopupView
-          // Popup data is a JSX element which is binding to the Popup Data Area like HOC
-          popupData={
-            <Filters>
-              {datefilter && <DateRangeSelector onChange={dateRangeChange} themeColors={themeColors}></DateRangeSelector>}
-              {formInput.map((item, index) => {
-                switch (item.type) {
-                  case "select":
-                    return (item.filter ?? true) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} required={false} />;
-                  case "date":
-                    return (item.filter ?? false) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} required={false} />;
-                  default:
-                    return null;
-                }
-              })}
-            </Filters>
-          }
-          themeColors={themeColors}
-          closeModal={() => setShowFilter(false)}
-          itemTitle={{ name: "title", type: "text", collection: "" }}
-          openData={{ data: { _id: "", title: "Filters" } }} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
-          customClass={"medium"}
-        ></PopupView>
-      )}
+      <PopupView
+        // Popup data is a JSX element which is binding to the Popup Data Area like HOC
+        popupData={
+          <Filters>
+            {datefilter && <DateRangeSelector onChange={dateRangeChange} themeColors={themeColors}></DateRangeSelector>}
+            {formInput.map((item, index) => {
+              switch (item.type) {
+                case "select":
+                  return (item.filter ?? true) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} required={false} />;
+                case "date":
+                  return (item.filter ?? false) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} required={false} />;
+                default:
+                  return null;
+              }
+            })}
+          </Filters>
+        }
+        themeColors={themeColors}
+        closeModal={() => setShowFilter(false)}
+        itemTitle={{ name: "title", type: "text", collection: "" }}
+        openData={{ data: { _id: "", title: "Filters" } }} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+        customClass={"medium filter " + (shoFilter ? "show" : "hide")}
+      ></PopupView>
     </RowContainer>
   ) : (
     <RowContainer>
