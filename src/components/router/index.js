@@ -9,32 +9,32 @@ import { RowContainer } from "../styles/containers/styles";
 import Header from "../private/common/layout/header";
 import Footer from "../private/common/layout/footer";
 import Menu from "../private/common/layout/menu";
-import Body from "../private/pages/dashboard";
 import InternetStatusPopup from "../elements/InternetStatusPopup";
-// import dietitian from "../private/pages/dashboard/dietitian";
 
 const PageRouter = () => {
   const user = useSelector((state) => state.login);
   const menuStatus = useSelector((state) => state.menuStatus);
+  const selectedMenuItem = useSelector((state) => state.selectedMenu);
   const createRouter = (router, menu = true) => {
     const role = menu ? router.menuRoles[0] : router.subMenuRoles[0];
-    return <Route key={`${router._id}`} path={`${router.path}`} element={<Switch addPrivilege={role.add ?? false} delPrivilege={role.delete ?? false} updatePrivilege={role.update ?? false} exportPrivilege={role.export ?? false} clonePrivilege={role.clone ?? false} page={router.element} />} />;
+    return <Route key={`${router._id}`} path={`${router.path}`} element={<Switch user={user.data} addPrivilege={role.add ?? false} delPrivilege={role.delete ?? false} updatePrivilege={role.update ?? false} exportPrivilege={role.export ?? false} clonePrivilege={role.clone ?? false} hideMenu={role.hideMenu ?? false} hideHeader={role.hideMenu ?? false} page={router.element} />} />;
   };
+
   const themeColors = useSelector((state) => state.themeColors);
   return user.data.token ? (
     <BrowserRouter>
       <MainContainer>
-        <SideBar theme={themeColors} className={menuStatus && "active"}>
-          <Menu user={user.data}></Menu>
-          <Footer></Footer>
-        </SideBar>
-        <RowContainer className="content">
-          <Header user={user.data}></Header>
+        {!(selectedMenuItem.hideMenu ?? false) && (
+          <SideBar theme={themeColors} className={menuStatus && "active"}>
+            <Menu user={user.data}></Menu>
+            <Footer></Footer>
+          </SideBar>
+        )}
+        <RowContainer className={`content ${selectedMenuItem.hideMenu && "hidemenu"}`}>
+          {!(selectedMenuItem.hideHeader ?? false) && <Header user={user.data}></Header>}
           <Container className="nopadding" theme={themeColors}>
             <Routes>
               <Route path="/" element={<Switch page="login" />} />
-              <Route path="/dashboard" element={<Body />} />
-              <Route path="/dietitian-dashboard" element={<Body />} />
               {user?.data?.menu?.map((menu) => {
                 if (menu.submenus?.length > 0) {
                   return (
@@ -50,7 +50,7 @@ const PageRouter = () => {
             </Routes>
           </Container>
         </RowContainer>
-        <InternetStatusPopup/>
+        <InternetStatusPopup />
       </MainContainer>
     </BrowserRouter>
   ) : (
