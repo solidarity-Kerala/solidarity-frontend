@@ -110,9 +110,33 @@ const Menu = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "checkbox",
+      placeholder: "Hide Menu",
+      name: "hideMenu",
+      validation: "",
+      default: "false",
+      label: "Hide Menu",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "checkbox",
+      placeholder: "Hide Header",
+      name: "hideHeader",
+      validation: "",
+      default: "false",
+      label: "Hide Header",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
-  const [timingAttributes] = useState([
+  const [submenuAttributes] = useState([
     {
       type: "text",
       placeholder: "Label",
@@ -197,6 +221,30 @@ const Menu = (props) => {
       validation: "",
       default: "false",
       label: "Is Link",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "checkbox",
+      placeholder: "Hide Menu",
+      name: "hideMenu",
+      validation: "",
+      default: "false",
+      label: "Hide Menu",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "checkbox",
+      placeholder: "Hide Header",
+      name: "hideHeader",
+      validation: "",
+      default: "false",
+      label: "Hide Header",
       required: true,
       view: true,
       add: true,
@@ -310,7 +358,7 @@ const Menu = (props) => {
       // Title of the submenu
       title: "Sub Menu",
       // Additional attributes for timing
-      attributes: timingAttributes,
+      attributes: submenuAttributes,
       // Parameters for API and submenu configuration
       params: {
         // API endpoint for submenu data

@@ -164,6 +164,10 @@ export const RowContainer = styled.div`
     max-width: calc(100% - 15em);
     height: 100vh;
   }
+  &.hidemenu{
+    flex: 1 1 calc(100%);
+    max-width: calc(100%);
+  }
   &.popup-data {
     overflow: auto;
     padding: 1em 0 0;

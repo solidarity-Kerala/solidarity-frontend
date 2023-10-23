@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import withLayout from "../layout";
 import { ColumnContainer } from "../../styles/containers/styles";
 import Header from "../header";
-import { clearLogin, fetchLogin } from "../../../store/actions/login";
+import { clearLoginSession, fetchLogin } from "../../../store/actions/login";
 
 const Login = (props) => {
   useEffect(() => {
@@ -50,12 +50,12 @@ const Login = (props) => {
   const { setLoaderBox } = props;
   useEffect(() => {
     if (user.data?.token) {
-      navigate(user.data?.menu[0]?.path ?? "404");
+      navigate(user.data?.menu[0]?.path ?? "dashboard");
     }
     setLoaderBox(user.isLoading);
     if (user.error !== null) {
       props.setMessage({ type: 1, content: t(user.error), proceed: "Okay" });
-      dispatch(clearLogin());
+      dispatch(clearLoginSession());
     }
   }, [user, navigate, setLoaderBox, t, props, dispatch]);
 

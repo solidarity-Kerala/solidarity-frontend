@@ -490,7 +490,7 @@ export const Filter = styled.button`
 `;
 export const Filters = styled.div`
   display: flex;
-  margin: 0 20px 20px;
+  margin: 0 ;
   flex-flow: wrap;
   justify-content: center;
   align-items: baseline;
