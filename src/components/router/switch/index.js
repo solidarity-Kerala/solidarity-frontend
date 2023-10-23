@@ -94,6 +94,8 @@ import RestoreFranchiseAdmin from "../../private/pages/restoreUser/restoreFranch
 import Allergy from "../../private/pages/allergy";
 import Inventory from "../../private/pages/inventory";
 import UserLog from "../../private/pages/report/userLog";
+// import FoodExchange from "../../private/pages/mealSettings/foodExchange";
+import FoodExchange from "../../private/pages/mealSettings/foodExchange";
 
 const Switch = ({ page, key, ...privileges }) => {
   switch (page) {
@@ -277,6 +279,8 @@ const Switch = ({ page, key, ...privileges }) => {
       return <Inventory key={key} {...privileges} />;
     case "subscriber-log":
       return <UserLog key={key} {...privileges} />;
+    case "food-exchange":
+      return <FoodExchange key={key} {...privileges} />;
     default:
       return <Page404 key={key}></Page404>;
   }

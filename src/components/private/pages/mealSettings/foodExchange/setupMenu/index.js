@@ -549,7 +549,19 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
 
   useEffect(() => {
     setLoaderBox(true);
-    getData({ menuId: openData.data._id, weekNumber }, "food-menu/get-a-menu")
+    // getData({ menuId: openData.data._id, weekNumber }, "food-menu/get-a-menu")
+    //   .then((response) => {
+    //     if (response.status === 200) {
+    //       setMenuData(response.data);
+    //       setLoaderBox(false);
+    //     }
+    //   })
+    //   .catch(() => [setLoaderBox(false)]);
+
+    getData(
+      { menuId: openData.data._id, weekNumber },
+      "food-exchange-category/food-exchange-menu"
+    )
       .then((response) => {
         if (response.status === 200) {
           setMenuData(response.data);
@@ -766,6 +778,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       closeEdit();
     });
   };
+
+  console.log({ menuData });
+
   return menuData ? (
     <ColumnContainer
       style={{ marginBottom: "30px", position: "relative", height: "90%" }}
@@ -814,10 +829,10 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 {...item}
                 onChange={(event) => {
                   if (
-                    !isNaN(event.value) &&
-                    event.value?.toString().length > 0
+                    !isNaN(event?.value) &&
+                    event?.value?.toString().length > 0
                   ) {
-                    setColoriePerDay(event.value);
+                    setColoriePerDay(event?.value);
                   }
                 }}
               />

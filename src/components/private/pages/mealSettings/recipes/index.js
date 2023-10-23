@@ -211,8 +211,33 @@ const Resicpes = (props) => {
   return (
     <Container className="noshadow">
       {/* Render a ListTable component */}
-      <ListTable actions={actions} api={`recipe-item`} itemTitle={{ name: "title", type: "text", collection: "" }} profileImage="photo" shortName={`Recipe Item`} formMode={`double`} {...props} attributes={attributes}></ListTable>
-      {openMenuSetup && openItemData && <PopupView  customClass={"print"} popupData={<SetupRecipe customClass={"print"} openData={openItemData} setMessage={props.setMessage} closeModal={closeModal}></SetupRecipe>} themeColors={themeColors} closeModal={closeModal} itemTitle={{ name: "title", type: "text", collection: "" }} openData={openItemData} ></PopupView>}
+      <ListTable
+        actions={actions}
+        api={`recipe-item`}
+        itemTitle={{ name: "title", type: "text", collection: "" }}
+        profileImage="photo"
+        shortName={`Recipe Item`}
+        formMode={`double`}
+        {...props}
+        attributes={attributes}
+      ></ListTable>
+      {openMenuSetup && openItemData && (
+        <PopupView
+          customClass={"print"}
+          popupData={
+            <SetupRecipe
+              customClass={"print"}
+              openData={openItemData}
+              setMessage={props.setMessage}
+              closeModal={closeModal}
+            ></SetupRecipe>
+          }
+          themeColors={themeColors}
+          closeModal={closeModal}
+          itemTitle={{ name: "title", type: "text", collection: "" }}
+          openData={openItemData}
+        ></PopupView>
+      )}
     </Container>
   );
 };

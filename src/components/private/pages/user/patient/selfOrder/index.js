@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-
+import styled from "styled-components";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   ColumnContainer,
   RowContainer,
@@ -11,24 +13,130 @@ import {
   DataItem,
   DataItemContainer,
   Div,
+  MealItem,
+  TabDataItem,
   Table,
   TableCell,
   Title,
 } from "./styles";
-import styled from "styled-components";
 import AutoForm from "../../../../../elements/form";
 import { getData, postData, putData } from "../../../../../../backend/api";
 import { useDispatch, useSelector } from "react-redux";
 import { addSelectObject } from "../../../../../../store/actions/select";
 import { GetIcon } from "../../../../../../icons";
 // import Checkbox from "../../../../../elements/checkbox";
-import { NoData } from "../../../../../elements/list/styles";
+import { NoData, ProfileImage } from "../../../../../elements/list/styles";
 import { getValue } from "../../../../../elements/list/functions";
 import axios from "axios";
 // import { GetAccessToken } from "../../../../../../backend/authentication";
-import { DatetimeInputDirectOrder } from "../../../../../elements/input/styles";
+import {
+  DatetimeInput,
+  DatetimeInputDirectOrder,
+  InputContainer,
+} from "../../../../../elements/input/styles";
 import { RecepeImage } from "../dietMenu/styles";
 import { ButtonContanter } from "../../../../../elements/form/styles";
+import InvoicePDF from "./inovicePDF";
+import { PDFViewer } from "@react-pdf/renderer";
+import PopupView from "../../../../../elements/popupview";
+import DraggableItem from "../../../mealSettings/foodMenu/setupMenu/dragdrop/drag";
+import { food } from "../../../../../../images";
+import { SelectBox } from "../../../../../elements/select/styles";
+
+const OrderForm = styled.form`
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0 10px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    gap: 0;
+  }
+`;
+
+const Invoice = styled.label`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  padding: 3px 20px;
+  width: 300px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin: 10px;
+  }
+`;
+
+const Field = styled.label`
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  padding: 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 300px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin: 10px;
+  }
+`;
+
+const CustomDatePicker = styled(DatePicker)`
+  border: none;
+  border-radius: 4px;
+  padding: 8px;
+  width: 95%;
+  font-size: 16px;
+  color: #333;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    margin: 10px;
+  }
+`;
+
+const DeliveryTimeSelect = styled.select`
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  width: 60%;
+  font-size: 16px;
+  color: #333;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const PlaceOrderButton = styled.button`
+  background-color: rgb(75, 75, 75);
+  color: white;
+  border: none;
+  width: 150px;
+  height: 60px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const options = [
+  { value: "morning", label: "Morning" },
+  { value: "afternoon", label: "Afternoon" },
+  { value: "evening", label: "Evening" },
+];
 
 const SetupRecipe = ({ openData, setMessage, closeModal }) => {
   const [search] = useState("");
@@ -139,12 +247,24 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
   const [mealTimeCategory, setMealTimeCatogory] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [lastInvoiceNumber, setLastInvoiceNumber] = useState("");
+  const [showPDF, setShowPDF] = useState(false);
+  const [directOrders, setDirectOrders] = useState();
+  const [orderDate, setOrderDate] = useState("");
+  const [deliveryTime, setDeliveryTime] = useState(options[0].value);
+
+  const handlePlaceOrder = (e) => {
+    e.preventDefault();
+    // Handle the place order action here
+  };
+
+  const themeColors = useSelector((state) => state.themeColors);
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
 
   const handleDateChange = (date) => {
+    setOrderDate(date);
     setSelectedDate(date);
     getData({ deliverydate: date }, "direct-order").then((response) => {
       console.log({ response });
@@ -171,7 +291,7 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
       return;
     } else {
       const exists = ingredients.some(
-        (ingredient) => ingredient._id === option._id
+        (ingredient) => ingredient?._id === option?._id
       );
 
       if (!exists) {
@@ -182,28 +302,6 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
           (option?.recipe?.price / 100) * 5 + option?.recipe?.price;
         setIngredients([...ingredients, option]);
       }
-
-      // if (option.measureType) {
-      //   const response = await postData(
-      //     { ingredient: option.id, recipe },
-      //     "recipe-ingredients"
-      //   );
-      //   response.data.addedItems && setIngredients(response.data.addedItems);
-      //   response.data.recipeNutritionInfo &&
-      //     setNutritionInfo(response.data.recipeNutritionInfo);
-      // } else {
-      //   if (option.id) {
-      //     option.measureType = "";
-      //     option.gramOfType = 0;
-      //     option.value =
-      //       typeof option.value === "undefined" ? "" : option.value;
-      //     option.ingredientsName = option.value ?? "";
-      //     option.quantity = 100;
-      //     setIngredient(option);
-      //     setUpdateId(option._id);
-      //     setIsOpen(true);
-      //   }
-      // }
     }
   };
 
@@ -286,12 +384,15 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
       console.log({ response });
       setLastInvoiceNumber(response?.data?.ordersCount);
     });
+    getData({}, "available-direct-orders/select").then((response) => {
+      setDirectOrders(response?.data);
+    });
   }, []);
 
   useEffect(() => {
     getData({ recipe }, "recipe-ingredients").then((response) => {
-      setIngredients(response.data.response);
-      setNutritionInfo(response.data.recipeNutritionInfo);
+      setIngredients(response.data.responseOne);
+      // setNutritionInfo(response.data.recipeNutritionInfo);
     });
   }, [recipe]);
 
@@ -368,7 +469,8 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
       //   },
       // }
     );
-    closeModal();
+    setShowPDF(true);
+    // closeModal();
   };
 
   const deleteItem = (ingredientId) => {
@@ -384,23 +486,214 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
   const today = moment();
   const maxDate = moment().add(1, "year");
 
+  const closeModals = () => {
+    setShowPDF(false);
+    closeModal();
+  };
+
+  const openItemData = {
+    name: "user name",
+    data: {
+      _id: "1234567890",
+    },
+    _id: "1234567890",
+  };
+
+  console.log({ directOrders });
   return (
-    <ColumnContainer className="custom">
-      <RowContainer className="quarter">
-        <FormInput
-          customClass="menu"
-          animation={`sub-1`}
-          placeholder={"Search Recipe"}
-          key={1}
-          id={0}
-          error={null}
-          value={search}
-          {...mealIngredient}
-          onChange={addIngredient}
+    <>
+      {/* <div
+        style={{
+          display: "flex",
+        }}
+      >
+        <label for="order">Order Date:</label>
+        <DatetimeInput
+          showYearDropdown
+          yearDropdownItemNumber={70}
+          minDate={today ?? moment().toDate()}
+          maxDate={maxDate ?? moment().add(1, "year").toDate()}
+          type="date"
+          id="order"
+          name="order"
+          onChange={handleDateChange}
         />
-      </RowContainer>
-      <RowContainer>
-        {/* <DatetimeInput
+        <TableCell className="left head">
+          <Div className="variants left" style={{ height: "" }}>
+            Invoice: {`INV-${lastInvoiceNumber + 1}`}
+          </Div>
+        </TableCell>
+      </div> */}
+
+      {/* <h3>Delivery time</h3>
+      <select value={selectedOption} onChange={handleOptionChange}>
+        <option value="">Select an option</option>
+        {mealTimeCategory.map((option, index) => (
+          <option key={index} value={option?.id}>
+            {option?.value}
+          </option>
+        ))}
+      </select> */}
+
+      <OrderForm onSubmit={handlePlaceOrder}>
+        <Invoice>
+          Invoice No:
+          <span>
+            <h5>{`INV-${lastInvoiceNumber + 1}`}</h5>
+          </span>
+        </Invoice>
+        <Field>
+          Order Date:
+          <CustomDatePicker
+            selected={selectedDate}
+            placeholderText="Select your date"
+            // onChange={(date) => setOrderDate(date)}
+            onChange={handleDateChange}
+          />
+        </Field>
+        <Field>
+          Delivery Time:
+          <DeliveryTimeSelect
+            value={selectedOption}
+            onChange={(e) => setSelectedOption(e.target.value)}
+          >
+            {mealTimeCategory.map((option, index) => (
+              <option key={index} value={option?.id}>
+                {option?.value}
+              </option>
+            ))}
+          </DeliveryTimeSelect>
+        </Field>
+        <PlaceOrderButton type="submit" onClick={submitOrder}>
+          Place Order
+        </PlaceOrderButton>
+        {/* {ingredients?.length ? (
+          <ButtonContanter
+            style={{
+              width: "max-content",
+              marginLeft: "auto",
+              cursor: "pointer",
+            }}
+            onClick={submitOrder}
+          >
+            Place Order
+          </ButtonContanter>
+        ) : null} */}
+      </OrderForm>
+      <ColumnContainer className="custom">
+        {showPDF && (
+          <PopupView
+            customClass={"print"}
+            popupData={
+              <InvoicePDF
+                customClass={"print"}
+                openData={ingredients}
+                total={grandTotal}
+                inovice={`INV-${lastInvoiceNumber + 1}`}
+                // setMessage={props.setMessage}
+                closeModal={closeModals}
+              />
+            }
+            themeColors={themeColors}
+            closeModal={closeModals}
+            itemTitle={{ name: "title", type: "text", collection: "" }}
+            openData={openItemData}
+          ></PopupView>
+        )}
+
+        <RowContainer className="quarter">
+          {/* <FormInput
+            customClass="menu"
+            animation={`sub-1`}
+            placeholder={"Search Recipe"}
+            key={1}
+            id={0}
+            error={null}
+            value={search}
+            {...mealIngredient}
+            onChange={addIngredient}
+          /> */}
+
+          {directOrders?.length &&
+            directOrders?.map((recipe) => (
+              <MealItem key={recipe?.id} onClick={() => addIngredient(recipe)}>
+                <ProfileImage>
+                  <img
+                    src={
+                      recipe?.recipe?.photo
+                        ? process.env.REACT_APP_CDN + recipe?.recipe?.photo
+                        : food
+                    }
+                    alt="icon"
+                  />
+                </ProfileImage>
+                <Title>
+                  {recipe?.value ?? "Title not found!"}
+                  <Title>
+                    <span>BHD</span>
+                    <span className="price">{recipe?.recipe?.price}</span>
+                    {/* <span className="offer">{recipe?.offerPrice}</span> */}
+                    {/* <span className="calories">{`${recipe?.calories.toFixed(
+                          2
+                        )} calories`}</span>
+                        <span className="calories">{`${recipe?.typeOfRecipe}`}</span>
+                        {recipe?.typeOfRecipe === "Mixed" && (
+                          <span className="calories">
+                            Meat{" "}
+                            {(recipe?.mixedMeatPercentage ?? 0) +
+                              "%, Bread " +
+                              (recipe?.mixedBreadPercentage ?? 0) +
+                              "%"}
+                          </span>
+                        )} */}
+                  </Title>
+                </Title>
+              </MealItem>
+            ))}
+
+          {/* {directOrders?.length > 0 ? (
+          <TabDataItem>
+            {directOrders.map((recipe) => (
+              <DraggableItem
+                key={recipe.id}
+                item={{
+                  ...recipe,
+                  mealOrRecepe: "recipe",
+                  recipe: { title: recipe?.value },
+                }}
+                element={
+                  <MealItem key={recipe?.id}>
+                    <ProfileImage>
+                      <img
+                        src={
+                          recipe?.recipe?.photo
+                            ? process.env.REACT_APP_CDN + recipe?.recipe?.photo
+                            : food
+                        }
+                        alt="icon"
+                      />
+                    </ProfileImage>
+                    <Title>
+                      {recipe?.value ?? "Title not found!"}
+                      <Title>
+                        <span>BHD</span>
+                        <span className="price">{recipe?.recipe?.price}</span>
+                      </Title>
+                    </Title>
+                  </MealItem>
+                }
+              />
+            ))}
+          </TabDataItem>
+        ) : (
+          <NoData>
+            <GetIcon icon={"recipe"}></GetIcon>No Recipes Found!
+          </NoData>
+        )} */}
+        </RowContainer>
+
+        <RowContainer>
+          {/* <DatetimeInput
           showYearDropdown
           yearDropdownItemNumber={70}
           //  minDate={props.minDate ?? moment().toDate()}
@@ -416,539 +709,552 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
           dateFormat={"yyyy-MM-dd hh:mm a"}
           //  onChange={(event) => props.onChange(event, props.id, props.type)}
         /> */}
-        <label for="order">Order Date:</label>
-        <DatetimeInputDirectOrder
-          showYearDropdown
-          yearDropdownItemNumber={70}
-          minDate={today ?? moment().toDate()}
-          maxDate={maxDate ?? moment().add(1, "year").toDate()}
-          type="date"
-          id="order"
-          name="order"
-          onChange={handleDateChange}
-        />
-        <h3>Invoice: {`INV-${lastInvoiceNumber + 1}`}</h3>
-        <div>
-          <h3>Delivery time</h3>
-          <select value={selectedOption} onChange={handleOptionChange}>
-            <option value="">Select an option</option>
-            {mealTimeCategory.map((option, index) => (
-              <option key={index} value={option?.id}>
-                {option?.value}
-              </option>
-            ))}
-          </select>
 
-          {/* {selectedOption && <p>You selected: {selectedOption}</p>} */}
-        </div>
-        {ingredients ? (
-          <Table>
-            <thead>
-              <tr>
-                <TableCell className="left head">
-                  <Div className="variants left">
-                    Recipes You have added ({ingredients?.length ?? 0})
-                  </Div>
-                </TableCell>
-                <TableCell className="left head">
-                  <Div className="variants">Quantity</Div>
-                </TableCell>
-                <TableCell className="left head">
-                  <Div className="variants">Price</Div>
-                </TableCell>
-                <TableCell className="left head">
-                  <Div className="variants">Tax (5%)</Div>
-                </TableCell>
-                <TableCell className="left head">
-                  <Div className="variants">Tax Price</Div>
-                </TableCell>
-                <TableCell className="left head">
-                  <Div className="variants">Remove</Div>
-                </TableCell>
-              </tr>
-            </thead>
-            <tbody>
-              {ingredients?.length > 0 &&
-                ingredients.map((item, index) => (
-                  <tr key={index}>
-                    <TableCell className="padding left">
-                      <Title>
-                        <GetIcon icon={"recepe"}></GetIcon>
-                        {item?.recipe?.title ?? "Nil"}
-                      </Title>
-                      <RecepeImage
-                        // src="https://www.seiu1000.org/sites/main/files/main-images/camera_lense_0.jpeg"
-                        src={
-                          item?.recipe?.photo
-                            ? process.env.REACT_APP_CDN + item?.recipe?.photo
-                            : null
-                        }
-                      ></RecepeImage>
-                      <DataItemContainer className="nowrp">
-                        {/* <DataItem>
+          {ingredients ? (
+            <Table>
+              <thead>
+                <tr>
+                  <TableCell className="left head">
+                    <Div className="variants left">
+                      Recipes You have added ({ingredients?.length ?? 0})
+                    </Div>
+                  </TableCell>
+                  <TableCell className="left head">
+                    <Div className="variants">Quantity</Div>
+                  </TableCell>
+                  <TableCell className="left head">
+                    <Div className="variants">Price</Div>
+                  </TableCell>
+                  <TableCell className="left head">
+                    <Div className="variants">Tax (5%)</Div>
+                  </TableCell>
+                  <TableCell className="left head">
+                    <Div className="variants">Tax Price</Div>
+                  </TableCell>
+                  <TableCell className="left head">
+                    <Div className="variants">Remove</Div>
+                  </TableCell>
+                </tr>
+              </thead>
+              <tbody>
+                {ingredients?.length > 0 &&
+                  ingredients.map((item, index) => (
+                    <tr key={index}>
+                      <TableCell className="padding left">
+                        <Title>
+                          <GetIcon icon={"recepe"}></GetIcon>
+                          {item?.recipe?.title ?? "Nil"}
+                        </Title>
+                        <RecepeImage
+                          // src="https://www.seiu1000.org/sites/main/files/main-images/camera_lense_0.jpeg"
+                          src={
+                            item?.recipe?.photo
+                              ? process.env.REACT_APP_CDN + item?.recipe?.photo
+                              : null
+                          }
+                        ></RecepeImage>
+                        <DataItemContainer className="nowrp">
+                          {/* <DataItem>
                           {item?.ingredient?.typeOfIngredient}
                         </DataItem>
                         <DataItem>
                           {item?.ingredient?.gramOfType}g/
                           {item?.ingredient?.measureType}
                         </DataItem> */}
-                        <DataItem>
-                          {/* {(
+                          <DataItem>
+                            {/* {(
                             (item?.ingredient?.calories *
                               item?.ingredient?.gramOfType) /
                             100
                           )?.toFixed(2)} */}
-                          {item?.carbohydrate}
-                          Carbohydrate
-                        </DataItem>
-                        <DataItem>
-                          {/* {(item?.protein / 100)?.toFixed(2)}g Protein */}
-                          {item?.protein}g Protein
-                        </DataItem>
-                        <DataItem>
-                          {/* {(
+                            {item?.carbohydrate}
+                            Carbohydrate
+                          </DataItem>
+                          <DataItem>
+                            {/* {(item?.protein / 100)?.toFixed(2)}g Protein */}
+                            {item?.protein}g Protein
+                          </DataItem>
+                          <DataItem>
+                            {/* {(
                             (item?.ingredient?.totalFat *
                               item?.ingredient?.gramOfType) /
                             100
                           )?.toFixed(2)} */}
-                          {item?.calories}Calories
-                        </DataItem>
-                        <DataItem>
-                          {/* {(
+                            {item?.calories}Calories
+                          </DataItem>
+                          <DataItem>
+                            {/* {(
                             (item?.ingredient?.carbohydrate *
                               item?.ingredient?.gramOfType) /
                             100
                           )?.toFixed(2)} */}
-                          {item?.totalFat}
-                          Total Fat
-                        </DataItem>
-                      </DataItemContainer>
-                    </TableCell>
-                    {/* <TableCell>{`${item?.ingredient?.gramOfType}g ${item?.ingredient?.measureType !== "Gram" ? ` per ${item?.ingredient?.measureType} = ` : ""} | ${item?.ingredient?.calories?.toFixed(2)} cal`}</TableCell> */}
+                            {item?.totalFat}
+                            Total Fat
+                          </DataItem>
+                        </DataItemContainer>
+                      </TableCell>
+                      {/* <TableCell>{`${item?.ingredient?.gramOfType}g ${item?.ingredient?.measureType !== "Gram" ? ` per ${item?.ingredient?.measureType} = ` : ""} | ${item?.ingredient?.calories?.toFixed(2)} cal`}</TableCell> */}
 
-                    <TableCell>
-                      <StyledInput
-                        placeholder="1"
-                        type="number"
-                        value={item?.quantity}
-                        onChange={(event) => {
-                          textChange(event, index, item);
-                        }}
-                      />
-                      {/* <Checkbox
+                      <TableCell>
+                        <StyledInput
+                          placeholder="1"
+                          type="number"
+                          value={item?.quantity}
+                          onChange={(event) => {
+                            textChange(event, index, item);
+                          }}
+                        />
+                        {/* <Checkbox
                         onChange={(event) => {
                           checkChange(event, index);
                         }}
                         checked={item?.isCalculated}
                         theme={themeColors}
                       /> */}
-                    </TableCell>
+                      </TableCell>
 
-                    <TableCell>
-                      {item?.recipe?.price}
-                      {/* {`${(
+                      <TableCell>
+                        {item?.recipe?.price}
+                        {/* {`${(
                         item?.ingredient?.gramOfType * item?.quantity
                       ).toFixed(2)}g / ${(
                         (item?.ingredient?.calories *
                           (item?.ingredient?.gramOfType * item?.quantity)) /
                         100
                       )?.toFixed(2)}cal`} */}
-                    </TableCell>
+                      </TableCell>
 
-                    <TableCell>{(item?.totalPrice / 100) * 5}</TableCell>
+                      <TableCell>{(item?.totalPrice / 100) * 5}</TableCell>
 
-                    <TableCell>
-                      {item?.totalPrice + (item?.totalPrice / 100) * 5}
-                    </TableCell>
+                      <TableCell>
+                        {item?.totalPrice + (item?.totalPrice / 100) * 5}
+                      </TableCell>
 
-                    <TableCell>
-                      <Button onClick={() => deleteItem(item?._id)}>
-                        <GetIcon icon={"delete"} />
-                      </Button>
-                    </TableCell>
-                  </tr>
-                ))}
-              {ingredients.length === 0 && (
-                <TableCell colSpan={4}>
-                  <NoData>
-                    <GetIcon icon={"recipe"}></GetIcon>No recipe added!
-                  </NoData>
-                </TableCell>
-              )}
-              {nutritionInfo && (
-                <>
-                  {portion > 1 ? (
-                    <tr key={0}>
-                      <TableCell colSpan={4}>
-                        <DataItemContainer>
-                          <DataItem className="head">
-                            <GetIcon icon={"info"}></GetIcon>Total Nutrition
-                            Info {portion > 1 && ` of ${1}/${portion}`}
-                          </DataItem>
-                          <DataItem>
-                            Gram:
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.gram / portion
-                            )}
-                            /{getValue({ type: "number" }, nutritionInfo.gram)}
-                          </DataItem>
-                          <DataItem>
-                            Calories:
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.calories / portion
-                            )}
-                            /
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.calories
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Protein:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.protein / portion
-                            )}
-                            /{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.protein
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Saturated Fat:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.satFat / portion
-                            )}
-                            /
-                            {getValue({ type: "number" }, nutritionInfo.satFat)}
-                          </DataItem>
-                          <DataItem>
-                            Unsaturated Fat:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.unSatFat / portion
-                            )}
-                            /
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.unSatFat
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Total Fat:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.totalFat / portion
-                            )}
-                            /
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.totalFat
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Cholesterol:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.cholesterol / portion
-                            )}
-                            /
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.cholesterol
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Fiber:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.fiber / portion
-                            )}
-                            /{getValue({ type: "number" }, nutritionInfo.fiber)}
-                          </DataItem>
-                          <DataItem>
-                            Carbohydrate:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.carbohydrate / portion
-                            )}
-                            /
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.carbohydrate
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Sugars:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.sugars / portion
-                            )}
-                            /
-                            {getValue({ type: "number" }, nutritionInfo.sugars)}
-                          </DataItem>
-                          <DataItem>
-                            Iron:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.iron / portion
-                            )}
-                            /{getValue({ type: "number" }, nutritionInfo.iron)}
-                          </DataItem>
-                          <DataItem>
-                            Calcium:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.calcium / portion
-                            )}
-                            /
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.calcium
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Sodium:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.sodium / portion
-                            )}
-                            /
-                            {getValue({ type: "number" }, nutritionInfo.sodium)}
-                          </DataItem>
-                          <DataItem>
-                            Potassium:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.potassium / portion
-                            )}
-                            /
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.potassium
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Vitamin A:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.vitaminA
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Vitamin C:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.vitaminC
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Vitamin E:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.vitaminE
-                            )}
-                          </DataItem>
-                        </DataItemContainer>
+                      <TableCell>
+                        <Button onClick={() => deleteItem(item?._id)}>
+                          <GetIcon icon={"delete"} />
+                        </Button>
                       </TableCell>
                     </tr>
-                  ) : (
-                    <tr key={0}>
-                      <TableCell colSpan={4}>
-                        <DataItemContainer>
-                          <DataItem className="head">
-                            <GetIcon icon={"info"}></GetIcon>Total Nutrition
-                            Info
-                          </DataItem>
-                          <DataItem>
-                            Gram:{" "}
-                            {getValue({ type: "number" }, nutritionInfo.gram)}
-                          </DataItem>
-                          <DataItem className="span">
-                            <span>
-                              Bread:{" "}
+                  ))}
+                {ingredients.length === 0 && (
+                  <TableCell colSpan={4}>
+                    <NoData>
+                      <GetIcon icon={"recipe"}></GetIcon>No recipe added!
+                    </NoData>
+                  </TableCell>
+                )}
+                {nutritionInfo && (
+                  <>
+                    {portion > 1 ? (
+                      <tr key={0}>
+                        <TableCell colSpan={4}>
+                          <DataItemContainer>
+                            <DataItem className="head">
+                              <GetIcon icon={"info"}></GetIcon>Total Nutrition
+                              Info {portion > 1 && ` of ${1}/${portion}`}
+                            </DataItem>
+                            <DataItem>
+                              Gram:
                               {getValue(
-                                { type: "percentage" },
-                                nutritionInfo.breadGram
+                                { type: "number" },
+                                nutritionInfo?.gram / portion
                               )}
-                            </span>
-                            <span>
-                              Meat:{" "}
+                              /
                               {getValue(
-                                { type: "percentage" },
-                                nutritionInfo.breadGram
+                                { type: "number" },
+                                nutritionInfo?.gram
                               )}
-                            </span>
-                            <span>
-                              Other:{" "}
+                            </DataItem>
+                            <DataItem>
+                              Calories:
                               {getValue(
-                                { type: "percentage" },
-                                nutritionInfo.breadGram
+                                { type: "number" },
+                                nutritionInfo?.calories / portion
                               )}
-                            </span>
-                          </DataItem>
-                          <DataItem>
-                            Calories:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.calories
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Protein:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.protein
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Saturated Fat:{" "}
-                            {getValue({ type: "number" }, nutritionInfo.satFat)}
-                          </DataItem>
-                          <DataItem>
-                            Unsaturated Fat:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.unSatFat
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Total Fat:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.totalFat
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Cholesterol:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.cholesterol
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Fiber:{" "}
-                            {getValue({ type: "number" }, nutritionInfo.fiber)}
-                          </DataItem>
-                          <DataItem>
-                            Carbohydrate:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.carbohydrate
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Sugars:{" "}
-                            {getValue({ type: "number" }, nutritionInfo.sugars)}
-                          </DataItem>
-                          <DataItem>
-                            Iron:{" "}
-                            {getValue({ type: "number" }, nutritionInfo.iron)}
-                          </DataItem>
-                          <DataItem>
-                            Calcium:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.calcium
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Sodium:{" "}
-                            {getValue({ type: "number" }, nutritionInfo.sodium)}
-                          </DataItem>
-                          <DataItem>
-                            Potassium:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.potassium
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Vitamin A:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.vitaminA
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Vitamin C:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.vitaminC
-                            )}
-                          </DataItem>
-                          <DataItem>
-                            Vitamin E:{" "}
-                            {getValue(
-                              { type: "number" },
-                              nutritionInfo.vitaminE
-                            )}
-                          </DataItem>
-                        </DataItemContainer>
-                      </TableCell>
-                    </tr>
-                  )}
-                </>
-              )}
-            </tbody>
-          </Table>
-        ) : (
-          <NoData>
-            <GetIcon icon={"recipe"}></GetIcon>Loading
-          </NoData>
-        )}
-        {ingredients?.length ? (
-          <>
-            <TableCell
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.calories
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Protein:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.protein / portion
+                              )}
+                              /{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.protein
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Saturated Fat:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.satFat / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.satFat
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Unsaturated Fat:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.unSatFat / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.unSatFat
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Total Fat:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.totalFat / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.totalFat
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Cholesterol:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.cholesterol / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.cholesterol
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Fiber:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.fiber / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.fiber
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Carbohydrate:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.carbohydrate / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.carbohydrate
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Sugars:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.sugars / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.sugars
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Iron:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.iron / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.iron
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Calcium:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.calcium / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.calcium
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Sodium:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.sodium / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.sodium
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Potassium:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.potassium / portion
+                              )}
+                              /
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.potassium
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Vitamin A:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.vitaminA
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Vitamin C:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.vitaminC
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Vitamin E:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.vitaminE
+                              )}
+                            </DataItem>
+                          </DataItemContainer>
+                        </TableCell>
+                      </tr>
+                    ) : (
+                      <tr key={0}>
+                        <TableCell colSpan={4}>
+                          <DataItemContainer>
+                            <DataItem className="head">
+                              <GetIcon icon={"info"}></GetIcon>Total Nutrition
+                              Info
+                            </DataItem>
+                            <DataItem>
+                              Gram:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo?.gram
+                              )}
+                            </DataItem>
+                            <DataItem className="span">
+                              <span>
+                                Bread:{" "}
+                                {getValue(
+                                  { type: "percentage" },
+                                  nutritionInfo.breadGram
+                                )}
+                              </span>
+                              <span>
+                                Meat:{" "}
+                                {getValue(
+                                  { type: "percentage" },
+                                  nutritionInfo.breadGram
+                                )}
+                              </span>
+                              <span>
+                                Other:{" "}
+                                {getValue(
+                                  { type: "percentage" },
+                                  nutritionInfo.breadGram
+                                )}
+                              </span>
+                            </DataItem>
+                            <DataItem>
+                              Calories:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.calories
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Protein:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.protein
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Saturated Fat:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.satFat
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Unsaturated Fat:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.unSatFat
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Total Fat:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.totalFat
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Cholesterol:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.cholesterol
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Fiber:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.fiber
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Carbohydrate:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.carbohydrate
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Sugars:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.sugars
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Iron:{" "}
+                              {getValue({ type: "number" }, nutritionInfo.iron)}
+                            </DataItem>
+                            <DataItem>
+                              Calcium:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.calcium
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Sodium:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.sodium
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Potassium:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.potassium
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Vitamin A:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.vitaminA
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Vitamin C:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.vitaminC
+                              )}
+                            </DataItem>
+                            <DataItem>
+                              Vitamin E:{" "}
+                              {getValue(
+                                { type: "number" },
+                                nutritionInfo.vitaminE
+                              )}
+                            </DataItem>
+                          </DataItemContainer>
+                        </TableCell>
+                      </tr>
+                    )}
+                  </>
+                )}
+              </tbody>
+            </Table>
+          ) : (
+            <NoData>
+              <GetIcon icon={"recipe"}></GetIcon>Loading
+            </NoData>
+          )}
+          {ingredients?.length ? (
+            <>
+              <TableCell
+                style={{
+                  width: 80,
+                }}
+              >
+                {grandTotal}
+              </TableCell>
+            </>
+          ) : null}
+
+          {/* {ingredients?.length ? (
+            <ButtonContanter
               style={{
-                width: 80,
+                width: "max-content",
+                marginLeft: "auto",
+                cursor: "pointer",
               }}
+              onClick={submitOrder}
             >
-              {grandTotal}
-            </TableCell>
-          </>
-        ) : null}
+              Place Order
+            </ButtonContanter>
+          ) : null} */}
+        </RowContainer>
 
-        {ingredients?.length ? (
-          <ButtonContanter
-            style={{
-              width: "max-content",
-              marginLeft: "auto",
-              cursor: "pointer",
+        {isOpen && (
+          <AutoForm
+            userId={updateId}
+            useCaptcha={false}
+            useCheckbox={false}
+            css="double"
+            description={""}
+            formValues={ingredient}
+            key={"type.description"}
+            formType={"post"}
+            header={`Update '${ingredient.ingredientsName ?? "NIL"}'`}
+            formInput={updateIngredient}
+            submitHandler={updateHandler}
+            button={"Submit"}
+            isOpenHandler={(value) => {
+              closeEdit(value);
             }}
-            onClick={submitOrder}
-          >
-            Place Order
-          </ButtonContanter>
-        ) : null}
-      </RowContainer>
-
-      {isOpen && (
-        <AutoForm
-          userId={updateId}
-          useCaptcha={false}
-          useCheckbox={false}
-          css="double"
-          description={""}
-          formValues={ingredient}
-          key={"type.description"}
-          formType={"post"}
-          header={`Update '${ingredient.ingredientsName ?? "NIL"}'`}
-          formInput={updateIngredient}
-          submitHandler={updateHandler}
-          button={"Submit"}
-          isOpenHandler={(value) => {
-            closeEdit(value);
-          }}
-          isOpen={true}
-          plainForm={false}
-        ></AutoForm>
-      )}
-    </ColumnContainer>
+            isOpen={true}
+            plainForm={false}
+          ></AutoForm>
+        )}
+      </ColumnContainer>
+    </>
   );
 };
 // Define a styled component for each input field
