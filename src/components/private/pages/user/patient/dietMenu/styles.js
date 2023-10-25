@@ -439,6 +439,10 @@ export const Recepe = styled.div`
     border: 1px solid rgb(227 227 227);
     border-radius: 10px;
   }
+  &.order {
+    /* border-radius: 10px; */
+    border-bottom: 1px solid rgb(227 227 227);
+  }
   &.deleted {
     opacity: 0.5;
     .light {
@@ -451,11 +455,28 @@ export const Recepe = styled.div`
     }
   }
 `;
+export const Patients = styled.div`
+  border-radius: 10px;
+  margin: 10px 0px 0;
+  display: flex;
+  gap: 10px;
+  flex-flow: wrap;
+`;
+export const Patient = styled.div`
+  padding: 10px;
+  border: 1px solid rgb(227 227 227);
+  border-radius: 10px;
+  font-size: 12px;
+  width: 100%;
+  .bold {
+    color: black;
+  }
+`;
+
 export const RecepeData = styled.div`
   padding: 0px;
   display: flex;
   flex-direction: column;
-
   .title {
     font-weight: bold;
     span {
@@ -498,6 +519,21 @@ export const RecepeData = styled.div`
         font-size: 11px;
       }
     }
+    .order & {
+      .title {
+        font-size: 17px;
+      }
+      .light {
+        font-size: 14px;
+      }
+      .actions {
+        height: auto;
+        align-items: flex-start !important;
+        justify-content: right !important;
+        padding: 10px;
+        background: transparent;
+      }
+    }
   }
 `;
 export const RecepeContent = styled.div`
@@ -538,6 +574,14 @@ export const RecepeContent = styled.div`
       background-color: red;
       color: white;
     }
+    .full {
+      width: auto;
+      border-radius: 10px;
+      padding: 0 10px;
+    }
+    .full svg {
+      margin-left: 5px;
+    }
   }
   &.recipe1:hover .actions,
   &.recipe2:hover ~ .sub-actions,
@@ -551,6 +595,7 @@ export const RecepeContent = styled.div`
 export const RecepeImage = styled.img`
   width: 60px;
   height: 60px;
+  min-width: 60px;
   margin-right: 10px;
   border-radius: 10px;
   object-fit: cover;

@@ -17,7 +17,7 @@ function FormInput(props) {
   const fileInputRef = useRef(null);
   // Get theme colors from Redux store
   const themeColors = useSelector((state) => state.themeColors);
-
+console.log(props);
   try {
     switch (props.type) {
       // Render a regular text input
