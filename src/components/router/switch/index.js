@@ -97,14 +97,17 @@ import UserLog from "../../private/pages/report/userLog";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectedMenu } from "../../../store/actions/common";
+import Delivery from "../../private/pages/order/delivery";
+import Packaging from "../../private/pages/order/packaging";
+import Preparation from "../../private/pages/order/preparation";
 
 const Switch = ({ page, key, user, ...privileges }) => {
   const location = useLocation();
   const selectedMenuItem = useSelector((state) => state.selectedMenu);
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log( selectedMenuItem.path, location.pathname)
-    if ("/" + selectedMenuItem.path !== location.pathname) {
+    console.log("selectedMenuItem",selectedMenuItem.path, location.pathname);
+    if (selectedMenuItem.path !== location.pathname) {
       // console.log("not equal", location.pathname, "/" + selectedMenuItem.path, user.menu);
       user &&
         user.menu.forEach((element) => {
@@ -303,6 +306,12 @@ const Switch = ({ page, key, user, ...privileges }) => {
       return <Allergy key={key} {...privileges} />;
     case "inventory":
       return <Inventory key={key} {...privileges} />;
+    case "preparation":
+      return <Preparation key={key} {...privileges} />;
+    case "packaging":
+      return <Packaging key={key} {...privileges} />;
+    case "delivery":
+      return <Delivery key={key} {...privileges} />;
     case "subscriber-log":
       return <UserLog key={key} {...privileges} />;
     default:

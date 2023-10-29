@@ -456,6 +456,9 @@ export const FilterBox = styled.div`
     padding-bottom: 5px;
     background: #eaeaea;
   }
+  &.gap{
+    gap:10px;
+  }
   .filter {
     margin-right: 0;
   }
