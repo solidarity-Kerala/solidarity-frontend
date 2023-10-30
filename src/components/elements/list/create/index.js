@@ -246,7 +246,7 @@ const CrudForm = (props) => {
     const field = formState[id];
     if (sub === null) {
       let value = "";
-      if (type === "checkbox") {
+      if (type === "checkbox" || type === "htmleditor") {
         value = event;
       } else if (type === "select") {
         value = event.id;
