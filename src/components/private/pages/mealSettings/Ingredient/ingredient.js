@@ -271,7 +271,7 @@ const Ingredient = (props) => {
     {
       type: "number",
       placeholder: "Vitamin A (%)",
-      name: "VitaminA",
+      name: "vitaminA",
       validation: "",
       showItem: "",
       default: "0",
