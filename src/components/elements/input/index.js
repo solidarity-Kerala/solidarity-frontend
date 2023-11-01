@@ -35,7 +35,7 @@ function FormInput(props) {
                 {`${t(props.label)}${props.required ? " *" : ""}`}
               </Label>
             )}
-            <Input disabled={props.disabled ?? false} autoComplete="on" theme={themeColors} className={`input ${props.value.toString().length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} type={props.type} value={props.value} onChange={(event) => props.onChange(event, props.id, props.type, props.sub)} />
+            <Input {...(props.maxLength > 0 ? { maxLength: props.maxLength } : {})}  disabled={props.disabled ?? false} autoComplete="on" theme={themeColors} className={`input ${props.value.toString().length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} type={props.type} value={props.value}  onChange={(event) => props.onChange(event, props.id, props.type, props.sub)} />
             {props.error?.length > 0 && <ErrorMessage dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
           </InputContainer>
         );

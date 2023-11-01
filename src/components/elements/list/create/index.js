@@ -7,6 +7,7 @@ import { GetIcon } from "../../../../icons";
 import { useSelector } from "react-redux";
 import { Header } from "../manage/styles";
 import { updateCaloriDetails, updateHealthDetails } from "../../../functions/health";
+import { customValidations } from "../../../private/form/validation";
 const CrudForm = (props) => {
   // Use the useTranslation hook from react-i18next to handle translations
   const { t } = useTranslation();
@@ -105,8 +106,7 @@ const CrudForm = (props) => {
         break;
       case "number":
         const numberRegex = /^\d+$/;
-        console.log("Numebr",!numberRegex.test(value), isNaN(value) ,value === null,typeof value === "undefined");
-
+        console.log("Numebr", !numberRegex.test(value), isNaN(value), value === null, typeof value === "undefined");
         if (!numberRegex.test(value) || isNaN(value) || value === null || typeof value === "undefined") {
           tempformError = t("validContent", { label: t(field.label) });
           flag += 1;
@@ -186,6 +186,10 @@ const CrudForm = (props) => {
       default:
         break;
     }
+    const customStatus = customValidations(field, tempformError, value, flag, t);
+    tempformError = customStatus.tempformError;
+    flag = customStatus.flag;
+
     if ((field.type === "image" || field.type === "file") && props.formType === "post") {
       if (value.length === 0) {
         tempformError = t("validContent", { label: t(field.label) });
