@@ -19,7 +19,6 @@ const AddRecipe = (props) => {
       type: "text",
       placeholder: "Recipe",
       name: "title",
-      validation: "",
       default: "",
       label: "Recipe",
       required: true,
