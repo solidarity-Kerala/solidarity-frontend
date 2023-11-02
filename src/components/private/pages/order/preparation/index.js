@@ -10,6 +10,7 @@ import { Head, Items } from "../styels";
 import { GetIcon } from "../../../../../icons";
 import { Patient, Patients, Recepe, RecepeContent, RecepeData, RecepeImage } from "../../user/patient/dietMenu/styles";
 import { food } from "../../../../../images";
+import { getData } from "../../../../../backend/api";
 
 const Preparation = (props) => {
   useEffect(() => {
@@ -18,23 +19,10 @@ const Preparation = (props) => {
   const [showAllReplacable, setShowAllReplacable] = useState(false);
   const [filterView, setFilterView] = useState({ date: new Date().toISOString(), mealTimeCategory: "", typeOfRecipe: "" });
   const [openRecipe, setOpenRecipe] = useState({});
-  const [preparing, setPreparing] = useState();
+  const [preparing, setPreparing] = useState([]);
   const [prepared, setPrepared] = useState();
   const takeData = () => {
-    setPreparing([
-      {
-        _id: 1,
-        gram: 20,
-        quantiy: 2,
-        recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" },
-        patients: [
-          { userDisplayName: "Azhar PK", recipeNote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry." },
-          { userDisplayName: "Shameer Babu", recipeNote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry." },
-        ],
-      },
-      { _id: 2, gram: 20, quantiy: 2, recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" } },
-      { _id: 3, gram: 20, quantiy: 2, recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" } },
-    ]);
+  
     setPrepared([
       {
         _id: 1,
@@ -109,8 +97,20 @@ const Preparation = (props) => {
       [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : null,
     };
     setFilterView(updateValue);
-    // updating the form values
-  };
+  
+    // Make an API call to fetch data based on the selected filters
+    getData({ mealTimeCategory: updateValue.mealTimeCategory}, "preperation")
+      .then((data) => {
+        // Update your state with the retrieved data
+        console.log(data)
+        setPreparing(data.data.response);
+        setPrepared(data.prepared);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+      });
+    };
   return (
     <Container className="noshadow">
       <ColumnContainer>
@@ -155,8 +155,8 @@ const Preparation = (props) => {
                         <RecepeData className="recipe">
                           <span className="title">{recipeItem.recipe.title}</span>
                           <span className="light">
-                            <span>{recipeItem.gram?.toFixed(2)} gram</span>
-                            <span>{recipeItem.quantiy?.toFixed(0)} nos</span>
+                            <span>{recipeItem.recipe.gram?.toFixed(2)} gram</span>
+                            <span>{recipeItem.recipe.quantiy?.toFixed(0)} nos</span>
                           </span>
                           <div className="actions">
                             <span
