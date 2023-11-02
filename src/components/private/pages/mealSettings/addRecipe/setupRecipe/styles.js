@@ -202,6 +202,9 @@ export const Title = styled.div`
     font-size: 14px;
     font-weight: bolder;
   }
+  &.normal {
+    font-weight: normal;
+  }
   .calories {
     border-left: 1px solid;
     padding-left: 5px;

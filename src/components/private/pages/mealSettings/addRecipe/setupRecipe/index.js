@@ -249,65 +249,96 @@ const SetupRecipe = ({ openData, setMessage }) => {
               {ingredients?.length > 0 &&
                 ingredients.map((item, index) => (
                   <tr key={index}>
-                    <TableCell className="padding left">
-                      <Title>
-                        <GetIcon icon={"recepe"}></GetIcon>
-                        {item.ingredient.ingredientsName ?? "Nil"}
-                      </Title>
-                      <DataItemContainer className="nowrp">
-                        <DataItem>{item.ingredient.typeOfIngredient}</DataItem>
-                        <DataItem>
-                          {item.ingredient.gramOfType}g/{item.ingredient.measureType}
-                        </DataItem>
-                        <DataItem>{((item.ingredient.calories * item.ingredient.gramOfType) / 100)?.toFixed(2)}KCal</DataItem>
-                        <DataItem>{((item.ingredient.protein * item.ingredient.gramOfType) / 100)?.toFixed(2)}g Protein</DataItem>
-                        <DataItem>{((item.ingredient.totalFat * item.ingredient.gramOfType) / 100)?.toFixed(2)}g Fat</DataItem>
-                        <DataItem>{((item.ingredient.carbohydrate * item.ingredient.gramOfType) / 100)?.toFixed(2)}g Carbs</DataItem>
-                      </DataItemContainer>
-                    </TableCell>
-                    {/* <TableCell>{`${item.ingredient.gramOfType}g ${item.ingredient.measureType !== "Gram" ? ` per ${item.ingredient.measureType} = ` : ""} | ${item.ingredient.calories?.toFixed(2)} cal`}</TableCell> */}
-
-                    <TableCell>
-                      <StyledInput
-                        placeholder="1"
-                        type="number"
-                        value={item.quantity}
-                        onChange={(event) => {
-                          textChange(event, index);
-                        }}
-                      />
-                      <Checkbox
-                        onChange={(event) => {
-                          checkChange(event, index);
-                        }}
-                        checked={item.isCalculated}
-                        theme={themeColors}
-                      />
-                    </TableCell>
-
-                    <TableCell>{`${(item.ingredient.gramOfType * item.quantity).toFixed(2)}g / ${((item.ingredient.calories * (item.ingredient.gramOfType * item.quantity)) / 100)?.toFixed(2)}cal`}</TableCell>
-
-                    <TableCell>
-                      <Button
-                        onClick={() => {
-                          setMessage({
-                            type: 2,
-                            content: "Do you want to delete?",
-                            proceed: "Delete",
-                            data: index,
-                            onProceed: async () => {
-                              const response = await deleteData({ id: item._id }, "recipe-ingredients");
-                              setNutritionInfo(response.data.recipeNutritionInfo);
-                              setIngredients(response.data.addedItems);
-                            },
-                          });
-                        }}
-                      >
-                        <GetIcon icon={"delete"} />
-                      </Button>
-                    </TableCell>
+                    {item.ingredient ? (
+                      <>
+                        <TableCell className="padding left">
+                          <Title>
+                            <GetIcon icon={"recepe"}></GetIcon>
+                            {item.ingredient.ingredientsName ?? "Nil"}
+                          </Title>
+                          <DataItemContainer className="nowrp">
+                            <DataItem>{item.ingredient.typeOfIngredient}</DataItem>
+                            <DataItem>
+                              {item.ingredient.gramOfType}g/{item.ingredient.measureType}
+                            </DataItem>
+                            <DataItem>{((item.ingredient.calories * item.ingredient.gramOfType) / 100)?.toFixed(2)}KCal</DataItem>
+                            <DataItem>{((item.ingredient.protein * item.ingredient.gramOfType) / 100)?.toFixed(2)}g Protein</DataItem>
+                            <DataItem>{((item.ingredient.totalFat * item.ingredient.gramOfType) / 100)?.toFixed(2)}g Fat</DataItem>
+                            <DataItem>{((item.ingredient.carbohydrate * item.ingredient.gramOfType) / 100)?.toFixed(2)}g Carbs</DataItem>
+                          </DataItemContainer>
+                        </TableCell>
+                        <TableCell>
+                          <StyledInput
+                            placeholder="1"
+                            type="number"
+                            value={item.quantity}
+                            onChange={(event) => {
+                              textChange(event, index);
+                            }}
+                          />
+                          <Checkbox
+                            onChange={(event) => {
+                              checkChange(event, index);
+                            }}
+                            checked={item.isCalculated}
+                            theme={themeColors}
+                          />
+                        </TableCell>
+                        <TableCell>{`${(item.ingredient.gramOfType * item.quantity).toFixed(2)}g / ${((item.ingredient.calories * (item.ingredient.gramOfType * item.quantity)) / 100)?.toFixed(2)}cal`}</TableCell>
+                        <TableCell>
+                          <Button
+                            onClick={() => {
+                              setMessage({
+                                type: 2,
+                                content: "Do you want to delete?",
+                                proceed: "Delete",
+                                data: index,
+                                onProceed: async () => {
+                                  const response = await deleteData({ id: item._id }, "recipe-ingredients");
+                                  setNutritionInfo(response.data.recipeNutritionInfo);
+                                  setIngredients(response.data.addedItems);
+                                },
+                              });
+                            }}
+                          >
+                            <GetIcon icon={"delete"} />
+                          </Button>
+                        </TableCell>
+                      </>
+                    ) : (
+                      <>
+                        <TableCell className="padding left">
+                          <Title className="normal">
+                            <GetIcon icon={"info"}></GetIcon>
+                            Ingredient reference not found, You can remove this and add the udpated ingredient.
+                          </Title>
+                        </TableCell>
+                        <TableCell>--</TableCell>
+                        <TableCell>--</TableCell>
+                        <TableCell>
+                          <Button
+                            onClick={() => {
+                              setMessage({
+                                type: 2,
+                                content: "Do you want to delete?",
+                                proceed: "Delete",
+                                data: index,
+                                onProceed: async () => {
+                                  const response = await deleteData({ id: item._id }, "recipe-ingredients");
+                                  setNutritionInfo(response.data.recipeNutritionInfo);
+                                  setIngredients(response.data.addedItems);
+                                },
+                              });
+                            }}
+                          >
+                            <GetIcon icon={"delete"} />
+                          </Button>
+                        </TableCell>
+                      </>
+                    )}
                   </tr>
                 ))}
+
               {ingredients.length === 0 && (
                 <TableCell colSpan={4}>
                   <NoData>
@@ -315,6 +346,7 @@ const SetupRecipe = ({ openData, setMessage }) => {
                   </NoData>
                 </TableCell>
               )}
+
               {nutritionInfo && (
                 <>
                   {portion > 1 ? (
