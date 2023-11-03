@@ -70,6 +70,9 @@ export const SelectBox = styled.div`
     align-items: center;
     cursor: pointer;
     margin: 0 0px 10px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   &.filter button {
     min-height: 40px;

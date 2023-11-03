@@ -136,6 +136,13 @@ export const Label = styled.label`
     margin-right: 5px;
     color: green;
   }
+  && {
+    /* Styles to apply when parent has class shrink */
+    .filter & {
+      top: 10px;
+      font-size: 10px;
+    }
+  }
 `;
 
 export const CheckBox = styled.input`
@@ -207,6 +214,14 @@ export const DatetimeInput = styled(DatePicker)`
   &.shrink {
     padding: 1.6em 13px 0;
     color: black;
+  }
+  && {
+    /* Styles to apply when parent has class shrink */
+    .filter & {
+      margin: 4px 0px 0px 0;
+      background-color: white;
+      height: 40px;
+    }
   }
 `;
 export const DatetimeInputDirectOrder = styled(DatePicker)`
