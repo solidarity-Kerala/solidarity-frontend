@@ -607,7 +607,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             label: "Recipe Note",
             required: true,
             view: true,
-            add: false,
+            add: true,
             update: true,
           },
           {
