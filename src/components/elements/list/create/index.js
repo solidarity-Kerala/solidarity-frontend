@@ -181,6 +181,20 @@ const CrudForm = (props) => {
           flag += 1;
         }
         break;
+      case "password":
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        // Explanation of the regex:
+        // - At least one uppercase letter (A-Z)
+        // - At least one lowercase letter (a-z)
+        // - At least one digit (0-9)
+        // - At least one special character (@, $, !, %, *, ?, &)
+        // - Minimum length of 8 characters
+
+        if (!passwordRegex.test(value)) {
+          tempformError = t("validContent", { label: t(field.label) });
+          flag += 1;
+        }
+        break;
       case "text":
         break;
       default:
