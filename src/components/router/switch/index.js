@@ -106,13 +106,8 @@ const Switch = ({ page, key, user, ...privileges }) => {
   const selectedMenuItem = useSelector((state) => state.selectedMenu);
   const dispatch = useDispatch();
   useEffect(() => {
-<<<<<<< HEAD
-    console.log(selectedMenuItem.path, location.pathname);
-    if ("/" + selectedMenuItem.path !== location.pathname) {
-=======
-    console.log("selectedMenuItem",selectedMenuItem.path, location.pathname);
+    console.log("selectedMenuItem", selectedMenuItem.path, location.pathname);
     if (selectedMenuItem.path !== location.pathname) {
->>>>>>> origin/main
       // console.log("not equal", location.pathname, "/" + selectedMenuItem.path, user.menu);
       user &&
         user.menu.forEach((element) => {
@@ -319,8 +314,8 @@ const Switch = ({ page, key, user, ...privileges }) => {
       return <Delivery key={key} {...privileges} />;
     case "subscriber-log":
       return <UserLog key={key} {...privileges} />;
-    case "food-exchange":
-      return <FoodExchange key={key} {...privileges} />;
+    // case "food-exchange":
+    //   return <FoodExchange key={key} {...privileges} />;
     default:
       return <Page404 key={key}></Page404>;
   }
