@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
+// import moment from "moment";
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,14 +7,12 @@ import {
   ColumnContainer,
   RowContainer,
 } from "../../../../../styles/containers/styles";
-import FormInput from "../../../../../elements/input";
 import {
   Button,
   DataItem,
   DataItemContainer,
   Div,
   MealItem,
-  TabDataItem,
   Table,
   TableCell,
   Title,
@@ -29,19 +27,11 @@ import { NoData, ProfileImage } from "../../../../../elements/list/styles";
 import { getValue } from "../../../../../elements/list/functions";
 import axios from "axios";
 // import { GetAccessToken } from "../../../../../../backend/authentication";
-import {
-  DatetimeInput,
-  DatetimeInputDirectOrder,
-  InputContainer,
-} from "../../../../../elements/input/styles";
+
 import { RecepeImage } from "../dietMenu/styles";
-import { ButtonContanter } from "../../../../../elements/form/styles";
 import InvoicePDF from "./inovicePDF";
-import { PDFViewer } from "@react-pdf/renderer";
 import PopupView from "../../../../../elements/popupview";
-import DraggableItem from "../../../mealSettings/foodMenu/setupMenu/dragdrop/drag";
 import { food } from "../../../../../../images";
-import { SelectBox } from "../../../../../elements/select/styles";
 
 const OrderForm = styled.form`
   display: flex;
@@ -132,14 +122,13 @@ const PlaceOrderButton = styled.button`
   }
 `;
 
-const options = [
-  { value: "morning", label: "Morning" },
-  { value: "afternoon", label: "Afternoon" },
-  { value: "evening", label: "Evening" },
-];
+// const options = [
+//   { value: "morning", label: "Morning" },
+//   { value: "afternoon", label: "Afternoon" },
+//   { value: "evening", label: "Evening" },
+// ];
 
 const SetupRecipe = ({ openData, setMessage, closeModal }) => {
-  const [search] = useState("");
   const dispatch = useDispatch();
   const [recipe] = useState(openData.data._id);
   const [portion] = useState(openData.data.numberOfPortion ?? 1);
@@ -249,8 +238,7 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
   const [lastInvoiceNumber, setLastInvoiceNumber] = useState("");
   const [showPDF, setShowPDF] = useState(false);
   const [directOrders, setDirectOrders] = useState();
-  const [orderDate, setOrderDate] = useState("");
-  const [deliveryTime, setDeliveryTime] = useState(options[0].value);
+  // const [orderDate, setOrderDate] = useState("");
 
   const handlePlaceOrder = (e) => {
     e.preventDefault();
@@ -259,12 +247,12 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
 
   const themeColors = useSelector((state) => state.themeColors);
 
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
+  // const handleOptionChange = (event) => {
+  //   setSelectedOption(event.target.value);
+  // };
 
   const handleDateChange = (date) => {
-    setOrderDate(date);
+    // setOrderDate(date);
     setSelectedDate(date);
     getData({ deliverydate: date }, "direct-order").then((response) => {
       console.log({ response });
@@ -324,57 +312,57 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
     closeEdit();
   };
 
-  const [mealIngredient] = useState({
-    type: "select",
-    apiType: "API",
-    // selectApi: "recipe/select",
-    selectApi: "available-direct-orders/select",
-    placeholder: "Recipe",
-    apiSearch: true,
-    listBox: true,
-    iconImage: { collection: "recipe", item: "photo" },
-    tags: [
-      // {
-      //   type: "image",
-      //   showItem: "photo",
-      //   item: "photo",
-      //   title: "Image",
-      //   collection: "recipe",
-      // },
+  // const [mealIngredient] = useState({
+  //   type: "select",
+  //   apiType: "API",
+  //   // selectApi: "recipe/select",
+  //   selectApi: "available-direct-orders/select",
+  //   placeholder: "Recipe",
+  //   apiSearch: true,
+  //   listBox: true,
+  //   iconImage: { collection: "recipe", item: "photo" },
+  //   tags: [
+  //     // {
+  //     //   type: "image",
+  //     //   showItem: "photo",
+  //     //   item: "photo",
+  //     //   title: "Image",
+  //     //   collection: "recipe",
+  //     // },
 
-      // {
-      //   type: "text",
-      //   item: "protein",
-      //   title: "Protein",
-      //   collection: "",
-      // },
-      // {
-      //   type: "text",
-      //   item: "calories",
-      //   title: "Calories",
-      //   collection: "",
-      // },
-      {
-        type: "text",
-        showItem: "price",
-        item: "price",
-        title: "Price",
-        collection: "recipe",
-      },
-    ],
-    name: "recipe",
-    collection: "recipe",
-    validation: "",
-    showItem: "title",
-    default: "",
-    tag: false,
-    label: "Recipe",
-    required: true,
-    view: true,
-    add: true,
-    update: true,
-    filter: false,
-  });
+  //     // {
+  //     //   type: "text",
+  //     //   item: "protein",
+  //     //   title: "Protein",
+  //     //   collection: "",
+  //     // },
+  //     // {
+  //     //   type: "text",
+  //     //   item: "calories",
+  //     //   title: "Calories",
+  //     //   collection: "",
+  //     // },
+  //     {
+  //       type: "text",
+  //       showItem: "price",
+  //       item: "price",
+  //       title: "Price",
+  //       collection: "recipe",
+  //     },
+  //   ],
+  //   name: "recipe",
+  //   collection: "recipe",
+  //   validation: "",
+  //   showItem: "title",
+  //   default: "",
+  //   tag: false,
+  //   label: "Recipe",
+  //   required: true,
+  //   view: true,
+  //   add: true,
+  //   update: true,
+  //   filter: false,
+  // });
 
   useEffect(() => {
     getData({}, "mealtime-category/select").then((response) => {
@@ -483,8 +471,8 @@ const SetupRecipe = ({ openData, setMessage, closeModal }) => {
     setIngredients(updatedIngredients);
   };
 
-  const today = moment();
-  const maxDate = moment().add(1, "year");
+  // const today = moment();
+  // const maxDate = moment().add(1, "year");
 
   const closeModals = () => {
     setShowPDF(false);
