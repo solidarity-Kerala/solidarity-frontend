@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getData, postData } from "../../../../../../backend/api";
-import { ArrowButton, NoData } from "../../../../../elements/list/styles";
+import { AddButton, ArrowButton, NoData } from "../../../../../elements/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import { TabContainer, TabButton, DayHead, Box, DayData, MealTimeHead, Recepe, RecepeImage, RecepeData, Recepes, RecepeContent, ReplacableItems, ReplacableItemsList, UserDetails, Details } from "./styles"; // Import styles from styles.js
 
@@ -1037,10 +1037,37 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   return day?.menu ? (
                     <Box active={selectedDayNumber === formattedDay} key={day._id}>
                       <DayData>
-                        <MealTimeHead className="assigned title">
-                          {`Calori for the day`}
-                          <span>{calories.toFixed(2)}KCal </span>
-                        </MealTimeHead>
+                        <ColumnContainer>
+                          <MealTimeHead className="assigned title">
+                            {`Calori for the day`}
+                            <span>{calories.toFixed(2)}KCal </span>
+                          </MealTimeHead>
+                          <AddButton
+                            onClick={() => {
+                              setMessage({
+                                type: 2,
+                                content: "Do you want to skip this day?",
+                                proceed: "Skip",
+                                onProceed: async () => {
+                                  try {
+                                    const response = await postData({ formattedDay }, "patient-diet/skip-this-day");
+                                    if (response.status === 200) {
+                                      
+                                    }
+                                  } catch (error) {
+                                    // Handle any errors that occur during the deletion process
+                                    console.log(error);
+                                  }
+                                },
+                                data: { id: formattedDay },
+                              });
+                            }}
+                            className="skip"
+                          >
+                            Skip Day<GetIcon icon={"next"}></GetIcon>
+                          </AddButton>
+                        </ColumnContainer>
+
                         {day.menu.map((menuItem, categoryIndex) => {
                           const mealtimeCalories = menuItem.recipes.reduce((sumMealtime, mealtime) => {
                             return sumMealtime + (mealtime.nutritionInfo.calories || 0);
