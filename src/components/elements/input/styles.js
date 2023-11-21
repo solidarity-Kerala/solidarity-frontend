@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./datepicker.css";
+
 export const InputContainer = styled.div`
   position: relative;
   display: flex;
@@ -17,10 +18,10 @@ export const InputContainer = styled.div`
   &.textarea {
     flex: calc(100% - 10px);
   }
-  &.direct input{
+  &.direct input {
     /* background-color:transparent; */
-    margin-bottom:0;
-    border-radius:0;
+    margin-bottom: 0;
+    border-radius: 0;
   }
   && {
     /* Styles to apply when parent has class shrink */
@@ -37,7 +38,11 @@ export const InputContainer = styled.div`
       }
     }
   }
-
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
   @media (max-width: 768px) {
     flex: 100%;
     margin: 0px !important;
@@ -131,6 +136,13 @@ export const Label = styled.label`
     margin-right: 5px;
     color: green;
   }
+  && {
+    /* Styles to apply when parent has class shrink */
+    .filter & {
+      top: 10px;
+      font-size: 10px;
+    }
+  }
 `;
 
 export const CheckBox = styled.input`
@@ -183,11 +195,39 @@ export const Input = styled.input`
   &.shrink {
     padding: 1.6em 13px 0;
   }
+  -webkit-appearance: none;
 `;
 export const DatetimeInput = styled(DatePicker)`
   box-sizing: border-box;
   outline: none !important;
   width: 100%;
+  border-radius: 10px;
+  border: 0px solid ${(props) => props.theme.border};
+  margin: 0 0px 10px 0;
+  height: 50px;
+  padding-left: 1em;
+  font-weight: 700;
+  box-shadow: none;
+  transition: all 0.2s ease-out 0s;
+  color: ${(props) => props.theme.secForeground};
+  background: ${(props) => props.theme.secBackground};
+  &.shrink {
+    padding: 1.6em 13px 0;
+    color: black;
+  }
+  && {
+    /* Styles to apply when parent has class shrink */
+    .filter & {
+      margin: 4px 0px 0px 0;
+      background-color: white;
+      height: 40px;
+    }
+  }
+`;
+export const DatetimeInputDirectOrder = styled(DatePicker)`
+  box-sizing: border-box;
+  outline: none !important;
+  width: fit-content;
   border-radius: 10px;
   border: 0px solid ${(props) => props.theme.border};
   margin: 0 0px 10px 0;

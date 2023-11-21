@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Menu from "../../private/pages/menu";
 import Franchise from "../../private/pages/franchise";
 import Login from "../../public/login";
@@ -94,8 +94,39 @@ import RestoreFranchiseAdmin from "../../private/pages/restoreUser/restoreFranch
 import Allergy from "../../private/pages/allergy";
 import Inventory from "../../private/pages/inventory";
 import UserLog from "../../private/pages/report/userLog";
+import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { selectedMenu } from "../../../store/actions/common";
+import Delivery from "../../private/pages/order/delivery";
+import Packaging from "../../private/pages/order/packaging";
+import Preparation from "../../private/pages/order/preparation";
 
-const Switch = ({ page, key, ...privileges }) => {
+const Switch = ({ page, key, user, ...privileges }) => {
+  const location = useLocation();
+  const selectedMenuItem = useSelector((state) => state.selectedMenu);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log("selectedMenuItem", selectedMenuItem.path, location.pathname);
+    if (selectedMenuItem.path !== location.pathname) {
+      // console.log("not equal", location.pathname, "/" + selectedMenuItem.path, user.menu);
+      user &&
+        user.menu.forEach((element) => {
+          // console.log("path", element.path, location.pathname);
+          if (element.path === location.pathname) {
+            console.log("equal", element.label);
+            dispatch(selectedMenu(element));
+          } else {
+            element.submenus?.forEach((subelement) => {
+              // console.log("path", subelement.path, location.pathname);
+              if (subelement.path === location.pathname) {
+                dispatch(selectedMenu(subelement));
+                console.log("equal", subelement.label);
+              }
+            });
+          }
+        });
+    }
+  }, [location.pathname, selectedMenuItem, user, dispatch]);
   switch (page) {
     case "login":
       return <Login key={key} />;
@@ -275,8 +306,16 @@ const Switch = ({ page, key, ...privileges }) => {
       return <Allergy key={key} {...privileges} />;
     case "inventory":
       return <Inventory key={key} {...privileges} />;
+    case "preparation":
+      return <Preparation key={key} {...privileges} />;
+    case "packaging":
+      return <Packaging key={key} {...privileges} />;
+    case "delivery":
+      return <Delivery key={key} {...privileges} />;
     case "subscriber-log":
       return <UserLog key={key} {...privileges} />;
+    // case "food-exchange":
+    //   return <FoodExchange key={key} {...privileges} />;
     default:
       return <Page404 key={key}></Page404>;
   }

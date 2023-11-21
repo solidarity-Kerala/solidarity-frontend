@@ -24,7 +24,7 @@ import Editable from "./editable";
 import Details from "./details";
 import PopupView from "../popupview";
 import { TabContainer } from "./popup/styles";
-import { TabButton } from "../../private/pages/mealSettings/foodMenu/setupMenu/styles";
+import { PageNumber } from "../../private/pages/mealSettings/foodMenu/setupMenu/styles";
 const SetTd = (props) => {
   if (props.viewMode === "table") {
     return <TdView {...props}></TdView>;
@@ -60,6 +60,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
   const [subAttributes, setSubAttributes] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [perPage, setPerPage] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
   const [showPageCount, setShowPageCount] = useState(false);
   const [shoFilter, setShowFilter] = useState(false);
   const [count, setCount] = useState(0);
@@ -167,6 +168,10 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       dispatch(addPageObject(currentApi, currentIndex, filterView, perPage));
     }
   }, [initialized, currentApi, currentIndex, dispatch, filterView, perPage]);
+
+  useEffect(() => {
+    setPageNumber(Math.ceil((currentIndex + 1) / perPage));
+  }, [count, currentIndex, perPage]);
   const refreshView = (currentIndex) => {
     try {
       dispatch(addPageObject(currentApi, currentIndex, filterView, perPage));
@@ -512,7 +517,11 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                       content: `Do you want to clone '${getValue({ type: itemTitle.type ?? "text" }, titleValue) ? getValue({ type: itemTitle.type ?? "text" }, titleValue) : "Item"}'?`,
                       proceed: "Clone",
                       onProceed: () => {
-                        updateHandler({ cloneId: data._id, _title: titleValue, clone: true });
+                        updateHandler({
+                          cloneId: data._id,
+                          _title: titleValue,
+                          clone: true,
+                        });
                       },
                       data: data,
                     });
@@ -837,6 +846,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     };
   }, []);
   let headerSticky = true;
+  const pageCount = Math.ceil(count / perPage);
   //end crud functions
   return viewMode === "list" || viewMode === "subList" || viewMode === "table" ? (
     <RowContainer theme={themeColors} className={viewMode}>
@@ -886,7 +896,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           <Filter
             theme={themeColors}
             onClick={() => {
-              setShowFilter(true);
+              setShowFilter(!shoFilter);
             }}
           >
             <GetIcon icon={"filter"} />
@@ -900,6 +910,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           </AddButton>
         )}
       </ButtonPanel>
+
       {viewMode === "table" ? (
         <TableContaner>
           <TableView>
@@ -992,51 +1003,69 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
           popupData={
-            <TabContainer className="custom">
-              {[10, 25, 50, 100, 250].map((num) => (
-                <TabButton
-                  className={"nomargin " + (perPage === num)}
-                  onClick={() => {
-                    setPerPage(num);
-                  }}
-                >
-                  {num}
-                </TabButton>
-              ))}
-            </TabContainer>
+            <>
+              <TabContainer className="page">
+                <div className="head">Items Per Page</div>
+                {[10, 25, 50, 100, 250].map((num) => (
+                  <PageNumber
+                    key={`per-${num}`}
+                    className={"nomargin " + (perPage === num)}
+                    onClick={() => {
+                      setPerPage(num);
+                    }}
+                  >
+                    {num}
+                  </PageNumber>
+                ))}
+              </TabContainer>
+              <TabContainer className="page">
+                <div className="head">
+                  Pages: {pageCount} | Current Page: {pageNumber}
+                </div>
+                {Array.from({ length: pageCount }, (_, index) => index + 1).map((num) => (
+                  <PageNumber
+                    key={`page-${num}`}
+                    className={"nomargin " + (pageNumber === num)}
+                    onClick={() => {
+                      setCurrentIndex((num - 1) * perPage);
+                    }}
+                  >
+                    {num}
+                  </PageNumber>
+                ))}
+              </TabContainer>
+            </>
           }
           themeColors={themeColors}
           closeModal={() => setShowPageCount(false)}
           itemTitle={{ name: "title", type: "text", collection: "" }}
-          openData={{ data: { _id: "", title: "Set Items per page!" } }} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+          openData={{ data: { _id: "", title: "Pagination Setup!" } }} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"small"}
         ></PopupView>
       )}
-      {shoFilter && (
-        <PopupView
-          // Popup data is a JSX element which is binding to the Popup Data Area like HOC
-          popupData={
-            <Filters>
-              {datefilter && <DateRangeSelector onChange={dateRangeChange} themeColors={themeColors}></DateRangeSelector>}
-              {formInput.map((item, index) => {
-                switch (item.type) {
-                  case "select":
-                    return (item.filter ?? true) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} required={false} />;
-                  case "date":
-                    return (item.filter ?? false) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} required={false} />;
-                  default:
-                    return null;
-                }
-              })}
-            </Filters>
-          }
-          themeColors={themeColors}
-          closeModal={() => setShowFilter(false)}
-          itemTitle={{ name: "title", type: "text", collection: "" }}
-          openData={{ data: { _id: "", title: "Filters" } }} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
-          customClass={"medium"}
-        ></PopupView>
-      )}
+      <PopupView
+        // Popup data is a JSX element which is binding to the Popup Data Area like HOC
+        popupData={
+          <Filters>
+            {datefilter && <DateRangeSelector onChange={dateRangeChange} themeColors={themeColors}></DateRangeSelector>}
+            {formInput.map((item, index) => {
+              switch (item.type) {
+                case "select":
+                  return (item.filter ?? true) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} required={false} />;
+                case "date":
+                  return (item.filter ?? false) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} required={false} />;
+                default:
+                  return null;
+              }
+            })}
+          </Filters>
+        }
+        themeColors={themeColors}
+        closeModal={() => setShowFilter(false)}
+        itemTitle={{ name: "title", type: "text", collection: "" }}
+        openData={{ data: { _id: "", title: "Filters" } }} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+        customClass={"medium filter " + (shoFilter ? "show" : "hide")}
+      ></PopupView>
     </RowContainer>
   ) : (
     <RowContainer>

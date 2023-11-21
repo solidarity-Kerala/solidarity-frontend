@@ -46,16 +46,23 @@ const Header = (props) => {
         <Title>{selectedMenuItem.label}</Title>
         {/* <User>{props.user.user.email}</User> */}
         <HeaderMenu
-        ref={profileRef}
+          ref={profileRef}
           onClick={() => {
             handleProfileClick();
           }}
         >
-          
-          {generateThumbnail(props.user.user?.username ?? "", null, props.user.user.photo ?? "")}
+          {generateThumbnail(
+            props.user.user?.username ?? "",
+            null,
+            props.user.user.photo ?? ""
+          )}
           {isProfileBarOpen && (
             <div className="ProfileBar" onClick={(e) => e.stopPropagation()}>
-              <ProfileBar setLoaderBox={props.setLoaderBox} setMessage={props.setMessage} data={props.user}></ProfileBar>
+              <ProfileBar
+                setLoaderBox={props.setLoaderBox}
+                setMessage={props.setMessage}
+                data={props.user}
+              ></ProfileBar>
             </div>
           )}
         </HeaderMenu>

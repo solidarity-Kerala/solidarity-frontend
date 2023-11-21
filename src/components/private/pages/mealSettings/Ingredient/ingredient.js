@@ -52,17 +52,15 @@ const Ingredient = (props) => {
       add: true,
       update: true,
       filter: true,
-      selectApi:
-        "Gram,Teaspoon,Tablespoon,Cup,Ounce,Piece,Milliliter,Pinch,Bunch",
+      selectApi: "Gram,Teaspoon,Tablespoon,Cup,Ounce,Piece,Milliliter,Pinch,Bunch",
       apiType: "CSV",
     },
     {
       type: "number",
       placeholder: "Gram Per Measurement Type",
       name: "gramOfType",
-      validation: "",
+      validation: "number",
       default: "",
-      dynamicClass: "direct",
       tag: true,
       label: "Gram Per Measurement Type",
       required: true,
@@ -287,7 +285,7 @@ const Ingredient = (props) => {
     {
       type: "number",
       placeholder: "Vitamin A (%)",
-      name: "VitaminA",
+      name: "vitaminA",
       validation: "",
       showItem: "",
       default: "0",
@@ -406,6 +404,19 @@ const Ingredient = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "image",
+      placeholder: "Ingredient",
+      name: "photo",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Ingredient",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
   return (
@@ -420,6 +431,7 @@ const Ingredient = (props) => {
           type: "text",
           collection: "",
         }}
+        profileImage="photo"
         shortName={`Ingredient`}
         // formMode={`single`}
         formMode={`double`}

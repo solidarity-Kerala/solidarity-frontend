@@ -7,8 +7,18 @@ import { Header, Page } from "../list/manage/styles";
 import { Overlay } from "../message/styles";
 import { CloseButton } from "./styles";
 
-const PopupView = ({ themeColors, closeModal, itemTitle, popupData, customClass, openData }) => {
-  const titleValue = (itemTitle.collection?.length > 0 ? openData?.data?.[itemTitle.collection]?.[itemTitle.name] ?? "" : openData?.data?.[itemTitle.name]) || "Please update the itemTitle.";
+const PopupView = ({
+  themeColors,
+  closeModal,
+  itemTitle,
+  popupData,
+  customClass,
+  openData,
+}) => {
+  const titleValue =
+    (itemTitle.collection?.length > 0
+      ? openData?.data?.[itemTitle.collection]?.[itemTitle.name] ?? ""
+      : openData?.data?.[itemTitle.name]) || "Please update the itemTitle.";
   return (
     <Overlay key={openData.data._id} className={`${customClass ?? "medium"}`}>
       <Page className={`${customClass ?? "medium"} popup-child`}>
@@ -18,7 +28,10 @@ const PopupView = ({ themeColors, closeModal, itemTitle, popupData, customClass,
             <GetIcon icon={"Close"} />
           </CloseButton>
         </Header>
-        <RowContainer theme={themeColors} className={`${customClass ?? "medium"} popup-data`}>
+        <RowContainer
+          theme={themeColors}
+          className={`${customClass ?? "medium"} popup-data`}
+        >
           {popupData}
         </RowContainer>
       </Page>

@@ -70,6 +70,9 @@ export const SelectBox = styled.div`
     align-items: center;
     cursor: pointer;
     margin: 0 0px 10px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   &.filter button {
     min-height: 40px;
@@ -80,8 +83,8 @@ export const SelectBox = styled.div`
   }
   &.filter {
     margin: 0px;
-    flex: 1 1 200px; /* flex-grow, flex-shrink, flex-basis */
-    max-width: 200px; /* Maximum width for flexibility */
+    flex: 1 1 250px; /* flex-grow, flex-shrink, flex-basis */
+    max-width: 250px; /* Maximum width for flexibility */
   }
   &.single {
     margin-right: 0em;
@@ -115,6 +118,11 @@ export const SelectBox = styled.div`
     top: 31px;
     position: initial;
     margin: 0;
+  }
+  &.single .options{
+    top: 47px;
+    position: absolute;
+    margin: 0px;
   }
   &.open svg.down {
     transition: all 0.2s ease-out 0s;

@@ -181,6 +181,7 @@ export const TabDataItem = styled.div`
   width: 100%;
 `;
 export const MealItem = styled.div`
+  display: flex;
   background: white;
   padding: 10px;
   margin-bottom: 5px;

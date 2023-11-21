@@ -1,8 +1,7 @@
 import { GetIcon } from "../../icons";
 import { ProfileStatus } from "../private/common/layout/styels";
 
-export function generateThumbnail(name='Azhar Pallikkandy', status = null, photo = "") {
-  console.log(name)
+export function generateThumbnail(name = "Azhar Pallikkandy", status = null, photo = "") {
   if (photo?.length > 5) {
     let statusText = "";
     if (status === true) {

@@ -205,7 +205,7 @@ function MultiSelect(props) {
       </button>
       {optionsVisible && initialized && (
         <ul className="options">
-          {(props.search ?? true) && <Search className={"select"} title={"Search"} theme={props.theme} placeholder="Search" value={searchValue} onChange={handleChange}></Search>}
+          {(props.search ?? true) && <Search active={true} className={"select"} title={"Search"} theme={props.theme} placeholder="Search" value={searchValue} onChange={handleChange}></Search>}
 
           {selectedId.length > 0 ? (
             <ItemBox>
@@ -244,67 +244,68 @@ function MultiSelect(props) {
               })}
             </ItemBox>
           ) : null}
+          <ItemBox>
+            {options.length > 0
+              ? (searchValue.length > 0 ? filteredOptions : options).map((option) => {
+                  const selectedIndex = selectedId.findIndex((item) => item.id === option.id);
+                  return (
+                    selectedIndex === -1 && (
+                      <li
+                        value={selectedIndex > -1}
+                        className={`${selectedIndex > -1}`}
+                        key={option.id}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          props.onSelect(option, props.id, props.type);
+                          // setSelectedValue(option.value);
+                          // setSelectedId(option.id);
 
-          {options.length > 0
-            ? (searchValue.length > 0 ? filteredOptions : options).map((option) => {
-                const selectedIndex = selectedId.findIndex((item) => item.id === option.id);
-                return (
-                  selectedIndex === -1 && (
-                    <li
-                      value={selectedIndex > -1}
-                      className={`${selectedIndex > -1}`}
-                      key={option.id}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        props.onSelect(option, props.id, props.type);
-                        // setSelectedValue(option.value);
-                        // setSelectedId(option.id);
+                          const items = selectedId;
+                          const index = items.findIndex((item) => item.id === option.id);
 
-                        const items = selectedId;
-                        const index = items.findIndex((item) => item.id === option.id);
+                          if (index === -1) {
+                            // If event._id doesn't exist, push it to the items array
+                            items.push(option);
+                          } else {
+                            // If event._id already exists, remove it from the items array
+                            items.splice(index, 1);
+                          }
+                          setSelectedId(items);
 
-                        if (index === -1) {
-                          // If event._id doesn't exist, push it to the items array
-                          items.push(option);
-                        } else {
-                          // If event._id already exists, remove it from the items array
-                          items.splice(index, 1);
-                        }
-                        setSelectedId(items);
-
-                        setSelectedValue(items.length > 0 ? `${items[0].value} ${items.length > 1 ? " (" + (items.length - 1) + " more)" : ""}` : props.label);
-                        // toggleOptions();
-                      }}
-                    >
-                      {props.displayValue ? option[props.displayValue] : option.value}
-                      {props.tags && (
-                        <TagBox>
-                          {props.iconImage && <ImgBox src={process.env.REACT_APP_CDN + (props.iconImage.collection.length > 0 ? option[props.iconImage.collection]?.[props.iconImage.item] ?? "" : option[props.iconImage.item])} />}
-                          <TagData>
-                            {props.tags.map((tag) => (
-                              <React.Fragment key={tag.item}>
-                                {tag.title.length > 0 && <TagTitle>{`${tag.title}`}</TagTitle>}
-                                <TagItem className={tag.type}>{getValue(tag, tag.collection.length > 0 ? option[tag.collection]?.[tag.item] ?? "" : option[tag.item])}</TagItem>
-                              </React.Fragment>
-                            ))}
-                          </TagData>
-                        </TagBox>
-                      )}
-                      {props.viewButton && (
-                        <Button
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            props.viewButton?.callback(option);
-                          }}
-                        >
-                          View Menu
-                        </Button>
-                      )}
-                    </li>
-                  )
-                );
-              })
-            : null}
+                          setSelectedValue(items.length > 0 ? `${items[0].value} ${items.length > 1 ? " (" + (items.length - 1) + " more)" : ""}` : props.label);
+                          // toggleOptions();
+                        }}
+                      >
+                        {props.displayValue ? option[props.displayValue] : option.value}
+                        {props.tags && (
+                          <TagBox>
+                            {props.iconImage && <ImgBox src={process.env.REACT_APP_CDN + (props.iconImage.collection.length > 0 ? option[props.iconImage.collection]?.[props.iconImage.item] ?? "" : option[props.iconImage.item])} />}
+                            <TagData>
+                              {props.tags.map((tag) => (
+                                <React.Fragment key={tag.item}>
+                                  {tag.title.length > 0 && <TagTitle>{`${tag.title}`}</TagTitle>}
+                                  <TagItem className={tag.type}>{getValue(tag, tag.collection.length > 0 ? option[tag.collection]?.[tag.item] ?? "" : option[tag.item])}</TagItem>
+                                </React.Fragment>
+                              ))}
+                            </TagData>
+                          </TagBox>
+                        )}
+                        {props.viewButton && (
+                          <Button
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              props.viewButton?.callback(option);
+                            }}
+                          >
+                            View Menu
+                          </Button>
+                        )}
+                      </li>
+                    )
+                  );
+                })
+              : null}
+          </ItemBox>
         </ul>
       )}
       {optionsVisible && initialized && (selectedId.length === 0 && options.length) === 0 && (

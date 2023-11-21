@@ -4,7 +4,7 @@ import { deleteData, getData, postData } from "../../../../../../backend/api";
 import { FilterBox, NoData, ProfileImage } from "../../../../../elements/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import Search from "../../../../../elements/search";
-import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection } from "./styles"; // Import styles from styles.js
+import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection, ShowCalorie } from "./styles"; // Import styles from styles.js
 import DraggableItem from "./dragdrop/drag";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
@@ -33,7 +33,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const [calories, setCalories] = useState({});
   const [popupData, setPopupData] = useState(null);
   const [activeTab] = useState("recipes");
-  const [selctedRecipeType, setSelctedRecipeType] = useState(["All"]);
+  const [selctedRecipeType, setSelctedRecipeType] = useState({ typeOfRecipe: [], mealTimeCategory: [], productionDepartment: [] });
   const [weekNumber, setWeekNumber] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const searchTimeoutRef = useRef();
@@ -47,7 +47,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   };
   const [coloriePerDay, setColoriePerDay] = useState("900");
   const getCalories = useCallback(
-    (recipe, mealTimeCategory, availableCalories) => {
+    (recipe, mealTimeCategory, availableCalories, calorieOnly = true) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
       const availableCalorie = availableCalories[coloriePerDay];
       let { numberOfPortion, recipeIngredients } = recipe;
@@ -56,10 +56,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       if (numberOfPortion === 0) {
         numberOfPortion = 1;
       }
-      [("Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Other")].map((typeOfIngredient) => {
+      ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Other"].map((typeOfIngredient) => {
         let info = { typeOfIngredient, ingredients: 0 };
         const typeOfIngredientLower = typeOfIngredient.toLowerCase();
-
         let count = availableCalorie[typeOfIngredientLower === "meat" ? "meal" : typeOfIngredientLower];
         count = count ? (count === 0 ? 1 : count) : 1;
         recipeIngredients.forEach((ingredient) => {
@@ -67,14 +66,11 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             if (typeOfIngredient === ingredient.data.typeOfIngredient) {
               ["calories", "gram", "protein", "saturatedFat", "totalFat", "cholesterol", "fiber", "carbohydrate", "sugars", "iron", "calcium", "potassium", "sodium", "vitaminA", "vitaminE", "vitaminC"].map((nutrition) => {
                 const nutritionLower = nutrition.toLowerCase();
-                info[nutrition] = info[nutrition] ?? 0 + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
-                nutritionInfo[nutrition] = nutritionInfo[nutrition] ?? 0 + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
+                info[nutrition] = (info[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
+                nutritionInfo[nutrition] = (nutritionInfo[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
                 return null;
               });
-              info["ingredients"] += 1;
-            }
-            if (recipe.title === "Spicy Chicken Slice") {
-              console.log(ingredient.data.ingredientsName, numberOfPortion, info);
+              nutritionInfo["ingredients"] += (nutritionInfo["ingredients"] ?? 0) + 1;
             }
           }
           return null;
@@ -83,55 +79,53 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         nutritionInfoDetails.push(info);
         return null;
       });
-      if (recipe.title === "Spicy Chicken Slice") {
-        console.log(recipe.title, recipeIngredients, nutritionInfo ?? 0);
-      }
-      return nutritionInfo.calories ?? 0;
+
+      return calorieOnly ? nutritionInfo.calories ?? 0 : nutritionInfo;
     },
     [coloriePerDay, menuData?.mealTimeCategories]
   );
-  const getNutritionInfo = (recipe, availableCalories) => {
-    const { meal, bread, fruit, dessert, soup, salad } = availableCalories;
-    let { typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
-    mixedMeatPercentage = mixedMeatPercentage ?? 100;
-    mixedBreadPercentage = mixedBreadPercentage ?? 100;
-    let count = 0,
-      count1 = 0,
-      count2 = 0,
-      nutritionInfo = {};
-    if (typeOfRecipe === "Meat") {
-      count1 = meal || 1;
-    } else if (typeOfRecipe === "Bread") {
-      count1 = bread || 1;
-    } else if (typeOfRecipe === "Fruit") {
-      count1 = fruit || 1;
-    } else if (typeOfRecipe === "Soup") {
-      count1 = soup || 1;
-    } else if (typeOfRecipe === "Dessert") {
-      count1 = dessert || 1;
-    } else if (typeOfRecipe === "Salad") {
-      count1 = salad || 1;
-    } else if (typeOfRecipe === "Mixed") {
-      count1 = (meal * mixedMeatPercentage) / 100;
-      count2 = (bread * mixedBreadPercentage) / 100;
-    }
+  // const getNutritionInfo = (recipe, availableCalories) => {
+  //   const { meal: meat, bread, fruit, dessert, soup, salad } = availableCalories;
+  //   let { typeOfRecipe, mixedMeatPercentage, mixedBreadPercentage, numberOfPortion } = recipe;
+  //   mixedMeatPercentage = mixedMeatPercentage ?? 100;
+  //   mixedBreadPercentage = mixedBreadPercentage ?? 100;
+  //   let count = 0,
+  //     count1 = 0,
+  //     count2 = 0,
+  //     nutritionInfo = {};
+  //   if (typeOfRecipe === "Meat") {
+  //     count1 = meat || 1;
+  //   } else if (typeOfRecipe === "Bread") {
+  //     count1 = bread || 1;
+  //   } else if (typeOfRecipe === "Fruit") {
+  //     count1 = fruit || 1;
+  //   } else if (typeOfRecipe === "Soup") {
+  //     count1 = soup || 1;
+  //   } else if (typeOfRecipe === "Dessert") {
+  //     count1 = dessert || 1;
+  //   } else if (typeOfRecipe === "Salad") {
+  //     count1 = salad || 1;
+  //   } else if (typeOfRecipe === "Mixed") {
+  //     count1 = (meat * mixedMeatPercentage) / 100;
+  //     count2 = (bread * mixedBreadPercentage) / 100;
+  //   }
 
-    count = parseInt(count1) + parseInt(count2);
-    nutritionInfo.calories = ((recipe.calories ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Gram = ((recipe.gram ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Protein = ((recipe.protein ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.SaturatedFat = ((recipe.satFat ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.UnsaturatedFat = ((recipe.unSatFat ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.TotalFat = ((recipe.totalFat ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Cholesterol = ((recipe.cholesterol ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Fiber = ((recipe.fiber ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Carbohydrate = ((recipe.carbohydrate ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Sugars = ((recipe.sugars ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Iron = ((recipe.iron ?? 0) / (numberOfPortion ?? 1)) * count;
-    nutritionInfo.Calcium = ((recipe.calcium ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   count = parseInt(count1) + parseInt(count2);
+  //   nutritionInfo.calories = ((recipe.calories ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Gram = ((recipe.gram ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Protein = ((recipe.protein ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.SaturatedFat = ((recipe.satFat ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.UnsaturatedFat = ((recipe.unSatFat ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.TotalFat = ((recipe.totalFat ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Cholesterol = ((recipe.cholesterol ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Fiber = ((recipe.fiber ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Carbohydrate = ((recipe.carbohydrate ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Sugars = ((recipe.sugars ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Iron = ((recipe.iron ?? 0) / (numberOfPortion ?? 1)) * count;
+  //   nutritionInfo.Calcium = ((recipe.calcium ?? 0) / (numberOfPortion ?? 1)) * count;
 
-    return nutritionInfo;
-  };
+  //   return nutritionInfo;
+  // };
   useEffect(() => {
     if (menuData?.foodMenu) {
       const reducedResult = menuData.foodMenu.reduce((accumulator, item) => {
@@ -141,7 +135,6 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         if (!accumulator[key]) {
           accumulator[key] = 0;
         }
-
         const recipeCalories = recipes.reduce((totalCalories, recipe) => {
           const recipeCalories = totalCalories + getCalories(recipe, mealTimeCategory, availableCalories);
           if (recipe.title === "Fish Sayadeih") {
@@ -168,15 +161,28 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     }
   }, [menuData, getCalories]);
 
-  const handleTabClick = useCallback((typeOfRecipeTemp, searchKey = "") => {
-    setSelctedRecipeType(typeOfRecipeTemp ?? []);
-    getData({ searchKey, typeOfRecipe: typeOfRecipeTemp ?? [] }, "recipe/search").then((result) => {
-      setRecipes(result.data.response);
-    });
-  }, []);
+  const handleTabClick = useCallback(
+    (typeOfRecipeTemp, searchKey = "") => {
+      setLoaderBox(true);
+      if (typeOfRecipeTemp) {
+        console.log("typeOfRecipeTemp", typeOfRecipeTemp);
+        setSelctedRecipeType(typeOfRecipeTemp);
+        getData({ searchKey, ...typeOfRecipeTemp }, "recipe/search").then((result) => {
+          setRecipes(result.data.response);
+          setLoaderBox(false);
+        });
+      } else {
+        getData({ searchKey, ...selctedRecipeType }, "recipe/search").then((result) => {
+          setRecipes(result.data.response);
+          setLoaderBox(false);
+        });
+      }
+    },
+    [selctedRecipeType, setLoaderBox]
+  );
 
   useEffect(() => {
-    handleTabClick([]);
+    handleTabClick();
     // console.log(openData.data);
   }, [handleTabClick]);
 
@@ -365,13 +371,13 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     }
   };
   const setCaloriesItems = (mealTimeCategories, single = false, recepeType = "") => {
-    const { bread, meal, fruit, dessert, soup, salad } = mealTimeCategories.availableCalories[coloriePerDay];
+    const { bread, meal: meat, fruit, dessert, soup, salad } = mealTimeCategories.availableCalories[coloriePerDay];
     if (!single) {
-      return `${meal && meal > 0 ? meal + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}`;
+      return `${meat && meat > 0 ? meat + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}`;
     } else {
       let count = 0;
       if (recepeType === "Meat") {
-        count = (meal || 0) + "M";
+        count = (meat || 0) + "M";
       } else if (recepeType === "Bread") {
         count = (bread || 0) + "B";
       } else if (recepeType === "Fruit") {
@@ -383,7 +389,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       } else if (recepeType === "Salad") {
         count = (salad || 0) + "SD";
       } else if (recepeType === "Mixed") {
-        count = meal + "M" + bread + "B";
+        count = meat + "M" + bread + "B";
       } else {
         count = "0";
       }
@@ -437,31 +443,72 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     })),
     apiType: "JSON",
   });
-  const [typeOfRecipes] = useState({
-    type: "multiSelect",
-    placeholder: "Type Of Recipe",
-    name: "typeOfRecipe",
-    validation: "",
-    default: "",
-    tag: true,
-    label: "Type Of Recipe",
-    required: true,
-    search: false,
-    view: true,
-    add: true,
-    update: true,
-    filter: true,
-    selectApi: [
-      { id: "Bread", value: "Bread" },
-      { id: "Meat", value: "Meat" },
-      { id: "Fruit", value: "Fruit" },
-      { id: "Dessert", value: "Dessert" },
-      { id: "Salad", value: "Salad" },
-      { id: "Soup", value: "Soup" },
-      { id: "Mixed", value: "Mixed" },
-    ],
-    apiType: "JSON",
-  });
+  const [typeOfRecipes] = useState([
+    {
+      type: "multiSelect",
+      placeholder: "Type Of Recipe",
+      name: "typeOfRecipe",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Type Of Recipe",
+      required: true,
+      search: false,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+      selectApi: [
+        { id: "Bread", value: "Bread" },
+        { id: "Meat", value: "Meat" },
+        { id: "Fruit", value: "Fruit" },
+        { id: "Dessert", value: "Dessert" },
+        { id: "Salad", value: "Salad" },
+        { id: "Soup", value: "Soup" },
+        { id: "Mixed", value: "Mixed" },
+      ],
+      apiType: "JSON",
+    },
+    {
+      type: "multiSelect",
+      apiType: "API",
+      selectApi: "mealtime-category/select",
+      placeholder: "Mealtime Category",
+      name: "mealTimeCategory",
+      validation: "",
+      showItem: "mealtimeCategoriesName",
+      default: "",
+      tag: true,
+      label: "Mealtime Category",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+    },
+    {
+      type: "multiSelect",
+      placeholder: "Production Department",
+      name: "productionDepartment",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Production Department",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+      selectApi: [
+        { id: "Hot kitchen", value: "Hot kitchen" },
+        { id: "Cold kitchen", value: "Cold kitchen" },
+        { id: "Bakery", value: "Bakery" },
+        { id: "Salad section", value: "Salad section" },
+        { id: "Sandwich section", value: "Sandwich section" },
+      ],
+      apiType: "JSON",
+    },
+  ]);
   //clone
   const [cloneParameters, setCloneParameters] = useState(null);
   const [isOpen, setIsOpen] = useState(null);
@@ -513,6 +560,23 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         selectApi: `mealtime-category/select-by-menu/${openData.data._id}`,
       },
       {
+        type: "select",
+        placeholder: "Select Destinations Menu",
+        name: "foodMenuId",
+        validation: "",
+        default: "",
+        customClass: "list",
+        tag: false,
+        label: "Select Destinations Menu",
+        search: true,
+        required: true,
+        view: true,
+        add: true,
+        update: true,
+        apiType: "API",
+        selectApi: `food-menu/get-menus/${openData.data._id}`,
+      },
+      {
         type: "multiSelect",
         placeholder: "Select Destinations Weeks",
         name: "weekNumbers",
@@ -529,7 +593,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         selectApi: Array.from({ length: 52 }, (_, index) => ({
           id: index,
           value: `Week ${index + 1}`,
-        })).filter((item) => item.id !== parseInt(weekNumber)),
+        })), //.filter((item) => item.id !== parseInt(weekNumber))
         apiType: "JSON",
       },
     ]);
@@ -607,6 +671,10 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       closeEdit();
     });
   };
+  function addSpaceBeforeCaps(str) {
+    str = str.replace(/([a-z])([A-Z])/g, "$1 $2");
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
   return menuData ? (
     <ColumnContainer style={{ marginBottom: "30px", position: "relative", height: "90%" }}>
       <DndProvider backend={HTML5Backend}>
@@ -737,6 +805,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                           }
                         }
                         const options = menuData.foodMenu.filter((item) => item.mealTimeCategory === mealTimeCategory._id && item.dayNumber === dayNumber && (item.meals.length > 0 || item.recipes.length > 0));
+                        let mealtimeCalories = 0;
                         return (
                           <TableCell colSpan={showAllReplacable ? 7 : 0} className={dayNumber === 0 ? "first" : ""} key={dayNumber}>
                             <div className="layer">
@@ -747,6 +816,8 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                       <Variants className="vertical">
                                         {items?.recipes?.length > 0
                                           ? items.recipes.map((item, recipeIndex) => {
+                                              let recipeCalories = getCalories(item ?? [], mealTimeCategory._id);
+                                              mealtimeCalories += recipeCalories;
                                               // Render your items inside the FoodButton here
                                               // For example, you can render a list of items like this
                                               return (
@@ -756,7 +827,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                       <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
                                                     </ProfileImage>
                                                     <span className="recipe">{item.title} </span>
-                                                    <span>{getCalories(item ?? [], mealTimeCategory._id).toFixed(2)} calories</span>
+                                                    <span>{recipeCalories.toFixed(2)} calories</span>
                                                     <div className="actions">
                                                       <span
                                                         className="info"
@@ -765,7 +836,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                             type: 1,
                                                             data: item,
                                                             mealTimeCategory: mealTimeCategory._id,
-                                                            nutritionInfo: getNutritionInfo(item, mealTimeCategory.availableCalories[coloriePerDay]),
+                                                            nutritionInfo: getCalories(item, "", mealTimeCategory.availableCalories, false),
                                                             Serving: setCaloriesItems(mealTimeCategory, true, item.typeOfRecipe),
                                                           });
                                                           console.log(popupData);
@@ -839,7 +910,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                                           type: 1,
                                                                           data: replacableItem.recipe,
                                                                           mealTimeCategory: mealTimeCategory._id,
-                                                                          nutritionInfo: getNutritionInfo(replacableItem.recipe, mealTimeCategory.availableCalories[coloriePerDay]),
+                                                                          nutritionInfo: getCalories(replacableItem.recipe, "", mealTimeCategory.availableCalories, false),
                                                                           Serving: setCaloriesItems(mealTimeCategory, true, replacableItem.recipe.typeOfRecipe),
                                                                         });
                                                                       }}
@@ -897,6 +968,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                 </Div>
                               )}
                             </div>
+                            <ShowCalorie>
+                              <span className="calories">{mealtimeCalories.toFixed(2)} calories</span>
+                            </ShowCalorie>
                           </TableCell>
                         );
                       })}
@@ -912,28 +986,34 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             <TabData>
               <FilterBox className="menu">
                 <Search title={"Search"} theme={themeColors} className={"sticky"} placeholder="Search" value={searchValue} onChange={searchChange} />
-                <FormInput
-                  customClass={"filter auto"}
-                  placeholder={`Type of Recipe`}
-                  {...typeOfRecipes}
-                  value={selctedRecipeType}
-                  key={`input` + 1}
-                  id={`type_of_recipe`}
-                  onChange={(event) => {
-                    console.log("event.value", event.value);
-                    const items = [...selctedRecipeType];
-                    const index = items.findIndex((item) => item === event.id);
 
-                    if (index === -1) {
-                      // If event._id doesn't exist, push it to the items array
-                      items.push(event.id);
-                    } else {
-                      // If event._id already exists, remove it from the items array
-                      items.splice(index, 1);
-                    }
-                    handleTabClick(items, searchValue);
-                  }}
-                />
+                {typeOfRecipes.map((field, index) => (
+                  <FormInput
+                    customClass={"filter auto"}
+                    placeholder={field.placeholder}
+                    {...field}
+                    value={selctedRecipeType[field.name] ?? []}
+                    key={`input` + index}
+                    id={`input` + index}
+                    onChange={(event) => {
+                      console.log("event.value", event.value);
+                      let selctedRecipeTypeTemp = { ...selctedRecipeType };
+                      const items = selctedRecipeType[field.name];
+                      const index = items.findIndex((item) => item === event.id);
+
+                      if (index === -1) {
+                        // If event._id doesn't exist, push it to the items array
+                        items.push(event.id);
+                      } else {
+                        // If event._id already exists, remove it from the items array
+                        items.splice(index, 1);
+                      }
+
+                      selctedRecipeTypeTemp[field.name] = items;
+                      handleTabClick(selctedRecipeTypeTemp, searchValue);
+                    }}
+                  />
+                ))}
               </FilterBox>
               {recipes?.length > 0 ? (
                 <TabDataItem>
@@ -990,7 +1070,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               <TableBody>
                 {Object.entries(popupData.nutritionInfo ?? {}).map(([key, value]) => (
                   <TableRow key={key}>
-                    <TableCell>{key.charAt(0).toUpperCase() + key.slice(1)}</TableCell>
+                    <TableCell>{addSpaceBeforeCaps(key)}</TableCell>
                     <TableCell>{getValue({ type: "number" }, value)}</TableCell>
                   </TableRow>
                 ))}

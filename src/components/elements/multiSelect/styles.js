@@ -178,6 +178,10 @@ export const ItemBox = styled.div`
   margin: 5px 5px 0;
   border-radius: 10px;
   font-size: 14px;
+  width: -webkit-fill-available;
+  &:nth-child(2) {
+    margin-top: 0;
+  }
   && {
     .list & {
       margin: 5px 5px 0px;

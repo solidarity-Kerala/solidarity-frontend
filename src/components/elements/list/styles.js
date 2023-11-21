@@ -424,6 +424,20 @@ export const AddButton = styled.button`
   margin-right: 0em;
   outline: none;
   cursor: pointer;
+  &.skip {
+    border: 1px solid #8b8989;
+    padding: 5px 20px;
+    height: 35px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+  &.skip svg {
+    margin: 0px;
+    margin-left: 5px;
+  }
+  &.add {
+  }
   && {
     /* .popup-child & {
       color: ${(props) => props.theme.secForeground};
@@ -455,6 +469,11 @@ export const FilterBox = styled.div`
     top: 0;
     padding-bottom: 5px;
     background: #eaeaea;
+    flex-wrap: wrap;
+    column-gap: 5px;
+  }
+  &.gap {
+    gap: 10px;
   }
   .filter {
     margin-right: 0;
@@ -490,7 +509,7 @@ export const Filter = styled.button`
 `;
 export const Filters = styled.div`
   display: flex;
-  margin: 0 20px 20px;
+  margin: 0;
   flex-flow: wrap;
   justify-content: center;
   align-items: baseline;

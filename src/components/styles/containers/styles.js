@@ -22,6 +22,9 @@ export const ColumnContainer = styled.div`
   &.header {
     overflow: initial;
   }
+  &.gap{
+    gap:10px;
+  }
   && {
     .second & {
       justify-content: left;
@@ -110,6 +113,9 @@ export const RowContainer = styled.div`
     position: sticky;
     top: 0px;
   }
+  &.order {
+    margin-top: 20px;
+  }
   &.mealSelection {
     padding-right: 30px;
     position: absolute;
@@ -164,6 +170,10 @@ export const RowContainer = styled.div`
     max-width: calc(100% - 15em);
     height: 100vh;
   }
+  &.hidemenu {
+    flex: 1 1 calc(100%);
+    max-width: calc(100%);
+  }
   &.popup-data {
     overflow: auto;
     padding: 1em 0 0;
@@ -199,6 +209,15 @@ export const RowContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     margin-right: 10px;
+  }
+   &.order-page {
+    margin-left: 30px;
+    margin-right: 30px;
+    flex: 0;
+    margin-bottom: 10px;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: 30px;
   }
   h2 {
     font-size: 1.8em;

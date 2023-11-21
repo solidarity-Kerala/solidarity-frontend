@@ -33,6 +33,19 @@ export const Overlay = styled.div`
   background-color: rgba(0, 0, 0, 0.2);
   overflow: auto;
   z-index: 1001;
+  &.filter {
+    width: 300px;
+    left: auto;
+    right: 0;
+    background-color: transparent;
+    .popup-data {
+      border-radius: 0px;
+      padding: 10px;
+    }
+  }
+  &.hide {
+    display: none;
+  }
   &.full-page {
     padding: 0;
   }
