@@ -45,7 +45,7 @@ const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox
       handleTabClick(selctedRecipeType, event.target.value);
     }, 300);
   };
-  const [coloriePerDay, setColoriePerDay] = useState("900");
+  const [coloriePerDay] = useState("900");
   const getCalories = useCallback((recipe, foodExchangeCategory, availableCalories, calorieOnly = true) => {
     // availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => foodExchangeCategory === item._id)?.availableCalories;
     // const availableCalorie = availableCalories[coloriePerDay];
@@ -358,22 +358,7 @@ const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox
       })
       .catch(() => [setLoaderBox(false)]);
   }, [openData.data._id, weekNumber, setLoaderBox]);
-  const [item] = useState({
-    type: "select",
-    placeholder: "Calories",
-    name: "calories",
-    validation: "",
-    default: "",
-    tag: false,
-    label: "Calories",
-    search: false,
-    required: true,
-    view: true,
-    add: true,
-    update: true,
-    selectApi: "900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000",
-    apiType: "CSV",
-  });
+
   const [weeks] = useState({
     type: "select",
     placeholder: "Week",
