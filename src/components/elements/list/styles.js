@@ -410,6 +410,9 @@ export const ButtonPanel = styled.div`
       top: -35px;
     }
   }
+   @media (max-width: 768px) {
+   padding: 1em 1em 0.5em;
+   }
 `;
 export const AddButton = styled.button`
   padding: 12px;
@@ -456,6 +459,9 @@ export const AddButton = styled.button`
     align-items: center;
     span {
       display: none;
+    }
+    & > svg {
+      margin-right: 0px;
     }
   }
 `;

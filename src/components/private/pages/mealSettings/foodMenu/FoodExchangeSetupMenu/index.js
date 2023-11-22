@@ -20,7 +20,7 @@ import { getValue } from "../../../../../elements/list/functions";
 import AutoForm from "../../../../../elements/form";
 import { useDispatch } from "react-redux";
 import { addSelectObject } from "../../../../../../store/actions/select";
-const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
+const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const [menuId] = useState(openData.data._id);
   const [data] = useState(openData.data);
@@ -33,7 +33,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const [calories, setCalories] = useState({});
   const [popupData, setPopupData] = useState(null);
   const [activeTab] = useState("recipes");
-  const [selctedRecipeType, setSelctedRecipeType] = useState({ typeOfRecipe: [], mealTimeCategory: [], productionDepartment: [], proteinCategory: [] });
+  const [selctedRecipeType, setSelctedRecipeType] = useState({ typeOfRecipe: [], foodExchangeCategory: [], productionDepartment: [], proteinCategory: [] });
   const [weekNumber, setWeekNumber] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const searchTimeoutRef = useRef();
@@ -45,56 +45,52 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       handleTabClick(selctedRecipeType, event.target.value);
     }, 300);
   };
-  const [coloriePerDay, setColoriePerDay] = useState("900");
-  const getCalories = useCallback(
-    (recipe, mealTimeCategory, availableCalories, calorieOnly = true) => {
-      availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-      const availableCalorie = availableCalories[coloriePerDay];
-      let { numberOfPortion, recipeIngredients } = recipe;
-      let nutritionInfoDetails = [];
-      let nutritionInfo = {};
-      if (numberOfPortion === 0) {
-        numberOfPortion = 1;
-      }
-      ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Other"].map((typeOfIngredient) => {
-        let info = { typeOfIngredient, ingredients: 0 };
-        const typeOfIngredientLower = typeOfIngredient.toLowerCase();
-        let count = availableCalorie[typeOfIngredientLower === "meat" ? "meal" : typeOfIngredientLower];
-        count = count ? (count === 0 ? 1 : count) : 1;
-        recipeIngredients.forEach((ingredient) => {
-          if (ingredient.isCalculated) {
-            if (typeOfIngredient === ingredient.data.typeOfIngredient) {
-              ["calories", "gram", "protein", "saturatedFat", "totalFat", "cholesterol", "fiber", "carbohydrate", "sugars", "iron", "calcium", "potassium", "sodium", "vitaminA", "vitaminE", "vitaminC"].map((nutrition) => {
-                const nutritionLower = nutrition.toLowerCase();
-                info[nutrition] = (info[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
-                nutritionInfo[nutrition] = (nutritionInfo[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
-                return null;
-              });
-              nutritionInfo["ingredients"] += (nutritionInfo["ingredients"] ?? 0) + 1;
-            }
+  const [coloriePerDay] = useState("900");
+  const getCalories = useCallback((recipe, foodExchangeCategory, availableCalories, calorieOnly = true) => {
+    // availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => foodExchangeCategory === item._id)?.availableCalories;
+    // const availableCalorie = availableCalories[coloriePerDay];
+    let { numberOfPortion, recipeIngredients } = recipe;
+    let nutritionInfoDetails = [];
+    let nutritionInfo = {};
+    if (numberOfPortion === 0) {
+      numberOfPortion = 1;
+    }
+    ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Other"].map((typeOfIngredient) => {
+      let info = { typeOfIngredient, ingredients: 0 };
+      let count = 1;
+      count = count ? (count === 0 ? 1 : count) : 1;
+      recipeIngredients.forEach((ingredient) => {
+        if (ingredient.isCalculated) {
+          if (typeOfIngredient === ingredient.data.typeOfIngredient) {
+            ["calories", "gram", "protein", "saturatedFat", "totalFat", "cholesterol", "fiber", "carbohydrate", "sugars", "iron", "calcium", "potassium", "sodium", "vitaminA", "vitaminE", "vitaminC"].map((nutrition) => {
+              const nutritionLower = nutrition.toLowerCase();
+              info[nutrition] = (info[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
+              nutritionInfo[nutrition] = (nutritionInfo[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
+              return null;
+            });
+            nutritionInfo["ingredients"] += (nutritionInfo["ingredients"] ?? 0) + 1;
           }
-          return null;
-        });
-        nutritionInfo["ingredients"] = recipeIngredients.length;
-        nutritionInfoDetails.push(info);
+        }
         return null;
       });
+      nutritionInfo["ingredients"] = recipeIngredients.length;
+      nutritionInfoDetails.push(info);
+      return null;
+    });
 
-      return calorieOnly ? nutritionInfo.calories ?? 0 : nutritionInfo;
-    },
-    [coloriePerDay, menuData?.mealTimeCategories]
-  );
+    return calorieOnly ? nutritionInfo.calories ?? 0 : nutritionInfo;
+  }, []);
   useEffect(() => {
     if (menuData?.foodMenu) {
       const reducedResult = menuData.foodMenu.reduce((accumulator, item) => {
-        const { dayNumber, recipes, mealTimeCategory } = item;
-        const availableCalories = menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
+        const { dayNumber, recipes, foodExchangeCategory } = item;
+        const availableCalories = menuData.foodExchangeCategories.find((item) => foodExchangeCategory === item._id);
         const key = "day_" + dayNumber;
         if (!accumulator[key]) {
           accumulator[key] = 0;
         }
         const recipeCalories = recipes.reduce((totalCalories, recipe) => {
-          const recipeCalories = totalCalories + getCalories(recipe, mealTimeCategory, availableCalories);
+          const recipeCalories = totalCalories + getCalories(recipe, foodExchangeCategory, availableCalories);
           if (recipe.title === "Fish Sayadeih") {
             console.log(recipe.title, "Cumulated", recipeCalories);
           }
@@ -139,7 +135,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const openReplacableItems = (foodMenuItem, mealOrRecepe) => {
     setShowReplcable(foodMenuItem);
   };
-  const deleteItem = async (id, index, mealOrRecepe, mealTimeCategory, dayNumber, optionNo) => {
+  const deleteItem = async (id, index, mealOrRecepe, foodExchangeCategory, dayNumber, optionNo) => {
     setMessage({
       type: 2,
       content: "Are you sure you want to delete?",
@@ -152,8 +148,8 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           // Create a copy of menuData.foodMenu to work with
           const menuDataTemp = { ...menuData };
 
-          // Find the items object based on the provided parameters (mealTimeCategory, dayNumber, optionNo)
-          const items = menuDataTemp.foodMenu.find((cat) => cat.mealTimeCategory === mealTimeCategory && cat.dayNumber === dayNumber && cat.optionNo === optionNo);
+          // Find the items object based on the provided parameters (foodExchangeCategory, dayNumber, optionNo)
+          const items = menuDataTemp.foodMenu.find((cat) => cat.foodExchangeCategory === foodExchangeCategory && cat.dayNumber === dayNumber && cat.optionNo === optionNo);
 
           // Check the value of mealOrRecepe to decide whether to delete from recipes or meals
           if (mealOrRecepe === "recipe") {
@@ -166,7 +162,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
 
           // If both recipes and meals are empty, remove the entire items object from menuDataTemp.foodMenu
           if (items.recipes.length === 0 && items.meals.length === 0) {
-            const itemIndex = menuDataTemp.foodMenu.findIndex((cat) => cat.mealTimeCategory === mealTimeCategory && cat.dayNumber === dayNumber && cat.optionNo === optionNo);
+            const itemIndex = menuDataTemp.foodMenu.findIndex((cat) => cat.foodExchangeCategory === foodExchangeCategory && cat.dayNumber === dayNumber && cat.optionNo === optionNo);
             if (itemIndex !== -1) {
               menuDataTemp.foodMenu.splice(itemIndex, 1);
             }
@@ -182,7 +178,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       data: { id },
     });
   };
-  const deleteReplcableItem = async (id, replacableIndex, index, mealOrRecepe, mealTimeCategory, dayNumber, optionNo) => {
+  const deleteReplcableItem = async (id, replacableIndex, index, mealOrRecepe, foodExchangeCategory, dayNumber, optionNo) => {
     setMessage({
       type: 2,
       content: "Are you sure you want to delete?",
@@ -193,8 +189,8 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           const response = await deleteData({ id }, "food-menu-item/replacable-item");
           if (response.data?.success === true) {
             const menuDataTemp = { ...menuData };
-            // Find the items object based on the provided parameters (mealTimeCategory, dayNumber, optionNo)
-            const items = menuDataTemp.foodMenu.find((cat) => cat.mealTimeCategory === mealTimeCategory && cat.dayNumber === dayNumber && cat.optionNo === optionNo);
+            // Find the items object based on the provided parameters (foodExchangeCategory, dayNumber, optionNo)
+            const items = menuDataTemp.foodMenu.find((cat) => cat.foodExchangeCategory === foodExchangeCategory && cat.dayNumber === dayNumber && cat.optionNo === optionNo);
 
             // Check the value of mealOrRecepe to decide whether to delete from recipes or meals
             if (mealOrRecepe === "recipe") {
@@ -208,7 +204,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             setMenuData(menuDataTemp);
           }
 
-          // Find the items object based on the provided parameters (mealTimeCategory, dayNumber, optionNo)
+          // Find the items object based on the provided parameters (foodExchangeCategory, dayNumber, optionNo)
         } catch (error) {
           // Handle any errors that occur during the deletion process
           console.log(error);
@@ -236,7 +232,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           "food-menu-item/replacable-item"
         );
         if (response?.data?.success === true) {
-          const items = menuDataTemp.foodMenu.find((cat) => data.mealTimeCategory === cat.mealTimeCategory && data.dayNumber === cat.dayNumber && data.optionNo === cat.optionNo);
+          const items = menuDataTemp.foodMenu.find((cat) => data.foodExchangeCategory === cat.foodExchangeCategory && data.dayNumber === cat.dayNumber && data.optionNo === cat.optionNo);
           if (items.recipes[data.recipeIndex]?.foodmenureplacableitems) {
             items.recipes[data.recipeIndex].foodmenureplacableitems.push(response.data.foodMenuReplacableItem);
           } else {
@@ -248,7 +244,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       }
       // setReplacableItems(replacableItemsTemp);
     } else {
-      const items = menuDataTemp.foodMenu.find((cat) => data.mealTimeCategory === cat.mealTimeCategory && data.dayNumber === cat.dayNumber && data.optionNo === cat.optionNo);
+      const items = menuDataTemp.foodMenu.find((cat) => data.foodExchangeCategory === cat.foodExchangeCategory && data.dayNumber === cat.dayNumber && data.optionNo === cat.optionNo);
       if (item.mealOrRecepe === "recipe") {
         const response = await postData(
           {
@@ -320,7 +316,12 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     }
   };
   const setCaloriesItems = (mealTimeCategories, single = false, recepeType = "") => {
-    const { bread, meal: meat, fruit, dessert, soup, salad } = mealTimeCategories.availableCalories[coloriePerDay];
+    const bread = 1,
+      meat = 1,
+      fruit = 1,
+      dessert = 1,
+      soup = 1,
+      salad = 1;
     if (!single) {
       return `${meat && meat > 0 ? meat + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}`;
     } else {
@@ -348,7 +349,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
 
   useEffect(() => {
     setLoaderBox(true);
-    getData({ menuId: openData.data._id, weekNumber }, "food-menu/get-a-menu")
+    getData({ menuId: openData.data._id, weekNumber }, "food-menu/get-a-exchange-menu")
       .then((response) => {
         if (response.status === 200) {
           setMenuData(response.data);
@@ -357,22 +358,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       })
       .catch(() => [setLoaderBox(false)]);
   }, [openData.data._id, weekNumber, setLoaderBox]);
-  const [item] = useState({
-    type: "select",
-    placeholder: "Calories",
-    name: "calories",
-    validation: "",
-    default: "",
-    tag: false,
-    label: "Calories",
-    search: false,
-    required: true,
-    view: true,
-    add: true,
-    update: true,
-    selectApi: "900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000",
-    apiType: "CSV",
-  });
+
   const [weeks] = useState({
     type: "select",
     placeholder: "Week",
@@ -423,7 +409,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       apiType: "API",
       selectApi: "mealtime-category/select",
       placeholder: "Mealtime Category",
-      name: "mealTimeCategory",
+      name: "foodExchangeCategory",
       validation: "",
       showItem: "mealtimeCategoriesName",
       default: "",
@@ -513,7 +499,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       {
         type: "multiSelect",
         placeholder: "Select Meal Times of Week " + (weekNumber + 1),
-        name: "mealTimeCategory",
+        name: "foodExchangeCategory",
         params: [{ name: "foodMenu", value: openData.data._id }],
         label: "Select Meal Times of Week " + (weekNumber + 1),
         required: true,
@@ -589,7 +575,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           },
           {
             type: "text",
-            item: "mealTimeCategory",
+            item: "foodExchangeCategory",
             title: "Meal Times",
             collection: "",
           },
@@ -669,19 +655,6 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 </>
               )}
               <FormInput
-                customClass={"filter auto single"}
-                placeholder={`Available Colories`}
-                value={coloriePerDay}
-                key={`input` + 0}
-                id={`available_colories`}
-                {...item}
-                onChange={(event) => {
-                  if (!isNaN(event.value) && event.value?.toString().length > 0) {
-                    setColoriePerDay(event.value);
-                  }
-                }}
-              />
-              <FormInput
                 {...weeks}
                 customClass={"filter auto single"}
                 placeholder={`Week`}
@@ -744,45 +717,45 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               </tr>
             </thead>
             <TableBody>
-              {menuData.mealTimeCategories.map((mealTimeCategory) => (
+              {menuData.foodExchangeCategories.map((foodExchangeCategory) => (
                 <>
                   <TableRow>
                     <TableCell colSpan={7}>
                       <MealTimeHead
-                        active={(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] ?? false) || expandAll}
+                        active={(selectedMealTime[`${foodExchangeCategory._id}-${weekNumber}`] ?? false) || expandAll}
                         onClick={() =>
                           setSelectedMealTime((prev) => ({
                             ...prev,
-                            [`${mealTimeCategory._id}-${weekNumber}`]: !prev[`${mealTimeCategory._id}-${weekNumber}`] ?? true,
+                            [`${foodExchangeCategory._id}-${weekNumber}`]: !prev[`${foodExchangeCategory._id}-${weekNumber}`] ?? true,
                           }))
                         }
                       >
-                        {`${mealTimeCategory.mealtimeCategoriesName} / ${setCaloriesItems(mealTimeCategory)}`}
+                        {`${foodExchangeCategory.foodExchangeCategoryName}`}
                         <GetIcon icon={"down"}></GetIcon>
                       </MealTimeHead>
                     </TableCell>
                   </TableRow>
-                  {(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] === true || expandAll) && (
-                    <TableRow key={mealTimeCategory._id}>
+                  {(selectedMealTime[`${foodExchangeCategory._id}-${weekNumber}`] === true || expandAll) && (
+                    <TableRow key={foodExchangeCategory._id}>
                       {daysOfWeek.map((day, dayNumber) => {
                         if (showAllReplacable) {
                           if (dayNumber !== selectedDayNumber) {
                             return null;
                           }
                         }
-                        const options = menuData.foodMenu.filter((item) => item.mealTimeCategory === mealTimeCategory._id && item.dayNumber === dayNumber && (item.meals.length > 0 || item.recipes.length > 0));
+                        const options = menuData.foodMenu.filter((item) => item.foodExchangeCategory === foodExchangeCategory._id && item.dayNumber === dayNumber && (item.meals.length > 0 || item.recipes.length > 0));
                         let mealtimeCalories = 0;
                         return (
                           <TableCell colSpan={showAllReplacable ? 7 : 0} className={dayNumber === 0 ? "first" : ""} key={dayNumber}>
                             <div className="layer">
                               {options.map((items, optionsIndex) => {
                                 return (
-                                  <Div key={`drop-${optionsIndex + mealTimeCategory._id + dayNumber + items.optionNo}`}>
+                                  <Div key={`drop-${optionsIndex + foodExchangeCategory._id + dayNumber + items.optionNo}`}>
                                     <>
                                       <Variants className="vertical">
                                         {items?.recipes?.length > 0
                                           ? items.recipes.map((item, recipeIndex) => {
-                                              let recipeCalories = getCalories(item ?? [], mealTimeCategory._id);
+                                              let recipeCalories = getCalories(item ?? [], foodExchangeCategory._id);
                                               mealtimeCalories += recipeCalories;
                                               // Render your items inside the FoodButton here
                                               // For example, you can render a list of items like this
@@ -801,9 +774,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                           setPopupData({
                                                             type: 1,
                                                             data: item,
-                                                            mealTimeCategory: mealTimeCategory._id,
-                                                            nutritionInfo: getCalories(item, "", mealTimeCategory.availableCalories, false),
-                                                            Serving: setCaloriesItems(mealTimeCategory, true, item.typeOfRecipe),
+                                                            foodExchangeCategory: foodExchangeCategory._id,
+                                                            nutritionInfo: getCalories(item, "", foodExchangeCategory.availableCalories, false),
+                                                            Serving: setCaloriesItems(foodExchangeCategory, true, item.typeOfRecipe),
                                                           });
                                                           console.log(popupData);
                                                         }}
@@ -814,7 +787,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                         <span
                                                           className="delete"
                                                           onClick={() => {
-                                                            deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                            deleteItem(item.foodMenuItem, recipeIndex, "recipe", foodExchangeCategory._id, dayNumber, items.optionNo);
                                                           }}
                                                         >
                                                           <GetIcon icon={"delete"} />
@@ -840,7 +813,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                       className={showAllReplacable.toString()}
                                                       data={{
                                                         recipeIndex,
-                                                        mealTimeCategory: mealTimeCategory._id,
+                                                        foodExchangeCategory: foodExchangeCategory._id,
                                                         dayNumber,
                                                         optionNo: items.optionNo,
                                                         foodMenuItem: item.foodMenuItem,
@@ -875,9 +848,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                                         setPopupData({
                                                                           type: 1,
                                                                           data: replacableItem.recipe,
-                                                                          mealTimeCategory: mealTimeCategory._id,
-                                                                          nutritionInfo: getCalories(replacableItem.recipe, "", mealTimeCategory.availableCalories, false),
-                                                                          Serving: setCaloriesItems(mealTimeCategory, true, replacableItem.recipe.typeOfRecipe),
+                                                                          foodExchangeCategory: foodExchangeCategory._id,
+                                                                          nutritionInfo: getCalories(replacableItem.recipe, "", foodExchangeCategory.availableCalories, false),
+                                                                          Serving: setCaloriesItems(foodExchangeCategory, true, replacableItem.recipe.typeOfRecipe),
                                                                         });
                                                                       }}
                                                                     >
@@ -889,7 +862,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                                         title="Remove Item"
                                                                         onClick={() => {
                                                                           // deleteReplcableItem(replacableItem._id, index);
-                                                                          deleteReplcableItem(replacableItem._id, replacableIndex, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                                          deleteReplcableItem(replacableItem._id, replacableIndex, recipeIndex, "recipe", foodExchangeCategory._id, dayNumber, items.optionNo);
                                                                         }}
                                                                       >
                                                                         <GetIcon icon={"delete"} />
@@ -911,7 +884,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                             })
                                           : ""}
                                       </Variants>
-                                      {/* <DropTarget onDrop={showReplacable ? () => {} : onDrop} data={{ mealTimeCategory: mealTimeCategory._id, dayNumber, optionNo: items.optionNo }} element={<div>Dag Here</div>}></DropTarget> */}
+                                      {/* <DropTarget onDrop={showReplacable ? () => {} : onDrop} data={{ foodExchangeCategory: foodExchangeCategory._id, dayNumber, optionNo: items.optionNo }} element={<div>Dag Here</div>}></DropTarget> */}
                                     </>
                                   </Div>
                                 );
@@ -921,7 +894,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                   <DropTarget
                                     onDrop={showReplacable ? () => {} : onDrop}
                                     data={{
-                                      mealTimeCategory: mealTimeCategory._id,
+                                      foodExchangeCategory: foodExchangeCategory._id,
                                       dayNumber,
                                       optionNo: options.length + 1,
                                     }}
@@ -1077,4 +1050,4 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   );
 };
 
-export default SetupMenu;
+export default FoodExchangeSetupMenu;

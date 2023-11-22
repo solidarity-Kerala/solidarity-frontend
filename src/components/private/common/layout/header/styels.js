@@ -4,6 +4,9 @@ export const Container = styled.div`
   padding: 0px 2em;
   display: flex;
   height: 60px;
+  @media (max-width: 768px) {
+    padding: 0px 0em;
+  }
 `;
 export const HeaderMenu = styled.div`
   display: flex;
@@ -60,6 +63,11 @@ export const Logo = styled.img`
   padding-left: 1em;
   padding-top: 1em;
   margin-bottom: 10px;
+  @media screen and (max-width: 768px) {
+    padding-left: 0;
+    padding-top: 0;
+    margin-bottom: 0;
+  }
 `;
 export const LogoContaner = styled.div`
   display: flex;
@@ -92,10 +100,28 @@ export const MNav = styled.div`
   height: 60px;
   padding: 0px;
   margin-right: 10px;
+  &.navicon {
+    display: none;
+  }
   @media screen and (max-width: 768px) {
+    margin-right: 10px;
+    &.navicon {
+      display: flex;
+      margin-right: 0;
+      padding-left: 5px;
+    }
     display: flex;
     padding-left: 15px;
     font-size: 25px;
+
+    &.navicon::after {
+      content: "";
+      width: 1px;
+      height: 20px;
+      margin-right: 0px;
+      margin-left: 13px;
+      background: black;
+    }
   }
 `;
 export const Title = styled.div`
@@ -130,18 +156,20 @@ export const Logout = styled.div`
     justify-content: center;
     align-items: center;
     height: 25px;
-    padding:5px 10px;
+    padding: 5px 10px;
     cursor: pointer;
     text-transform: uppercase;
   }
 `;
 
 export const MNavClose = styled.div`
-  margin-right: 1em;
+ margin-right: 2px;
+    margin-top: 5px;
   cursor: pointer;
   justify-content: center;
   align-items: center;
   display: none;
+  color: black;
   a {
     text-decoration: none;
   }
