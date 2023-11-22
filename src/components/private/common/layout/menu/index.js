@@ -36,7 +36,7 @@ const Menu = (props) => {
 
   return (
     <>
-      <Logo src={logo} alt="logo" />
+      
       <Header>
         {/* <User>{props.user.user.email}</User> */}
         {/* <Logout
@@ -46,7 +46,7 @@ const Menu = (props) => {
           }}
         >
           <LogoutIcon />
-        </Logout> */}
+        </Logout> */}<Logo src={logo} alt="logo" />
         <MNavClose
           onClick={() => {
             dispatch(menuStatus(false));

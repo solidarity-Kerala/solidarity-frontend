@@ -100,6 +100,7 @@ import { selectedMenu } from "../../../store/actions/common";
 import Delivery from "../../private/pages/order/delivery";
 import Packaging from "../../private/pages/order/packaging";
 import Preparation from "../../private/pages/order/preparation";
+import Aibot from "../../private/pages/order/aibot/index.js";
 
 const Switch = ({ page, key, user, ...privileges }) => {
   const location = useLocation();
@@ -314,6 +315,8 @@ const Switch = ({ page, key, user, ...privileges }) => {
       return <Delivery key={key} {...privileges} />;
     case "subscriber-log":
       return <UserLog key={key} {...privileges} />;
+    case "food-exchange":
+      return <Aibot key={key} {...privileges} />;
     // case "food-exchange":
     //   return <FoodExchange key={key} {...privileges} />;
     default:

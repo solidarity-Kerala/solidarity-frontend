@@ -5,7 +5,7 @@ import ListTable from "../../../../elements/list/list";
 import { Container } from "../../../common/layout/styels";
 import { useSelector } from "react-redux";
 import PopupView from "../../../../elements/popupview";
-import SetupMenu from "./setupMenu";
+import MenuNavigator from "./menuNavigator";
 
 // FoodMenu Component
 const FoodMenu = (props) => {
@@ -187,13 +187,13 @@ const FoodMenu = (props) => {
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
           popupData={
-            <SetupMenu
+            <MenuNavigator
               openData={openItemData}
               setMessage={props.setMessage}
               themeColors={themeColors}
               {...props}
               // Pass selected item data (Menu Title) to the popup for setting the time
-            ></SetupMenu>
+            ></MenuNavigator>
           }
           themeColors={themeColors}
           closeModal={closeModal}
