@@ -173,7 +173,7 @@ function FormInput(props) {
           </InputContainer>
         );
       case "htmleditor":
-        return <EditorNew className={`${props.dynamicClass ?? ""}`} key={props.id} type={props.type} placeholder={props.placeholder} value={props.value} id={props.id} onChange={props.onChange}></EditorNew>;
+        return <EditorNew dynamicClass={`${props.dynamicClass ?? ""}`} key={props.id} type={props.type} placeholder={props.placeholder} value={props.value} id={props.id} onChange={props.onChange}></EditorNew>;
       // Render a submit button
       case "submit":
         return (

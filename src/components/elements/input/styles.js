@@ -91,6 +91,9 @@ export const FileContainer = styled.div`
   color: ${(props) => props.theme.secForeground};
   background: ${(props) => props.theme.secBackground};
   text-align: center;
+  &.disabled {
+    display: none;
+  }
   button {
     background-color: transparent;
     border: 0;
