@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Table, Button, Td, Tr, Count, AddButton, ButtonPanel, Filter, Filters, ToggleContainer, ToggleInput, ToggleSlider, NoData, FilterBox, More, Actions, Title, DataItem, ToolTipContainer, Head, TrBody, TableView, TrView, ThView, TdView, TableContaner, ProfileImage, ArrowPagination, ListContainer } from "./styles";
+import { Table, Button, Td, Tr, Count, AddButton, ButtonPanel, Filter, Filters, ToggleContainer, ToggleInput, ToggleSlider, NoData, FilterBox, More, Actions, Title, DataItem, ToolTipContainer, Head, TrBody, TableView, TrView, ThView, TdView, TableContaner, ProfileImage, ArrowPagination, ListContainer, PageNumber } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { RowContainer } from "../../styles/containers/styles";
 import { AddIcon, GetIcon, NextIcon, PreviousIcon } from "../../../icons";
@@ -24,7 +24,6 @@ import Editable from "./editable";
 import Details from "./details";
 import PopupView from "../popupview";
 import { TabContainer } from "./popup/styles";
-import { PageNumber } from "../../private/pages/mealSettings/foodMenu/setupMenu/styles";
 const SetTd = (props) => {
   if (props.viewMode === "table") {
     return <TdView {...props}></TdView>;
