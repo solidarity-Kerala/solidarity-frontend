@@ -79,8 +79,8 @@ function DateRangeSelector(props) {
       key: "selection",
     },
   ]);
-  const formatStartDate = dateRange[0]?.startDate ? moment(dateRange[0].startDate).format("MMMM D") : "From";
-  const formatEndDate = dateRange[0]?.endDate ? moment(dateRange[0].endDate).format("MMMM D") : "To";
+  const formatStartDate = dateRange[0]?.startDate ? moment(dateRange[0].startDate).format("MMM D") : "From";
+  const formatEndDate = dateRange[0]?.endDate ? moment(dateRange[0].endDate).format("MMM D") : "To";
 
   const [dateRangeStatus, setDateRangeStatus] = useState(false);
   const showPricker = (value) => {
@@ -117,6 +117,10 @@ function DateRangeSelector(props) {
           className={dateRangeStatus}
           ranges={dateRange}
           staticRanges={staticRanges}
+          showSelectionPreview={false} // Hide the selection preview
+          showMonthAndYearPickers={false} // Hide the month and year pickers
+          showDateDisplay={false} // Hide the date display in the top bar
+          months={1}
           onChange={(ranges) => {
             setDates([ranges.selection]);
           }}
@@ -125,6 +129,10 @@ function DateRangeSelector(props) {
         <DateRange
           className={dateRangeStatus}
           ranges={dateRange}
+          showSelectionPreview={false} // Hide the selection preview
+          showMonthAndYearPickers={false} // Hide the month and year pickers
+          showDateDisplay={false} // Hide the date display in the top bar
+          months={1}
           onChange={(ranges) => {
             setDates([ranges.selection]);
           }}

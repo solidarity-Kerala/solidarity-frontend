@@ -2,8 +2,11 @@
 .rdrStartEdge,
 .rdrEndEdge,
 .rdrDateDisplay {
-  color: #77998e !important;
+  color:rgb(84 140 40) !important;
 }
-.rdrDayHovered{
-  border-color: #77998e !important;
+.rdrDayHovered {
+  border-color: rgb(84 140 40) !important;
+}
+.rdrDefinedRangesWrapper {
+  display: none;
 }
