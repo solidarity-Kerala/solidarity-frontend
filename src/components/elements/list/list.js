@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Table, Button, Td, Tr, Count, AddButton, ButtonPanel, Filter, Filters, ToggleContainer, ToggleInput, ToggleSlider, NoData, FilterBox, More, Actions, Title, DataItem, ToolTipContainer, Head, TrBody, TableView, TrView, ThView, TdView, TableContaner, ProfileImage, ArrowPagination } from "./styles";
+import { Table, Button, Td, Tr, Count, AddButton, ButtonPanel, Filter, Filters, ToggleContainer, ToggleInput, ToggleSlider, NoData, FilterBox, More, Actions, Title, DataItem, ToolTipContainer, Head, TrBody, TableView, TrView, ThView, TdView, TableContaner, ProfileImage, ArrowPagination, ListContainer } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { RowContainer } from "../../styles/containers/styles";
 import { AddIcon, GetIcon, NextIcon, PreviousIcon } from "../../../icons";
@@ -86,6 +86,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
   const [updateId, setUpdateId] = useState("");
   const [updateValues, setUpdateValues] = useState({});
   const [udpateView, setUpdateView] = useState(() => {});
+  const [hasFilter, setHasFilter] = useState(false);
   const [filterView, setFilterView] = useState(referenceId !== 0 ? { [parentReference]: referenceId, ...preFilter } : { ...preFilter });
   useEffect(() => {
     const addValuesTemp = {
@@ -387,6 +388,14 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     const ActionDiv = (
       <React.Fragment key={`actions-${shortName}-${data._id}`}>
         {actions.map((item, index) => {
+          let status = true;
+          if (item.condition) {
+            if (data[item.condition.item] === item.condition.if) {
+              status = item.condition.then;
+            } else {
+              status = item.condition.else;
+            }
+          }
           return (
             item.element !== "button" && (
               <ToggleContainer key={`${item.id}-${data._id}`}>
@@ -435,12 +444,12 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                 <ToggleSlider />
               </ToggleContainer>
             ),
-            item.type === "callback" && (
+            item.type === "callback" && status && (
               <More
                 theme={themeColors}
                 key={`custom-${item.id + "-" + index}-${data._id}`}
                 onClick={() => {
-                  item.callback(item, data);
+                  item.callback(item, data, refreshView);
                 }}
                 className="edit menu callBack"
               >
@@ -847,6 +856,24 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
   }, []);
   let headerSticky = true;
   const pageCount = Math.ceil(count / perPage);
+  useEffect(() => {
+    if (datefilter) {
+      setHasFilter(true);
+    }
+    formInput.map((item, index) => {
+      switch (item.type) {
+        case "select":
+          if ((item.filter ?? true) === true) setHasFilter(true);
+          return true;
+        case "date":
+          if ((item.filter ?? false) === true) setHasFilter(true);
+          return true;
+        default:
+          return true;
+      }
+    });
+  }, [formInput, setHasFilter, datefilter]);
+
   //end crud functions
   return viewMode === "list" || viewMode === "subList" || viewMode === "table" ? (
     <RowContainer theme={themeColors} className={viewMode}>
@@ -893,14 +920,16 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
               <GetIcon icon={"print"} />
             </Filter>
           )}
-          <Filter
-            theme={themeColors}
-            onClick={() => {
-              setShowFilter(!shoFilter);
-            }}
-          >
-            <GetIcon icon={"filter"} />
-          </Filter>
+          {hasFilter && (
+            <Filter
+              theme={themeColors}
+              onClick={() => {
+                setShowFilter(!shoFilter);
+              }}
+            >
+             <GetIcon icon={shoFilter? "close":'filter'} />
+            </Filter>
+          )}
         </FilterBox>
 
         {(addPrivilege ? addPrivilege : false) && (
@@ -910,35 +939,49 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           </AddButton>
         )}
       </ButtonPanel>
-
-      {viewMode === "table" ? (
-        <TableContaner>
-          <TableView>
-            <thead>
-              <tr>
-                <ThView className={headerSticky} key={"slno"}>
-                  S/N
-                </ThView>
-                {attributes.map((attribute) => {
-                  const result =
-                    attribute.view === true ? (
-                      <ThView className={headerSticky} key={shortName + attribute.name}>
-                        {attribute.label}
-                      </ThView>
-                    ) : (
-                      ""
-                    );
-                  headerSticky = false;
-                  return result;
-                })}
-              </tr>
-            </thead>
-            <tbody>{users.data?.response?.length > 0 && users.data?.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}</tbody>
-          </TableView>
-        </TableContaner>
-      ) : (
-        <Table className={`table ${displayColumn}`}>{users.data?.response?.length > 0 && users.data.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}</Table>
-      )}
+      <ListContainer className={shoFilter && "show-filter"}>
+        <Filters>
+          {datefilter && <DateRangeSelector onChange={dateRangeChange} themeColors={themeColors}></DateRangeSelector>}
+          {formInput.map((item, index) => {
+            switch (item.type) {
+              case "select":
+                return (item.filter ?? true) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} required={false} />;
+              case "date":
+                return (item.filter ?? false) === true && <FormInput customClass={"filter"} placeholder={item.placeHolder} value={filterView[item.name]} key={`input` + index} id={item.name} {...item} onChange={filterChange} required={false} />;
+              default:
+                return null;
+            }
+          })}
+        </Filters>
+        {viewMode === "table" ? (
+          <TableContaner>
+            <TableView>
+              <thead>
+                <tr>
+                  <ThView className={headerSticky} key={"slno"}>
+                    S/N
+                  </ThView>
+                  {attributes.map((attribute) => {
+                    const result =
+                      attribute.view === true ? (
+                        <ThView className={headerSticky} key={shortName + attribute.name}>
+                          {attribute.label}
+                        </ThView>
+                      ) : (
+                        ""
+                      );
+                    headerSticky = false;
+                    return result;
+                  })}
+                </tr>
+              </thead>
+              <tbody>{users.data?.response?.length > 0 && users.data?.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}</tbody>
+            </TableView>
+          </TableContaner>
+        ) : (
+          <Table className={`table ${displayColumn}`}>{users.data?.response?.length > 0 && users.data.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}</Table>
+        )}
+      </ListContainer>
       {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
       {users.data?.response?.length === 0 && (
         // <CrudForm
@@ -1043,7 +1086,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           customClass={"small"}
         ></PopupView>
       )}
-      <PopupView
+      {/* <PopupView
         // Popup data is a JSX element which is binding to the Popup Data Area like HOC
         popupData={
           <Filters>
@@ -1065,7 +1108,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
         itemTitle={{ name: "title", type: "text", collection: "" }}
         openData={{ data: { _id: "", title: "Filters" } }} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
         customClass={"medium filter " + (shoFilter ? "show" : "hide")}
-      ></PopupView>
+      ></PopupView> */}
     </RowContainer>
   ) : (
     <RowContainer>

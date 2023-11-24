@@ -7,6 +7,8 @@ export const Table = styled.div`
   font-family: Arial, sans-serif;
   margin-bottom: auto;
   border-top: 0px solid #d9d9d9;
+  width: 100%;
+  width: -webkit-fill-available;
   &.record {
     border-top: 0px solid #d9d9d9;
   }
@@ -69,10 +71,16 @@ export const Tr = styled.div`
   padding: 10px;
   background-color: ${(props) => props.theme.background};
   border-radius: 10px;
+
   && {
     /* .popup-child & {
       box-shadow: rgb(167 167 167 / 26%) 0px 0px 12px 0px;
     } */
+  }
+  && {
+    .show-filter & {
+      margin: 0em 2em 0 10px;
+    }
   }
   &:hover h4 {
     color: ${(props) => props.theme.themeForegound};
@@ -410,9 +418,9 @@ export const ButtonPanel = styled.div`
       top: -35px;
     }
   }
-   @media (max-width: 768px) {
-   padding: 1em 1em 0.5em;
-   }
+  @media (max-width: 768px) {
+    padding: 1em 1em 0.5em;
+  }
 `;
 export const AddButton = styled.button`
   padding: 12px;
@@ -520,13 +528,35 @@ export const Filters = styled.div`
   justify-content: center;
   align-items: baseline;
   gap: 10px;
+  display: none;
   &.center {
     margin-left: auto;
+  }
+  && {
+    .show-filter & {
+      margin: 0px 0px 0px 30px;
+      display: table;
+      border-right: 1px solid lightgrey;
+      padding: 0px 10px 0 0;
+      border-radius: 0;
+      width: 250px;
+    }
   }
   @media (max-width: 768px) {
     flex-flow: wrap;
     max-width: 100%;
     margin-bottom: 10px;
+    && {
+      .show-filter & {
+        position: absolute;
+        background-color: lightgray;
+        z-index: 1001;
+        width: 200px;
+        margin: 0px 1em;
+        padding: 10px;
+        border-radius: 10px;
+      }
+    }
   }
 `;
 export const ToggleContainer = styled.label`
@@ -698,7 +728,14 @@ export const IconBox = styled.span`
 export const TableContaner = styled.div`
   margin: 0em 2em 0px;
   overflow: auto;
+  width: -webkit-fill-available;
+  && {
+    .show-filter & {
+      margin: 0em 2em 0 10px;
+    }
+  }
 `;
+
 export const TableView = styled.table`
   border-collapse: collapse;
 
@@ -823,3 +860,6 @@ export const TdView = styled.td`
   }
 `;
 export const TrBodyView = styled.tbody``;
+export const ListContainer = styled.div`
+  display: flex;
+`;

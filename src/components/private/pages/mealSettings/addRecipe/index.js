@@ -236,8 +236,7 @@ const AddRecipe = (props) => {
       add: true,
       update: true,
       filter: true,
-      selectApi:
-        "Hot kitchen, Cold kitchen, Bakery, Salad section, Sandwich section",
+      selectApi: "Hot kitchen, Cold kitchen, Bakery, Salad section, Sandwich section",
       apiType: "CSV",
     },
     {
@@ -285,6 +284,12 @@ const AddRecipe = (props) => {
       },
       icon: "menu",
       title: "Recipe Settings",
+      // condition: {
+      //   item: "title",
+      //   if: "Mustard Peas Dip",
+      //   then: true,
+      //   else:true,
+      // },
       params: {
         api: `food-group-item`,
         parentReference: "",
