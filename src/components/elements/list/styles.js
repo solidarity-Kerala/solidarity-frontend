@@ -863,3 +863,18 @@ export const TrBodyView = styled.tbody``;
 export const ListContainer = styled.div`
   display: flex;
 `;
+export const PageNumber = styled.button`
+  padding: 10px 5px;
+  background-color: white;
+  font-weight: bold;
+  border: none;
+  font-size: 14px;
+  margin-bottom: 0px;
+  cursor: pointer;
+  border-radius: 10px;
+  min-width: 40px;
+  &.true {
+    background-color: #ccc;
+    font-weight: normal;
+  }
+`;
