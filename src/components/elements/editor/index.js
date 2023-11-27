@@ -43,7 +43,7 @@ const EditorNew = (props) => {
     setShowEditor(!showEditor);
   };
   return (
-    <Overlay className={showEditor && "open"}>
+    <Overlay className={props.dynamicClass + " " + (showEditor && "open")}>
       <Page className={showEditor && "open"}>
         <Editor
           theme="snow"

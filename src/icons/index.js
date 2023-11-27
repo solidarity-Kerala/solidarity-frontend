@@ -99,6 +99,11 @@ export const QuestionIcon = () => (
     ></path>
   </Svg>
 );
+export const DefaultIcon = () => (
+  <Svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+    <path  fill="currentColor" d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+  </Svg>
+);
 export const LocationIcon = () => (
   <Svg className="svg-inline--fa fa-location-dot" aria-hidden="true" focusable="false" data-prefix="fal" data-icon="location-dot" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg="">
     <path
@@ -1055,7 +1060,7 @@ export const GetIcon = ({ icon }) => {
     case "down":
       return <DownIcon />;
     case "up":
-      return <UpIcon/>
+      return <UpIcon />;
     case "menu":
       return <MenuIcon />;
     case "mealSettings":
@@ -1228,6 +1233,6 @@ export const GetIcon = ({ icon }) => {
       return <OpenBook />;
     default:
       // console.log("missing icon", icon);
-      return <QuestionIcon />;
+      return <DefaultIcon />;
   }
 };

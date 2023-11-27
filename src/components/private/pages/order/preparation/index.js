@@ -1,24 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../../../common/layout";
 import { Container } from "../../../common/layout/styels";
-import {
-  ColumnContainer,
-  RowContainer,
-} from "../../../../styles/containers/styles";
-import { TabContainer } from "../../Calories/avialableCalories/styles";
-import { TabButton } from "../../mealSettings/foodMenu/setupMenu/styles";
+import { ColumnContainer, RowContainer } from "../../../../styles/containers/styles";
 import FormInput from "../../../../elements/input";
 import { FilterBox } from "../../../../elements/list/styles";
 import { Head, Items } from "../styels";
 import { GetIcon } from "../../../../../icons";
-import {
-  Patient,
-  Patients,
-  Recepe,
-  RecepeContent,
-  RecepeData,
-  RecepeImage,
-} from "../../user/patient/dietMenu/styles";
+import { Patient, Patients, Recepe, RecepeContent, RecepeData, RecepeImage } from "../../user/patient/dietMenu/styles";
 import { food } from "../../../../../images";
 import { getData } from "../../../../../backend/api";
 
@@ -26,48 +14,39 @@ const Preparation = (props) => {
   useEffect(() => {
     document.title = `Today Order - Diet Food Management Portal`;
   }, []);
-
-  const [showAllReplacable, setShowAllReplacable] = useState(false);
+  const { setLoaderBox } = props; // Destructuring from props
+  // const [showAllReplacable, setShowAllReplacable] = useState(false);
   const [filterView, setFilterView] = useState({
     date: new Date().toISOString(),
     mealTimeCategory: "",
     typeOfRecipe: "",
   });
+  const filterChange = async (option, name, type) => {
+    const updateValue = {
+      ...filterView,
+      [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : null,
+    };
+    setFilterView(updateValue);
+    loadData(updateValue);
+  };
   const [openRecipe, setOpenRecipe] = useState([]);
   const [preparing, setPreparing] = useState([]);
   const [prepared, setPrepared] = useState([]);
-
-  const takeData = () => {
-    const filters = {
-      date: filterView.date,
-      mealTimeCategory: filterView.mealTimeCategory,
-      typeOfRecipe: filterView.typeOfRecipe,
-    };
-
-    getData(filters, "preperation")
-      .then((data) => {
-        console.log(data.data);
-        setPreparing(data.data.response);
-        setOpenRecipe(data.data.response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    getData(filters, "preperation/get-prepared")
-      .then((data) => {
-        console.log(data);
-        setPrepared(data.data.response);
-        setOpenRecipe(data.data.response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
+  
+  const loadData = useCallback(
+    async (updateValue) => {
+      setLoaderBox(true);
+      const preperation = await getData({ ...updateValue, prepared: true }, "preperation");
+      const prepared = await getData(updateValue, "preperation");
+      setPreparing(preperation.data.response);
+      setPrepared(prepared.data.response);
+      setLoaderBox(false);
+    },
+    [setLoaderBox, setPreparing, setPrepared] // Add dependencies here
+  );
   useEffect(() => {
-    takeData();
-  }, [filterView]);
+    loadData(filterView);
+  }, [filterView, loadData]);
 
   const [date] = useState({
     type: "date",
@@ -121,85 +100,17 @@ const Preparation = (props) => {
     apiType: "CSV",
   });
 
-  const filterChange = (option, name, type) => {
-    const updateValue = {
-      ...filterView,
-      [name]:
-        type === "select"
-          ? option.id
-          : type === "date"
-          ? option?.toISOString()
-          : null,
-    };
-    setFilterView(updateValue);
 
-    getData(updateValue, "preperation")
-      .then((data) => {
-        console.log(data.data);
-        setPreparing(data.data.response);
-        setOpenRecipe(data.data.response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    getData(updateValue, "preperation/get-prepared")
-      .then((data) => {
-        console.log(data.data);
-        setPrepared(data.data.response);
-        setOpenRecipe(data.data.response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  console.log(preparing);
 
   return (
     <Container className="noshadow">
       <ColumnContainer>
         <RowContainer className="order">
           <RowContainer className="order-page">
-            <TabContainer>
-              <TabButton
-                className={showAllReplacable === true}
-                onClick={() => setShowAllReplacable(false)}
-              >
-                Preparing
-              </TabButton>
-              <TabButton
-                className={showAllReplacable === false}
-                onClick={() => setShowAllReplacable(true)}
-              >
-                Prepared
-              </TabButton>
-            </TabContainer>
             <FilterBox className="gap">
-              <FormInput
-                value={filterView[date.name]}
-                key={`input` + 0}
-                id={date.name}
-                onChange={filterChange}
-                {...date}
-                required={false}
-              />
-              <FormInput
-                value={filterView[mealtimeCategories.name]}
-                key={`input` + 1}
-                id={mealtimeCategories.name}
-                onChange={filterChange}
-                {...mealtimeCategories}
-                required={false}
-              />
-              <FormInput
-                value={filterView[typeOfRecipe.name]}
-                key={`input` + 2}
-                id={typeOfRecipe.name}
-                onChange={filterChange}
-                {...typeOfRecipe}
-                required={false}
-              />
+              <FormInput value={filterView[date.name]} key={`input` + 0} id={date.name} onChange={filterChange} {...date} required={false} />
+              <FormInput value={filterView[mealtimeCategories.name]} key={`input` + 1} id={mealtimeCategories.name} onChange={filterChange} {...mealtimeCategories} required={false} />
+              <FormInput value={filterView[typeOfRecipe.name]} key={`input` + 2} id={typeOfRecipe.name} onChange={filterChange} {...typeOfRecipe} required={false} />
             </FilterBox>
           </RowContainer>
           <RowContainer className="order-page">
@@ -224,18 +135,9 @@ const Preparation = (props) => {
                     <div key={`recipe-group-${recepeIndex}`}>
                       {Array.isArray(recipeItem.recipe) ? (
                         recipeItem.recipe.map((recipe, recipeIndex) => (
-                          <Recepe
-                            className={"recipe order"}
-                            key={`recipe-${recepeIndex}-${recipeIndex}`}
-                          >
+                          <Recepe className={"recipe order"} key={`recipe-${recepeIndex}-${recipeIndex}`}>
                             <RecepeContent className="recipe1">
-                              <RecepeImage
-                                src={
-                                  recipe.photo
-                                    ? process.env.REACT_APP_CDN + recipe.photo
-                                    : food
-                                }
-                              ></RecepeImage>
+                              <RecepeImage src={recipe.photo ? process.env.REACT_APP_CDN + recipe.photo : food}></RecepeImage>
                               <RecepeData className="recipe">
                                 <span className="title">{recipe.title}</span>
                                 <span className="light">
@@ -262,10 +164,7 @@ const Preparation = (props) => {
                                     onClick={() => {
                                       setOpenRecipe((prev) => ({
                                         ...prev,
-                                        [recipe._id]: !(
-                                          prev[recipe._id] ??
-                                          false
-                                        ),
+                                        [recipe._id]: !(prev[recipe._id] ?? false),
                                         // ["preparing_" + recipe._id]: !(
                                         //   prev["preparing_" + recipe._id] ??
                                         //   false
@@ -273,30 +172,22 @@ const Preparation = (props) => {
                                       }));
                                     }}
                                   >
-                                    {!(openRecipe[recipe._id] ?? false) ? (
-                                      <GetIcon icon={"down"} />
-                                    ) : (
-                                      <GetIcon icon={"up"} />
-                                    )}
+                                    {!(openRecipe[recipe._id] ?? false) ? <GetIcon icon={"down"} /> : <GetIcon icon={"up"} />}
                                   </span>
                                 </div>
                                 {openRecipe[recipe._id] && (
                                   <Patients>
-                                    {recipeItem.users?.map((item) => (
+                                    {recipeItem.users?.map((item) =>
                                       item?.map((user) => (
-                                      <Patient key={`patient-${item.userId}`}>
-                                        <span className="light">
-                                          <span className="bold">
-                                            {user.username}
+                                        <Patient key={`patient-${item.userId}`}>
+                                          <span className="light">
+                                            <span className="bold">{user.username}</span>
+                                            <span className="bold">{recipe.gram?.toFixed(2)} g</span>
+                                            <span>{recipeItem.recipeNote}</span>
                                           </span>
-                                          <span className="bold">
-                                            {recipe.gram?.toFixed(2)} g
-                                          </span>
-                                          <span>{recipeItem.recipeNote}</span>
-                                        </span>
-                                      </Patient>
+                                        </Patient>
                                       ))
-                                    ))}
+                                    )}
                                   </Patients>
                                 )}
                               </RecepeData>
@@ -312,30 +203,14 @@ const Preparation = (props) => {
 
                 <Items>
                   {prepared?.map((recipeItem, recepeIndex) => (
-                    <Recepe
-                      className={"recipe order"}
-                      key={`recipe-${recepeIndex}`}
-                    >
+                    <Recepe className={"recipe order"} key={`recipe-${recepeIndex}`}>
                       <RecepeContent className="recipe">
-                        <RecepeImage
-                          src={
-                            recipeItem.recipe.photo
-                              ? process.env.REACT_APP_CDN +
-                                recipeItem.recipe.photo
-                              : food
-                          }
-                        ></RecepeImage>
+                        <RecepeImage src={recipeItem.recipe.photo ? process.env.REACT_APP_CDN + recipeItem.recipe.photo : food}></RecepeImage>
                         <RecepeData>
-                          <span className="title">
-                            {recipeItem.recipe.title}
-                          </span>
+                          <span className="title">{recipeItem.recipe.title}</span>
                           <span className="light">
-                            <span>
-                              {recipeItem.recipe.gram?.toFixed(2)} gram
-                            </span>
-                            <span>
-                              {recipeItem.recipe.quantiy?.toFixed(2)} nos
-                            </span>
+                            <span>{recipeItem.recipe.gram?.toFixed(2)} gram</span>
+                            <span>{recipeItem.recipe.quantiy?.toFixed(2)} nos</span>
                           </span>
                         </RecepeData>
                       </RecepeContent>

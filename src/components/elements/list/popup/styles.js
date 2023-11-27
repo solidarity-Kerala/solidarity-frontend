@@ -129,7 +129,7 @@ export const DataItem = styled.span`
 export const TabContainer = styled.div`
   border-radius: 12px;
   background-color: white;
-  margin: 20px 30px 10px;
+  margin: 20px 30px 30px;
   .head {
     width: 100%;
     background-color: rgb(75, 75, 75);

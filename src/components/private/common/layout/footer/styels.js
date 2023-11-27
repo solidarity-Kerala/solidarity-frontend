@@ -5,7 +5,6 @@ export const FooterText = styled.footer`
   align-items: flex-end;
   margin-top: auto;
   padding: 0;
-  border-top: 1px solid #657599;
 `;
 
 export const Nav = styled.nav`

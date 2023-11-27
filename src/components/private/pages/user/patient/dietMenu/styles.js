@@ -521,7 +521,7 @@ export const RecepeData = styled.div`
     }
     .order & {
       .title {
-        font-size: 17px;
+        font-size: 15px;
       }
       .light {
         font-size: 14px;
