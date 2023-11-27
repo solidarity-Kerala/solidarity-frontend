@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     borderCollapse: "collapse",
     marginTop: 20,
     tableLayout: "fixed",
+    textAlign: "left",
   },
   tableRow: {
     margin: "auto",
@@ -120,7 +121,8 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     padding: 2,
     width: "33.33%",
-    height: "20px", // Adjust the value to your preference
+    height: "16px", // Adjust the value to your preference
+    fontSize: 9,
   },
 
   headerLineBlack: {
@@ -198,90 +200,168 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  itemcalories: {
+    width: "80px",
+  },
+  itemIngredient: {
+    width: "230px",
+  },
+  info: {
+    paddingTop: "10px"
+  },
+  subtitle: {
+    fontSize: 13,
+    paddingTop: "10px"
+  }
 });
 
 const CustomTable = ({ data, openData, recipeIngredients }) => (
   <View style={styles.table}>
     {/* Table Header */}
     <View style={styles.tableRow}>
-      <View style={[styles.tableCell, styles.bold]}>
+      <View style={[styles.tableCell, styles.bold, styles.itemIngredient]}>
         <Text>Ingredient</Text>
       </View>
-      <View style={[styles.tableCell, styles.bold]}>
+      <View style={[styles.tableCell, styles.bold, styles.itemcalories]}>
         <Text>Calories</Text>
       </View>
       <View style={[styles.tableCell, styles.bold]}>
-        <Text>Quantity</Text>
+        <Text>Grams</Text>
       </View>
     </View>
     {/* Table Data Rows */}
     {data?.length &&
       data.map((row, index) => (
         <View style={styles.tableRow} key={index}>
-          <View style={styles.tableCell}>
+          <View style={[styles.tableCell, styles.itemIngredient]}>
             <Text>{row.ingredient?.ingredientsName}</Text>
           </View>
-          <View style={styles.tableCell}>
-            <Text>{row?.calories / openData?.data?.numberOfPortion}</Text>
+          <View style={[styles.tableCell, styles.itemcalories]}>
+            <Text>{row?.calories}</Text>
           </View>
           <View style={styles.tableCell}>
-            <Text>{row?.quantity / openData?.data?.numberOfPortion}</Text>
+            <Text>{row?.gram}g</Text>
           </View>
         </View>
       ))}
     {/* Nutrition Data */}
-
+    <View>
+      <Text style={[styles.h5, styles.bold, styles.info]}>Nutrition Info </Text>
+    </View>
     <View style={styles.table}>
       <View style={styles.tableRow}>
         <Text style={styles.tableCell}>Calories</Text>
-        <Text style={styles.tableCell}>السعرات الحرارية</Text>
+        {/* <Text style={styles.tableCell}>السعرات الحرارية</Text> */}
         <Text style={styles.tableCell}>
-          {openData?.data?.calories / openData?.data?.numberOfPortion}
-        </Text>
-      </View>
-      <View style={styles.tableRow}>
-        <Text style={styles.tableCell}>Total Fat</Text>
-        <Text style={styles.tableCell}>الدهون الكلية</Text>
-        <Text style={styles.tableCell}>
-          {openData?.data?.totalFat / openData?.data?.numberOfPortion}
-        </Text>
-      </View>
-      <View style={styles.tableRow}>
-        <Text style={styles.tableCell}>Total Fiber</Text>
-        <Text style={styles.tableCell}>الألياف الكلية</Text>
-        <Text style={styles.tableCell}>
-          {openData?.data?.fiber / openData?.data?.numberOfPortion}
-        </Text>
-      </View>
-      <View style={styles.tableRow}>
-        <Text style={styles.tableCell}>Total Sugar</Text>
-        <Text style={styles.tableCell}>السكر الكلي</Text>
-        <Text style={styles.tableCell}>
-          {openData?.data?.sugars / openData?.data?.numberOfPortion}
+          {openData?.data?.calories.toFixed(2)}g
         </Text>
       </View>
       <View style={styles.tableRow}>
         <Text style={styles.tableCell}>Protein</Text>
-        <Text style={styles.tableCell}>البروتين</Text>
+        {/* <Text style={styles.tableCell}>البروتين</Text> */}
         <Text style={styles.tableCell}>
-          {openData?.data?.protein / openData?.data?.numberOfPortion}
+          {openData?.data?.protein.toFixed(2)}g
         </Text>
       </View>
       <View style={styles.tableRow}>
-        <Text style={styles.tableCell}>Calcium</Text>
-        <Text style={styles.tableCell}>الكالسيوم</Text>
+        <Text style={styles.tableCell}>Saturated Fat</Text>
+        {/* <Text style={styles.tableCell}>البروتين</Text> */}
         <Text style={styles.tableCell}>
-          {openData?.data?.calcium / openData?.data?.numberOfPortion}
+          {openData?.data?.satFat.toFixed(2)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Unsaturated Fat</Text>
+        {/* <Text style={styles.tableCell}>البروتين</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.unSatFat.toFixed(2)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Total Fat</Text>
+        {/* <Text style={styles.tableCell}>الدهون الكلية</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.totalFat - (openData?.data?.totalFat * openData?.data?.fatLoss / 100)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Cholesterol</Text>
+        {/* <Text style={styles.tableCell}>الدهون الكلية</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.cholesterol.toFixed(2)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Total Fiber</Text>
+        {/* <Text style={styles.tableCell}>الألياف الكلية</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.fiber.toFixed(2)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Carbohydrate</Text>
+        {/* <Text style={styles.tableCell}>الدهون الكلية</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.carbohydrate.toFixed(2)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Total Sugar</Text>
+        {/* <Text style={styles.tableCell}>السكر الكلي</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.sugars.toFixed(2)}g
         </Text>
       </View>
       <View style={styles.tableRow}>
         <Text style={styles.tableCell}>Iron</Text>
-        <Text style={styles.tableCell}>الحديد</Text>
+        {/* <Text style={styles.tableCell}>الحديد</Text> */}
         <Text style={styles.tableCell}>
-          {openData?.data?.iron / openData?.data?.numberOfPortion}
+          {openData?.data?.iron.toFixed(2)}g
         </Text>
       </View>
-      <Text style={styles.paragraph}>{openData?.data?.description}</Text>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Calcium</Text>
+        {/* <Text style={styles.tableCell}>الكالسيوم</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.calcium.toFixed(2)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Sodium</Text>
+        {/* <Text style={styles.tableCell}>الحديد</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.sodium.toFixed(2)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Potassium</Text>
+        {/* <Text style={styles.tableCell}>الحديد</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.potassium.toFixed(2)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Vitamin A</Text>
+        {/* <Text style={styles.tableCell}>الحديد</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.VitaminA.toFixed(2)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Vitamin C</Text>
+        {/* <Text style={styles.tableCell}>الحديد</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.vitaminC.toFixed(2)}g
+        </Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Vitamin E</Text>
+        {/* <Text style={styles.tableCell}>الحديد</Text> */}
+        <Text style={styles.tableCell}>
+          {openData?.data?.vitaminE.toFixed(2)}g
+        </Text>
+      </View>
+      {/* <Text style={styles.paragraph}>{openData?.data?.description}</Text> */}
     </View>
 
     {/* <Footer /> Include the Footer component here */}
@@ -289,24 +369,24 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
       <View style={styles.sectionBottomTitle}>
         {/* Allergens */}
         <View style={styles.sectionBottomHeader}>
-          <Text style={styles.h3}>Allergens: </Text>
-          <Text style={styles.h3}>{openData?.data?.allergy || 0}</Text>
+          <Text style={styles.h5}>Allergens: </Text>
+          <Text style={styles.h5}>{openData?.data?.allergy || 0}</Text>
         </View>
 
         {/* Ingredients */}
 
         {/* Storage */}
         <View style={styles.sectionBottomHeader}>
-          <Text style={styles.h3}>Storage: </Text>
-          <Text style={styles.h3}>{openData?.data?.storage || 0}</Text>
+          <Text style={styles.h5}>Storage: </Text>
+          <Text style={styles.h5}>{openData?.data?.storage || 0}</Text>
         </View>
 
         {/* Validity */}
         <View style={styles.sectionBottomHeader} id="section-validity">
-          <Text style={styles.h3}>Validity: </Text>
-          <Text style={styles.h3}>{openData?.data?.validity || 0}</Text>
+          <Text style={styles.h5}>Validity: </Text>
+          <Text style={styles.h5}>{openData?.data?.validity || 0}</Text>
         </View>
-        <View style={styles.sectionBottomHeader}>
+        {/* <View style={styles.sectionBottomHeader}>
           <Text style={styles.h3}>Ingredients: </Text>
           <Text style={styles.h3}>
             {data?.length &&
@@ -315,17 +395,17 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
                   (index !== 0 ? ", " : "") + data.ingredient?.ingredientsName
               )}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.headerLineBlackSmall} />
         {/* Produced By */}
         <View style={styles.sectionBottomHeader}>
-          <Text style={styles.h3}>Produced By: </Text>
-          <Text style={styles.h3}>EUROS BAKE, Bahrain</Text>
+          <Text style={styles.h5}>Produced By: </Text>
+          <Text style={styles.h5}>Euros Bake W.L.L, CR.No:72669-6</Text>
         </View>
 
         {/* MADE IN BAHRAIN */}
         <View style={styles.sectionBottomHeader}>
-          <Text style={styles.h3}>MADE IN BAHRAIN</Text>
+          <Text style={styles.h5}>MADE IN BAHRAIN</Text>
           <Text>{new Date().toLocaleString()}</Text>
         </View>
 
@@ -335,19 +415,19 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
     <View style={styles.footer}>
       <View style={styles.footerItems}>
         <View>
-          <Text style={styles.footerTextleft}>
+          {/* <Text style={styles.footerTextleft}>
             Euros Bake W.L.L, CR.No:72669-6
-          </Text>
+          </Text> */}
           <Text style={styles.footerTextleft}>
             P.O BOX:80304, Sanad, Kingdom of Bahrain
           </Text>
         </View>
-        <View>
+        {/* <View>
           <Text style={styles.footerTextright}>
             (+973 17 627777 ) (+973 33 626044)
           </Text>
           <Text style={styles.footerTextright}>(sales@eurobakes.me.com)</Text>
-        </View>
+        </View> */}
       </View>
     </View>
   </View>
@@ -370,7 +450,7 @@ const PDFGenerator = ({ openData, closeModal }) => {
   const generatePDF = () => (
     <Document
       author="Tecnocorp Solutions"
-      subject={`Number of servings: ${openData?.data?.numberOfPortion}, weight: ${openData?.data?.quantity}`}
+      subject={`Number of servings: ${openData?.data?.numberOfPortion}, weight: ${openData?.data?.quantity - (openData?.data?.quantity * openData?.data?.waterLoss / 100) - (openData?.data?.quantity * openData?.data?.processingLoss / 100)}`}
       title={openData?.data?.title}
     >
       <Page size="A4" style={styles.page}>
@@ -384,6 +464,13 @@ const PDFGenerator = ({ openData, closeModal }) => {
             </Text>
             <Text style={styles.recipetitle}>
               weight: {openData?.data?.gram}g
+            </Text>
+            <Text style={[styles.title, styles.subtitle]}>Yield Management</Text>
+            <Text style={styles.recipetitle}>
+              Water Loss: {openData?.data?.waterLoss}
+            </Text>
+            <Text style={styles.recipetitle}>
+              Processing Loss: {openData?.data?.processingLoss}
             </Text>
           </View>
           <View style={styles.logoContainer}>
@@ -416,3 +503,4 @@ const PDFGenerator = ({ openData, closeModal }) => {
 };
 
 export default PDFGenerator;
+
