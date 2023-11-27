@@ -71,7 +71,6 @@ export const Tr = styled.div`
   padding: 10px;
   background-color: ${(props) => props.theme.background};
   border-radius: 10px;
-
   && {
     /* .popup-child & {
       box-shadow: rgb(167 167 167 / 26%) 0px 0px 12px 0px;
@@ -85,7 +84,6 @@ export const Tr = styled.div`
   &:hover h4 {
     color: ${(props) => props.theme.themeForegound};
   }
-  flex-direction: column;
   /* padding: 5px 26px; */
   padding-bottom: 12px;
   &:first-child {
@@ -209,11 +207,14 @@ export const Tr = styled.div`
 `;
 export const Td = styled.div`
   text-align: left;
-  padding: 10px 5px;
+  padding: 5px 5px 0;
   position: relative;
   font-size: 14px;
   &.disabled {
     display: none;
+  }
+  &.custom {
+    padding: 0px 5px 5px;
   }
   &.no,
   &.name {
@@ -254,6 +255,9 @@ export const Td = styled.div`
   &.right {
     text-align: right;
   }
+  :last-child span:last-child::after {
+    display: none;
+  }
 `;
 
 export const TrBody = styled.div`
@@ -265,11 +269,18 @@ export const TrBody = styled.div`
   &.single {
     padding: 15px 17px 15px 26px;
   }
+  @media (max-width: 768px) {
+    &.nowrap {
+      flex-flow: initial;
+      margin-bottom: 5px;
+    }
+  }
 `;
 export const Title = styled.span`
   margin-right: 5px;
   margin-bottom: 5px;
   color: #838894;
+  font-size: 13px;
   &:after {
     content: " :";
   }
@@ -294,11 +305,18 @@ export const DataItem = styled.span`
   padding: 5px 10px;
   border-radius: 10px;
   font-weight: 500;
-  border: 1px solid #ddd;
+  padding: 0;
+  font-size: 15px;
+  /* border: 1px solid #ddd; */
   p {
     text-align: center;
     white-space: pre-line;
     display: contents;
+  }
+  &:after {
+    content: " |";
+    margin-left: 10px;
+    color: #bcbcbc;
   }
 `;
 export const Button = styled.button`
@@ -351,6 +369,7 @@ export const Count = styled.div`
   height: 25px;
   justify-content: flex-end;
   display: flex;
+  text-wrap: nowrap;
   button:nth-child(2) {
     margin-left: 1em;
   }
@@ -406,10 +425,11 @@ export const ButtonPanel = styled.div`
   padding: 1em 2em 0.5em;
   justify-content: space-between;
   margin-bottom: 0.5em;
-  position: sticky;
-  top: -5px;
+  /* position: sticky; */
+  /* top: -5px; */
   background: #eaeaea;
   z-index: 100;
+  height: 50px;
   svg {
     background-color: transparent;
   }
@@ -586,6 +606,18 @@ export const NoData = styled.div`
   &.small {
     height: auto;
   }
+  &.white-list{
+    margin: 0em 2em 0px;
+    background: #f8f8f8;
+    border-radius: 10px;
+  }
+  @media screen and (max-width: 768px) {
+    &.white-list{
+    margin: 0em 1em 0px;
+    background: #f8f8f8;
+    border-radius: 10px;
+  }
+  }
   &.white {
     background: #f8f8f8;
     border-radius: 10px;
@@ -614,9 +646,7 @@ export const Img = styled.img`
   object-fit: cover;
   width: 100px;
 `;
-export const ScrollLayout = styled.div`
-  /* overflow: auto; */
-`;
+
 export const ToggleSlider = styled.span`
   position: absolute;
   cursor: pointer;
@@ -655,7 +685,8 @@ export const More = styled.div`
   justify-content: center;
   align-items: center;
   right: 0;
-  margin-top: 5px;
+  margin-top: 0px;
+  margin-bottom: 10px;
   &.callBack {
     margin-right: 10px;
     width: auto;
@@ -727,23 +758,33 @@ export const IconBox = styled.span`
 `;
 export const TableContaner = styled.div`
   margin: 0em 2em 0px;
+  padding: 0em 1em 0em;
+  background-color: white;
+  border-radius: 10px;
+  height: calc(100vh - 192px);
   overflow: auto;
   width: -webkit-fill-available;
+  background: white;
   && {
     .show-filter & {
       margin: 0em 2em 0 10px;
     }
   }
+  @media screen and (max-width: 768px) {
+    margin: 0em 1em 0px;
+     height: calc(100vh - 180px);
+  }
 `;
 
 export const TableView = styled.table`
   border-collapse: collapse;
-
   width: 100%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
   margin-bottom: auto;
-
+  thead > tr {
+    background-color: white;
+  }
   th {
     background-color: ${(props) => props.theme.pageBackground};
   }
@@ -761,14 +802,15 @@ export const TableView = styled.table`
 `;
 export const ThView = styled.th`
   text-align: left;
-  padding: 15px 8px 15px;
-  border-right: 1px solid rgb(238 238 238);
+  padding: 20px 8px 15px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: white;
   white-space: nowrap;
   font-weight: bolder;
   border-radius: 0px;
-  min-width: 100px;
-  background-color: #f3f3f3;
-  color: black;
+  color: #626262;
   :first-child {
     border-top-left-radius: 12px;
   }
@@ -795,10 +837,10 @@ export const ThView = styled.th`
 
 export const TrView = styled.tr`
   border-top: 1px solid #ccc;
-  &:hover {
+  /* &:hover {
     background-color: #eaeaea;
     border-radius: 12px;
-  }
+  } */
   &:last-child td:first-child {
     border-bottom-left-radius: 12px;
   }
@@ -823,7 +865,7 @@ export const CoutSelector = styled.td`
 export const TdView = styled.td`
   text-align: left;
   background-color: white;
-  border-right: 1px solid rgb(238 238 238);
+  /* border-right: 1px solid rgb(238 238 238); */
   padding: 8px;
   height: 30px;
   position: relative;
@@ -854,6 +896,8 @@ export const TdView = styled.td`
     display: flex;
     justify-content: right;
     overflow-wrap: normal;
+    position: sticky;
+    right: -14px;
   }
   &.right {
     text-align: right;
@@ -863,6 +907,13 @@ export const TrBodyView = styled.tbody``;
 export const ListContainer = styled.div`
   display: flex;
 `;
+export const ListContainerData = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  max-width: 100%;
+`;
+
 export const PageNumber = styled.button`
   padding: 10px 5px;
   background-color: white;
@@ -876,5 +927,84 @@ export const PageNumber = styled.button`
   &.true {
     background-color: #ccc;
     font-weight: normal;
+  }
+`;
+export const ListContainerBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
+export const ScrollContainerLayout = styled.div`
+  padding: 1em;
+  margin: 0em 2em 0px;
+  width: calc(100% - 2em);
+  background-color: white;
+  border-radius: 10px;
+  padding-bottom: 0em;
+`;
+export const ScrollLayout = styled.div`
+  display: flex;
+  flex: 1 1 100%;
+  max-width: 100%;
+  width: calc(100% - 0em);
+  padding-bottom: 1em;
+  flex-direction: column;
+  min-height: calc(100vh - 14em);
+  max-height: calc(100vh - 14em);
+  .sub-page & {
+    position: inherit;
+    height: auto;
+    flex-direction: column;
+    min-height: 250px;
+    max-height: calc(100vh - 12em);
+  }
+  .popup-child & {
+    position: inherit;
+    height: auto;
+    flex-direction: column;
+    min-height: 250px;
+    max-height: calc(100vh - 20em);
+  }
+  .profile & {
+    position: inherit;
+    height: auto;
+    flex-direction: column;
+    min-height: 250px;
+    max-height: calc(100vh - 20em);
+  }
+  && {
+    .tab & {
+      min-height: calc(100vh - 20em);
+      max-height: calc(100vh - 20em);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    min-height: calc(100% - 12em);
+    max-height: calc(100% - 12em);
+    min-height: inherit;
+    position: fixed;
+    top: 120px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+    overflow: auto;
+    && {
+      .tab & {
+        position: absolute;
+        margin-top: 20px;
+        height: calc(100% - 190px);
+      }
+      .sub-page & {
+        position: inherit;
+        height: auto;
+        flex-direction: column;
+        min-height: auto;
+        max-height: calc(100vh - 12em);
+        left: 0;
+        top: 0;
+        margin-top: 50px;
+      }
+    }
   }
 `;

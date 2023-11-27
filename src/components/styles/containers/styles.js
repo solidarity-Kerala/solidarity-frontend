@@ -303,6 +303,11 @@ export const RowContainer = styled.div`
   &.print {
     padding: 0;
   }
+  &.data-layout {
+     display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 80px);
+  }
   @media screen and (max-width: 768px) {
     max-width: 100%;
     margin-right: 0px;

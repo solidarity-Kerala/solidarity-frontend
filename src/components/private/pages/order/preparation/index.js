@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../../../common/layout";
 import { Container } from "../../../common/layout/styels";
 import { ColumnContainer, RowContainer } from "../../../../styles/containers/styles";
-import { TabContainer } from "../../Calories/avialableCalories/styles";
-import { TabButton } from "../../mealSettings/foodMenu/setupMenu/styles";
 import FormInput from "../../../../elements/input";
 import { FilterBox } from "../../../../elements/list/styles";
 import { Head, Items } from "../styels";
@@ -16,48 +14,39 @@ const Preparation = (props) => {
   useEffect(() => {
     document.title = `Today Order - Diet Food Management Portal`;
   }, []);
-
-  const [showAllReplacable, setShowAllReplacable] = useState(false);
+  const { setLoaderBox } = props; // Destructuring from props
+  // const [showAllReplacable, setShowAllReplacable] = useState(false);
   const [filterView, setFilterView] = useState({
     date: new Date().toISOString(),
     mealTimeCategory: "",
     typeOfRecipe: "",
   });
+  const filterChange = async (option, name, type) => {
+    const updateValue = {
+      ...filterView,
+      [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : null,
+    };
+    setFilterView(updateValue);
+    loadData(updateValue);
+  };
   const [openRecipe, setOpenRecipe] = useState([]);
   const [preparing, setPreparing] = useState([]);
   const [prepared, setPrepared] = useState([]);
-
-  const takeData = useCallback(() => {
-    const filters = {
-      date: filterView.date,
-      mealTimeCategory: filterView.mealTimeCategory,
-      typeOfRecipe: filterView.typeOfRecipe,
-    };
-
-    getData(filters, "preperation")
-      .then((data) => {
-        console.log(data.data);
-        setPreparing(data.data.response);
-        setOpenRecipe(data.data.response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    getData(filters, "preperation/get-prepared")
-      .then((data) => {
-        console.log(data);
-        setPrepared(data.data.response);
-        setOpenRecipe(data.data.response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [filterView, setPreparing, setOpenRecipe, setPrepared]);
-
+  
+  const loadData = useCallback(
+    async (updateValue) => {
+      setLoaderBox(true);
+      const preperation = await getData({ ...updateValue, prepared: true }, "preperation");
+      const prepared = await getData(updateValue, "preperation");
+      setPreparing(preperation.data.response);
+      setPrepared(prepared.data.response);
+      setLoaderBox(false);
+    },
+    [setLoaderBox, setPreparing, setPrepared] // Add dependencies here
+  );
   useEffect(() => {
-    takeData();
-  }, [takeData]);
+    loadData(filterView);
+  }, [filterView, loadData]);
 
   const [date] = useState({
     type: "date",
@@ -111,49 +100,13 @@ const Preparation = (props) => {
     apiType: "CSV",
   });
 
-  const filterChange = (option, name, type) => {
-    const updateValue = {
-      ...filterView,
-      [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : null,
-    };
-    setFilterView(updateValue);
 
-    getData(updateValue, "preperation")
-      .then((data) => {
-        console.log(data.data);
-        setPreparing(data.data.response);
-        setOpenRecipe(data.data.response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    getData(updateValue, "preperation/get-prepared")
-      .then((data) => {
-        console.log(data.data);
-        setPrepared(data.data.response);
-        setOpenRecipe(data.data.response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  console.log(preparing);
 
   return (
     <Container className="noshadow">
       <ColumnContainer>
         <RowContainer className="order">
           <RowContainer className="order-page">
-            <TabContainer>
-              <TabButton className={showAllReplacable === true} onClick={() => setShowAllReplacable(false)}>
-                Preparing
-              </TabButton>
-              <TabButton className={showAllReplacable === false} onClick={() => setShowAllReplacable(true)}>
-                Prepared
-              </TabButton>
-            </TabContainer>
             <FilterBox className="gap">
               <FormInput value={filterView[date.name]} key={`input` + 0} id={date.name} onChange={filterChange} {...date} required={false} />
               <FormInput value={filterView[mealtimeCategories.name]} key={`input` + 1} id={mealtimeCategories.name} onChange={filterChange} {...mealtimeCategories} required={false} />
