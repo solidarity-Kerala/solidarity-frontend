@@ -487,7 +487,7 @@ const Patient = (props) => {
       // maximum: 150,
       tag: true,
       label: "Target Weight(kg)",
-      required: true,
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -955,13 +955,13 @@ const Patient = (props) => {
     },
     {
       type: "text",
-      placeholder: "Area",
-      name: "area",
+      placeholder: "Flat",
+      name: "flat",
       showItem: "",
       validation: "",
       default: "",
       tag: true,
-      label: "Area",
+      label: "Flat",
       required: true,
       view: true,
       add: true,
@@ -997,13 +997,13 @@ const Patient = (props) => {
     },
     {
       type: "text",
-      placeholder: "Floor",
-      name: "floor",
+      placeholder: "Area",
+      name: "area",
       showItem: "",
       validation: "",
       default: "",
       tag: true,
-      label: "Floor",
+      label: "Area",
       required: true,
       view: true,
       add: true,
@@ -1011,14 +1011,14 @@ const Patient = (props) => {
     },
     {
       type: "text",
-      placeholder: "Flat",
-      name: "flat",
+      placeholder: "Floor",
+      name: "floor",
       showItem: "",
       validation: "",
       default: "",
       tag: true,
-      label: "Flat",
-      required: true,
+      label: "Floor",
+      required: false,
       view: true,
       add: true,
       update: true,
@@ -1807,7 +1807,7 @@ const Patient = (props) => {
               openData={openItemData}
               setMessage={props.setMessage}
               {...props}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
@@ -1843,7 +1843,7 @@ const Patient = (props) => {
             <AppointmentMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></AppointmentMenu>
           }
           themeColors={themeColors}

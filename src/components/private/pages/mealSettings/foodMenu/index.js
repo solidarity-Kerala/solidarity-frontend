@@ -32,7 +32,20 @@ const FoodMenu = (props) => {
       add: true,
       update: true,
     },
-
+    {
+      type: "text",
+      placeholder: "Arabic Name",
+      name: "arabicName",
+      validation: "",
+      showItem: "",
+      default: "",
+      tag: true,
+      label: "Arabic Name",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
     {
       type: "select",
       apiType: "API",
