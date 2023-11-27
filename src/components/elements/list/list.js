@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Table, Button, Td, Tr, Count, AddButton, ButtonPanel, Filter, Filters, ToggleContainer, ToggleInput, ToggleSlider, NoData, FilterBox, More, Actions, Title, DataItem, ToolTipContainer, Head, TrBody, TableView, TrView, ThView, TdView, TableContaner, ProfileImage, ArrowPagination, ListContainer, PageNumber } from "./styles";
+import { Table, Button, Td, Tr, Count, AddButton, ButtonPanel, Filter, Filters, ToggleContainer, ToggleInput, ToggleSlider, NoData, FilterBox, More, Actions, Title, DataItem, ToolTipContainer, Head, TrBody, TableView, TrView, ThView, TdView, TableContaner, ProfileImage, ArrowPagination, ListContainer, PageNumber, ListContainerData, ListContainerBox } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { RowContainer } from "../../styles/containers/styles";
 import { AddIcon, GetIcon, NextIcon, PreviousIcon } from "../../../icons";
@@ -594,7 +594,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     return viewMode === "table" ? (
       <TrView style={{ zIndex: users.data?.response?.length - slNo }} key={`${shortName}-${slNo}`}>
         <TdView className={sticky} key={-1}>
-          <GetIcon icon={selectedMenuItem.icon} /> {slNo + 1 + currentIndex}
+          {slNo + 1 + currentIndex}
         </TdView>
         {attributes.map((attribute, index) => {
           if (attribute.view) {
@@ -641,87 +641,89 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       </TrView>
     ) : (
       <SetTr viewMode={viewMode} theme={themeColors} className={signleRecord ? "single" : ""} key={`row-${shortName}-${data._id ?? slNo}`}>
-        <TrBody className={signleRecord ? "single" : ""}>
-          {profileImage && (
-            <ProfileImage>
-              <img src={process.env.REACT_APP_CDN + data[profileImage]} alt="Profile"></img>
-            </ProfileImage>
-          )}
-          <SetTd key={`row-head-${slNo}`}>
-            {signleRecord ? (
-              <Head>
-                <GetIcon icon={selectedMenuItem.icon} />
-                <span>{shortName}</span>
-              </Head>
-            ) : (
-              <Head
-                onClick={() => {
-                  setIsOpen(true);
-                  setOpenData({ actions, attributes, data });
-                  setSubAttributes({ actions, attributes, data });
-                }}
-              >
-                {!profileImage && <GetIcon icon={selectedMenuItem.icon} />} <span>{` ${getValue({ type: itemTitle.type ?? "text" }, titleValue)}`}</span>
-                <Highlight data={data} highlight={highlight}></Highlight>
-              </Head>
-            )}
-          </SetTd>
-          <Td style={{ zIndex: users.data?.response?.length - slNo }} key={`actions-${shortName}-${data._id}`} className="actions">
-            {ActionDiv}
-          </Td>
-        </TrBody>
-        {signleRecord ? (
-          <DisplayInformations formMode={formMode} attributes={attributes} data={data} />
-        ) : (
-          <TrBody>
-            {attributes.map((attribute, index) => {
-              if (attribute.view && (attribute.tag ?? false)) {
-                try {
-                  const itemValue = attribute.collection?.length > 0 && attribute.showItem?.length > 0 ? data[attribute.collection][attribute.showItem] : data[attribute.name];
-                  const itemColor = attribute.collection?.length > 0 && attribute.color?.length > 0 ? data[attribute.collection][attribute.color] : "initial";
-                  let dynamicClass = "";
-                  if (attribute.condition) {
-                    if (data[attribute.condition.item] === attribute.condition.if) {
-                      dynamicClass = attribute.condition.then;
-                    } else {
-                      dynamicClass = attribute.condition.else;
-                    }
-                  }
-                  if (attribute.type === "image") {
-                    return "";
-                  }
-                  return (
-                    <Td className={dynamicClass} key={index}>
-                      <Title>{attribute.label}</Title>
-                      <DataItem
-                        onClick={() => {
-                          if (attribute.editable === true) {
-                            const temp = { ...editable };
-                            temp[`${index}-${attribute.name}`] = temp[`${index}-${attribute.name}`] ? !temp[`${index}-${attribute.name}`] : true;
-                            setEditable(temp);
-                          }
-                        }}
-                        style={{ color: itemColor }}
-                      >
-                        {getValue(attribute, itemValue)}
-                      </DataItem>
-                      {editable[`${index}-${attribute.name}`] ? <Editable item={attribute} /> : ""}
-                    </Td>
-                  );
-                } catch (error) {
-                  return (
-                    <Td key={index}>
-                      <Title>{attribute.label}</Title>
-                      <DataItem>{`--`} </DataItem>
-                    </Td>
-                  );
-                }
-              }
-
-              return null;
-            })}
-          </TrBody>
+        {profileImage && (
+          <ProfileImage>
+            <img src={process.env.REACT_APP_CDN + data[profileImage]} alt="Profile"></img>
+          </ProfileImage>
         )}
+        <ListContainerBox>
+          <TrBody className={signleRecord ? "nowrap single" : "nowrap "}>
+            <SetTd key={`row-head-${slNo}`}>
+              {signleRecord ? (
+                <Head>
+                  <GetIcon icon={selectedMenuItem.icon} />
+                  <span>{shortName}</span>
+                </Head>
+              ) : (
+                <Head
+                  onClick={() => {
+                    setIsOpen(true);
+                    setOpenData({ actions, attributes, data });
+                    setSubAttributes({ actions, attributes, data });
+                  }}
+                >
+                  {!profileImage && <GetIcon icon={selectedMenuItem.icon} />} <span>{` ${getValue({ type: itemTitle.type ?? "text" }, titleValue)}`}</span>
+                  <Highlight data={data} highlight={highlight}></Highlight>
+                </Head>
+              )}
+            </SetTd>
+            <Td style={{ zIndex: users.data?.response?.length - slNo }} key={`actions-${shortName}-${data._id}`} className="actions">
+              {ActionDiv}
+            </Td>
+          </TrBody>
+          {signleRecord ? (
+            <DisplayInformations formMode={formMode} attributes={attributes} data={data} />
+          ) : (
+            <TrBody>
+              {attributes.map((attribute, index) => {
+                if (attribute.view && (attribute.tag ?? false)) {
+                  try {
+                    const itemValue = attribute.collection?.length > 0 && attribute.showItem?.length > 0 ? data[attribute.collection][attribute.showItem] : data[attribute.name];
+                    const itemColor = attribute.collection?.length > 0 && attribute.color?.length > 0 ? data[attribute.collection][attribute.color] : "initial";
+                    let dynamicClass = "";
+                    if (attribute.condition) {
+                      if (data[attribute.condition.item] === attribute.condition.if) {
+                        dynamicClass = attribute.condition.then;
+                      } else {
+                        dynamicClass = attribute.condition.else;
+                      }
+                    }
+                    if (attribute.type === "image") {
+                      return "";
+                    }
+                    return (
+                      <Td className={"custom " + dynamicClass} key={index}>
+                        <Title>{attribute.label}</Title>
+                        <DataItem
+                          onClick={() => {
+                            if (attribute.editable === true) {
+                              const temp = { ...editable };
+                              temp[`${index}-${attribute.name}`] = temp[`${index}-${attribute.name}`] ? !temp[`${index}-${attribute.name}`] : true;
+                              setEditable(temp);
+                            }
+                          }}
+                          style={{ color: itemColor }}
+                        >
+                          {getValue(attribute, itemValue)}
+                        </DataItem>
+                        {editable[`${index}-${attribute.name}`] ? <Editable item={attribute} /> : ""}
+                      </Td>
+                    );
+                  } catch (error) {
+                    return (
+                      <Td key={index}>
+                        <Title>{attribute.label}</Title>
+                        <DataItem>{`--`} </DataItem>
+                      </Td>
+                    );
+                  }
+                }
+
+                return null;
+              })}
+            </TrBody>
+          )}
+        </ListContainerBox>
       </SetTr>
     );
   };
@@ -875,10 +877,19 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
 
   //end crud functions
   return viewMode === "list" || viewMode === "subList" || viewMode === "table" ? (
-    <RowContainer theme={themeColors} className={viewMode}>
+    <RowContainer theme={themeColors} className={"data-layout " + viewMode}>
       <ButtonPanel>
         <FilterBox>
-          <Search title={"Search"} theme={themeColors} placeholder="Search" value={searchValue} onChange={handleChange}></Search>
+          {hasFilter && (
+            <Filter
+              theme={themeColors}
+              onClick={() => {
+                setShowFilter(!shoFilter);
+              }}
+            >
+              <GetIcon icon={shoFilter ? "close" : "filter"} />
+            </Filter>
+          )}
           <Filter
             theme={themeColors}
             onClick={() => {
@@ -919,16 +930,8 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
               <GetIcon icon={"print"} />
             </Filter>
           )}
-          {hasFilter && (
-            <Filter
-              theme={themeColors}
-              onClick={() => {
-                setShowFilter(!shoFilter);
-              }}
-            >
-             <GetIcon icon={shoFilter? "close":'filter'} />
-            </Filter>
-          )}
+
+          <Search title={"Search"} theme={themeColors} placeholder="Search" value={searchValue} onChange={handleChange}></Search>
         </FilterBox>
 
         {(addPrivilege ? addPrivilege : false) && (
@@ -952,54 +955,47 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
             }
           })}
         </Filters>
-        {viewMode === "table" ? (
-          <TableContaner>
-            <TableView>
-              <thead>
-                <tr>
-                  <ThView className={headerSticky} key={"slno"}>
-                    S/N
-                  </ThView>
-                  {attributes.map((attribute) => {
-                    const result =
-                      attribute.view === true ? (
-                        <ThView className={headerSticky} key={shortName + attribute.name}>
-                          {attribute.label}
-                        </ThView>
-                      ) : (
-                        ""
-                      );
-                    headerSticky = false;
-                    return result;
-                  })}
-                </tr>
-              </thead>
-              <tbody>{users.data?.response?.length > 0 && users.data?.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}</tbody>
-            </TableView>
-          </TableContaner>
-        ) : (
-          <Table className={`table ${displayColumn}`}>{users.data?.response?.length > 0 && users.data.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}</Table>
-        )}
+        <ListContainerData>
+          {viewMode === "table" ? (
+            <TableContaner>
+              <TableView>
+                <thead>
+                  <tr>
+                    <ThView className={headerSticky} key={"slno"}>
+                      S/N
+                    </ThView>
+                    {attributes.map((attribute) => {
+                      const result =
+                        attribute.view === true ? (
+                          <ThView className={headerSticky} key={shortName + attribute.name}>
+                            {attribute.label}
+                          </ThView>
+                        ) : (
+                          ""
+                        );
+                      headerSticky = false;
+                      return result;
+                    })}
+                  </tr>
+                </thead>
+                <tbody>{users.data?.response?.length > 0 && users.data?.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}</tbody>
+              </TableView>
+              {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
+              {users.data?.response?.length === 0 && <NoData>No records found for {shortName}.</NoData>}
+            </TableContaner>
+          ) : (
+            <>
+              <Table className={`table ${displayColumn}`}>
+                {users.data?.response?.length > 0 && users.data.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}
+                {!users.data && !users.data?.response && <NoData className="white-list">No {shortName} found!</NoData>}
+                {users.data?.response?.length === 0 && <NoData className="white-list">No records found for {shortName}.</NoData>}
+              </Table>
+            </>
+          )}
+        </ListContainerData>
       </ListContainer>
-      {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
-      {users.data?.response?.length === 0 && (
-        // <CrudForm
-        //   api={api}
-        //   formMode={formMode}
-        //   css="plain"
-        //   formType={"post"}
-        //   header={t("addNewTitle", {
-        //     label: t(shortName ? shortName : "Form"),
-        //   })}
-        //   formInput={formInput}
-        //   formValues={addValues}
-        //   formErrors={errroInput}
-        //   submitHandler={submitHandler}
-        //   isOpenHandler={isCreatingHandler}
-        //   isOpen={isCreating}
-        // ></CrudForm>
-        <NoData>No records found for {shortName}.</NoData>
-      )}
+      {/* {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
+      {users.data?.response?.length === 0 && <NoData>No records found for {shortName}.</NoData>} */}
       {count > 0 ? (
         count > perPage ? (
           <Count>

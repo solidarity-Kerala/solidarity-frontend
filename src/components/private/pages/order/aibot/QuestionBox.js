@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function QuestionBox({ onSubmit }) {
-    const [question, setQuestion] = useState('');
+    const [question, setQuestion] = useState('who are you?');
 
     const handleSubmit = (e) => {
         e.preventDefault();
