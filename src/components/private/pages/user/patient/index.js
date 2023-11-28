@@ -116,19 +116,19 @@ const Patient = (props) => {
       add: true,
       update: true,
     },
-    {
-      type: "password",
-      placeholder: "Password",
-      name: "password",
-      validation: "",
-      default: "",
-      // tag: true,
-      label: "Password",
-      required: true,
-      view: false,
-      add: true,
-      update: false,
-    },
+    // {
+    //   type: "password",
+    //   placeholder: "Password",
+    //   name: "password",
+    //   validation: "",
+    //   default: "",
+    //   // tag: true,
+    //   label: "Password",
+    //   required: true,
+    //   view: false,
+    //   add: true,
+    //   update: false,
+    // },
     {
       type: "text",
       placeholder: "Father Name",
@@ -187,7 +187,8 @@ const Patient = (props) => {
     },
     {
       type: "title",
-      title: "Email and password are required for login",
+      title:
+        "For user login, the email address will serve as the username, and the CPR number will be used as the password",
       name: "bmr",
       add: true,
       update: true,
@@ -1807,7 +1808,7 @@ const Patient = (props) => {
               openData={openItemData}
               setMessage={props.setMessage}
               {...props}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
@@ -1843,7 +1844,7 @@ const Patient = (props) => {
             <AppointmentMenu
               openData={openItemData}
               setMessage={props.setMessage}
-            // Pass selected item data (Menu Title) to the popup for setting the time
+              // Pass selected item data (Menu Title) to the popup for setting the time
             ></AppointmentMenu>
           }
           themeColors={themeColors}
