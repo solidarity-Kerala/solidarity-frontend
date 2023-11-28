@@ -101,6 +101,7 @@ import Delivery from "../../private/pages/order/delivery";
 import Packaging from "../../private/pages/order/packaging";
 import Preparation from "../../private/pages/order/preparation";
 import Aibot from "../../private/pages/order/aibot/index.js";
+import LabelPrintSetting from "../../private/pages/labelPrintSetting/index.js";
 
 const Switch = ({ page, key, user, ...privileges }) => {
   const location = useLocation();
@@ -319,6 +320,8 @@ const Switch = ({ page, key, user, ...privileges }) => {
       return <Aibot key={key} {...privileges} />;
     // case "food-exchange":
     //   return <FoodExchange key={key} {...privileges} />;
+    case "label-print-setting":
+      return <LabelPrintSetting key={key} {...privileges} />;
     default:
       return <Page404 key={key}></Page404>;
   }
