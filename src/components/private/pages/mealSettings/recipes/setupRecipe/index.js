@@ -450,7 +450,7 @@ const PDFGenerator = ({ openData, closeModal }) => {
   const generatePDF = () => (
     <Document
       author="Tecnocorp Solutions"
-      subject={`Number of servings: ${openData?.data?.numberOfPortion}, weight: ${openData?.data?.quantity - (openData?.data?.quantity * openData?.data?.waterLoss / 100) - (openData?.data?.quantity * openData?.data?.processingLoss / 100)}`}
+      subject={`Number of servings: ${openData?.data?.numberOfPortion}, weight: ${openData?.data?.gram - (openData?.data?.gram * openData?.data?.waterLoss / 100) - (openData?.data?.gram * openData?.data?.processingLoss / 100)}`}
       title={openData?.data?.title}
     >
       <Page size="A4" style={styles.page}>
@@ -465,13 +465,13 @@ const PDFGenerator = ({ openData, closeModal }) => {
             <Text style={styles.recipetitle}>
               weight: {openData?.data?.gram}g
             </Text>
-            <Text style={[styles.title, styles.subtitle]}>Yield Management</Text>
+            {/* <Text style={[styles.title, styles.subtitle]}>Yield Management</Text> */}
             <Text style={styles.recipetitle}>
-              Water Loss: {openData?.data?.waterLoss}
+              Yield Weight: {openData?.data?.gram - (openData?.data?.gram * openData?.data?.waterLoss / 100) - (openData?.data?.gram * openData?.data?.processingLoss / 100)}
             </Text>
-            <Text style={styles.recipetitle}>
+            {/* <Text style={styles.recipetitle}>
               Processing Loss: {openData?.data?.processingLoss}
-            </Text>
+            </Text> */}
           </View>
           <View style={styles.logoContainer}>
             <Image
