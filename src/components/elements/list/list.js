@@ -197,6 +197,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
   const [isEditing, setIsEditing] = useState(false);
   const isEditingHandler = (value, callback, titleValue, clone = false) => {
     setLoaderBox(true);
+    console.log(value);
     if (!isEditing) {
       if (!clone) {
         setUpdateView(() => callback);
@@ -503,8 +504,8 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                       type: 2,
                       content: `Do you want to clone '${getValue({ type: itemTitle.type ?? "text" }, titleValue) ? getValue({ type: itemTitle.type ?? "text" }, titleValue) : "Item"}'?`,
                       proceed: "Clone",
-                      onProceed: () => {
-                        updateHandler({
+                      onProceed: async () => {
+                        await updateHandler({
                           cloneId: data._id,
                           _title: titleValue,
                           clone: true,
