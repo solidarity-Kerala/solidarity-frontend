@@ -7,7 +7,7 @@ import { Container } from "../../common/layout/styels";
 const LabelPrintSetting = (props) => {
     //to update the page title
     useEffect(() => {
-        document.title = `Label Print Setting - DataHex Site Builder Portal`;
+        document.title = `Label Print Setting - Diet Food Management Portal`;
     }, []);
 
     const [attributes] = useState([

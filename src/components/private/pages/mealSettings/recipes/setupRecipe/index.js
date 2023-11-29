@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const CustomTable = ({ data, openData, recipeIngredients }) => (
+const CustomTable = ({ data, openData, recipeIngredients, labelPrint }) => (
   <View style={styles.table}>
     {/* Table Header */}
     <View style={styles.tableRow}>
@@ -361,7 +361,7 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
           {openData?.data?.vitaminE.toFixed(2)}g
         </Text>
       </View>
-      {/* <Text style={styles.paragraph}>{openData?.data?.description}</Text> */}
+      <Text style={styles.paragraph}>{labelPrint?.footNote}</Text>
     </View>
 
     {/* <Footer /> Include the Footer component here */}
@@ -400,7 +400,8 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
         {/* Produced By */}
         <View style={styles.sectionBottomHeader}>
           <Text style={styles.h5}>Produced By: </Text>
-          <Text style={styles.h5}>Euros Bake W.L.L, CR.No:72669-6</Text>
+          <Text style={styles.h5}>{labelPrint?.address}</Text>
+          
         </View>
 
         {/* MADE IN BAHRAIN */}
@@ -419,7 +420,8 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
             Euros Bake W.L.L, CR.No:72669-6
           </Text> */}
           <Text style={styles.footerTextleft}>
-            P.O BOX:80304, Sanad, Kingdom of Bahrain
+            {/* P.O BOX:80304, Sanad, Kingdom of Bahrain */}
+            {labelPrint?.contact}
           </Text>
         </View>
         {/* <View>
@@ -436,15 +438,19 @@ const CustomTable = ({ data, openData, recipeIngredients }) => (
 // PDFGenerator component
 const PDFGenerator = ({ openData, closeModal }) => {
   const [recipeIngredients, setRecipeIngredients] = useState();
+  const [labelPrint, setLabelPrint] = useState();
 
   // Fetch recipe ingredients data
   useEffect(() => {
     getData({ recipe: openData?.data?._id }, "recipe-ingredients").then(
       (response) => {
         setRecipeIngredients(response?.data?.response);
+        setLabelPrint(response?.data?.labelPrint);
       }
     );
   }, [openData]);
+
+  console.log({labelPrint})
 
   // Function to generate the PDF document
   const generatePDF = () => (
@@ -469,9 +475,6 @@ const PDFGenerator = ({ openData, closeModal }) => {
             <Text style={styles.recipetitle}>
               Yield Weight: {openData?.data?.gram - (openData?.data?.gram * openData?.data?.waterLoss / 100) - (openData?.data?.gram * openData?.data?.processingLoss / 100)}
             </Text>
-            {/* <Text style={styles.recipetitle}>
-              Processing Loss: {openData?.data?.processingLoss}
-            </Text> */}
           </View>
           <View style={styles.logoContainer}>
             <Image
@@ -486,7 +489,7 @@ const PDFGenerator = ({ openData, closeModal }) => {
         </View>
 
         {/* Render the custom table component */}
-        <CustomTable data={recipeIngredients} openData={openData} />
+        <CustomTable data={recipeIngredients} openData={openData} labelPrint={labelPrint} />
 
         {/* ... your existing content ... */}
       </Page>
