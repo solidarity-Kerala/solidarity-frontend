@@ -1,5 +1,13 @@
+const defaultValues = {
+  formaintaining: 95,
+  mildweightloss: 86,
+  weightloss: 74,
+  extremeweightloss: 55
+};
+
 // Define the updateHealthDetails function
 export const updateHealthDetails = (data = {}) => {
+  console.log({data})
   try {
     const {
       gender = "Male",
@@ -46,6 +54,13 @@ export const updateHealthDetails = (data = {}) => {
       superactive: 1.9,
     };
 
+    const defaultValues = {
+      formaintaining: 95,
+      mildweightloss: 86,
+      weightloss: 74,
+      extremeweightloss: 55
+    };
+
     // Convert the provided activityFactor value to lowercase
     const normalizedActivityFactor = userActivenessStatus.toLowerCase();
 
@@ -71,6 +86,7 @@ export const updateHealthDetails = (data = {}) => {
     data.calories = isNaN(calories) ? 0 : calories;
     data.percentageOfCarbs = isNaN(percentageOfCarbs) ? 0 : percentageOfCarbs;
     data.percentageOfFat = isNaN(percentageOfFat) ? 0 : percentageOfFat;
+    data.dailyCalorie = isNaN(defaultValues?.formaintaining * calories) ? 0 : (defaultValues?.formaintaining * calories) / 100
     data.percentageOfProtein = isNaN(percentageOfProtein)
       ? 0
       : percentageOfProtein;
@@ -92,6 +108,8 @@ export const updateCaloriDetails = (data = {}) => {
     data.percentageOfCarbs = isNaN(percentageOfCarbs) ? 0 : percentageOfCarbs;
     data.percentageOfFat = isNaN(percentageOfFat) ? 0 : percentageOfFat;
     data.percentageOfProtein = isNaN(percentageOfProtein)
+    data.dailyCalorie = isNaN(defaultValues?.formaintaining * calories) ? 0 : (defaultValues?.formaintaining * calories) / 100
+
       ? 0
       : percentageOfProtein;
 
@@ -99,4 +117,29 @@ export const updateCaloriDetails = (data = {}) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const updateDailyCaloric = (value = {}) => {
+  console.log({value})
+  try {
+    const defaultValues = {
+      formaintaining: 95,
+      mildweightloss: 86,
+      weightloss: 74,
+      extremeweightloss: 55
+    };
+    const isValue = Object.values(defaultValues).every(
+      (defaultValue) => value?.proposedCalorie !== defaultValue
+    );
+  
+    if (isValue) {
+  
+      const relValue = defaultValues[value?.proposedCalorie];
+      const result = (value?.calories * relValue) / 100;
+  
+      value.dailyCalorie = result
+    }
+  } catch (error) {
+    console.log(error);
+  }  
 };
