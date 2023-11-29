@@ -13,7 +13,32 @@ const Resicpes = (props) => {
 
   const themeColors = useSelector((state) => state.themeColors);
   const [attributes] = useState([
-
+    {
+      type: "text",
+      placeholder: "Weight",
+      name: "gram",
+      validation: "",
+      default: "",
+      label: "Weight",
+      required: true,
+      view: true,
+      add: false,
+      update: true,
+      disabled: true,
+    },
+    {
+      type: "text",
+      placeholder: "Yield Weight",
+      name: "yieldWeight",
+      validation: "",
+      default: "",
+      label: "Yield Weight",
+      required: true,
+      view: true,
+      add: false,
+      update: true,
+      disabled: true,
+    },
     {
       type: "title",
       title: "Yield Management(%)",
