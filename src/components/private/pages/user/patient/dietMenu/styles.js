@@ -435,6 +435,7 @@ export const Recepe = styled.div`
   margin: 0px;
   padding: 10px;
   background: white;
+  cursor: pointer;
   &.horizontal {
     border: 1px solid rgb(227 227 227);
     border-radius: 10px;
@@ -468,8 +469,13 @@ export const Patient = styled.div`
   border-radius: 10px;
   font-size: 12px;
   width: 100%;
+  position:relative;
   .bold {
     color: black;
+  }
+  .small {
+    color: grey;
+    font-size:12px;
   }
 `;
 
@@ -488,7 +494,7 @@ export const RecepeData = styled.div`
     }
   }
   .red {
-    color: red;
+    color: red !important;
   }
   .light {
     font-size: 12px;
@@ -509,7 +515,11 @@ export const RecepeData = styled.div`
   .light span svg {
     margin-right: 5px;
   }
-
+.small {
+    color: grey;
+    font-size:12px;
+    margin-top:5px;
+  }
   && {
     .horizontal & {
       .title {
@@ -521,10 +531,10 @@ export const RecepeData = styled.div`
     }
     .order & {
       .title {
-        font-size: 15px;
+        font-size: 14px;
       }
       .light {
-        font-size: 14px;
+        font-size: 12px;
       }
       .actions {
         height: auto;

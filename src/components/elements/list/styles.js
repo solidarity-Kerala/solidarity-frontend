@@ -269,10 +269,20 @@ export const TrBody = styled.div`
   &.single {
     padding: 15px 17px 15px 26px;
   }
+  &.actions {
+    display: flex;
+    justify-content: right;
+    margin-top: 5px;
+  }
   @media (max-width: 768px) {
     &.nowrap {
       flex-flow: initial;
       margin-bottom: 5px;
+    }
+    &.actions {
+      display: flex;
+      justify-content: left;
+      margin-top: 5px;
     }
   }
 `;
@@ -315,7 +325,7 @@ export const DataItem = styled.span`
   }
   &:after {
     content: " |";
-    margin-left: 10px;
+    margin-left: 5px;
     color: #bcbcbc;
   }
 `;
@@ -606,17 +616,17 @@ export const NoData = styled.div`
   &.small {
     height: auto;
   }
-  &.white-list{
+  &.white-list {
     margin: 0em 2em 0px;
     background: #f8f8f8;
     border-radius: 10px;
   }
   @media screen and (max-width: 768px) {
-    &.white-list{
-    margin: 0em 1em 0px;
-    background: #f8f8f8;
-    border-radius: 10px;
-  }
+    &.white-list {
+      margin: 0em 1em 0px;
+      background: #f8f8f8;
+      border-radius: 10px;
+    }
   }
   &.white {
     background: #f8f8f8;
@@ -686,7 +696,7 @@ export const More = styled.div`
   align-items: center;
   right: 0;
   margin-top: 0px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   &.callBack {
     margin-right: 10px;
     width: auto;
@@ -699,9 +709,9 @@ export const More = styled.div`
     }
   }
   @media screen and (max-width: 768px) {
-    span {
+    /* span {
       display: none;
-    }
+    } */
   }
   &.active,
   &:hover {
@@ -772,7 +782,7 @@ export const TableContaner = styled.div`
   }
   @media screen and (max-width: 768px) {
     margin: 0em 1em 0px;
-     height: calc(100vh - 180px);
+    height: calc(100vh - 180px);
   }
 `;
 
