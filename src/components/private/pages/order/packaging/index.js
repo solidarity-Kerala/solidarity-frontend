@@ -1,76 +1,77 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import Layout from "../../../common/layout";
 import { Container } from "../../../common/layout/styels";
 import { ColumnContainer, RowContainer } from "../../../../styles/containers/styles";
-import { TabContainer } from "../../Calories/avialableCalories/styles";
-import { TabButton } from "../../mealSettings/foodMenu/setupMenu/styles";
 import FormInput from "../../../../elements/input";
 import { FilterBox } from "../../../../elements/list/styles";
-import { Head, Items } from "../styels";
+import { DataBox, Head, Items, Patient } from "../styels";
 import { GetIcon } from "../../../../../icons";
-import { Patient, Patients, Recepe, RecepeContent, RecepeData, RecepeImage } from "../../user/patient/dietMenu/styles";
+import { Patients, Recepe, RecepeContent, RecepeData, RecepeImage } from "../../user/patient/dietMenu/styles";
 import { food } from "../../../../../images";
+import { getData, postData } from "../../../../../backend/api";
+import Checkbox from "../../../../elements/checkbox";
+import { useSelector } from "react-redux";
 
-const Packaging = (props) => {
+const Preparation = (props) => {
   useEffect(() => {
     document.title = `Today Order - Diet Food Management Portal`;
   }, []);
-  const [showAllReplacable, setShowAllReplacable] = useState(false);
-  const [filterView, setFilterView] = useState({ date: new Date().toISOString(), deliveryArea: "", deliveryMan: "" });
-  const [openRecipe, setOpenRecipe] = useState({});
-  const [packaging, setPackaging] = useState();
-  const [packaged, setPackaged] = useState();
-  const takeData = () => {
-    setPackaging([
-      {
-        _id: 1,
-        userDisplayName: "Azhar PK",
-        id: "12321312",
-        items: 2,
-        recipes: [
-          { _id: 1, mealTimeCategory: { mealTimeCategoryName: "Break Fast" }, gram: 100, recipeNote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" } },
-          { _id: 2, mealTimeCategory: { mealTimeCategoryName: "Break Fast" }, gram: 100, recipeNote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" } },
-          { _id: 3, mealTimeCategory: { mealTimeCategoryName: "Break Fast" }, gram: 100, recipeNote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" } },
-        ],
-      },
-      {
-        _id: 2,
-        userDisplayName: "Azhar PK",
-        id: "12321312",
-        items: 2,
-        recipes: [{ _id: 1, mealTimeCategory: { mealTimeCategoryName: "Break Fast" }, gram: 90, recipeNote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" } }],
-      },
-      {
-        _id: 3,
-        userDisplayName: "Azhar PK",
-        id: "12321312",
-        items: 2,
-        recipes: [{ _id: 1, mealTimeCategory: { mealTimeCategoryName: "Break Fast" }, gram: 100, recipeNote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" } }],
-      },
-    ]);
-    setPackaged([
-      {
-        _id: 1,
-        gram: 20,
-        quantiy: 2,
-        recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" },
-        patients: [
-          { userDisplayName: "Azhar PK", recipeNote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry." },
-          { userDisplayName: "Shameer Babu", recipeNote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry." },
-        ],
-      },
-      { _id: 2, gram: 20, quantiy: 2, recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" } },
-      { _id: 3, gram: 20, quantiy: 2, recipe: { title: "Pineaple Juice", photo: "public/dfms/uploads/meals/photo-1696104654422.jpg" } },
-    ]);
+  const { setLoaderBox } = props;
+  const themeColors = useSelector((state) => state.themeColors);
+  const [filterView, setFilterView] = useState({
+    scheduleDate: new Date().toISOString(),
+    mealTimeCategory: "",
+    typeOfRecipe: "",
+    productionDepartment: "",
+  });
+  const filterChange = async (option, name, type) => {
+    const updateValue = {
+      ...filterView,
+      [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : null,
+    };
+    setFilterView(updateValue);
+    // loadData(updateValue);
   };
-  useEffect(() => {
-    takeData();
-  }, []);
+  const [preparing, setPreparing] = useState([]);
+  const [prepared, setPrepared] = useState(null);
+
+  const loadData = useCallback(
+    async (updateValue) => {
+      console.log("setLoaderBox", setLoaderBox);
+      setLoaderBox(true);
+      const preperation = await getData({ ...updateValue, prepared: false }, "preperation/packaging");
+      // const prepared = await getData({ ...updateValue, prepared: true }, "preperation");
+      setPreparing(preperation.data.response);
+      setPrepared(null);
+      setLoaderBox(false);
+    },
+    [setLoaderBox, setPreparing] // Add dependencies here
+  );
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  useLayoutEffect(() => {
+    const fetchData = async () => {
+      await loadData(filterView);
+    };
+
+    fetchData();
+  }, [filterView, loadData]);
+  const statusChange = (recipeSchedule, status, index) => {
+    setLoaderBox(true);
+    postData({ recipeSchedule, status }, "preperation/move-to-delivery").then((response) => {
+      if (response.status === 200) {
+        const preparationTemp = [...preparing];
+        preparationTemp[selectedIndex].schedules[index].status = status;
+        setPreparing(preparationTemp);
+        setPrepared(preparationTemp[selectedIndex]);
+      }
+      setLoaderBox(false);
+    });
+  };
   const [date] = useState({
     type: "date",
-    placeholder: "Date",
+    placeholder: "scheduleDate",
     customClass: "filter",
-    name: "date",
+    name: "scheduleDate",
     validation: "",
     default: "",
     tag: true,
@@ -80,36 +81,19 @@ const Packaging = (props) => {
     add: true,
     update: true,
   });
-  const [deliveryMan] = useState({
-    type: "select",
-    apiType: "API",
-    selectApi: "mealtime-category/select",
-    placeholder: "Delivery Man",
-    name: "deliveryMan",
-    customClass: "filter auto single",
-    validation: "",
-    showItem: "mealtimeCategoriesName",
-    default: "",
-    tag: true,
-    label: "Delivery Man",
-    required: true,
-    view: true,
-    add: true,
-    update: true,
-    filter: true,
-  });
-  const [deliveryArea] = useState({
+
+  const [mealtimeCategories] = useState({
     type: "select",
     apiType: "API",
     selectApi: "mealtime-category/select",
     placeholder: "Mealtime Category",
-    name: "deliveryArea",
+    name: "mealTimeCategory",
     customClass: "filter auto single",
     validation: "",
     showItem: "mealtimeCategoriesName",
     default: "",
     tag: true,
-    label: "Delivery Area",
+    label: "Mealtime Category",
     required: true,
     view: true,
     add: true,
@@ -117,154 +101,153 @@ const Packaging = (props) => {
     filter: true,
   });
 
-  const filterChange = (option, name, type) => {
-    const updateValue = {
-      ...filterView,
-      [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : null,
-    };
-    setFilterView(updateValue);
-    // updating the form values
-  };
+  const [typeOfRecipe] = useState({
+    type: "select",
+    placeholder: "Type Of Recipe",
+    name: "typeOfRecipe",
+    validation: "",
+    customClass: "filter auto single",
+    default: "",
+    tag: true,
+    label: "Type Of Recipe",
+    required: true,
+    view: true,
+    add: true,
+    update: true,
+    filter: true,
+    selectApi: "Bread,Meat,Fruit,Dessert,Salad,Soup,Mixed",
+    apiType: "CSV",
+  });
+  const [productionDepartment] = useState({
+    type: "select",
+    placeholder: "Production Department",
+    name: "productionDepartment",
+    customClass: "filter auto single",
+    validation: "",
+    default: "",
+    tag: true,
+    label: "Production Department",
+    required: true,
+    view: true,
+    add: true,
+    update: true,
+    filter: true,
+    selectApi: "Hot kitchen, Cold kitchen, Bakery, Salad section, Sandwich section",
+    apiType: "CSV",
+  });
   return (
     <Container className="noshadow">
       <ColumnContainer>
         <RowContainer className="order">
           <RowContainer className="order-page">
-            <TabContainer>
-              <TabButton className={showAllReplacable === true} onClick={() => setShowAllReplacable(false)}>
-                Packaging
-              </TabButton>
-              <TabButton className={showAllReplacable === false} onClick={() => setShowAllReplacable(true)}>
-                Packaged
-              </TabButton>
-            </TabContainer>
             <FilterBox className="gap">
               <FormInput value={filterView[date.name]} key={`input` + 0} id={date.name} onChange={filterChange} {...date} required={false} />
-              <FormInput value={filterView[deliveryMan.name]} key={`input` + 1} id={deliveryMan.name} onChange={filterChange} {...deliveryMan} required={false} />
-              <FormInput value={filterView[deliveryArea.name]} key={`input` + 2} id={deliveryArea.name} onChange={filterChange} {...deliveryArea} required={false} />
+            </FilterBox>
+            <FilterBox className="gap">
+              <FormInput value={filterView[mealtimeCategories.name]} key={`input` + 1} id={mealtimeCategories.name} onChange={filterChange} {...mealtimeCategories} required={false} />
+              <FormInput value={filterView[productionDepartment.name]} key={`input` + 1} id={productionDepartment.name} onChange={filterChange} {...productionDepartment} required={false} />
+              <FormInput value={filterView[typeOfRecipe.name]} key={`input` + 2} id={typeOfRecipe.name} onChange={filterChange} {...typeOfRecipe} required={false} />
             </FilterBox>
           </RowContainer>
           <RowContainer className="order-page">
             <RowContainer>
-              <ColumnContainer className="gap">
-                <Head className="first">
-                  <span>
-                    Packaging <i>{packaging?.length} boxes</i>
-                  </span>
-                  <GetIcon icon={"packaging"} />
-                </Head>
-                <Head className="last">
-                  <span>
-                    Packaged <i>{packaged?.length} boxes</i>
-                  </span>
-                  <GetIcon icon={"checked"} />
-                </Head>
-              </ColumnContainer>
+              <ColumnContainer className="gap"></ColumnContainer>
               <ColumnContainer className="gap">
                 <Items>
-                  {packaging?.map((user, recepeIndex) => (
-                    <Recepe className={"recipe order"} key={`recipe-${recepeIndex}`}>
-                      <RecepeContent className="recipe1">
-                        {/* <RecepeImage src={user.recipe.photo ? process.env.REACT_APP_CDN + recipeItem.recipe.photo : food}></RecepeImage> */}
-                        <RecepeData className="recipe">
-                          <span className="title">{user.userDisplayName}</span>
-                          <span className="light">
-                            <span>{user.recipes.length?.toFixed(0)} items</span>
-                          </span>
-                          <div className="actions">
-                            <span
-                              className="delete full"
-                              title="View Recipe Info"
-                              onClick={() => {
-                                //setPopupData({ nutritionInfo: recipeItem.nutritionInfo, data: recipeItem.recipe, recipe: recipeItem, availablecalories: recipeItem.availablecalories });
-                              }}
-                            >
-                              Move to Packaged
-                              <GetIcon icon={"next"} />
-                            </span>
-                            <span
-                              className="info"
-                              title="View Recipe Info"
-                              onClick={() => {
-                                setOpenRecipe((prev) => ({
-                                  ...prev,
-                                  ["packaging_" + user._id]: !(prev["packaging_" + user._id] ?? false),
-                                }));
-                              }}
-                            >
-                              {!(openRecipe["packaging_" + user._id] ?? false) ? <GetIcon icon={"down"} /> : <GetIcon icon={"up"} />}
-                            </span>
-                          </div>
-                          {openRecipe["packaging_" + user._id] && (
+                  <Head className="first">
+                    <span>
+                      Lsit to Package <i>{preparing?.length} Items</i>
+                    </span>
+                    <GetIcon icon={"preparation"} />
+                  </Head>
+                  <DataBox>
+                    {preparing?.map((recipeItem, recipeIndex) =>{ 
+                       const count = recipeItem.schedules.filter((item) => item.status === "Packaging").length;
+                      return(
+                      <div className={selectedIndex===recipeIndex?'selected':''} key={`recipe-group-${recipeIndex}`}>
+                        {recipeItem.user && (
+                          <Recepe
+                            onClick={() => {
+                              setPrepared(recipeItem);
+                              setSelectedIndex(recipeIndex);
+                            }}
+                            className="recipe order"
+                            key={`recipe-${recipeIndex}`}
+                          >
+                            <RecepeContent className="recipe1">
+                              {/* <RecepeImage src={recipeItem.recipe.photo ? `${process.env.REACT_APP_CDN}${recipeItem.recipe.photo}` : food}></RecepeImage> */}
+                              <RecepeData className="recipe">
+                                <span className="title">{recipeItem.user.username}</span>
+                                <span className="light">
+                                  <span>{recipeItem.gram?.toFixed(2)} gram</span>
+                                  <span>{recipeItem.count?.toFixed(0)} nos</span>
+                                </span>
+                                <div className="small">Ref No: {recipeItem.user.cprNumber}</div>
+                                {count > 0 && <span className={"small red"}>Pending: {count ?? 0}</span>}
+                              </RecepeData>
+                            </RecepeContent>
+                          </Recepe>
+                        )}
+                      </div>
+                    )})}
+                  </DataBox>
+                  {preparing?.length === 0 && (
+                    <div key={`recipe-group`}>
+                      <Recepe className="recipe order" key={`recipe`}>
+                        No Recipe to Pack!
+                      </Recepe>
+                    </div>
+                  )}
+                </Items>
+                {prepared && (
+                  <Items className="sticky">
+                    <Head className="last">
+                      <span>
+                        {prepared.user.username} <i>{prepared?.schedules.length} Items</i>
+                      </span>
+                      <GetIcon icon={"recipe"} />
+                    </Head>
+                    <DataBox aBox key={`recipe-group`}>
+                      <Recepe className="recipe order" key={`recipe`}>
+                        <RecepeContent className="recipe1">
+                          <RecepeData className="recipe">
                             <Patients>
-                              {user.recipes?.map((item) => (
+                              {prepared.schedules?.map((item, recipeIndex) => (
                                 <Patient>
                                   <RecepeContent className="recipe1">
                                     <RecepeImage src={item.recipe.photo ? process.env.REACT_APP_CDN + item.recipe.photo : food}></RecepeImage>
+                                    <Checkbox
+                                      onChange={() => {
+                                        statusChange(item._id, "Out for Delivery", recipeIndex);
+                                      }}
+                                      checked={item.status === "Packaging" ? false : true}
+                                      theme={themeColors}
+                                    ></Checkbox>
                                     <RecepeData className="recipe">
                                       <span className="title">{item.recipe.title}</span>
                                       <span className="light">
-                                        <span>{item.gram?.toFixed(2)} gram</span>
-                                        <span>{item.mealTimeCategory.mealTimeCategoryName}</span>
+                                        <div className="bold">{item.nutritionInfo.gram?.toFixed(2)} g</div>
+                                        <span>{item.mealTimeCategoryInfo.mealtimeCategoriesName}</span>
                                       </span>
+                                     
                                     </RecepeData>
                                   </RecepeContent>
                                 </Patient>
                               ))}
                             </Patients>
-                          )}
-                        </RecepeData>
-                      </RecepeContent>
-                    </Recepe>
-                  ))}
-                </Items>
-                <Items>
-                  {packaging?.map((user, recepeIndex) => (
-                    <Recepe className={"recipe order"} key={`recipe-${recepeIndex}`}>
-                      <RecepeContent className="recipe1">
-                        {/* <RecepeImage src={user.recipe.photo ? process.env.REACT_APP_CDN + recipeItem.recipe.photo : food}></RecepeImage> */}
-                        <RecepeData className="recipe">
-                          <span className="title">{user.userDisplayName}</span>
-                          <span className="light">
-                            <span>{user.recipes.length?.toFixed(0)} items</span>
-                          </span>
-                          <div className="actions">
-                            <span
-                              className="info"
-                              title="View Recipe Info"
-                              onClick={() => {
-                                setOpenRecipe((prev) => ({
-                                  ...prev,
-                                  ["packaged_" + user._id]: !(prev["packaged_" + user._id] ?? false),
-                                }));
-                              }}
-                            >
-                              {!(openRecipe["packaged_" + user._id] ?? false) ? <GetIcon icon={"down"} /> : <GetIcon icon={"up"} />}
-                            </span>
-                          </div>
-                          {openRecipe["packaged_" + user._id] && (
-                            <Patients>
-                              {user.recipes?.map((item) => (
-                                <Patient>
-                                  <RecepeContent className="recipe1">
-                                    <RecepeImage src={item.recipe.photo ? process.env.REACT_APP_CDN + item.recipe.photo : food}></RecepeImage>
-                                    <RecepeData className="recipe">
-                                      <span className="title">{item.recipe.title}</span>
-                                      <span className="light">
-                                        <span>{item.gram?.toFixed(2)} gram</span>
-                                        <span>{item.quantiy?.toFixed(0)} nos</span>
-                                      </span>
-                                    </RecepeData>
-                                  </RecepeContent>
-                                </Patient>
-                              ))}
-                            </Patients>
-                          )}
-                        </RecepeData>
-                      </RecepeContent>
-                    </Recepe>
-                  ))}
-                </Items>
+                          </RecepeData>
+                        </RecepeContent>
+                      </Recepe>
+                    </DataBox>
+                    {prepared?.length === 0 && (
+                      <div key={`recipe-group`}>
+                        <Recepe className="recipe order" key={`recipe`}>
+                          No Item in Packaging!
+                        </Recepe>
+                      </div>
+                    )}
+                  </Items>
+                )}
               </ColumnContainer>
             </RowContainer>
           </RowContainer>
@@ -273,4 +256,5 @@ const Packaging = (props) => {
     </Container>
   );
 };
-export default Layout(Packaging);
+
+export default Layout(Preparation);

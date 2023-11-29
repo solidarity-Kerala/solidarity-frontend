@@ -387,14 +387,6 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     const ActionDiv = (
       <React.Fragment key={`actions-${shortName}-${data._id}`}>
         {actions.map((item, index) => {
-          let status = true;
-          if (item.condition) {
-            if (data[item.condition.item] === item.condition.if) {
-              status = item.condition.then;
-            } else {
-              status = item.condition.else;
-            }
-          }
           return (
             item.element !== "button" && (
               <ToggleContainer key={`${item.id}-${data._id}`}>
@@ -442,19 +434,6 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
                 />
                 <ToggleSlider />
               </ToggleContainer>
-            ),
-            item.type === "callback" && status && (
-              <More
-                theme={themeColors}
-                key={`custom-${item.id + "-" + index}-${data._id}`}
-                onClick={() => {
-                  item.callback(item, data, refreshView);
-                }}
-                className="edit menu callBack"
-              >
-                <GetIcon icon={item.icon} />
-                <span>{item.title}</span>
-              </More>
             )
           );
         })}
@@ -723,6 +702,34 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
               })}
             </TrBody>
           )}
+          <TrBody className="actions">
+            {actions.map((item, index) => {
+              let status = true;
+              if (item.condition) {
+                if (data[item.condition.item] === item.condition.if) {
+                  status = item.condition.then;
+                } else {
+                  status = item.condition.else;
+                }
+              }
+              return (
+                item.type === "callback" &&
+                status && (
+                  <More
+                    theme={themeColors}
+                    key={`custom-${item.id + "-" + index}-${data._id}`}
+                    onClick={() => {
+                      item.callback(item, data, refreshView);
+                    }}
+                    className="edit menu callBack"
+                  >
+                    <GetIcon icon={item.icon} />
+                    <span>{item.title}</span>
+                  </More>
+                )
+              );
+            })}
+          </TrBody>
         </ListContainerBox>
       </SetTr>
     );

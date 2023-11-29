@@ -221,6 +221,7 @@ export const DatetimeInput = styled(DatePicker)`
   && {
     /* Styles to apply when parent has class shrink */
     .filter & {
+      padding: 1.4em 13px 0px;
       margin: 4px 0px 0px 0;
       background-color: white;
       height: 40px;

@@ -108,7 +108,6 @@ const Switch = ({ page, key, user, ...privileges }) => {
   const selectedMenuItem = useSelector((state) => state.selectedMenu);
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log("selectedMenuItem", selectedMenuItem.path, location.pathname);
     if (selectedMenuItem.path !== location.pathname) {
       // console.log("not equal", location.pathname, "/" + selectedMenuItem.path, user.menu);
       user &&

@@ -1,25 +1,28 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import Layout from "../../../common/layout";
 import { Container } from "../../../common/layout/styels";
 import { ColumnContainer, RowContainer } from "../../../../styles/containers/styles";
 import FormInput from "../../../../elements/input";
 import { FilterBox } from "../../../../elements/list/styles";
-import { Head, Items } from "../styels";
+import { DataBox, Head, Items, Patient } from "../styels";
 import { GetIcon } from "../../../../../icons";
-import { Patient, Patients, Recepe, RecepeContent, RecepeData, RecepeImage } from "../../user/patient/dietMenu/styles";
+import { Patients, Recepe, RecepeContent, RecepeData, RecepeImage } from "../../user/patient/dietMenu/styles";
 import { food } from "../../../../../images";
-import { getData } from "../../../../../backend/api";
+import { getData, postData } from "../../../../../backend/api";
+import Checkbox from "../../../../elements/checkbox";
+import { useSelector } from "react-redux";
 
 const Preparation = (props) => {
   useEffect(() => {
     document.title = `Today Order - Diet Food Management Portal`;
   }, []);
-  const { setLoaderBox } = props; // Destructuring from props
-  // const [showAllReplacable, setShowAllReplacable] = useState(false);
+  const { setLoaderBox } = props;
+  const themeColors = useSelector((state) => state.themeColors);
   const [filterView, setFilterView] = useState({
-    date: new Date().toISOString(),
+    scheduleDate: new Date().toISOString(),
     mealTimeCategory: "",
     typeOfRecipe: "",
+    productionDepartment: "",
   });
   const filterChange = async (option, name, type) => {
     const updateValue = {
@@ -27,32 +30,47 @@ const Preparation = (props) => {
       [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : null,
     };
     setFilterView(updateValue);
-    loadData(updateValue);
+    // loadData(updateValue);
   };
-  const [openRecipe, setOpenRecipe] = useState([]);
   const [preparing, setPreparing] = useState([]);
-  const [prepared, setPrepared] = useState([]);
-  
+  const [prepared, setPrepared] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const loadData = useCallback(
     async (updateValue) => {
+      console.log("setLoaderBox", setLoaderBox);
       setLoaderBox(true);
-      const preperation = await getData({ ...updateValue, prepared: true }, "preperation");
-      const prepared = await getData(updateValue, "preperation");
+      const preperation = await getData({ ...updateValue, prepared: false }, "preperation");
+      // const prepared = await getData({ ...updateValue, prepared: true }, "preperation");
       setPreparing(preperation.data.response);
-      setPrepared(prepared.data.response);
+      setPrepared(null);
       setLoaderBox(false);
     },
-    [setLoaderBox, setPreparing, setPrepared] // Add dependencies here
+    [setLoaderBox, setPreparing] // Add dependencies here
   );
-  useEffect(() => {
-    loadData(filterView);
-  }, [filterView, loadData]);
+  useLayoutEffect(() => {
+    const fetchData = async () => {
+      await loadData(filterView);
+    };
 
+    fetchData();
+  }, [filterView, loadData]);
+  const statusChange = (recipeSchedule, status, index) => {
+    setLoaderBox(true);
+    postData({ recipeSchedule, status }, "preperation/move-to-packaging").then((response) => {
+      if (response.status === 200) {
+        const preparationTemp = [...preparing];
+        preparationTemp[selectedIndex].schedules[index].status = status;
+        setPreparing(preparationTemp);
+        setPrepared(preparationTemp[selectedIndex]);
+      }
+      setLoaderBox(false);
+    });
+  };
   const [date] = useState({
     type: "date",
-    placeholder: "Date",
+    placeholder: "scheduleDate",
     customClass: "filter",
-    name: "date",
+    name: "scheduleDate",
     validation: "",
     default: "",
     tag: true,
@@ -99,9 +117,23 @@ const Preparation = (props) => {
     selectApi: "Bread,Meat,Fruit,Dessert,Salad,Soup,Mixed",
     apiType: "CSV",
   });
-
-
-
+  const [productionDepartment] = useState({
+    type: "select",
+    placeholder: "Production Department",
+    name: "productionDepartment",
+    customClass: "filter auto single",
+    validation: "",
+    default: "",
+    tag: true,
+    label: "Production Department",
+    required: true,
+    view: true,
+    add: true,
+    update: true,
+    filter: true,
+    selectApi: "Hot kitchen, Cold kitchen, Bakery, Salad section, Sandwich section",
+    apiType: "CSV",
+  });
   return (
     <Container className="noshadow">
       <ColumnContainer>
@@ -109,114 +141,114 @@ const Preparation = (props) => {
           <RowContainer className="order-page">
             <FilterBox className="gap">
               <FormInput value={filterView[date.name]} key={`input` + 0} id={date.name} onChange={filterChange} {...date} required={false} />
+            </FilterBox>
+            <FilterBox className="gap">
               <FormInput value={filterView[mealtimeCategories.name]} key={`input` + 1} id={mealtimeCategories.name} onChange={filterChange} {...mealtimeCategories} required={false} />
-              <FormInput value={filterView[typeOfRecipe.name]} key={`input` + 2} id={typeOfRecipe.name} onChange={filterChange} {...typeOfRecipe} required={false} />
+              <FormInput value={filterView[productionDepartment.name]} key={`input` + 2} id={productionDepartment.name} onChange={filterChange} {...productionDepartment} required={false} />
+              <FormInput value={filterView[typeOfRecipe.name]} key={`input` + 3} id={typeOfRecipe.name} onChange={filterChange} {...typeOfRecipe} required={false} />
             </FilterBox>
           </RowContainer>
           <RowContainer className="order-page">
             <RowContainer>
-              <ColumnContainer className="gap">
-                <Head className="first">
-                  <span>
-                    Preparing <i>{preparing?.length} Items</i>
-                  </span>
-                  <GetIcon icon={"preparation"} />
-                </Head>
-                <Head className="last">
-                  <span>
-                    Prepared <i>{prepared?.length} Items</i>
-                  </span>
-                  <GetIcon icon={"checked"} />
-                </Head>
-              </ColumnContainer>
+              <ColumnContainer className="gap"></ColumnContainer>
               <ColumnContainer className="gap">
                 <Items>
-                  {preparing?.map((recipeItem, recepeIndex) => (
-                    <div key={`recipe-group-${recepeIndex}`}>
-                      {Array.isArray(recipeItem.recipe) ? (
-                        recipeItem.recipe.map((recipe, recipeIndex) => (
-                          <Recepe className={"recipe order"} key={`recipe-${recepeIndex}-${recipeIndex}`}>
-                            <RecepeContent className="recipe1">
-                              <RecepeImage src={recipe.photo ? process.env.REACT_APP_CDN + recipe.photo : food}></RecepeImage>
-                              <RecepeData className="recipe">
-                                <span className="title">{recipe.title}</span>
-                                <span className="light">
-                                  <span>{recipe.gram?.toFixed(2)} gram</span>
-                                  <span>{recipe.quantiy?.toFixed(0)} nos</span>
-                                </span>
-                                <div className="actions">
-                                  <span
-                                    className="delete full"
-                                    title="View Recipe Info"
-                                    // onClick={() => {
-                                    //   moveRecipeToPrepared(
-                                    //     recipeItem.data._id,
-                                    //     recipeItem.mealTimeCategory._id
-                                    //   );
-                                    // }}
-                                  >
-                                    Move to Prepared
-                                    <GetIcon icon={"next"} />
-                                  </span>
-                                  <span
-                                    className="info"
-                                    title="View Recipe Info"
-                                    onClick={() => {
-                                      setOpenRecipe((prev) => ({
-                                        ...prev,
-                                        [recipe._id]: !(prev[recipe._id] ?? false),
-                                        // ["preparing_" + recipe._id]: !(
-                                        //   prev["preparing_" + recipe._id] ??
-                                        //   false
-                                        // ),
-                                      }));
-                                    }}
-                                  >
-                                    {!(openRecipe[recipe._id] ?? false) ? <GetIcon icon={"down"} /> : <GetIcon icon={"up"} />}
-                                  </span>
-                                </div>
-                                {openRecipe[recipe._id] && (
-                                  <Patients>
-                                    {recipeItem.users?.map((item) =>
-                                      item?.map((user) => (
-                                        <Patient key={`patient-${item.userId}`}>
-                                          <span className="light">
-                                            <span className="bold">{user.username}</span>
-                                            <span className="bold">{recipe.gram?.toFixed(2)} g</span>
-                                            <span>{recipeItem.recipeNote}</span>
-                                          </span>
-                                        </Patient>
-                                      ))
-                                    )}
-                                  </Patients>
-                                )}
-                              </RecepeData>
-                            </RecepeContent>
-                          </Recepe>
-                        ))
-                      ) : (
-                        <p>Recipes array is not defined or is not an array</p>
-                      )}
-                    </div>
-                  ))}
-                </Items>
+                  <Head className="first">
+                    <span>
+                      Schedules <i>{preparing?.length} Items</i>
+                    </span>
+                    <GetIcon icon={"preparation"} />
+                  </Head>
+                  <DataBox>
+                    {preparing?.map((recipeItem, recipeIndex) => {
+                      const count = recipeItem.schedules.filter((item) => item.status === "Scheduled").length;
 
-                <Items>
-                  {prepared?.map((recipeItem, recepeIndex) => (
-                    <Recepe className={"recipe order"} key={`recipe-${recepeIndex}`}>
-                      <RecepeContent className="recipe">
-                        <RecepeImage src={recipeItem.recipe.photo ? process.env.REACT_APP_CDN + recipeItem.recipe.photo : food}></RecepeImage>
-                        <RecepeData>
-                          <span className="title">{recipeItem.recipe.title}</span>
-                          <span className="light">
-                            <span>{recipeItem.recipe.gram?.toFixed(2)} gram</span>
-                            <span>{recipeItem.recipe.quantiy?.toFixed(2)} nos</span>
-                          </span>
-                        </RecepeData>
-                      </RecepeContent>
-                    </Recepe>
-                  ))}
+                      return (
+                        <div className={selectedIndex===recipeIndex?'selected':''} key={`recipe-group-${recipeIndex}`}>
+                          {recipeItem.recipe && (
+                            <Recepe
+                              onClick={() => {
+                                setPrepared(recipeItem);
+                                setSelectedIndex(recipeIndex);
+                              }}
+                              className="recipe order"
+                              key={`recipe-${recipeIndex}`}
+                            >
+                              <RecepeContent className="recipe1">
+                                <RecepeImage src={recipeItem.recipe.photo ? `${process.env.REACT_APP_CDN}${recipeItem.recipe.photo}` : food}></RecepeImage>
+                                <RecepeData className="recipe">
+                                  <span className="title">{recipeItem.recipe.title}</span>
+                                  <span className="light">
+                                    <span>{recipeItem.gram?.toFixed(2)} gram</span>
+                                    <span>{recipeItem.count?.toFixed(0)} nos</span>
+                                    {count > 0 && <span className={"red"}>Pending: {count ?? 0}</span>}
+                                  </span>
+                                </RecepeData>
+                              </RecepeContent>
+                            </Recepe>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </DataBox>
+                  {preparing?.length === 0 && (
+                    <div key={`recipe-group`}>
+                      <Recepe className="recipe order" key={`recipe`}>
+                        No Schedule Found!
+                      </Recepe>
+                    </div>
+                  )}
                 </Items>
+                {prepared && (
+                  <Items className="sticky">
+                    <Head className="last">
+                      <span>
+                        {prepared.recipe.title} <i>{prepared?.count} Items</i>
+                      </span>
+                      <GetIcon icon={"recipe"} />
+                    </Head>
+                    <DataBox aBox key={`recipe-group`}>
+                      <Recepe className="recipe order" key={`recipe`}>
+                        <RecepeContent className="recipe1">
+                          <RecepeImage src={prepared.recipe.photo ? `${process.env.REACT_APP_CDN}${prepared.recipe.photo}` : food}></RecepeImage>
+                          <RecepeData className="recipe">
+                            <span className="title">{prepared.recipe.title}</span>
+                            <span className="light">
+                              <span>{prepared.gram?.toFixed(2)} gram</span>
+                              <span>{prepared.count?.toFixed(0)} nos</span>
+                            </span>
+                            <Patients>
+                              {prepared.schedules?.map((schedule, userIndex) => (
+                                <Patient key={`patient-${schedule.user.userId}-${userIndex}`}>
+                                  <Checkbox
+                                    onChange={() => {
+                                      statusChange(schedule._id, "Packaging", userIndex);
+                                    }}
+                                    checked={schedule.status === "Scheduled" ? false : true}
+                                    theme={themeColors}
+                                  ></Checkbox>
+                                  <div className="light">
+                                    <div className="bold">{schedule.user.username}</div>
+                                    <div className="bold">{schedule.nutritionInfo.gram?.toFixed(2)} g</div>
+                                    {schedule.recipeNote.length > 0 ? <div>{"Note: " + schedule.recipeNote}</div> : ""}
+                                    <div className="small">Ref No: {schedule.user.cprNumber}</div>
+                                  </div>
+                                </Patient>
+                              ))}
+                            </Patients>
+                          </RecepeData>
+                        </RecepeContent>
+                      </Recepe>
+                    </DataBox>
+                    {prepared?.length === 0 && (
+                      <div key={`recipe-group`}>
+                        <Recepe className="recipe order" key={`recipe`}>
+                          No Item in Packaging!
+                        </Recepe>
+                      </div>
+                    )}
+                  </Items>
+                )}
               </ColumnContainer>
             </RowContainer>
           </RowContainer>
