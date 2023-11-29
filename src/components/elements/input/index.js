@@ -91,7 +91,6 @@ function FormInput(props) {
         );
       // Render a date input with date picker
       case "date":
-        console.log("all data", props);
         let userFriendlyDate = typeof props.value === "undefined" || props.value === null ? null : props.value.length > 0 ? new Date(props.value) : null;
         return (
           <InputContainer className={`${props.dynamicClass ?? ""} ${props.customClass ?? ""}`}>
