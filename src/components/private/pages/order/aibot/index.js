@@ -4,11 +4,11 @@ import styled, { keyframes } from "styled-components";
 import { marked } from "marked";
 
 // Keyframes for the blinking animation
-const blink = keyframes`
-  0% { opacity: 0.2; }
-  20% { opacity: 1; }
-  100% { opacity: 0.2; }
-`;
+  const blink = keyframes`
+    0% { opacity: 0.2; }
+    20% { opacity: 1; }
+    100% { opacity: 0.2; }
+  `;
 
 // Styled component for the spinner container
 const SpinnerContainer = styled.div`
