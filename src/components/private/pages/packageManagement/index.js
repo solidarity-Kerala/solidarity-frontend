@@ -49,7 +49,7 @@ const PackageManagement = (props) => {
       name: "calories",
       validation: "",
       default: [
-        900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000,
+        800,900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200,
       ],
       label: "Calories",
       required: true,
@@ -60,6 +60,7 @@ const PackageManagement = (props) => {
       apiType: "JSON",
       search: false,
       selectApi: [
+        { value: "800", id: 800 },
         { value: "900", id: 900 },
         { value: "1000", id: 1000 },
         { value: "1100", id: 1100 },
@@ -74,14 +75,7 @@ const PackageManagement = (props) => {
         { value: "2000", id: 2000 },
         { value: "2100", id: 2100 },
         { value: "2200", id: 2200 },
-        { value: "2300", id: 2300 },
-        { value: "2400", id: 2400 },
-        { value: "2500", id: 2500 },
-        { value: "2600", id: 2600 },
-        { value: "2700", id: 2700 },
-        { value: "2800", id: 2800 },
-        { value: "2900", id: 2900 },
-        { value: "3000", id: 3000 },
+        
       ],
     },
     {
