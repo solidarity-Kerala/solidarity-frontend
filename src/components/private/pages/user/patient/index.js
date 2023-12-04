@@ -207,195 +207,6 @@ const Patient = (props) => {
     },
   ]);
 
-  // const [details] = useState([
-  //   // {
-  //   //   type: "text",
-  //   //   placeholder: "Father Name",
-  //   //   name: "fathername",
-  //   //   validation: "",
-  //   //   default: "",
-  //   //   tag: true,
-  //   //   label: "Father Name",
-  //   //   required: true,
-  //   //   view: true,
-  //   //   add: true,
-  //   //   update: true,
-  //   // },
-  //   // {
-  //   //   type: "text",
-  //   //   placeholder: "Mother Name",
-  //   //   name: "mothername",
-  //   //   validation: "",
-  //   //   default: "",
-  //   //   tag: true,
-  //   //   label: "Mother Name",
-  //   //   required: false,
-  //   //   view: true,
-  //   //   add: true,
-  //   //   update: true,
-  //   // },
-  //   // {
-  //   //   type: "select",
-  //   //   apiType: "API",
-  //   //   selectApi: "nationality/select",
-  //   //   placeholder: "Nationality",
-  //   //   name: "nationality",
-  //   //   showItem: "nationality",
-  //   //   validation: "",
-  //   //   default: "",
-  //   //   tag: true,
-  //   //   label: "Nationality",
-  //   //   required: true,
-  //   //   view: true,
-  //   //   add: true,
-  //   //   update: true,
-  //   //   filter: false,
-  //   // },
-  //   // {
-  //   //   type: "text",
-  //   //   placeholder: "Occupation",
-  //   //   name: "occupation",
-  //   //   validation: "",
-  //   //   default: "",
-  //   //   tag: true,
-  //   //   label: "Occupation",
-  //   //   required: false,
-  //   //   view: true,
-  //   //   add: true,
-  //   //   update: true,
-  //   // },
-  //   // {
-  //   //   type: "select",
-  //   //   apiType: "API",
-  //   //   selectApi: "deliveryman-location/select",
-  //   //   placeholder: "Location",
-  //   //   name: "deliveryManLocation",
-  //   //   collection: "",
-  //   //   validation: "",
-  //   //   showItem: "",
-  //   //   default: "",
-  //   //   tag: true,
-  //   //   label: "Location",
-  //   //   required: false,
-  //   //   view: true,
-  //   //   add: true,
-  //   //   update: true,
-  //   // },
-  //   // {
-  //   //   type: "select",
-  //   //   apiType: "API",
-  //   //   selectApi: "user/select",
-  //   //   placeholder: "Delivery Men",
-  //   //   name: "deliveryMen",
-  //   //   showItem: "username",
-  //   //   validation: "",
-  //   //   default: "",
-  //   //   tag: true,
-  //   //   label: "Delivery Men",
-  //   //   required: false,
-  //   //   view: true,
-  //   //   add: true,
-  //   //   update: true,
-  //   //   filter: false,
-  //   // },
-  //   {
-  //     type: "checkbox",
-  //     placeholder: "Marital Status",
-  //     name: "maritalStatus",
-  //     validation: "",
-  //     default: "false",
-  //     tag: true,
-  //     label: "Marital Status",
-  //     required: true,
-  //     view: true,
-  //     add: true,
-  //     update: true,
-  //   },
-  //   {
-  //     type: "number",
-  //     placeholder: "Number of Children",
-  //     name: "numberOfChildren",
-  //     condition: {
-  //       item: "maritalStatus",
-  //       if: true,
-  //       then: "enabled",
-  //       else: "disabled",
-  //     },
-  //     showItem: "",
-  //     validation: "",
-  //     default: "",
-  //     tag: true,
-  //     label: "Number of Children",
-  //     required: false,
-  //     view: true,
-  //     add: true,
-  //     update: true,
-  //   },
-  //   {
-  //     type: "date",
-  //     placeholder: "Wedding Day",
-  //     name: "weddingDay",
-  //     condition: {
-  //       item: "maritalStatus",
-  //       if: true,
-  //       then: "enabled",
-  //       else: "disabled",
-  //     },
-  //     showItem: "",
-  //     validation: "",
-  //     default: "",
-  //     tag: true,
-  //     label: "Wedding Day",
-  //     required: false,
-  //     view: true,
-  //     add: true,
-  //     update: true,
-  //   },
-  //   {
-  //     type: "checkbox",
-  //     placeholder: "Pregnant",
-  //     name: "isPregnant",
-  //     condition: {
-  //       item: "maritalStatus",
-  //       if: true,
-  //       then: "enabled",
-  //       else: "disabled",
-  //     },
-  //     validation: "",
-  //     default: "false",
-  //     tag: true,
-  //     label: "Pregnant",
-  //     required: true,
-  //     view: true,
-  //     add: true,
-  //     update: true,
-  //   },
-  //   {
-  //     type: "select",
-  //     placeholder: "Trimester",
-  //     name: "admissionType",
-  //     condition: {
-  //       item: "isPregnant",
-  //       if: true,
-  //       then: "enabled",
-  //       else: "disabled",
-  //     },
-  //     validation: "",
-  //     default: "IN",
-  //     tag: true,
-  //     editable: true,
-  //     label: "Trimester",
-  //     showItem: "",
-  //     required: false,
-  //     view: true,
-  //     filter: false,
-  //     add: true,
-  //     update: true,
-  //     apiType: "CSV",
-  //     selectApi: "1st Trimester, 2nd Trimester, 3rd Trimester",
-  //   },
-  // ]);
-
   const [medicalRecord] = useState([
     {
       type: "date",
@@ -1018,31 +829,7 @@ const Patient = (props) => {
       add: true,
       update: true,
     },
-    {
-      type: "multiSelect",
-      placeholder: "Select Days of Week",
-      listView: true,
-      name: "days",
-      validation: "",
-      default: [0, 1, 2, 3, 4, 5, 6],
-      label: "Select Days of Week",
-      required: true,
-      view: true,
-      customClass: "list",
-      add: true,
-      update: true,
-      apiType: "JSON",
-      search: false,
-      selectApi: [
-        { value: "Sunday", id: 0 },
-        { value: "Monday", id: 1 },
-        { value: "Tuesday", id: 2 },
-        { value: "Wednesday", id: 3 },
-        { value: "Thursday", id: 4 },
-        { value: "Friday", id: 5 },
-        { value: "Saturday", id: 6 },
-      ],
-    },
+
     {
       type: "select",
       apiType: "API",
@@ -1055,7 +842,7 @@ const Patient = (props) => {
       default: "",
       tag: true,
       label: "Delivery Slot",
-      required: false,
+      required: true,
       view: true,
       add: true,
       update: true,
@@ -1066,34 +853,17 @@ const Patient = (props) => {
       apiType: "API",
       selectApi: "deliveryman-location/select",
       placeholder: "Location",
-      name: "deliveryManLocation",
-      collection: "deliveryManLocation",
+      name: "deliveryLocation",
+      collection: "deliveryLocation",
       validation: "",
       showItem: "deliveryLocation",
       default: "",
       tag: true,
       label: "Location",
-      required: false,
-      view: true,
-      add: true,
-      update: true,
-    },
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "user/select?userType=64815bde89e0a44fc31c53b0",
-      placeholder: "Delivery Men",
-      name: "deliveryMan",
-      validation: "",
-      showItem: "username",
-      default: "",
-      tag: true,
-      label: "Delivery Men",
       required: true,
       view: true,
       add: true,
       update: true,
-      filter: false,
     },
   ]);
 
@@ -1467,12 +1237,7 @@ const Patient = (props) => {
       updateOn: ["bookingDate", "dietician", "physical"],
       selectApi: "day-slot/avail-slot",
       placeholder: "Time Slot",
-      params: [
-        { name: "center" },
-        { name: "bookingDate" },
-        { name: "dietician" },
-        { name: "physical" },
-      ],
+      params: [{ name: "center" }, { name: "bookingDate" }, { name: "dietician" }, { name: "physical" }],
       name: "bookingSlot",
       showItem: "availableSlots",
       validation: "",
@@ -1504,31 +1269,44 @@ const Patient = (props) => {
       filter: false,
     },
   ]);
-
+  const [deliveryAddressActions] = useState([
+    {
+      element: "button",
+      type: "callback",
+      callback: (item, data) => {
+        // Write code to set default..
+      },
+      itemTitle: {
+        name: "mealName",
+        type: "text",
+        collection: "meal",
+      },
+      icon: "default",
+      title: "Set Default",
+      condition: {
+        item: "isDefault",
+        if: "true",
+        then: true,
+        else: false,
+      },
+      params: {
+        api: `food-group-item`,
+        parentReference: "",
+        // itemTitle: "username",
+        itemTitle: {
+          name: "mealName",
+          type: "text",
+          collection: "meal",
+        },
+        shortName: "Recipe Items",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+      },
+    },
+  ]);
   const [actions] = useState([
-    // {
-    //   element: "button",
-    //   type: "subItem",
-    //   id: "patient-details",
-    //   itemTitle: "username",
-    //   title: "Details",
-    //   attributes: details,
-    //   params: {
-    //     api: `user/subscriber`,
-    //     parentReference: "user",
-    //     itemTitle: {
-    //       name: "mobileNumber",
-    //       type: "text",
-    //       collection: "",
-    //     },
-    //     shortName: "Patient Details",
-    //     addPrivilege: true,
-    //     delPrivilege: true,
-    //     updatePrivilege: true,
-    //     customClass: "medium",
-    //     formMode: `double`,
-    //   },
-    // },
     {
       element: "button",
       type: "subItem",
@@ -1576,6 +1354,7 @@ const Patient = (props) => {
           type: "text",
           collection: "user",
         },
+        actions: deliveryAddressActions,
         shortName: "Delivery Address",
         addPrivilege: true,
         delPrivilege: true,
@@ -1693,39 +1472,6 @@ const Patient = (props) => {
         customClass: "medium",
       },
     },
-    // {
-    //   element: "button",
-    //   type: "callback",
-    //   callback: (item, data) => {
-    //     // Set the data for the clicked item and open the SetupMenu popup
-    //     console.log(item, data);
-    //     setOpenItemData({ item, data });
-    //     setOpenMenuSetup(true);
-    //   },
-    //   itemTitle: {
-    //     name: "mealName",
-    //     type: "text",
-    //     collection: "meal",
-    //   },
-    //   icon: "menu",
-    //   title: "Recipe Settings",
-    //   params: {
-    //     api: `food-group-item`,
-    //     parentReference: "",
-    //     // itemTitle: "username",
-    //     itemTitle: {
-    //       name: "mealName",
-    //       type: "text",
-    //       collection: "meal",
-    //     },
-    //     shortName: "Recipe Items",
-    //     addPrivilege: true,
-    //     delPrivilege: true,
-    //     updatePrivilege: true,
-    //     customClass: "medium",
-    //     // formMode: "double",
-    //   },
-    // },
     {
       element: "button",
       type: "callback",
@@ -1764,22 +1510,9 @@ const Patient = (props) => {
       },
     },
   ]);
-
-  // console.log({ openSelftOrderSetup }, { openSelfItemData }, { openedMenu });
-
   return (
     <Container className="noshadow">
-      <ListTable
-        actions={actions}
-        api={`user`}
-        itemTitle={{ name: "fullName", type: "text", collection: "" }}
-        shortName={`Patient`}
-        parentReference={"userType"}
-        referenceId={"6471b3849fb2b29fe045887b"}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
+      <ListTable actions={actions} api={`user`} itemTitle={{ name: "fullName", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
@@ -1801,15 +1534,7 @@ const Patient = (props) => {
       {openedMenu === "diet" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
-          popupData={
-            <DietMenu
-              openData={openItemData}
-              setMessage={props.setMessage}
-              {...props}
-              themeColors={themeColors}
-              key={"patient-diet"}
-            ></DietMenu>
-          }
+          popupData={<DietMenu openData={openItemData} setMessage={props.setMessage} {...props} themeColors={themeColors} key={"patient-diet"}></DietMenu>}
           themeColors={themeColors}
           closeModal={closeModal}
           itemTitle={{ name: "username", type: "text", collection: "" }}

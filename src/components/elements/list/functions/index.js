@@ -1,3 +1,4 @@
+import { Image } from "@react-pdf/renderer";
 import { GetIcon } from "../../../../icons";
 import { dateFormat, dateTimeFormat } from "../../../functions/date";
 import { IconBox, Img } from "../styles";
@@ -10,14 +11,14 @@ export function convertMinutesToHHMM(minutes) {
 
   return `${hoursStr}:${minsStr}`;
 }
-export const getValue = (attribute, itemValue, display = false) => {
+export const getValue = (attribute, itemValue, display = false, isPrint = false) => {
   let response = "";
   switch (attribute.type) {
     case "minute":
       response = convertMinutesToHHMM(parseFloat(itemValue ?? 0));
       break;
     case "image":
-      response = <Img src={process.env.REACT_APP_CDN + itemValue} />;
+      response = isPrint ? <Image style={{ width: 50, height: 50 }} source={process.env.REACT_APP_CDN + itemValue} /> : <Img src={process.env.REACT_APP_CDN + itemValue} />;
       break;
     case "datetime":
       response = dateTimeFormat(itemValue);
@@ -48,7 +49,7 @@ export const getValue = (attribute, itemValue, display = false) => {
       break;
     case "textarea":
     case "htmleditor":
-      response = <span dangerouslySetInnerHTML={{ __html: itemValue?.toString()?.substring(0, 200) }}></span>;
+      response = isPrint ? itemValue : <span dangerouslySetInnerHTML={{ __html: itemValue?.toString()?.substring(0, 200) }}></span>;
       break;
     case "checkbox":
       response = <IconBox className={display && "display"}>{itemValue ? <GetIcon icon={"checked"} /> : <GetIcon icon={"Close"} />}</IconBox>;

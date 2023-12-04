@@ -37,6 +37,14 @@ export const Head = styled.div`
     margin-left: 5px;
     font-size: 12px;
   }
+  span{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    svg{
+      margin-right:10px;
+    }
+  }
 `;
 
 export const Items = styled.div`
@@ -87,4 +95,8 @@ export const DataBox = styled.div`
   .selected > div {
     box-shadow: inset rgb(146 146 146 / 14%) 0px 1px 15px 5px;
   }
+`;
+export const SubHead = styled.div`
+  font-weight: 600;
+  font-size: 13px;
 `;

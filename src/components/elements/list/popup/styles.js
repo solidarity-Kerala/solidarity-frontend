@@ -23,7 +23,7 @@ export const CloseButton = styled.button`
 `;
 export const Td = styled.div`
   text-align: left;
-  padding: 10px 30px;
+     padding: 5px 20px;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -113,7 +113,7 @@ export const Head = styled.span`
   width: "100%";
   display: flex;
   align-items: "center";
-  padding: 15px 17px 15px 26px;
+      padding: 5px 15px 5px 15px;
   svg {
     margin-right: 10px;
   }

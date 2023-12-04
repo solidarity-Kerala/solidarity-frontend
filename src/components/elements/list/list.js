@@ -38,7 +38,7 @@ const SetTr = (props) => {
     return <Tr {...props}></Tr>;
   }
 };
-const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, clonePrivilege = true, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list" }) => {
+const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, clonePrivilege = false, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list" }) => {
   const userData = useSelector((state) => state.pages);
   const [users, setUsers] = useState({
     data: null,
@@ -251,23 +251,47 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     await deleteData({ id }, currentApi)
       .then((response) => {
         if (response.status === 200) {
-          setMessage({
-            type: 1,
-            content: `The '${item.title ? item.title : shortName}' deleted successfully!`,
-            proceed: "Okay",
-          });
+          if (response.customMessage?.length > 0) {
+            setMessage({
+              type: 1,
+              content: response.customMessage,
+              proceed: "Okay",
+            });
+          } else {
+            setMessage({
+              type: 1,
+              content: `The '${item.title ? item.title : shortName}' deleted successfully!`,
+              proceed: "Okay",
+            });
+          }
           setCount((count) => count - 1);
           setIsCreating(false);
           refreshView(currentIndex);
           // udpateView(0);
         } else if (response.status === 404) {
-          setMessage({ type: 1, content: "User not found!", proceed: "Okay" });
+          if (response.customMessage?.length > 0) {
+            setMessage({
+              type: 1,
+              content: response.customMessage,
+              proceed: "Okay",
+            });
+          } else {
+            setMessage({ type: 1, content: "User not found!", proceed: "Okay" });
+          }
         } else {
-          setMessage({
-            type: 1,
-            content: "Something went wrong!",
-            proceed: "Okay",
-          });
+          if (response.customMessage?.length > 0) {
+            setMessage({
+              type: 1,
+              content: response.customMessage,
+              proceed: "Okay",
+            });
+          } else {
+            setMessage({
+              type: 1,
+              content: "Something went wrong!",
+              proceed: "Okay",
+            });
+          }
         }
         setLoaderBox(false);
       })
@@ -288,31 +312,58 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
   };
   const submitHandler = async (data) => {
     setLoaderBox(true);
+
     const saveData = referenceId === 0 ? { ...data } : { ...data, [parentReference]: referenceId };
     await postData(saveData, currentApi)
       .then((response) => {
         if (response.status === 200) {
-          setMessage({
-            type: 1,
-            content: `The '${shortName}' saved successfully!`,
-            proceed: "Okay",
-          });
+          if (response.data.customMessage?.length > 0) {
+            setMessage({
+              type: 1,
+              content: response.customMessage,
+              proceed: "Okay",
+            });
+          } else {
+            setMessage({
+              type: 1,
+              content: `The '${shortName}' saved successfully!`,
+              proceed: "Okay",
+            });
+          }
           setIsCreating(false);
           setCurrentIndex(0);
           refreshView(0);
           // udpateView(0);
         } else if (response.status === 404) {
-          setMessage({ type: 1, content: "User not found!", proceed: "Okay" });
+          if (response.customMessage?.length > 0) {
+            setMessage({
+              type: 1,
+              content: response.customMessage,
+              proceed: "Okay",
+            });
+          } else {
+            setMessage({ type: 1, content: "User not found!", proceed: "Okay" });
+          }
         } else {
-          setMessage({
-            type: 1,
-            content: "Something went wrong!",
-            proceed: "Okay",
-          });
+          console.log(response);
+          if (response.customMessage?.length > 0) {
+            setMessage({
+              type: 1,
+              content: response.customMessage,
+              proceed: "Okay",
+            });
+          } else {
+            setMessage({
+              type: 1,
+              content: "Something went wrong!",
+              proceed: "Okay",
+            });
+          }
         }
         setLoaderBox(false);
       })
       .catch((error) => {
+        console.log(error);
         setMessage({
           type: 1,
           content: error.message + "Something went wrong!",
@@ -328,21 +379,46 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
     await putData(data, `${currentApi}`)
       .then((response) => {
         if (response.status === 200) {
-          setMessage({
-            type: 1,
-            content: `The '${data._title ?? shortName}' ${data.clone ? "cloned" : "updated"} successfully!`,
-            proceed: "Okay",
-          });
+          if (response.customMessage?.length > 0) {
+            setMessage({
+              type: 1,
+              content: response.customMessage,
+              proceed: "Okay",
+            });
+          } else {
+            setMessage({
+              type: 1,
+              content: `The '${data._title ?? shortName}' ${data.clone ? "cloned" : "updated"} successfully!`,
+              proceed: "Okay",
+            });
+          }
           refreshView(currentIndex);
           setIsEditing(false);
         } else if (response.status === 404) {
-          setMessage({ type: 1, content: "User not found!", proceed: "Okay" });
+          if (response.customMessage?.length > 0) {
+            setMessage({
+              type: 1,
+              content: response.customMessage,
+              proceed: "Okay",
+            });
+          } else {
+            setMessage({ type: 1, content: "User not found!", proceed: "Okay" });
+          }
         } else {
-          setMessage({
-            type: 1,
-            content: "Something went wrong!",
-            proceed: "Okay",
-          });
+          console.log("Error", response);
+          if (response.customMessage?.length > 0) {
+            setMessage({
+              type: 1,
+              content: response.customMessage,
+              proceed: "Okay",
+            });
+          } else {
+            setMessage({
+              type: 1,
+              content: "Something went wrong!",
+              proceed: "Okay",
+            });
+          }
         }
         setLoaderBox(false);
       })
@@ -461,6 +537,15 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
             </More> */}
           </>
         )}
+        {updatePrivilege && (
+          <More
+            onClick={() => {
+              isEditingHandler(data, udpateView, titleValue);
+            }}
+          >
+            <GetIcon icon={"edit"} />
+          </More>
+        )}
         {signleRecord && (
           <More
             onClick={() => {
@@ -481,20 +566,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           </More>
           <ToolTip className={currentAction === data._id ? `actions` : `actions hide`}>
             <Actions>
-              {updatePrivilege && (
-                <Button
-                  theme={themeColors}
-                  key={`edit-${data._id}`}
-                  onClick={() => {
-                    isEditingHandler(data, udpateView, titleValue);
-                  }}
-                  className="edit menu"
-                >
-                  <GetIcon icon={"edit"} />
-                  <span>Edit</span>
-                </Button>
-              )}
-              {updatePrivilege && (
+              {clonePrivilege && (
                 <Button
                   theme={themeColors}
                   key={`clone-${data._id}`}
@@ -707,7 +779,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
             {actions.map((item, index) => {
               let status = true;
               if (item.condition) {
-                if (data[item.condition.item] === item.condition.if) {
+                if (data[item.condition.item].toString() === item.condition.if.toString()) {
                   status = item.condition.then;
                 } else {
                   status = item.condition.else;
@@ -804,7 +876,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
           jsonData.forEach((data) => {
             const excelRow = {};
             attributes.forEach((attribute) => {
-              if (attribute.view) {
+              if (attribute.export ?? true) {
                 const name = attribute.label;
                 switch (attribute.type) {
                   case "minute":
@@ -1044,7 +1116,7 @@ const ListTable = ({ profileImage, displayColumn = "single", printPrivilege = tr
       {isOpen && <Popup formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Popup>}
       {detailView && <Details formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Details>}
       {showSublist && subAttributes?.item?.attributes?.length > 0 && <SubPage themeColors={themeColors} formMode={formMode} closeModal={closeModal} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} subAttributes={subAttributes}></SubPage>}
-      {isPrint && <Print key={shortName} data={printData} themeColors={themeColors} formMode={formMode} closeModal={closeModal} setMessage={setMessage} setLoaderBox={setLoaderBox} shortName={shortName} attributes={attributes}></Print>}
+      {isPrint && <PopupView customClass={"print"} popupData={<Print orientation={orientation} key={shortName} data={printData} themeColors={themeColors} formMode={formMode} closeModal={() => setIsPrint(false)} setMessage={setMessage} setLoaderBox={setLoaderBox} shortName={shortName} attributes={attributes}></Print>} themeColors={themeColors} closeModal={() => setIsPrint(false)} itemTitle={{ name: "title", type: "text", collection: "" }} openData={{ data: { key: "print_preparation", title: "Print " + shortName } }}></PopupView>}
       {showPageCount && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC

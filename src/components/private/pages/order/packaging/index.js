@@ -3,14 +3,17 @@ import Layout from "../../../common/layout";
 import { Container } from "../../../common/layout/styels";
 import { ColumnContainer, RowContainer } from "../../../../styles/containers/styles";
 import FormInput from "../../../../elements/input";
-import { FilterBox } from "../../../../elements/list/styles";
-import { DataBox, Head, Items, Patient } from "../styels";
+import { Filter, FilterBox } from "../../../../elements/list/styles";
+import { DataBox, Head, Items, Patient, SubHead } from "../styels";
 import { GetIcon } from "../../../../../icons";
 import { Patients, Recepe, RecepeContent, RecepeData, RecepeImage } from "../../user/patient/dietMenu/styles";
 import { food } from "../../../../../images";
 import { getData, postData } from "../../../../../backend/api";
 import Checkbox from "../../../../elements/checkbox";
 import { useSelector } from "react-redux";
+import PopupView from "../../../../elements/popupview";
+import Print from "./print";
+import LabelPrint from "./labelPrint";
 
 const Preparation = (props) => {
   useEffect(() => {
@@ -18,6 +21,8 @@ const Preparation = (props) => {
   }, []);
   const { setLoaderBox } = props;
   const themeColors = useSelector((state) => state.themeColors);
+  const [openPrint, setOpenPrint] = useState(false);
+  const [openPrintType, setOpenPrintType] = useState(null);
   const [filterView, setFilterView] = useState({
     scheduleDate: new Date().toISOString(),
     mealTimeCategory: "",
@@ -142,6 +147,15 @@ const Preparation = (props) => {
           <RowContainer className="order-page">
             <FilterBox className="gap">
               <FormInput value={filterView[date.name]} key={`input` + 0} id={date.name} onChange={filterChange} {...date} required={false} />
+              <Filter
+                theme={themeColors}
+                onClick={() => {
+                  setOpenPrintType(1);
+                  setOpenPrint(true);
+                }}
+              >
+                <GetIcon icon={"print"} />
+              </Filter>
             </FilterBox>
             <FilterBox className="gap">
               <FormInput value={filterView[mealtimeCategories.name]} key={`input` + 1} id={mealtimeCategories.name} onChange={filterChange} {...mealtimeCategories} required={false} />
@@ -156,40 +170,70 @@ const Preparation = (props) => {
                 <Items>
                   <Head className="first">
                     <span>
-                      Lsit to Package <i>{preparing?.length} Items</i>
+                      <GetIcon icon={"preparation"} />
+                      List to Package <i>{preparing?.length} Items</i>
                     </span>
-                    <GetIcon icon={"preparation"} />
+                    <Filter
+                      className="single"
+                      theme={themeColors}
+                      onClick={() => {
+                        setOpenPrintType(2);
+                        setOpenPrint(true);
+                      }}
+                    >
+                      <GetIcon icon={"print"} />
+                    </Filter>
                   </Head>
                   <DataBox>
-                    {preparing?.map((recipeItem, recipeIndex) =>{ 
-                       const count = recipeItem.schedules.filter((item) => item.status === "Packaging").length;
-                      return(
-                      <div className={selectedIndex===recipeIndex?'selected':''} key={`recipe-group-${recipeIndex}`}>
-                        {recipeItem.user && (
-                          <Recepe
-                            onClick={() => {
-                              setPrepared(recipeItem);
-                              setSelectedIndex(recipeIndex);
-                            }}
-                            className="recipe order"
-                            key={`recipe-${recipeIndex}`}
-                          >
-                            <RecepeContent className="recipe1">
-                              {/* <RecepeImage src={recipeItem.recipe.photo ? `${process.env.REACT_APP_CDN}${recipeItem.recipe.photo}` : food}></RecepeImage> */}
-                              <RecepeData className="recipe">
-                                <span className="title">{recipeItem.user.username}</span>
-                                <span className="light">
-                                  <span>{recipeItem.gram?.toFixed(2)} gram</span>
-                                  <span>{recipeItem.count?.toFixed(0)} nos</span>
-                                </span>
-                                <div className="small">Ref No: {recipeItem.user.cprNumber}</div>
-                                {count > 0 && <span className={"small red"}>Pending: {count ?? 0}</span>}
-                              </RecepeData>
-                            </RecepeContent>
-                          </Recepe>
-                        )}
-                      </div>
-                    )})}
+                    {preparing?.map((recipeItem, recipeIndex) => {
+                      const count = recipeItem.schedules.filter((item) => item.status === "Packaging").length;
+                      return (
+                        <div className={selectedIndex === recipeIndex ? "selected" : ""} key={`recipe-group-${recipeIndex}`}>
+                          {recipeItem.user && (
+                            <Recepe
+                              onClick={() => {
+                                setPrepared(recipeItem);
+                                setSelectedIndex(recipeIndex);
+                              }}
+                              className="recipe order"
+                              key={`recipe-${recipeIndex}`}
+                            >
+                              <RecepeContent className="recipe1">
+                                {/* <RecepeImage src={recipeItem.recipe.photo ? `${process.env.REACT_APP_CDN}${recipeItem.recipe.photo}` : food}></RecepeImage> */}
+                                <RecepeData className="recipe">
+                                  <span className="user">
+                                    {recipeItem.user.fullName}
+                                    <span className="light">
+                                      <span>{recipeItem.gram?.toFixed(2)} gram</span>
+                                      <span>{recipeItem.count?.toFixed(0)} nos</span>
+                                    </span>
+                                  </span>
+                                  {recipeItem.userData.foodDisLikeList.length > 0 && (
+                                    <div className="conditions small">
+                                      <span>Food DisLike List:</span> {recipeItem.userData.foodDisLikeList.map((dislike) => dislike.proteinCategoriesName).join(", ")}
+                                    </div>
+                                  )}
+                                  {recipeItem.userData.allergyList.length > 0 && (
+                                    <div className="conditions small">
+                                      <span>Allergy List:</span> {recipeItem.userData.allergyList.map((allergy) => allergy.title).join(", ")}
+                                    </div>
+                                  )}
+                                  {recipeItem.userData.medicalCondition && (
+                                    <div className="conditions small">
+                                      <span>Medical Condition:</span> {recipeItem.userData.medicalCondition.map((allergy) => allergy.medicalConditionsName).join(", ")}
+                                    </div>
+                                  )}
+                                  <div className="conditions small">
+                                    <span>Ref No: {recipeItem.user.cprNumber}</span>
+                                  </div>
+                                  {count > 0 && <span className={"conditions small red"}>Ready for Package: {count ?? 0}</span>}
+                                </RecepeData>
+                              </RecepeContent>
+                            </Recepe>
+                          )}
+                        </div>
+                      );
+                    })}
                   </DataBox>
                   {preparing?.length === 0 && (
                     <div key={`recipe-group`}>
@@ -203,37 +247,63 @@ const Preparation = (props) => {
                   <Items className="sticky">
                     <Head className="last">
                       <span>
-                        {prepared.user.username} <i>{prepared?.schedules.length} Items</i>
+                        <GetIcon icon={"recipe"} />
+                        {prepared.user.fullName} <i>{prepared?.schedules.length} Items</i>
                       </span>
-                      <GetIcon icon={"recipe"} />
+
+                      <Filter
+                        className="single"
+                        theme={themeColors}
+                        onClick={() => {
+                          setOpenPrintType(3);
+                          setOpenPrint(true);
+                        }}
+                      >
+                        <GetIcon icon={"print"} />
+                      </Filter>
                     </Head>
                     <DataBox aBox key={`recipe-group`}>
                       <Recepe className="recipe order" key={`recipe`}>
                         <RecepeContent className="recipe1">
                           <RecepeData className="recipe">
                             <Patients>
-                              {prepared.schedules?.map((item, recipeIndex) => (
-                                <Patient>
-                                  <RecepeContent className="recipe1">
-                                    <RecepeImage src={item.recipe.photo ? process.env.REACT_APP_CDN + item.recipe.photo : food}></RecepeImage>
-                                    <Checkbox
-                                      onChange={() => {
-                                        statusChange(item._id, "Out for Delivery", recipeIndex);
-                                      }}
-                                      checked={item.status === "Packaging" ? false : true}
-                                      theme={themeColors}
-                                    ></Checkbox>
-                                    <RecepeData className="recipe">
-                                      <span className="title">{item.recipe.title}</span>
-                                      <span className="light">
-                                        <div className="bold">{item.nutritionInfo.gram?.toFixed(2)} g</div>
-                                        <span>{item.mealTimeCategoryInfo.mealtimeCategoriesName}</span>
-                                      </span>
-                                     
-                                    </RecepeData>
-                                  </RecepeContent>
-                                </Patient>
-                              ))}
+                              {(() => {
+                                let order = ""; // Ensure 'order' is initialized
+                                // Optional: Add sorting if needed
+                                const sortedSchedules = prepared.schedules.sort((a, b) => a.status.localeCompare(b.status));
+
+                                return sortedSchedules.map((item, recipeIndex) => {
+                                  const recipes = (
+                                    <React.Fragment key={"recipe-item" + recipeIndex}>
+                                      {(order !== item.status || order === "") && <SubHead>{item.status === "Scheduled" ? "Preparing" : item.status}</SubHead>}
+                                      <Patient>
+                                        <RecepeContent className="recipe1">
+                                          <RecepeImage src={item.recipe.photo ? process.env.REACT_APP_CDN + item.recipe.photo : food}></RecepeImage>
+                                          {item.status === "Packaging" && (
+                                            <Checkbox
+                                              onChange={() => {
+                                                statusChange(item._id, "Out for Delivery", recipeIndex);
+                                              }}
+                                              checked={["Out for Delivery"].includes(item.status.toString())}
+                                              theme={themeColors}
+                                            ></Checkbox>
+                                          )}
+                                          <RecepeData className="recipe">
+                                            <span className="title">{item.recipe.title}</span>
+                                            <span className="light">
+                                              <div className="bold">{item.nutritionInfo.gram?.toFixed(2)} g</div>
+                                              <span>{item.mealTimeCategoryInfo.mealtimeCategoriesName}</span>
+                                              <span>{item.status === "Scheduled" ? "Preparing • You can pack this only once prepared" : item.status}</span>
+                                            </span>
+                                          </RecepeData>
+                                        </RecepeContent>
+                                      </Patient>
+                                    </React.Fragment>
+                                  );
+                                  order = item.status;
+                                  return recipes;
+                                });
+                              })()}
                             </Patients>
                           </RecepeData>
                         </RecepeContent>
@@ -253,6 +323,45 @@ const Preparation = (props) => {
           </RowContainer>
         </RowContainer>
       </ColumnContainer>
+      {openPrint && (
+        <PopupView
+          customClass={"print"}
+          popupData={
+            openPrintType === 1 ? (
+              <Print
+                customClass={"print"}
+                openData={preparing}
+                setMessage={props.setMessage}
+                closeModal={() => {
+                  setOpenPrint(false);
+                }}
+              />
+            ) : openPrintType === 2 ? (
+              <LabelPrint
+                customClass={"print"}
+                openData={preparing}
+                setMessage={props.setMessage}
+                closeModal={() => {
+                  setOpenPrint(false);
+                }}
+              />
+            ) : (
+              <LabelPrint
+                customClass={"print"}
+                openData={[prepared]}
+                setMessage={props.setMessage}
+                closeModal={() => {
+                  setOpenPrint(false);
+                }}
+              />
+            )
+          }
+          themeColors={themeColors}
+          closeModal={() => setOpenPrint(false)}
+          itemTitle={{ name: "title", type: "text", collection: "" }}
+          openData={{ data: { key: "print_preparation", title: "Print Packaging" } }}
+        ></PopupView>
+      )}
     </Container>
   );
 };

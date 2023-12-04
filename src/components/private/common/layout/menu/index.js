@@ -25,7 +25,6 @@ const Menu = (props) => {
       const labelMatches = menuItem.label.toLowerCase().includes(search);
       // Filter submenu labels
       const filteredSubmenu = menuItem.submenus.filter((submenuItem) => submenuItem.label.toLowerCase().includes(search));
-      console.log("filteredSubmenu", filteredSubmenu);
       menuItem.submenus = labelMatches ? menuItem.submenus : filteredSubmenu;
 
       return labelMatches || filteredSubmenu.length > 0;
