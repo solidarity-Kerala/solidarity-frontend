@@ -7,7 +7,7 @@ import { Container } from "../../common/layout/styels";
 const Allergy = (props) => {
     //to update the page title
     useEffect(() => {
-        document.title = `Allergy - DataHex Site Builder Portal`;
+        document.title = `Allergy - Diet Food Management Portal`;
     }, []);
 
     const [attributes] = useState([

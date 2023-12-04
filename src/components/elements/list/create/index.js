@@ -6,7 +6,7 @@ import { CloseButton } from "../popup/styles";
 import { GetIcon } from "../../../../icons";
 import { useSelector } from "react-redux";
 import { Header } from "../manage/styles";
-import { updateCaloriDetails, updateHealthDetails } from "../../../functions/health";
+import { updateCaloriDetails, updateDailyCaloric, updateHealthDetails } from "../../../functions/health";
 import { customValidations } from "../../../private/form/validation";
 const CrudForm = (props) => {
   // Use the useTranslation hook from react-i18next to handle translations
@@ -306,6 +306,10 @@ const CrudForm = (props) => {
       }
       if (["calories"].includes(field.name)) {
         updateCaloriDetails(udpateValue);
+      }
+
+      if (["proposedCalorie"].includes(field.name)) {
+        updateDailyCaloric(udpateValue);
       }
       if (type === "select") {
         if (field.updateFields) {
