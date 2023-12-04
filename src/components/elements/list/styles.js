@@ -541,6 +541,11 @@ export const Filter = styled.button`
   border-radius: 12px;
   margin-top: 4px;
   cursor: pointer;
+  &.single{
+    padding: 0 0.5em;
+    margin-top:0;
+    height:auto;
+  }
   &:hover {
     color: ${(props) => props.theme.bgPrimary};
   }

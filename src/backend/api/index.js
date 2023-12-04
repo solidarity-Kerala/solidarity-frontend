@@ -48,7 +48,7 @@ const postData = async (fields, ulr, dispatch, navigate) => {
       // console.log("error", error);
       resolve({
         status: error.response.status,
-        data: error.response?.data?.message,
+        customMessage: error.response?.data?.customMessage ?? "Something went wrong!",
       });
     }
   });
@@ -75,13 +75,13 @@ const putData = async (fields, ulr, dispatch, navigate) => {
           });
         }
       } else {
-          formData.append(key, value);
+        formData.append(key, value);
       }
     });
     for (let [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
-    
+
     const response = await axios.put(`${apiUrl}${ulr}`, formData, {
       headers: {
         "Content-Type": isUplaoding ? "multipart/form-data" : "application/json",
@@ -99,9 +99,10 @@ const putData = async (fields, ulr, dispatch, navigate) => {
     }
     return { status: response.status, data: response.data };
   } catch (error) {
+    console.log(error);
     return {
       status: error.response?.status,
-      data: error.response?.data?.message,
+      customMessage: error.response?.data?.customMessage ?? "Something went wrong!",
     };
   }
 };
@@ -172,7 +173,7 @@ const deleteData = async (fields, ulr, dispatch, navigate) => {
       console.log("API Eror", error.message);
       resolve({
         status: error.response.status,
-        data: error.response?.data?.message,
+        customMessage: error.response?.data?.customMessage ?? "Something went wrong!",
       });
     }
   });

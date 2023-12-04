@@ -9,7 +9,7 @@ import { Container } from "../../../common/layout/styels";
 const DeliveryManLocation = (props) => {
   //to update the page title
   useEffect(() => {
-    document.title = `DeliveryMan Location- Diet Food Management Portal`;
+    document.title = `Delivery Location- Diet Food Management Portal`;
   }, []);
 
   const [attributes] = useState([
@@ -24,6 +24,22 @@ const DeliveryManLocation = (props) => {
       view: true,
       add: true,
       update: true,
+    },{
+      type: "select",
+      apiType: "API",
+      selectApi: "user/select?userType=64815bde89e0a44fc31c53b0",
+      placeholder: "Delivery Men",
+      name: "deliveryMan",
+      validation: "",
+      showItem: "userDisplayName",
+      default: "",
+      tag: true,
+      label: "Delivery Men",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: false,
     },
   ]);
 
@@ -35,7 +51,7 @@ const DeliveryManLocation = (props) => {
         displayColumn="double"
         // itemTitle={`userDisplayName`}
         itemTitle={{ name: "deliveryLocation", type: "text", collection: "" }}
-        shortName={`DeliveryMan Location`}
+        shortName={`Delivery Location`}
         // parentReference={"userType"}
         // referenceId={"64815bde89e0a44fc31c53b0"}
         // formMode={`single`}

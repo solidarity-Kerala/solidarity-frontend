@@ -74,7 +74,6 @@ import DietPrice from "../../private/pages/Calories/dietPrice";
 import Incredientmedicalcondition from "../../private/pages/Calories/Incredientmedicalcondition";
 import DeliveryManLocation from "../../private/pages/dispatch/deliveryManLocation/index.js";
 
-import DeliveryLocation from "../../private/pages/registrationSettings/DeliveryLocation";
 import AddMeal from "../../private/pages/mealSettings/addMeal";
 import Recipes from "../../private/pages/mealSettings/recipes";
 import RecipeReport from "../../private/pages/report/recipeReport";
@@ -144,8 +143,6 @@ const Switch = ({ page, key, user, ...privileges }) => {
       return <UserList key={key} {...privileges} />;
     case "delivery-slot":
       return <DeliverySlot key={key} {...privileges} />;
-    case "delivery-location":
-      return <DeliveryLocation key={key} {...privileges} />;
     case "protein-category":
       return <ProteinCategory key={key} {...privileges} />;
     case "delivery-instruction":
@@ -278,7 +275,7 @@ const Switch = ({ page, key, user, ...privileges }) => {
       return <DietPrice key={key} {...privileges} />;
     case "incredient-medical-connection":
       return <Incredientmedicalcondition key={key} {...privileges} />;
-    case "deliveryman-location":
+    case "delivery-location":
       return <DeliveryManLocation key={key} {...privileges} />;
     case "recipes":
       return <Recipes key={key} {...privileges} />;

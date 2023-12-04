@@ -25,6 +25,8 @@ const Dietitian = (props) => {
       view: true,
       add: false,
       update: false,
+      print:false,
+      export:false
     },
     {
       type: "text",
@@ -238,6 +240,7 @@ const Dietitian = (props) => {
       view: true,
       add: true,
       update: true,
+      print:false
     },
     {
       type: "select",
@@ -404,6 +407,7 @@ const Dietitian = (props) => {
         actions={actions}
         api={`user`}
         displayColumn="single"
+        // orientation={'landscape'}
         profileImage={'userImage'}
         // itemTitle={`userDisplayName`}
         itemTitle={{ name: "userDisplayName", type: "text", collection: "" }}

@@ -469,13 +469,13 @@ export const Patient = styled.div`
   border-radius: 10px;
   font-size: 12px;
   width: 100%;
-  position:relative;
+  position: relative;
   .bold {
     color: black;
   }
   .small {
     color: grey;
-    font-size:12px;
+    font-size: 12px;
   }
 `;
 
@@ -492,6 +492,15 @@ export const RecepeData = styled.div`
       content: " \u2022"; /* Unicode character for round dot */
       margin-right: 3px;
     }
+  }
+  .user {
+    font-weight: bold;
+    font-size: 14px;
+    span {
+      font-size: 12px;
+      margin-left:5px;
+    }
+    margin-bottom:10px;
   }
   .red {
     color: red !important;
@@ -515,11 +524,26 @@ export const RecepeData = styled.div`
   .light span svg {
     margin-right: 5px;
   }
-.small {
+  .small {
     color: grey;
-    font-size:12px;
-    margin-top:5px;
+    font-size: 12px;
+    margin-top: 0px;
   }
+  .conditions {
+    color: red;
+    margin-bottom: 5px;
+    span {
+      font-weight: 600;
+      color: #000;
+    }
+  }
+  .conditions:last-child {
+    margin-bottom: 5px;
+  }
+  .conditions:first-child {
+    margin-top: 5px;
+  }
+
   && {
     .horizontal & {
       .title {

@@ -304,10 +304,8 @@ const AddRecipe = (props) => {
         delPrivilege: true,
         updatePrivilege: true,
         customClass: "medium",
-        // formMode: "double",
       },
     },
-    // More actions...
   ]);
 
   // State to control the display of the SetupMenu popup

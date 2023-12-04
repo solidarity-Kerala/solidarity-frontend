@@ -4,7 +4,7 @@ import { Container } from "../../../common/layout/styels";
 import { ColumnContainer, RowContainer } from "../../../../styles/containers/styles";
 import FormInput from "../../../../elements/input";
 import { FilterBox } from "../../../../elements/list/styles";
-import { DataBox, Head, Items, Patient } from "../styels";
+import { DataBox, Head, Items, Patient, SubHead } from "../styels";
 import { GetIcon } from "../../../../../icons";
 import { Patients, Recepe, RecepeContent, RecepeData, RecepeImage } from "../../user/patient/dietMenu/styles";
 import { food } from "../../../../../images";
@@ -161,35 +161,36 @@ const Delivery = (props) => {
                     <GetIcon icon={"preparation"} />
                   </Head>
                   <DataBox>
-                    {preparing?.map((recipeItem, recipeIndex) =>{ 
-                       const count = recipeItem.schedules.filter((item) => item.status === "Out for Delivery").length;
-                      return(
-                      <div className={selectedIndex===recipeIndex?'selected':''} key={`recipe-group-${recipeIndex}`}>
-                        {recipeItem.user && (
-                          <Recepe
-                            onClick={() => {
-                              setPrepared(recipeItem);
-                              setSelectedIndex(recipeIndex);
-                            }}
-                            className="recipe order"
-                            key={`recipe-${recipeIndex}`}
-                          >
-                            <RecepeContent className="recipe1">
-                              {/* <RecepeImage src={recipeItem.recipe.photo ? `${process.env.REACT_APP_CDN}${recipeItem.recipe.photo}` : food}></RecepeImage> */}
-                              <RecepeData className="recipe">
-                                <span className="title">{recipeItem.user.username}</span>
-                                <span className="light">
-                                  <span>{recipeItem.gram?.toFixed(2)} gram</span>
-                                  <span>{recipeItem.count?.toFixed(0)} nos</span>
-                                </span>
-                                <div className="small">Ref No: {recipeItem.user.cprNumber}</div>
-                                {count > 0 && <span className={"small red"}>Pending: {count ?? 0}</span>}
-                              </RecepeData>
-                            </RecepeContent>
-                          </Recepe>
-                        )}
-                      </div>
-                    )})}
+                    {preparing?.map((recipeItem, recipeIndex) => {
+                      const count = recipeItem.schedules.filter((item) => item.status === "Out for Delivery").length;
+                      return (
+                        <div className={selectedIndex === recipeIndex ? "selected" : ""} key={`recipe-group-${recipeIndex}`}>
+                          {recipeItem.user && (
+                            <Recepe
+                              onClick={() => {
+                                setPrepared(recipeItem);
+                                setSelectedIndex(recipeIndex);
+                              }}
+                              className="recipe order"
+                              key={`recipe-${recipeIndex}`}
+                            >
+                              <RecepeContent className="recipe1">
+                                {/* <RecepeImage src={recipeItem.recipe.photo ? `${process.env.REACT_APP_CDN}${recipeItem.recipe.photo}` : food}></RecepeImage> */}
+                                <RecepeData className="recipe">
+                                  <span className="title">{recipeItem.user.username}</span>
+                                  <span className="light">
+                                    <span>{recipeItem.gram?.toFixed(2)} gram</span>
+                                    <span>{recipeItem.count?.toFixed(0)} nos</span>
+                                  </span>
+                                  <div className="small">Ref No: {recipeItem.user.cprNumber}</div>
+                                  {count > 0 && <span className={"small red"}>Pending: {count ?? 0}</span>}
+                                </RecepeData>
+                              </RecepeContent>
+                            </Recepe>
+                          )}
+                        </div>
+                      );
+                    })}
                   </DataBox>
                   {preparing?.length === 0 && (
                     <div key={`recipe-group`}>
@@ -212,28 +213,35 @@ const Delivery = (props) => {
                         <RecepeContent className="recipe1">
                           <RecepeData className="recipe">
                             <Patients>
-                              {prepared.schedules?.map((item, recipeIndex) => (
-                                <Patient>
-                                  <RecepeContent className="recipe1">
-                                    <RecepeImage src={item.recipe.photo ? process.env.REACT_APP_CDN + item.recipe.photo : food}></RecepeImage>
-                                    <Checkbox
-                                      onChange={() => {
-                                        statusChange(item._id, "Delivered", recipeIndex);
-                                      }}
-                                      checked={item.status === "Out for Delivery" ? false : true}
-                                      theme={themeColors}
-                                    ></Checkbox>
-                                    <RecepeData className="recipe">
-                                      <span className="title">{item.recipe.title}</span>
-                                      <span className="light">
-                                        <div className="bold">{item.nutritionInfo.gram?.toFixed(2)} g</div>
-                                        <span>{item.mealTimeCategoryInfo.mealtimeCategoriesName}</span>
-                                      </span>
-                                     
-                                    </RecepeData>
-                                  </RecepeContent>
-                                </Patient>
-                              ))}
+                              {(() => {
+                                let lastStatus = "";
+                                const sorted = prepared.schedules.sort((a, b) => a.status.localeCompare(b.status));
+
+                                return sorted.map((item, recipeIndex) => {
+                                  const isNewStatus = lastStatus !== item.status;
+                                  lastStatus = item.status;
+
+                                  return (
+                                    <React.Fragment key={"recipe-item" + recipeIndex}>
+                                      {isNewStatus && <SubHead>{item.status === "Scheduled" ? "Preparing" : item.status}</SubHead>}
+                                      <Patient>
+                                        <RecepeContent className="recipe1">
+                                          <RecepeImage src={item.recipe.photo ? process.env.REACT_APP_CDN + item.recipe.photo : food}></RecepeImage>
+                                          <Checkbox onChange={() => statusChange(item._id, "Delivered", recipeIndex)} checked={item.status !== "Out for Delivery"} theme={themeColors} />
+                                          <RecepeData className="recipe">
+                                            <span className="title">{item.recipe.title}</span>
+                                            <span className="light">
+                                              <div className="bold">{item.nutritionInfo.gram?.toFixed(2)} g</div>
+                                              <span>{item.mealTimeCategoryInfo.mealtimeCategoriesName}</span>
+                                              <span>{item.status === "Scheduled" ? "Preparing" : item.status}</span>
+                                            </span>
+                                          </RecepeData>
+                                        </RecepeContent>
+                                      </Patient>
+                                    </React.Fragment>
+                                  );
+                                });
+                              })()}
                             </Patients>
                           </RecepeData>
                         </RecepeContent>
