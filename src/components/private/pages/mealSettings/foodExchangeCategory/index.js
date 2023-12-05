@@ -37,7 +37,19 @@ const FoodExchangeCategory = (props) => {
       add: true,
       update: true,
     },
-    
+    {
+      type: "number",
+      placeholder: "Gram",
+      name: "gram",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Gram",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
     {
       type: "number",
       placeholder: "sequence",
