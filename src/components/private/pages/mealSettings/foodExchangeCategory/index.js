@@ -9,20 +9,36 @@ const FoodExchangeCategory = (props) => {
   useEffect(() => {
     document.title = `Food Exchange Category - Diet Food Management Portal`;
   }, []);
-
   const [attributes] = useState([
     {
-      type: "text",
+      type: "select",
       placeholder: "Food Exchange Category",
       name: "foodExchangeCategoryName",
       validation: "",
       default: "",
-      tag: false,
+      tag: true,
       label: "Food Exchange Category",
       required: true,
+      search: false,
       view: true,
       add: true,
       update: true,
+      filter: true,
+      selectApi: [
+        { id: "Starch", value: "Starch" },
+        { id: "Lean Meat", value: "Lean Meat" },
+        { id: "Skim Milk", value: "Skim Milk" },
+        { id: "Non Starchy Vegetable", value: "Non Starchy Vegetable" },
+        { id: "Fruits", value: "Fruits" },
+        { id: "Fats", value: "Fats" },
+        { id: "Sugar", value: "Sugar" },
+        { id: "Very Lean Meat", value: "Very Lean Meat" },
+        { id: "Medium Fat Meat / egg", value: "Medium Fat Meat / egg" },
+        { id: "Vegetarian Protein", value: "Vegetarian Protein" },
+        { id: "Low fat Milk", value: "Low fat Milk" },
+        { id: "Regular Milk", value: "Regular Milk" },
+      ],
+      apiType: "JSON",
     },
     {
       type: "number",
@@ -63,7 +79,6 @@ const FoodExchangeCategory = (props) => {
       add: true,
       update: true,
     },
-    
   ]);
 
   // Use the useTranslation hook from react-i18next to handle translations
