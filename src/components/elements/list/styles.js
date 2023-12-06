@@ -506,6 +506,7 @@ export const AddButton = styled.button`
 export const FilterBox = styled.div`
   flex-direction: row;
   display: flex;
+  
   &.menu {
     width: 100%;
     margin-bottom: 5px;
@@ -522,6 +523,7 @@ export const FilterBox = styled.div`
   .filter {
     margin-right: 0;
   }
+  
 `;
 export const Filter = styled.button`
   background: transparent;
@@ -541,13 +543,16 @@ export const Filter = styled.button`
   border-radius: 12px;
   margin-top: 4px;
   cursor: pointer;
-  &.single{
+  &.single {
     padding: 0 0.5em;
-    margin-top:0;
-    height:auto;
+    margin-top: 0;
+    height: auto;
   }
   &:hover {
     color: ${(props) => props.theme.bgPrimary};
+  }
+  &.open {
+    color: green;
   }
   && {
     /* .popup-child & {
@@ -822,7 +827,6 @@ export const ThView = styled.th`
   top: 0;
   z-index: 30;
   background: white;
-  white-space: nowrap;
   font-weight: bolder;
   border-radius: 0px;
   color: #626262;

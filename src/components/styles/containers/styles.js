@@ -22,8 +22,19 @@ export const ColumnContainer = styled.div`
   &.header {
     overflow: initial;
   }
-  &.gap{
-    gap:10px;
+  &.gap {
+    gap: 10px;
+  }
+  &.filter {
+    gap: 10px;
+  }
+  &.close {
+    display: none;
+  }
+  &.filter {
+    gap: 0;
+    column-gap: 10px;
+    flex-wrap: wrap;
   }
   && {
     .second & {
@@ -210,7 +221,7 @@ export const RowContainer = styled.div`
     justify-content: space-between;
     margin-right: 10px;
   }
-   &.order-page {
+  &.order-page {
     margin-left: 30px;
     margin-right: 30px;
     flex: 0;
@@ -304,7 +315,7 @@ export const RowContainer = styled.div`
     padding: 0;
   }
   &.data-layout {
-     display: flex;
+    display: flex;
     flex-direction: column;
     max-height: calc(100vh - 80px);
   }
