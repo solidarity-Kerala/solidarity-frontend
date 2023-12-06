@@ -11,6 +11,8 @@ import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
 import AppointmentMenu from "./appointment";
 // import SetupRecipe from "./setupRecipe";
 import SelfOrder from "./selfOrder";
+import { putData } from "../../../../../backend/api";
+import axios from "axios";
 
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
@@ -431,24 +433,24 @@ const Patient = (props) => {
       add: true,
       update: true,
       filter: false,
-  },
-  {
-    type: "number",
-    placeholder: "Daily caloric intake",
-    updateOn: "proposedCalorie",
+    },
+    {
+      type: "number",
+      placeholder: "Daily caloric intake",
+      updateOn: "proposedCalorie",
 
-    name: "dailyCalorie",
-    showItem: "",
-    disabled: true,
-    validation: "",
-    default: "",
-    tag: true,
-    label: "Daily caloric intake",
-    required: false,
-    view: true,
-    add: true,
-    update: true,
-  },
+      name: "dailyCalorie",
+      showItem: "",
+      disabled: true,
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Daily caloric intake",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
     {
       type: "number",
       placeholder: "Carbs",
@@ -925,6 +927,19 @@ const Patient = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "checkbox",
+      placeholder: "Default Address",
+      name: "isDefault",
+      validation: "",
+      default: "false",
+      tag: true,
+      label: "Default Address",
+      required: false,
+      view: true,
+      add: false,
+      update: false,
+    },
   ]);
 
   const [admissionHistory] = useState([
@@ -1297,7 +1312,12 @@ const Patient = (props) => {
       updateOn: ["bookingDate", "dietician", "physical"],
       selectApi: "day-slot/avail-slot",
       placeholder: "Time Slot",
-      params: [{ name: "center" }, { name: "bookingDate" }, { name: "dietician" }, { name: "physical" }],
+      params: [
+        { name: "center" },
+        { name: "bookingDate" },
+        { name: "dietician" },
+        { name: "physical" },
+      ],
       name: "bookingSlot",
       showItem: "availableSlots",
       validation: "",
@@ -1329,11 +1349,13 @@ const Patient = (props) => {
       filter: false,
     },
   ]);
+
   const [deliveryAddressActions] = useState([
     {
       element: "button",
       type: "callback",
       callback: (item, data) => {
+        setDefault(data);
         // Write code to set default..
       },
       itemTitle: {
@@ -1350,13 +1372,13 @@ const Patient = (props) => {
         else: false,
       },
       params: {
-        api: `food-group-item`,
+        api: ``,
         parentReference: "",
         // itemTitle: "username",
         itemTitle: {
           name: "mealName",
           type: "text",
-          collection: "meal",
+          collection: "",
         },
         shortName: "Recipe Items",
         addPrivilege: true,
@@ -1366,6 +1388,27 @@ const Patient = (props) => {
       },
     },
   ]);
+  const setDefault = async (data) => {
+    props.setLoaderBox(true);
+    await axios
+      .put(`${process.env.REACT_APP_API}delivery-address/default`, data)
+      .then((response) => {
+        props.setLoaderBox(false);
+        console.log(response);
+        if (response.data) {
+          props.setMessage({ content: response.data.message });
+          // refreshView();
+        } else {
+          // Handle the case where response.data is undefined
+          console.error("Response data is undefined.");
+        }
+      })
+      .catch((error) => {
+        props.setLoaderBox(false);
+        // Handle any errors that occur during the API request
+        console.error("API request error:", error);
+      });
+  };
   const [actions] = useState([
     {
       element: "button",
@@ -1572,7 +1615,17 @@ const Patient = (props) => {
   ]);
   return (
     <Container className="noshadow">
-      <ListTable actions={actions} api={`user`} itemTitle={{ name: "fullName", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
+      <ListTable
+        actions={actions}
+        api={`user`}
+        itemTitle={{ name: "fullName", type: "text", collection: "" }}
+        shortName={`Patient`}
+        parentReference={"userType"}
+        referenceId={"6471b3849fb2b29fe045887b"}
+        formMode={`double`}
+        {...props}
+        attributes={attributes}
+      ></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
@@ -1594,7 +1647,15 @@ const Patient = (props) => {
       {openedMenu === "diet" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
-          popupData={<DietMenu openData={openItemData} setMessage={props.setMessage} {...props} themeColors={themeColors} key={"patient-diet"}></DietMenu>}
+          popupData={
+            <DietMenu
+              openData={openItemData}
+              setMessage={props.setMessage}
+              {...props}
+              themeColors={themeColors}
+              key={"patient-diet"}
+            ></DietMenu>
+          }
           themeColors={themeColors}
           closeModal={closeModal}
           itemTitle={{ name: "username", type: "text", collection: "" }}
