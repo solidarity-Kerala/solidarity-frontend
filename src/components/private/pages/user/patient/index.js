@@ -11,7 +11,6 @@ import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
 import AppointmentMenu from "./appointment";
 // import SetupRecipe from "./setupRecipe";
 import SelfOrder from "./selfOrder";
-import { putData } from "../../../../../backend/api";
 import axios from "axios";
 
 //src/components/styles/page/index.js
@@ -1358,29 +1357,19 @@ const Patient = (props) => {
         setDefault(data);
         // Write code to set default..
       },
-      itemTitle: {
-        name: "mealName",
-        type: "text",
-        collection: "meal",
-      },
+
       icon: "default",
       title: "Set Default",
       condition: {
         item: "isDefault",
         if: "true",
-        then: true,
+        then: false,
         else: false,
       },
       params: {
         api: ``,
         parentReference: "",
         // itemTitle: "username",
-        itemTitle: {
-          name: "mealName",
-          type: "text",
-          collection: "",
-        },
-        shortName: "Recipe Items",
         addPrivilege: true,
         delPrivilege: true,
         updatePrivilege: true,
