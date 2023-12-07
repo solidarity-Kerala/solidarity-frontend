@@ -115,7 +115,7 @@ const Delivery = (props) => {
     add: true,
     update: true,
     filter: true,
-    selectApi: "Bread,Meat,Fruit,Dessert,Salad,Soup,Mixed",
+    selectApi: "Bread,Meat,Fruit,Dessert,Salad,Fat,Snacking,Soup,Mixed",
     apiType: "CSV",
   });
   const [productionDepartment] = useState({

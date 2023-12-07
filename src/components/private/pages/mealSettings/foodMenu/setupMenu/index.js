@@ -69,7 +69,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       if (numberOfPortion === 0) {
         numberOfPortion = 1;
       }
-      ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Other"].map((typeOfIngredient) => {
+      ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad","Fat","Snacking", "Other"].map((typeOfIngredient) => {
         let info = { typeOfIngredient, ingredients: 0 };
         const typeOfIngredientLower = typeOfIngredient.toLowerCase();
         let count = availableCalorie[typeOfIngredientLower === "meat" ? "meal" : typeOfIngredientLower];
@@ -381,9 +381,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   };
 
   const setCaloriesItems = (mealTimeCategories, single = false, recepeType = "") => {
-    const { bread, meal: meat, fruit, dessert, soup, salad } = mealTimeCategories.availableCalories[coloriePerDay];
+    const { bread, meal: meat, fruit, dessert, soup, salad,fat,snacking } = mealTimeCategories.availableCalories[coloriePerDay];
     if (!single) {
-      return `${meat && meat > 0 ? meat + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}`;
+      return `${meat && meat > 0 ? meat + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${fat > 0 ? fat + "FT" : ""}${snacking > 0 ? snacking + "SN" : ""}${soup > 0 ? soup + "SP" : ""}`;
     } else {
       let count = 0;
       if (recepeType === "Meat") {
@@ -398,6 +398,10 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         count = (dessert || 0) + "D";
       } else if (recepeType === "Salad") {
         count = (salad || 0) + "SD";
+      }else if (recepeType === "Fat") {
+        count = (fat || 0) + "FT";
+      }else if (recepeType === "Snacking") {
+        count = (snacking || 0) + "SN";
       } else if (recepeType === "Mixed") {
         count = meat + "M" + bread + "B";
       } else {
@@ -476,6 +480,8 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         { id: "Dessert", value: "Dessert" },
         { id: "Salad", value: "Salad" },
         { id: "Soup", value: "Soup" },
+        { id: "Fat", value: "Fat" },
+        { id: "Snacking", value: "Snacking" },
         { id: "Mixed", value: "Mixed" },
       ],
       apiType: "JSON",
