@@ -111,8 +111,13 @@ const TypeOfDiet = (props) => {
       view: true,
       add: true,
       update: true,
-      selectApi: "General, FoodExchange,Liquid",
-      apiType: "CSV",
+      selectApi: [
+        { id: "General", value: "General Diet" },
+        { id: "FoodExchange", value: "Food Exchange Diet" },
+        { id: "Liquid", value: "Liquid Diet" },
+        { id: "Keto", value: "Keto Diet" },
+      ],
+      apiType: "JSON",
     },
     {
       type: "number",

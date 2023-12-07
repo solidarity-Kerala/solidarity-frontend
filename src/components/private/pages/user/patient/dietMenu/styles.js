@@ -367,7 +367,13 @@ export const Box = styled.div`
 export const DayData = styled.div`
   padding: 0px;
 `;
+export const MealTimeBox = styled.div`
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  display: flex;
+`;
 export const MealTimeHead = styled.div`
+  width: calc(100% - 70px);
   font-weight: 600;
   padding: 10px;
   border-radius: 10px;
@@ -498,9 +504,9 @@ export const RecepeData = styled.div`
     font-size: 14px;
     span {
       font-size: 12px;
-      margin-left:5px;
+      margin-left: 5px;
     }
-    margin-bottom:10px;
+    margin-bottom: 10px;
   }
   .red {
     color: red !important;
