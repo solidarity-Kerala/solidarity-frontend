@@ -14,7 +14,7 @@ import { Header } from "../../../../../elements/list/manage/styles";
 import { useRef } from "react";
 import FormInput from "../../../../../elements/input";
 import { food } from "../../../../../../images";
-import { MealTimeHead } from "../../../user/patient/dietMenu/styles";
+import { MealTimeBox, MealTimeHead } from "../../../user/patient/dietMenu/styles";
 import PopupView from "../../../../../elements/popupview";
 import { getValue } from "../../../../../elements/list/functions";
 import AutoForm from "../../../../../elements/form";
@@ -54,11 +54,15 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       handleTabClick(selctedRecipeType, event.target.value);
     }, 300);
   };
-  const [coloriePerDay, setColoriePerDay] = useState("900");
+  const [coloriePerDay, setColoriePerDay] = useState(900);
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories, calorieOnly = true) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-      const availableCalorie = availableCalories[coloriePerDay];
+      const availableCalorie = availableCalories?.[coloriePerDay] ?? null;
+      if (!availableCalorie) {
+        console.log("Not Found Available Calori: ", availableCalorie);
+        return 0;
+      }
       let { numberOfPortion, recipeIngredients } = recipe;
       let nutritionInfoDetails = [];
       let nutritionInfo = {};
@@ -405,7 +409,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
 
   useEffect(() => {
     setLoaderBox(true);
-    getData({ menuId: openData.data._id, weekNumber, category: openData.data.subDiet.category??"General" }, "food-menu/get-a-menu")
+    getData({ menuId: openData.data._id, weekNumber, category: openData.data.subDiet.category ?? "General" }, "food-menu/get-a-menu")
       .then((response) => {
         if (response.status === 200) {
           setMenuData(response.data);
@@ -783,11 +787,6 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 onClick={() => {
                   deleteFoodMenu(
                     item.foodMenuItem
-                    // recipeIndex,
-                    // "recipe",
-                    // mealTimeCategory._id,
-                    // dayNumber,
-                    // items.optionNo
                   );
                 }}
               >
@@ -885,19 +884,31 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               {menuData.mealTimeCategories.map((mealTimeCategory) => (
                 <>
                   <TableRow>
-                    <TableCell colSpan={7}>
-                      <MealTimeHead
-                        active={(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] ?? false) || expandAll}
-                        onClick={() =>
-                          setSelectedMealTime((prev) => ({
-                            ...prev,
-                            [`${mealTimeCategory._id}-${weekNumber}`]: !prev[`${mealTimeCategory._id}-${weekNumber}`] ?? true,
-                          }))
-                        }
-                      >
-                        {`${mealTimeCategory.mealtimeCategoriesName} / ${setCaloriesItems(mealTimeCategory)}`}
-                        <GetIcon icon={"down"}></GetIcon>
-                      </MealTimeHead>
+                    <TableCell className="row" colSpan={7}>
+                      <MealTimeBox>
+                        <MealTimeHead
+                          active={(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] ?? false) || expandAll}
+                          onClick={() =>
+                            setSelectedMealTime((prev) => ({
+                              ...prev,
+                              [`${mealTimeCategory._id}-${weekNumber}`]: !prev[`${mealTimeCategory._id}-${weekNumber}`] ?? true,
+                            }))
+                          }
+                        >
+                          {`${mealTimeCategory.mealtimeCategoriesName} / ${setCaloriesItems(mealTimeCategory)}`}
+                          <GetIcon icon={"down"}></GetIcon>
+                        </MealTimeHead>
+                        <WeekSelection>
+                          <button
+                          className="nomargin"
+                            onClick={() => {
+                             
+                            }}
+                          >
+                             <GetIcon icon={"swap"} />
+                          </button>
+                        </WeekSelection>
+                      </MealTimeBox>
                     </TableCell>
                   </TableRow>
                   {(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] === true || expandAll) && (

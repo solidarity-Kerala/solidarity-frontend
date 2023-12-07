@@ -163,6 +163,9 @@ export const TableCell = styled.td`
   &:first-child {
     border: 0;
   }
+  &.row{
+    flex-direction:row;
+  }
   .layer {
     border-radius: 10px;
     background-color: white;
@@ -496,6 +499,9 @@ export const WeekSelection = styled.div`
   > button:hover span {
     display: flex;
     width: auto;
+  }
+  > button.nomargin{
+    margin:0;
   }
   > span {
     font-weight: bold;
