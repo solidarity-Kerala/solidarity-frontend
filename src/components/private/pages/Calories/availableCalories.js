@@ -283,6 +283,7 @@ const AvailableCalories = (props) => {
       selectApi: [
         { id: "General", value: "General Diet" },
         { id: "Keto", value: "Keto Diet" },
+        { id: "FoodExchange", value: "Food Exchange Diet" },
       ],
       apiType: "JSON",
     },
