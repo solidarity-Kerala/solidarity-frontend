@@ -131,7 +131,7 @@ const AddRecipe = (props) => {
       add: true,
       update: true,
       filter: true,
-      selectApi: "Bread,Meat,Fruit,Dessert,Salad,Soup,Mixed",
+      selectApi: "Bread,Meat,Fruit,Dessert,Salad,Soup,Fat,Snacking,Mixed",
       apiType: "CSV",
     },
     {

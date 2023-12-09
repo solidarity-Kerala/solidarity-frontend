@@ -14,7 +14,7 @@ const FixedReplacableRecipe = (props) => {
         {
             type: "select",
             apiType: "CSV",
-            selectApi: "Meat, Bread, Fruit, Dessert, Soup, Salad, Other",
+            selectApi: "Meat, Bread, Fruit, Dessert, Soup, Salad,Fat,Snacking, Other",
             placeholder: "Type Of Recipe",
             name: "typeOfRecipe",
             validation: "",
