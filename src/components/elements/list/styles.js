@@ -506,7 +506,7 @@ export const AddButton = styled.button`
 export const FilterBox = styled.div`
   flex-direction: row;
   display: flex;
-  
+
   &.menu {
     width: 100%;
     margin-bottom: 5px;
@@ -523,7 +523,6 @@ export const FilterBox = styled.div`
   .filter {
     margin-right: 0;
   }
-  
 `;
 export const Filter = styled.button`
   background: transparent;
@@ -547,6 +546,24 @@ export const Filter = styled.button`
     padding: 0 0.5em;
     margin-top: 0;
     height: auto;
+  }
+  &.inner-long {
+    width: auto;
+    text-wrap: nowrap;
+    margin-left: 0;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    gap: 10px;
+    height: auto;
+    margin: 0;
+    width: auto;
+    padding: 7px 15px;
+    font-size: 12px;
+    margin-right: 0;
+    margin-left: auto;
   }
   &:hover {
     color: ${(props) => props.theme.bgPrimary};
