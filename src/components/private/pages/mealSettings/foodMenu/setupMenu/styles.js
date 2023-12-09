@@ -426,7 +426,7 @@ export const Variant = styled.div`
   && {
     .false & {
       &.replace {
-        flex-direction: row;
+        /* flex-direction: row; */
       }
     }
   }
