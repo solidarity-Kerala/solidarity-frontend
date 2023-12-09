@@ -4,7 +4,7 @@ import { deleteData, getData, postData } from "../../../../../../backend/api";
 import { Filter, FilterBox, NoData, ProfileImage } from "../../../../../elements/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import Search from "../../../../../elements/search";
-import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection, ShowCalorie } from "./styles"; // Import styles from styles.js
+import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection, ShowCalorie, CommonReplace } from "./styles"; // Import styles from styles.js
 import DraggableItem from "./dragdrop/drag";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
@@ -14,7 +14,7 @@ import { Header } from "../../../../../elements/list/manage/styles";
 import { useRef } from "react";
 import FormInput from "../../../../../elements/input";
 import { food } from "../../../../../../images";
-import { MealTimeBox, MealTimeHead } from "../../../user/patient/dietMenu/styles";
+import { MealTimeHead } from "../../../user/patient/dietMenu/styles";
 import PopupView from "../../../../../elements/popupview";
 import { getValue } from "../../../../../elements/list/functions";
 import AutoForm from "../../../../../elements/form";
@@ -22,7 +22,6 @@ import { useDispatch } from "react-redux";
 import { addSelectObject } from "../../../../../../store/actions/select";
 
 const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
-  console.log({ openData });
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const [menuId] = useState(openData.data._id);
   const [data] = useState(openData.data);
@@ -35,6 +34,8 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const [calories, setCalories] = useState({});
   const [popupData, setPopupData] = useState(null);
   const [activeTab] = useState("recipes");
+  const [activeCustomReplace, setActiveCustomReplace] = useState(null);
+  const [activeCustomReplaceRecipeType, setActiveCustomReplaceRecipeType] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
   const [selctedRecipeType, setSelctedRecipeType] = useState({
     typeOfRecipe: [],
@@ -108,10 +109,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         }
         const recipeCalories = recipes.reduce((totalCalories, recipe) => {
           const recipeCalories = totalCalories + getCalories(recipe, mealTimeCategory, availableCalories);
-          if (recipe.title === "Fish Sayadeih") {
-            console.log(recipe.title, "Cumulated", recipeCalories);
-          }
-
+          // if (recipe.title === "Fish Sayadeih") {
+          //   console.log(recipe.title, "Cumulated", recipeCalories);
+          // }
           return recipeCalories;
         }, 0);
 
@@ -127,7 +127,6 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     (typeOfRecipeTemp, searchKey = "") => {
       setLoaderBox(true);
       if (typeOfRecipeTemp) {
-        console.log("typeOfRecipeTemp", typeOfRecipeTemp);
         setSelctedRecipeType(typeOfRecipeTemp);
         getData({ searchKey, ...typeOfRecipeTemp }, "recipe/search").then((result) => {
           setRecipes(result.data.response);
@@ -276,13 +275,63 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       data: { id },
     });
   };
+  const deleteCommonReplcableItem = async (id) => {
+    setMessage({
+      type: 2,
+      content: "Are you sure you want to delete?",
+      proceed: "Delete",
+      onProceed: async () => {
+        try {
+          // Call the deleteData function to delete the item with the given id from the server (Assuming this is an asynchronous function)
+          const response = await deleteData({ id }, "food-menu-item/common-replacable-item");
+          if (response.data?.success === true) {
+            const menuDataTemp = { ...menuData };
+            // Find the items object based on the provided parameters (mealTimeCategory, dayNumber, optionNo)
+            const replacableIndex = menuDataTemp.commonReplacableItems.findIndex((cat) => cat._id === id);
+            console.log("replacableIndex", replacableIndex);
+            menuDataTemp.commonReplacableItems.splice(replacableIndex, 1, id);
+            // Update the state with the modified menuDataTemp
+            setMenuData(menuDataTemp);
+          }
+
+          // Find the items object based on the provided parameters (mealTimeCategory, dayNumber, optionNo)
+        } catch (error) {
+          // Handle any errors that occur during the deletion process
+          console.log(error);
+        }
+      },
+      data: { id },
+    });
+  };
 
   const onDrop = async (item, data) => {
     const menuDataTemp = { ...menuData };
     const foodMenuItem = data.foodMenuItem;
-
+    if ((data.type ?? 1) === 0) {
+      if (item.typeOfRecipe !== activeCustomReplaceRecipeType) {
+        setMessage({ content: "Sorry, you can add only same type of recipes to the list!", proceed: "Okay" });
+      } else {
+        const response = await postData(
+          {
+            ...data,
+            foodMenu: openData.data._id,
+            recipe: item._id,
+            typeOfRecipe: item.typeOfRecipe,
+            mealTimeCategory: data.mealTimeCategory,
+          },
+          "food-menu-item/common-replacable-item"
+        );
+        if (response?.data?.success === true) {
+          menuDataTemp.commonReplacableItems.push(response.data.replacableItem);
+          console.log(menuDataTemp);
+          setMenuData(menuDataTemp);
+        }
+      }
+      return;
+    }
     if (data.recipeIndex >= 0) {
       // const replacableItemsTemp = { ...replacableItems };
+
       if (data.mealOrRecepe === "recipe" && activeTab === "recipes") {
         const response = await postData(
           {
@@ -453,7 +502,17 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     })),
     apiType: "JSON",
   });
-
+  const [typeOfRecipesTitles] = useState([
+    { id: "Bread", value: "Bread" },
+    { id: "Meat", value: "Meat" },
+    { id: "Fruit", value: "Fruit" },
+    { id: "Dessert", value: "Dessert" },
+    { id: "Salad", value: "Salad" },
+    { id: "Soup", value: "Soup" },
+    { id: "Fat", value: "Fat" },
+    { id: "Snacking", value: "Snacking" },
+    { id: "Mixed", value: "Mixed" },
+  ]);
   const [typeOfRecipes] = useState([
     {
       type: "multiSelect",
@@ -469,15 +528,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       add: true,
       update: true,
       filter: true,
-      selectApi: [
-        { id: "Bread", value: "Bread" },
-        { id: "Meat", value: "Meat" },
-        { id: "Fruit", value: "Fruit" },
-        { id: "Dessert", value: "Dessert" },
-        { id: "Salad", value: "Salad" },
-        { id: "Soup", value: "Soup" },
-        { id: "Mixed", value: "Mixed" },
-      ],
+      selectApi: typeOfRecipesTitles,
       apiType: "JSON",
     },
     {
@@ -785,9 +836,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             <WeekSelection>
               <button
                 onClick={() => {
-                  deleteFoodMenu(
-                    item.foodMenuItem
-                  );
+                  deleteFoodMenu(item.foodMenuItem);
                 }}
               >
                 <span>Delete</span> <GetIcon icon={"delete"} />
@@ -826,7 +875,6 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 key={`input` + 2}
                 id={`input` + 2}
                 onChange={(event) => {
-                  console.log(event.id);
                   if (!isNaN(event.id)) {
                     setWeekNumber(parseInt(event.id));
                   }
@@ -885,225 +933,318 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 <>
                   <TableRow>
                     <TableCell className="row" colSpan={7}>
-                      <MealTimeBox>
-                        <MealTimeHead
-                          active={(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] ?? false) || expandAll}
-                          onClick={() =>
-                            setSelectedMealTime((prev) => ({
-                              ...prev,
-                              [`${mealTimeCategory._id}-${weekNumber}`]: !prev[`${mealTimeCategory._id}-${weekNumber}`] ?? true,
-                            }))
-                          }
-                        >
-                          {`${mealTimeCategory.mealtimeCategoriesName} / ${setCaloriesItems(mealTimeCategory)}`}
-                          <GetIcon icon={"down"}></GetIcon>
-                        </MealTimeHead>
-                        <WeekSelection>
-                          <button
-                          className="nomargin"
-                            onClick={() => {
-                             
-                            }}
-                          >
-                             <GetIcon icon={"swap"} />
-                          </button>
-                        </WeekSelection>
-                      </MealTimeBox>
+                      <MealTimeHead
+                        active={(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] ?? false) || expandAll}
+                        onClick={() =>
+                          setSelectedMealTime((prev) => ({
+                            ...prev,
+                            [`${mealTimeCategory._id}-${weekNumber}`]: !prev[`${mealTimeCategory._id}-${weekNumber}`] ?? true,
+                          }))
+                        }
+                      >
+                        {`${mealTimeCategory.mealtimeCategoriesName} / ${setCaloriesItems(mealTimeCategory)}`}
+                        <GetIcon icon={"down"}></GetIcon>
+                      </MealTimeHead>
                     </TableCell>
                   </TableRow>
+
                   {(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] === true || expandAll) && (
-                    <TableRow key={mealTimeCategory._id}>
-                      {daysOfWeek.map((day, dayNumber) => {
-                        if (showAllReplacable) {
-                          if (dayNumber !== selectedDayNumber) {
-                            return null;
+                    <React.Fragment>
+                      <TableRow key={mealTimeCategory._id}>
+                        {daysOfWeek.map((day, dayNumber) => {
+                          if (showAllReplacable) {
+                            if (dayNumber !== selectedDayNumber) {
+                              return null;
+                            }
                           }
-                        }
-                        const options = menuData.foodMenu.filter((item) => item.mealTimeCategory === mealTimeCategory._id && item.dayNumber === dayNumber && (item.meals.length > 0 || item.recipes.length > 0));
-                        let mealtimeCalories = 0;
-                        return (
-                          <TableCell colSpan={showAllReplacable ? 7 : 0} className={dayNumber === 0 ? "first" : ""} key={dayNumber}>
-                            <div className="layer">
-                              {options.map((items, optionsIndex) => {
-                                return (
-                                  <Div key={`drop-${optionsIndex + mealTimeCategory._id + dayNumber + items.optionNo}`}>
-                                    <>
-                                      <Variants className="vertical">
-                                        {items?.recipes?.length > 0
-                                          ? items.recipes.map((item, recipeIndex) => {
-                                              let recipeCalories = getCalories(item ?? [], mealTimeCategory._id);
-                                              mealtimeCalories += recipeCalories;
-                                              // Render your items inside the FoodButton here
-                                              // For example, you can render a list of items like this
-                                              return (
-                                                <Variant key={item._id} className={`vertical replace ${data.menuType} ${(openData.item.viewOnly ?? false) === true ? "Fixed" : ""}`}>
-                                                  <Variant key={item._id} className="vertical recipe">
-                                                    <ProfileImage>
-                                                      <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
-                                                    </ProfileImage>
-                                                    <span className="recipe">{item.title} </span>
-                                                    <span>{recipeCalories.toFixed(2)} calories</span>
-                                                    <div className="actions">
-                                                      <span
-                                                        className="info"
-                                                        onClick={() => {
-                                                          setPopupData({
-                                                            type: 1,
-                                                            data: item,
-                                                            mealTimeCategory: mealTimeCategory._id,
-                                                            nutritionInfo: getCalories(item, "", mealTimeCategory.availableCalories, false),
-                                                            Serving: setCaloriesItems(mealTimeCategory, true, item.typeOfRecipe),
-                                                          });
-                                                          console.log(popupData);
-                                                        }}
-                                                      >
-                                                        <GetIcon icon={"info"} />
-                                                      </span>
-                                                      <span
-                                                        className="edit"
-                                                        title="Modify Recipe Note"
-                                                        onClick={() => {
-                                                          // deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
-                                                          editNotes("recipe", item, {
-                                                            date: "date",
-                                                            categoryIndex: "categoryIndex",
-                                                            recepeIndex: "recepeIndex",
-                                                          });
-                                                        }}
-                                                      >
-                                                        <GetIcon icon={"edit"} />
-                                                      </span>
-                                                      {!(openData.item.viewOnly ?? false) && (
+                          const options = menuData.foodMenu.filter((item) => item.mealTimeCategory === mealTimeCategory._id && item.dayNumber === dayNumber && (item.meals.length > 0 || item.recipes.length > 0));
+                          let mealtimeCalories = 0;
+                          return (
+                            <TableCell colSpan={showAllReplacable ? 7 : 0} className={dayNumber === 0 ? "first" : ""} key={dayNumber}>
+                              <div className="layer">
+                                {options.map((items, optionsIndex) => {
+                                  return (
+                                    <Div key={`drop-${optionsIndex + mealTimeCategory._id + dayNumber + items.optionNo}`}>
+                                      <>
+                                        <Variants className="vertical">
+                                          {items?.recipes?.length > 0
+                                            ? items.recipes.map((item, recipeIndex) => {
+                                                let recipeCalories = getCalories(item ?? [], mealTimeCategory._id);
+                                                mealtimeCalories += recipeCalories;
+                                                // Render your items inside the FoodButton here
+                                                // For example, you can render a list of items like this
+                                                return (
+                                                  <Variant key={item._id} className={`vertical replace ${data.menuType} ${(openData.item.viewOnly ?? false) === true ? "Fixed" : ""}`}>
+                                                    <Variant key={item._id} className="vertical recipe">
+                                                      <ProfileImage>
+                                                        <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
+                                                      </ProfileImage>
+                                                      <span className="recipe">{item.title} </span>
+                                                      <span>{recipeCalories.toFixed(2)} calories</span>
+                                                      <div className="actions">
                                                         <span
-                                                          className="delete"
+                                                          className="info"
                                                           onClick={() => {
-                                                            deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                            setPopupData({
+                                                              type: 1,
+                                                              data: item,
+                                                              mealTimeCategory: mealTimeCategory._id,
+                                                              nutritionInfo: getCalories(item, "", mealTimeCategory.availableCalories, false),
+                                                              Serving: setCaloriesItems(mealTimeCategory, true, item.typeOfRecipe),
+                                                            });
                                                           }}
                                                         >
-                                                          <GetIcon icon={"delete"} />
+                                                          <GetIcon icon={"info"} />
                                                         </span>
-                                                      )}
-                                                    </div>
-                                                  </Variant>
+                                                        <span
+                                                          className="edit"
+                                                          title="Modify Recipe Note"
+                                                          onClick={() => {
+                                                            // deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                            editNotes("recipe", item, {
+                                                              date: "date",
+                                                              categoryIndex: "categoryIndex",
+                                                              recepeIndex: "recepeIndex",
+                                                            });
+                                                          }}
+                                                        >
+                                                          <GetIcon icon={"edit"} />
+                                                        </span>
+                                                        {!(openData.item.viewOnly ?? false) && (
+                                                          <span
+                                                            className="delete"
+                                                            onClick={() => {
+                                                              deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                            }}
+                                                          >
+                                                            <GetIcon icon={"delete"} />
+                                                          </span>
+                                                        )}
+                                                      </div>
+                                                    </Variant>
 
-                                                  {data.menuType === "Dynamic" && !showAllReplacable && (
-                                                    <span
-                                                      title="Replacable Items"
-                                                      className={`replace ${showReplacable === item.foodMenuItem && "selected"}`}
-                                                      onClick={() => {
-                                                        openReplacableItems(item.foodMenuItem, "recipe");
-                                                      }}
-                                                    >
-                                                      <GetIcon icon={"replace"} />
-                                                    </span>
-                                                  )}
-                                                  {(showReplacable === item.foodMenuItem || showAllReplacable === true) && data.menuType === "Dynamic" && (
-                                                    <DropTarget
-                                                      onDrop={onDrop}
-                                                      className={showAllReplacable.toString()}
-                                                      data={{
-                                                        recipeIndex,
-                                                        mealTimeCategory: mealTimeCategory._id,
-                                                        dayNumber,
-                                                        optionNo: items.optionNo,
-                                                        foodMenuItem: item.foodMenuItem,
-                                                        mealOrRecepe: "recipe",
-                                                        optionsIndex,
-                                                      }}
-                                                      element={
-                                                        <ReplacableItems className={showAllReplacable.toString()}>
-                                                          {!showAllReplacable && (
-                                                            <Header className="small">
-                                                              <span>{`Replacable Recipes`}</span>
-                                                              <CloseButton theme={themeColors} onClick={() => setShowReplcable(false)}>
-                                                                <GetIcon icon={"Close"} />
-                                                              </CloseButton>
-                                                            </Header>
-                                                          )}
-                                                          <Variants className={showReplacable ? "vertical" : "day vertical "}>
-                                                            {item.foodmenureplacableitems?.length > 0 &&
-                                                              item.foodmenureplacableitems.map((replacableItem, replacableIndex) => (
-                                                                <Variant key={replacableItem._id} className="horizontal child-recipe">
-                                                                  <ProfileImage>
-                                                                    <img src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food} alt="icon"></img>
-                                                                  </ProfileImage>
-                                                                  <Details>
-                                                                    <span className="recipe">{replacableItem.recipe.title}</span>
-                                                                    <span>{replacableItem.recipe.calories.toFixed(2)} calories</span>
-                                                                  </Details>
-                                                                  <div className="sub-actions">
-                                                                    <span
-                                                                      className="info"
-                                                                      onClick={() => {
-                                                                        setPopupData({
-                                                                          type: 1,
-                                                                          data: replacableItem.recipe,
-                                                                          mealTimeCategory: mealTimeCategory._id,
-                                                                          nutritionInfo: getCalories(replacableItem.recipe, "", mealTimeCategory.availableCalories, false),
-                                                                          Serving: setCaloriesItems(mealTimeCategory, true, replacableItem.recipe.typeOfRecipe),
-                                                                        });
-                                                                      }}
-                                                                    >
-                                                                      <GetIcon icon={"info"} />
-                                                                    </span>
-                                                                    {!(openData.item.viewOnly ?? false) && (
+                                                    {data.menuType === "Dynamic" && !showAllReplacable && (
+                                                      <span
+                                                        title="Replacable Items"
+                                                        className={`replace ${showReplacable === item.foodMenuItem && "selected"}`}
+                                                        onClick={() => {
+                                                          openReplacableItems(item.foodMenuItem, "recipe");
+                                                        }}
+                                                      >
+                                                        <GetIcon icon={"replace"} />
+                                                      </span>
+                                                    )}
+                                                    {(showReplacable === item.foodMenuItem || showAllReplacable === true) && data.menuType === "Dynamic" && (
+                                                      <DropTarget
+                                                        onDrop={onDrop}
+                                                        className={showAllReplacable.toString()}
+                                                        data={{
+                                                          recipeIndex,
+                                                          mealTimeCategory: mealTimeCategory._id,
+                                                          dayNumber,
+                                                          optionNo: items.optionNo,
+                                                          foodMenuItem: item.foodMenuItem,
+                                                          mealOrRecepe: "recipe",
+                                                          optionsIndex,
+                                                        }}
+                                                        element={
+                                                          <ReplacableItems className={showAllReplacable.toString()}>
+                                                            {!showAllReplacable && (
+                                                              <Header className="small">
+                                                                <span>{`Replacable Recipes`}</span>
+                                                                <CloseButton theme={themeColors} onClick={() => setShowReplcable(false)}>
+                                                                  <GetIcon icon={"Close"} />
+                                                                </CloseButton>
+                                                              </Header>
+                                                            )}
+                                                            <Variants className={showReplacable ? "vertical" : "day vertical "}>
+                                                              {item.foodmenureplacableitems?.length > 0 &&
+                                                                item.foodmenureplacableitems.map((replacableItem, replacableIndex) => (
+                                                                  <Variant key={replacableItem._id} className="horizontal child-recipe">
+                                                                    <ProfileImage>
+                                                                      <img src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food} alt="icon"></img>
+                                                                    </ProfileImage>
+                                                                    <Details>
+                                                                      <span className="recipe">{replacableItem.recipe.title}</span>
+                                                                      <span>{replacableItem.recipe.calories.toFixed(2)} calories</span>
+                                                                    </Details>
+                                                                    <div className="sub-actions">
                                                                       <span
-                                                                        className="delete"
-                                                                        title="Remove Item"
+                                                                        className="info"
                                                                         onClick={() => {
-                                                                          // deleteReplcableItem(replacableItem._id, index);
-                                                                          deleteReplcableItem(replacableItem._id, replacableIndex, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                                          setPopupData({
+                                                                            type: 1,
+                                                                            data: replacableItem.recipe,
+                                                                            mealTimeCategory: mealTimeCategory._id,
+                                                                            nutritionInfo: getCalories(replacableItem.recipe, "", mealTimeCategory.availableCalories, false),
+                                                                            Serving: setCaloriesItems(mealTimeCategory, true, replacableItem.recipe.typeOfRecipe),
+                                                                          });
                                                                         }}
                                                                       >
-                                                                        <GetIcon icon={"delete"} />
+                                                                        <GetIcon icon={"info"} />
                                                                       </span>
-                                                                    )}
-                                                                  </div>
-                                                                </Variant>
-                                                              ))}
-                                                            <Variant className="vertical add-button">
-                                                              <GetIcon icon={"add"}></GetIcon>
-                                                            </Variant>
-                                                          </Variants>
-                                                        </ReplacableItems>
-                                                      }
-                                                    />
-                                                  )}
-                                                </Variant>
-                                              );
-                                            })
-                                          : ""}
-                                      </Variants>
-                                      {/* <DropTarget onDrop={showReplacable ? () => {} : onDrop} data={{ mealTimeCategory: mealTimeCategory._id, dayNumber, optionNo: items.optionNo }} element={<div>Dag Here</div>}></DropTarget> */}
-                                    </>
+                                                                      {!(openData.item.viewOnly ?? false) && (
+                                                                        <span
+                                                                          className="delete"
+                                                                          title="Remove Item"
+                                                                          onClick={() => {
+                                                                            // deleteReplcableItem(replacableItem._id, index);
+                                                                            deleteReplcableItem(replacableItem._id, replacableIndex, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                                          }}
+                                                                        >
+                                                                          <GetIcon icon={"delete"} />
+                                                                        </span>
+                                                                      )}
+                                                                    </div>
+                                                                  </Variant>
+                                                                ))}
+                                                              <Variant className="vertical add-button">
+                                                                <GetIcon icon={"add"}></GetIcon>
+                                                              </Variant>
+                                                            </Variants>
+                                                          </ReplacableItems>
+                                                        }
+                                                      />
+                                                    )}
+                                                  </Variant>
+                                                );
+                                              })
+                                            : ""}
+                                        </Variants>
+                                        {/* <DropTarget onDrop={showReplacable ? () => {} : onDrop} data={{ mealTimeCategory: mealTimeCategory._id, dayNumber, optionNo: items.optionNo }} element={<div>Dag Here</div>}></DropTarget> */}
+                                      </>
+                                    </Div>
+                                  );
+                                })}
+                                {(!openData.item.viewOnly ?? false) && (
+                                  <Div>
+                                    <DropTarget
+                                      onDrop={showReplacable ? () => {} : onDrop}
+                                      data={{
+                                        mealTimeCategory: mealTimeCategory._id,
+                                        dayNumber,
+                                        optionNo: options.length + 1,
+                                      }}
+                                      element={
+                                        <Variants className="vertical add-button">
+                                          <GetIcon icon={"add"}></GetIcon>
+                                        </Variants>
+                                      }
+                                    />
                                   </Div>
-                                );
-                              })}
-                              {(!openData.item.viewOnly ?? false) && (
-                                <Div>
-                                  <DropTarget
-                                    onDrop={showReplacable ? () => {} : onDrop}
-                                    data={{
-                                      mealTimeCategory: mealTimeCategory._id,
-                                      dayNumber,
-                                      optionNo: options.length + 1,
-                                    }}
-                                    element={
-                                      <Variants className="vertical add-button">
-                                        <GetIcon icon={"add"}></GetIcon>
-                                      </Variants>
-                                    }
-                                  />
-                                </Div>
-                              )}
-                            </div>
-                            <ShowCalorie>
-                              <span className="calories">{mealtimeCalories.toFixed(2)} calories</span>
-                            </ShowCalorie>
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
+                                )}
+                              </div>
+                              <ShowCalorie>
+                                <span className="calories">{mealtimeCalories.toFixed(2)} calories</span>
+                              </ShowCalorie>
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={7}>
+                          {(openData.data.subDiet.category ?? "General") === "General" && (
+                            <Filter
+                              // className={showFilter ? "close" : "open"}
+                              theme={themeColors}
+                              className="inner-long"
+                              onClick={() => {
+                                setActiveCustomReplaceRecipeType(typeOfRecipesTitles[0].id);
+                                
+                                setActiveCustomReplace(activeCustomReplace && activeCustomReplace.id === mealTimeCategory._id ? null : { id: mealTimeCategory._id, name: mealTimeCategory.mealtimeCategoriesName });
+                              }}
+                            >
+                              {`Common Recipe Replacables for '${mealTimeCategory.mealtimeCategoriesName}'`} <GetIcon icon={activeCustomReplace?.id === mealTimeCategory._id ? "close" : "info"} />
+                            </Filter>
+                          )}
+                          {activeCustomReplace && activeCustomReplace.id === mealTimeCategory._id && (
+                            <CommonReplace>
+                              <TabContainer>
+                                {typeOfRecipesTitles.map((item) => {
+                                  return (
+                                    <TabButton className={activeCustomReplaceRecipeType === item.id} onClick={() => setActiveCustomReplaceRecipeType(item.id)}>
+                                      {item.value}
+                                    </TabButton>
+                                  );
+                                })}
+                              </TabContainer>
+
+                              {(!openData.item.viewOnly ?? false) &&
+                                typeOfRecipesTitles.map((item) => {
+                                  const replacableItems = menuData.commonReplacableItems?.filter((replaceRecipe) => replaceRecipe.typeOfRecipe === activeCustomReplaceRecipeType && activeCustomReplace.id === replaceRecipe.mealTimeCategory);
+                                  return (
+                                    //custome replacabe recipes
+                                    item.id === activeCustomReplaceRecipeType && (
+                                      <div className="layer">
+                                        <Div>
+                                          <DropTarget
+                                            onDrop={showReplacable ? () => {} : onDrop}
+                                            data={{
+                                              type: 0,
+                                              foodMenu: openData.data._id,
+                                              mealTimeCategory: activeCustomReplace.id,
+                                              typeOfRecipe: activeCustomReplaceRecipeType,
+                                            }}
+                                            element={
+                                              item.id === activeCustomReplaceRecipeType && (
+                                                <Variants className={`vertical ${replacableItems.length > 0 ? "day" : ""}`}>
+                                                  {replacableItems.length > 0 &&
+                                                    replacableItems.map((replacableItem, replacableIndex) => (
+                                                      <Variant key={replacableItem._id} className="horizontal child-recipe">
+                                                        <ProfileImage>
+                                                          <img src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food} alt="icon"></img>
+                                                        </ProfileImage>
+                                                        <Details>
+                                                          <span className="recipe">{replacableItem.recipe.title}</span>
+                                                          <span>{replacableItem.recipe.calories?.toFixed(2)} calories</span>
+                                                        </Details>
+                                                        <div className="sub-actions">
+                                                          <span
+                                                            className="info"
+                                                            onClick={() => {
+                                                              // setPopupData({
+                                                              //   type: 1,
+                                                              //   data: replacableItem.recipe,
+                                                              //   mealTimeCategory: mealTimeCategory._id,
+                                                              //   nutritionInfo: getCalories(replacableItem.recipe, "", mealTimeCategory.availableCalories, false),
+                                                              //   Serving: setCaloriesItems(mealTimeCategory, true, replacableItem.recipe.typeOfRecipe),
+                                                              // });
+                                                            }}
+                                                          >
+                                                            <GetIcon icon={"info"} />
+                                                          </span>
+                                                          {!(openData.item.viewOnly ?? false) && (
+                                                            <span
+                                                              className="delete"
+                                                              title="Remove Item"
+                                                              onClick={() => {
+                                                                deleteCommonReplcableItem(replacableItem._id);
+                                                                // deleteReplcableItem(replacableItem._id, replacableIndex, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
+                                                              }}
+                                                            >
+                                                              <GetIcon icon={"delete"} />
+                                                            </span>
+                                                          )}
+                                                        </div>
+                                                      </Variant>
+                                                    ))}
+                                                  <Variant className=" add-button">
+                                                    <GetIcon icon={"add"}></GetIcon>
+                                                  </Variant>
+                                                </Variants>
+                                              )
+                                            }
+                                          />
+                                        </Div>
+                                      </div>
+                                    )
+                                  );
+                                })}
+                            </CommonReplace>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    </React.Fragment>
                   )}
                 </>
               ))}
@@ -1136,7 +1277,6 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       key={`input` + index}
                       id={`input` + index}
                       onChange={(event) => {
-                        console.log("event.value", event.value);
                         let selctedRecipeTypeTemp = { ...selctedRecipeType };
                         const items = selctedRecipeType[field.name];
                         const index = items.findIndex((item) => item === event.id);
@@ -1225,6 +1365,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           customClass={"small"}
         ></PopupView>
       )}
+
       {isOpen && (
         <AutoForm
           userId={openData.data._id}

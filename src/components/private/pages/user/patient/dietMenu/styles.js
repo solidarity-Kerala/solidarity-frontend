@@ -373,7 +373,6 @@ export const MealTimeBox = styled.div`
   display: flex;
 `;
 export const MealTimeHead = styled.div`
-  width: calc(100% - 70px);
   font-weight: 600;
   padding: 10px;
   border-radius: 10px;
