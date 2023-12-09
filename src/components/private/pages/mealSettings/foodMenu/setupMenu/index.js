@@ -59,7 +59,17 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories, calorieOnly = true) => {
       availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-      const availableCalorie = availableCalories?.[coloriePerDay] ?? null;
+      const availableCalorie = availableCalories?.[coloriePerDay] ?? {
+        calories: coloriePerDay,
+        meal: 0,
+        bread: 0,
+        dessert: 0,
+        fruit: 0,
+        fat: 0,
+        salad: 0,
+        snacking: 0,
+        soup: 0,
+      };
       if (!availableCalorie) {
         console.log("Not Found Available Calori: ", availableCalorie);
         return 0;
@@ -70,7 +80,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       if (numberOfPortion === 0) {
         numberOfPortion = 1;
       }
-      ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Other"].map((typeOfIngredient) => {
+      ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Fat", "Snacking", "Other"].map((typeOfIngredient) => {
         let info = { typeOfIngredient, ingredients: 0 };
         const typeOfIngredientLower = typeOfIngredient.toLowerCase();
         let count = availableCalorie[typeOfIngredientLower === "meat" ? "meal" : typeOfIngredientLower];
@@ -430,9 +440,21 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   };
 
   const setCaloriesItems = (mealTimeCategories, single = false, recepeType = "") => {
-    const { bread, meal: meat, fruit, dessert, soup, salad } = mealTimeCategories.availableCalories[coloriePerDay];
+    const availableCalorie = mealTimeCategories.availableCalories?.[coloriePerDay] ?? {
+      calories: coloriePerDay,
+      meal: 0,
+      bread: 0,
+      dessert: 0,
+      fruit: 0,
+      fat: 0,
+      salad: 0,
+      snacking: 0,
+      soup: 0,
+    };
+    const { bread, meal: meat, fruit, dessert, soup, salad, fat, snacking } = availableCalorie;
     if (!single) {
-      return `${meat && meat > 0 ? meat + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}`;
+      const text = `${meat && meat > 0 ? meat + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}${fat > 0 ? fat + "FT" : ""}${snacking > 0 ? snacking + "SN" : ""}`;
+      return text.length > 0 ? "/ " + text : "";
     } else {
       let count = 0;
       if (recepeType === "Meat") {
@@ -445,6 +467,10 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         count = (soup || 0) + "SP";
       } else if (recepeType === "Dessert") {
         count = (dessert || 0) + "D";
+      } else if (recepeType === "Fat") {
+        count = (fat || 0) + "FT";
+      }else if (recepeType === "Snacking") {
+        count = (dessert || 0) + "SN";
       } else if (recepeType === "Salad") {
         count = (salad || 0) + "SD";
       } else if (recepeType === "Mixed") {
@@ -942,7 +968,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                           }))
                         }
                       >
-                        {`${mealTimeCategory.mealtimeCategoriesName} / ${setCaloriesItems(mealTimeCategory)}`}
+                        {`${mealTimeCategory.mealtimeCategoriesName} ${setCaloriesItems(mealTimeCategory)}`}
                         <GetIcon icon={"down"}></GetIcon>
                       </MealTimeHead>
                     </TableCell>
@@ -1150,7 +1176,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                               className="inner-long"
                               onClick={() => {
                                 setActiveCustomReplaceRecipeType(typeOfRecipesTitles[0].id);
-                                
+
                                 setActiveCustomReplace(activeCustomReplace && activeCustomReplace.id === mealTimeCategory._id ? null : { id: mealTimeCategory._id, name: mealTimeCategory.mealtimeCategoriesName });
                               }}
                             >
