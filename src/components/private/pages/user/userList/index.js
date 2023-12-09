@@ -118,10 +118,10 @@ const UserList = (props) => {
     {
       type: "select",
       apiType: "API",
-      selectApi: "delivery-location/select",
+      selectApi: "deliveryman-location/select",
       placeholder: "Location",
-      name: "deliveryLocation",
-      collection: "deliveryLocation",
+      name: "deliveryManLocation",
+      collection: "deliveryManLocation",
       showItem: "deliveryLocation",
       validation: "",
       default: "",
