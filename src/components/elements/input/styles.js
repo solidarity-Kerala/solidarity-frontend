@@ -23,6 +23,10 @@ export const InputContainer = styled.div`
     margin-bottom: 0;
     border-radius: 0;
   }
+  &.small {
+    width: 25%;
+    flex: 1 1 calc(25% - 10px);
+  }
   && {
     /* Styles to apply when parent has class shrink */
     .popup & {
