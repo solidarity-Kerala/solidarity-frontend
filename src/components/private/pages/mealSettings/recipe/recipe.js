@@ -61,6 +61,19 @@ const Recipe = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "textarea",
+      placeholder: "Garnish",
+      name: "garnish",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Garnish",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
    return (

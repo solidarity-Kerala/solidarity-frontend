@@ -9,7 +9,6 @@ import OrderStatus from "../../private/pages/dispatch/orderStatus";
 import UserList from "../../private/pages/user/userList";
 import ProteinCategory from "../../private/pages/mealSettings/proteinCategory";
 import MealTimeCategory from "../../private/pages/mealSettings/mealTimeCategory";
-import FoodExchangeCategory from "../../private/pages/mealSettings/foodExchangeCategory";
 import VariantGroup from "../../private/pages/mealSettings/variantGroup";
 import VaraiantLevel from "../../private/pages/mealSettings/varaiantLevel";
 import DayOfWeek from "../../private/pages/mealSettings/dayOfWeek";
@@ -68,7 +67,6 @@ import AddRecipe from "../../private/pages/mealSettings/addRecipe";
 import DaySlot from "../../private/pages/daySlot";
 import PackageOrder from "../../private/pages/order/packageOrder";
 import AvailableCalories from "../../private/pages/Calories/availableCalories";
-import FoodExchangeData from "../../private/pages/Calories/foodExchangeData";
 import AvailableSizes from "../../private/pages/Calories/availableSizes";
 import DietPrice from "../../private/pages/Calories/dietPrice";
 import Incredientmedicalcondition from "../../private/pages/Calories/Incredientmedicalcondition";
@@ -154,10 +152,6 @@ const Switch = ({ page, key, user, ...privileges }) => {
       return <OrderStatus key={key} {...privileges} />;
     case "mealtime-category":
       return <MealTimeCategory key={key} {...privileges} />;
-    case "food-exchange-category":
-      return <FoodExchangeCategory key={key} {...privileges} />;
-    case "foodexchange-data":
-      return <FoodExchangeData key={key} {...privileges} />;
     case "recipe-tag":
       return <RecipeTag key={key} {...privileges} />;
     case "variant-group":
@@ -316,8 +310,6 @@ const Switch = ({ page, key, user, ...privileges }) => {
       return <UserLog key={key} {...privileges} />;
     case "food-exchange":
       return <Aibot key={key} {...privileges} />;
-    // case "food-exchange":
-    //   return <FoodExchange key={key} {...privileges} />;
     case "label-print-setting":
       return <LabelPrintSetting key={key} {...privileges} />;
     case "fixed-replacable-recipe":
