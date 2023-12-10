@@ -12,6 +12,13 @@ const Ingredient = (props) => {
 
   const [attributes] = useState([
     {
+      type: "title",
+      title: "General Infromations",
+      view: false,
+      add: true,
+      update: true,
+    },
+    {
       type: "text",
       placeholder: "Ingredient",
       name: "ingredientsName",
@@ -52,8 +59,7 @@ const Ingredient = (props) => {
       add: true,
       update: true,
       filter: true,
-      selectApi:
-        "Gram,Teaspoon,Tablespoon,Cup,Ounce,Piece,Milliliter,Pinch,Bunch",
+      selectApi: "Gram,Teaspoon,Tablespoon,Cup,Ounce,Piece,Milliliter,Pinch,Bunch",
       apiType: "CSV",
     },
     {
@@ -91,6 +97,7 @@ const Ingredient = (props) => {
       type: "number",
       placeholder: "Calories (Kcal)",
       name: "calories",
+      customClass:"small",
       validation: "",
       showItem: "",
       default: "",
@@ -106,6 +113,7 @@ const Ingredient = (props) => {
       placeholder: "Protein (g)",
       name: "protein",
       validation: "",
+      customClass:"small",
       showItem: "",
       default: "",
       tag: true,
@@ -119,6 +127,7 @@ const Ingredient = (props) => {
       type: "number",
       placeholder: "SatFat (g)",
       name: "satFat",
+      customClass:"small",
       validation: "",
       showItem: "",
       default: "",
@@ -133,6 +142,7 @@ const Ingredient = (props) => {
       type: "number",
       placeholder: "UnSatFat (g)",
       name: "unSatFat",
+      customClass:"small",
       validation: "",
       showItem: "",
       default: "",
@@ -341,7 +351,7 @@ const Ingredient = (props) => {
       selectApi: "water,fat,both,other",
       apiType: "CSV",
     },
-    
+
     {
       type: "multiSelect",
       apiType: "API",
@@ -392,7 +402,7 @@ const Ingredient = (props) => {
       selectApi: "Meat,Bread,Fruit,Soup,Dessert,Salad,Mixed,Fat,Snacking,Other",
       apiType: "CSV",
     },
-    
+
     {
       type: "checkbox",
       placeholder: "Added Sugar",
@@ -408,15 +418,9 @@ const Ingredient = (props) => {
       update: true,
     },
     {
-      type: "image",
-      placeholder: "Ingredient",
-      name: "photo",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Ingredient",
-      required: false,
-      view: true,
+      type: "title",
+      title: "Food Exchange Values",
+      view: false,
       add: true,
       update: true,
     },
@@ -615,8 +619,20 @@ const Ingredient = (props) => {
       view: true,
       add: true,
       update: true,
-    }
-    
+    },
+    {
+      type: "image",
+      placeholder: "Ingredient",
+      name: "photo",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Ingredient",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
   return (

@@ -1702,7 +1702,7 @@ const Patient = (props) => {
           }
           themeColors={themeColors}
           closeModal={closeModal}
-          itemTitle={{ name: "username", type: "text", collection: "" }}
+          itemTitle={{ name: "fullName", type: "text", collection: "" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"full-page"}
         ></PopupView>
