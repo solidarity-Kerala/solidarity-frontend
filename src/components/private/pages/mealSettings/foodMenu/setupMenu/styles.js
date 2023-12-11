@@ -163,8 +163,8 @@ export const TableCell = styled.td`
   &:first-child {
     border: 0;
   }
-  &.row{
-    flex-direction:row;
+  &.row {
+    flex-direction: row;
   }
   .layer {
     border-radius: 10px;
@@ -217,6 +217,7 @@ export const MealItem = styled.div`
   flex-direction: row;
   display: flex;
 `;
+
 export const Title = styled.div`
   width: 100%;
   span {
@@ -236,6 +237,12 @@ export const Title = styled.div`
     font-size: 14px;
     margin-left: 5px;
   }
+`;
+export const CommonReplace = styled.div`
+  bottom: 0;
+  background: white;
+  margin-top:10px;
+  border-radius: 10px 10px 0 0px;
 `;
 export const Variants = styled.div`
   width: 100%;
@@ -419,7 +426,7 @@ export const Variant = styled.div`
   && {
     .false & {
       &.replace {
-        flex-direction: row;
+        /* flex-direction: row; */
       }
     }
   }
@@ -500,8 +507,8 @@ export const WeekSelection = styled.div`
     display: flex;
     width: auto;
   }
-  > button.nomargin{
-    margin:0;
+  > button.nomargin {
+    margin: 0;
   }
   > span {
     font-weight: bold;

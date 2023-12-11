@@ -55,7 +55,7 @@ const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox
     if (numberOfPortion === 0) {
       numberOfPortion = 1;
     }
-    ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Other"].map((typeOfIngredient) => {
+    ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Fat", "Snacking", "Other"].map((typeOfIngredient) => {
       let info = { typeOfIngredient, ingredients: 0 };
       let count = 1;
       count = count ? (count === 0 ? 1 : count) : 1;
@@ -321,9 +321,12 @@ const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox
       fruit = 1,
       dessert = 1,
       soup = 1,
-      salad = 1;
+      salad = 1,
+    fat = 1,
+    snacking = 1;
+
     if (!single) {
-      return `${meat && meat > 0 ? meat + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}`;
+      return `${meat && meat > 0 ? meat + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${fat > 0 ? fat + "FT" : ""}${snacking > 0 ? snacking + "SN" : ""}${soup > 0 ? soup + "SP" : ""}`;
     } else {
       let count = 0;
       if (recepeType === "Meat") {
@@ -338,6 +341,10 @@ const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox
         count = (dessert || 0) + "D";
       } else if (recepeType === "Salad") {
         count = (salad || 0) + "SD";
+      } else if (recepeType === "Fat") {
+        count = (fat || 0) + "FT";
+      } else if (recepeType === "Snacking") {
+        count = (snacking || 0) + "SN";
       } else if (recepeType === "Mixed") {
         count = meat + "M" + bread + "B";
       } else {
@@ -400,6 +407,8 @@ const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox
         { id: "Dessert", value: "Dessert" },
         { id: "Salad", value: "Salad" },
         { id: "Soup", value: "Soup" },
+        { id: "Fat", value: "Fat" },
+        { id: "Snacking", value: "Snacking" },
         { id: "Mixed", value: "Mixed" },
       ],
       apiType: "JSON",
@@ -693,27 +702,27 @@ const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox
                 </MealCategoryCell> */}
                 {!showAllReplacable
                   ? daysOfWeek.map((day, index) => (
-                      <TableHeader key={index}>
-                        <DayHead>
-                          <span className="day">{day}</span>
-                          <span className="calories">{(parseFloat(calories["day_" + index] ?? 0) ?? 0)?.toFixed(2)} calories</span>
-                        </DayHead>
-                      </TableHeader>
-                    ))
+                    <TableHeader key={index}>
+                      <DayHead>
+                        <span className="day">{day}</span>
+                        <span className="calories">{(parseFloat(calories["day_" + index] ?? 0) ?? 0)?.toFixed(2)} calories</span>
+                      </DayHead>
+                    </TableHeader>
+                  ))
                   : daysOfWeek.map((day, index) => (
-                      <TableHeader
-                        key={index}
-                        active={selectedDayNumber === index}
-                        onClick={() => {
-                          setSelectedDayNumber(index);
-                        }}
-                      >
-                        <DayHead>
-                          <span className="day">{day}</span>
-                          <span className="calories">{(parseFloat(calories["day_" + index] ?? 0) ?? 0)?.toFixed(2)} calories</span>
-                        </DayHead>
-                      </TableHeader>
-                    ))}
+                    <TableHeader
+                      key={index}
+                      active={selectedDayNumber === index}
+                      onClick={() => {
+                        setSelectedDayNumber(index);
+                      }}
+                    >
+                      <DayHead>
+                        <span className="day">{day}</span>
+                        <span className="calories">{(parseFloat(calories["day_" + index] ?? 0) ?? 0)?.toFixed(2)} calories</span>
+                      </DayHead>
+                    </TableHeader>
+                  ))}
               </tr>
             </thead>
             <TableBody>
@@ -755,133 +764,133 @@ const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox
                                       <Variants className="vertical">
                                         {items?.recipes?.length > 0
                                           ? items.recipes.map((item, recipeIndex) => {
-                                              let recipeCalories = getCalories(item ?? [], foodExchangeCategory._id);
-                                              mealtimeCalories += recipeCalories;
-                                              // Render your items inside the FoodButton here
-                                              // For example, you can render a list of items like this
-                                              return (
-                                                <Variant key={item._id} className={`vertical replace ${data.menuType} ${(openData.item.viewOnly ?? false) === true ? "Fixed" : ""}`}>
-                                                  <Variant key={item._id} className="vertical recipe">
-                                                    <ProfileImage>
-                                                      <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
-                                                    </ProfileImage>
-                                                    <span className="recipe">{item.title} </span>
-                                                    <span>{recipeCalories.toFixed(2)} calories</span>
-                                                    <div className="actions">
-                                                      <span
-                                                        className="info"
-                                                        onClick={() => {
-                                                          setPopupData({
-                                                            type: 1,
-                                                            data: item,
-                                                            foodExchangeCategory: foodExchangeCategory._id,
-                                                            nutritionInfo: getCalories(item, "", foodExchangeCategory.availableCalories, false),
-                                                            Serving: setCaloriesItems(foodExchangeCategory, true, item.typeOfRecipe),
-                                                          });
-                                                          console.log(popupData);
-                                                        }}
-                                                      >
-                                                        <GetIcon icon={"info"} />
-                                                      </span>
-                                                      {!(openData.item.viewOnly ?? false) && (
-                                                        <span
-                                                          className="delete"
-                                                          onClick={() => {
-                                                            deleteItem(item.foodMenuItem, recipeIndex, "recipe", foodExchangeCategory._id, dayNumber, items.optionNo);
-                                                          }}
-                                                        >
-                                                          <GetIcon icon={"delete"} />
-                                                        </span>
-                                                      )}
-                                                    </div>
-                                                  </Variant>
-
-                                                  {data.menuType === "Dynamic" && !showAllReplacable && (
+                                            let recipeCalories = getCalories(item ?? [], foodExchangeCategory._id);
+                                            mealtimeCalories += recipeCalories;
+                                            // Render your items inside the FoodButton here
+                                            // For example, you can render a list of items like this
+                                            return (
+                                              <Variant key={item._id} className={`vertical replace ${data.menuType} ${(openData.item.viewOnly ?? false) === true ? "Fixed" : ""}`}>
+                                                <Variant key={item._id} className="vertical recipe">
+                                                  <ProfileImage>
+                                                    <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
+                                                  </ProfileImage>
+                                                  <span className="recipe">{item.title} </span>
+                                                  <span>{recipeCalories.toFixed(2)} calories</span>
+                                                  <div className="actions">
                                                     <span
-                                                      title="Replacable Items"
-                                                      className={`replace ${showReplacable === item.foodMenuItem && "selected"}`}
+                                                      className="info"
                                                       onClick={() => {
-                                                        openReplacableItems(item.foodMenuItem, "recipe");
+                                                        setPopupData({
+                                                          type: 1,
+                                                          data: item,
+                                                          foodExchangeCategory: foodExchangeCategory._id,
+                                                          nutritionInfo: getCalories(item, "", foodExchangeCategory.availableCalories, false),
+                                                          Serving: setCaloriesItems(foodExchangeCategory, true, item.typeOfRecipe),
+                                                        });
+                                                        console.log(popupData);
                                                       }}
                                                     >
-                                                      <GetIcon icon={"replace"} />
+                                                      <GetIcon icon={"info"} />
                                                     </span>
-                                                  )}
-                                                  {(showReplacable === item.foodMenuItem || showAllReplacable === true) && data.menuType === "Dynamic" && (
-                                                    <DropTarget
-                                                      onDrop={onDrop}
-                                                      className={showAllReplacable.toString()}
-                                                      data={{
-                                                        recipeIndex,
-                                                        foodExchangeCategory: foodExchangeCategory._id,
-                                                        dayNumber,
-                                                        optionNo: items.optionNo,
-                                                        foodMenuItem: item.foodMenuItem,
-                                                        mealOrRecepe: "recipe",
-                                                        optionsIndex,
-                                                      }}
-                                                      element={
-                                                        <ReplacableItems className={showAllReplacable.toString()}>
-                                                          {!showAllReplacable && (
-                                                            <Header className="small">
-                                                              <span>{`Replacable Recipes`}</span>
-                                                              <CloseButton theme={themeColors} onClick={() => setShowReplcable(false)}>
-                                                                <GetIcon icon={"Close"} />
-                                                              </CloseButton>
-                                                            </Header>
-                                                          )}
-                                                          <Variants className={showReplacable ? "vertical" : "day vertical "}>
-                                                            {item.foodmenureplacableitems?.length > 0 &&
-                                                              item.foodmenureplacableitems.map((replacableItem, replacableIndex) => (
-                                                                <Variant key={replacableItem._id} className="horizontal child-recipe">
-                                                                  <ProfileImage>
-                                                                    <img src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food} alt="icon"></img>
-                                                                  </ProfileImage>
-                                                                  <Details>
-                                                                    <span className="recipe">{replacableItem.recipe.title}</span>
-                                                                    <span>{replacableItem.recipe.calories.toFixed(2)} calories</span>
-                                                                  </Details>
-                                                                  <div className="sub-actions">
+                                                    {!(openData.item.viewOnly ?? false) && (
+                                                      <span
+                                                        className="delete"
+                                                        onClick={() => {
+                                                          deleteItem(item.foodMenuItem, recipeIndex, "recipe", foodExchangeCategory._id, dayNumber, items.optionNo);
+                                                        }}
+                                                      >
+                                                        <GetIcon icon={"delete"} />
+                                                      </span>
+                                                    )}
+                                                  </div>
+                                                </Variant>
+
+                                                {data.menuType === "Dynamic" && !showAllReplacable && (
+                                                  <span
+                                                    title="Replacable Items"
+                                                    className={`replace ${showReplacable === item.foodMenuItem && "selected"}`}
+                                                    onClick={() => {
+                                                      openReplacableItems(item.foodMenuItem, "recipe");
+                                                    }}
+                                                  >
+                                                    <GetIcon icon={"replace"} />
+                                                  </span>
+                                                )}
+                                                {(showReplacable === item.foodMenuItem || showAllReplacable === true) && data.menuType === "Dynamic" && (
+                                                  <DropTarget
+                                                    onDrop={onDrop}
+                                                    className={showAllReplacable.toString()}
+                                                    data={{
+                                                      recipeIndex,
+                                                      foodExchangeCategory: foodExchangeCategory._id,
+                                                      dayNumber,
+                                                      optionNo: items.optionNo,
+                                                      foodMenuItem: item.foodMenuItem,
+                                                      mealOrRecepe: "recipe",
+                                                      optionsIndex,
+                                                    }}
+                                                    element={
+                                                      <ReplacableItems className={showAllReplacable.toString()}>
+                                                        {!showAllReplacable && (
+                                                          <Header className="small">
+                                                            <span>{`Replacable Recipes`}</span>
+                                                            <CloseButton theme={themeColors} onClick={() => setShowReplcable(false)}>
+                                                              <GetIcon icon={"Close"} />
+                                                            </CloseButton>
+                                                          </Header>
+                                                        )}
+                                                        <Variants className={showReplacable ? "vertical" : "day vertical "}>
+                                                          {item.foodmenureplacableitems?.length > 0 &&
+                                                            item.foodmenureplacableitems.map((replacableItem, replacableIndex) => (
+                                                              <Variant key={replacableItem._id} className="horizontal child-recipe">
+                                                                <ProfileImage>
+                                                                  <img src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food} alt="icon"></img>
+                                                                </ProfileImage>
+                                                                <Details>
+                                                                  <span className="recipe">{replacableItem.recipe.title}</span>
+                                                                  <span>{replacableItem.recipe.calories.toFixed(2)} calories</span>
+                                                                </Details>
+                                                                <div className="sub-actions">
+                                                                  <span
+                                                                    className="info"
+                                                                    onClick={() => {
+                                                                      setPopupData({
+                                                                        type: 1,
+                                                                        data: replacableItem.recipe,
+                                                                        foodExchangeCategory: foodExchangeCategory._id,
+                                                                        nutritionInfo: getCalories(replacableItem.recipe, "", foodExchangeCategory.availableCalories, false),
+                                                                        Serving: setCaloriesItems(foodExchangeCategory, true, replacableItem.recipe.typeOfRecipe),
+                                                                      });
+                                                                    }}
+                                                                  >
+                                                                    <GetIcon icon={"info"} />
+                                                                  </span>
+                                                                  {!(openData.item.viewOnly ?? false) && (
                                                                     <span
-                                                                      className="info"
+                                                                      className="delete"
+                                                                      title="Remove Item"
                                                                       onClick={() => {
-                                                                        setPopupData({
-                                                                          type: 1,
-                                                                          data: replacableItem.recipe,
-                                                                          foodExchangeCategory: foodExchangeCategory._id,
-                                                                          nutritionInfo: getCalories(replacableItem.recipe, "", foodExchangeCategory.availableCalories, false),
-                                                                          Serving: setCaloriesItems(foodExchangeCategory, true, replacableItem.recipe.typeOfRecipe),
-                                                                        });
+                                                                        // deleteReplcableItem(replacableItem._id, index);
+                                                                        deleteReplcableItem(replacableItem._id, replacableIndex, recipeIndex, "recipe", foodExchangeCategory._id, dayNumber, items.optionNo);
                                                                       }}
                                                                     >
-                                                                      <GetIcon icon={"info"} />
+                                                                      <GetIcon icon={"delete"} />
                                                                     </span>
-                                                                    {!(openData.item.viewOnly ?? false) && (
-                                                                      <span
-                                                                        className="delete"
-                                                                        title="Remove Item"
-                                                                        onClick={() => {
-                                                                          // deleteReplcableItem(replacableItem._id, index);
-                                                                          deleteReplcableItem(replacableItem._id, replacableIndex, recipeIndex, "recipe", foodExchangeCategory._id, dayNumber, items.optionNo);
-                                                                        }}
-                                                                      >
-                                                                        <GetIcon icon={"delete"} />
-                                                                      </span>
-                                                                    )}
-                                                                  </div>
-                                                                </Variant>
-                                                              ))}
-                                                            <Variant className="vertical add-button">
-                                                              <GetIcon icon={"add"}></GetIcon>
-                                                            </Variant>
-                                                          </Variants>
-                                                        </ReplacableItems>
-                                                      }
-                                                    />
-                                                  )}
-                                                </Variant>
-                                              );
-                                            })
+                                                                  )}
+                                                                </div>
+                                                              </Variant>
+                                                            ))}
+                                                          <Variant className="vertical add-button">
+                                                            <GetIcon icon={"add"}></GetIcon>
+                                                          </Variant>
+                                                        </Variants>
+                                                      </ReplacableItems>
+                                                    }
+                                                  />
+                                                )}
+                                              </Variant>
+                                            );
+                                          })
                                           : ""}
                                       </Variants>
                                       {/* <DropTarget onDrop={showReplacable ? () => {} : onDrop} data={{ foodExchangeCategory: foodExchangeCategory._id, dayNumber, optionNo: items.optionNo }} element={<div>Dag Here</div>}></DropTarget> */}
@@ -892,7 +901,7 @@ const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox
                               {(!openData.item.viewOnly ?? false) && (
                                 <Div>
                                   <DropTarget
-                                    onDrop={showReplacable ? () => {} : onDrop}
+                                    onDrop={showReplacable ? () => { } : onDrop}
                                     data={{
                                       foodExchangeCategory: foodExchangeCategory._id,
                                       dayNumber,
@@ -975,7 +984,7 @@ const FoodExchangeSetupMenu = ({ openData, themeColors, setMessage, setLoaderBox
                               <span>BHD</span>
                               <span className="price">{recipe.price}</span>
                               <span className="offer">{recipe.offerPrice}</span>
-                              <span className="calories">{`${(recipe.calories/recipe.numberOfPortion).toFixed(2)} calories`}</span>
+                              <span className="calories">{`${(recipe.calories / recipe.numberOfPortion).toFixed(2)} calories`}</span>
                               <span className="calories">{`${recipe.typeOfRecipe}`}</span>
                               {recipe.typeOfRecipe === "Mixed" && <span className="calories">Meat {(recipe.mixedMeatPercentage ?? 0) + "%, Bread " + (recipe.mixedBreadPercentage ?? 0) + "%"}</span>}
                             </Title>

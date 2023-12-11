@@ -940,6 +940,61 @@ const Patient = (props) => {
       add: false,
       update: false,
     },
+    {
+      type: "select",
+      placeholder: "Contact Person for Delivery",
+      name: "contactPerson",
+      validation: "",
+      default: "false",
+      tag: true,
+      label: "Contact Person for Delivery",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      selectApi: "Self,Other",
+      apiType: "CSV",
+    },
+    {
+      type: "text",
+      placeholder: "Delivery Contact Name",
+      name: "deliveryContactName",
+      condition: {
+        item: "contactPerson",
+        if: "Other",
+        then: "enabled",
+        else: "disabled",
+      },
+      showItem: "",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Delivery Contact Name",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "number",
+      placeholder: "Delivery Contact Number",
+      name: "deliverycontactNumber",
+      condition: {
+        item: "contactPerson",
+        if: "Other",
+        then: "enabled",
+        else: "disabled",
+      },
+      showItem: "",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Delivery Contact Number",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
   const [admissionHistory] = useState([
@@ -1673,7 +1728,7 @@ const Patient = (props) => {
           }
           themeColors={themeColors}
           closeModal={closeModal}
-          itemTitle={{ name: "username", type: "text", collection: "" }}
+          itemTitle={{ name: "fullName", type: "text", collection: "" }}
           openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
           customClass={"full-page"}
         ></PopupView>

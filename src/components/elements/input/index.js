@@ -50,7 +50,7 @@ function FormInput(props) {
           console.log("event", event.keyCode);
         };
         return (
-          <InputContainer className={`${props.dynamicClass ?? ""}`} animation={props.animation}>
+          <InputContainer className={`${props.dynamicClass ?? ""} ${props.customClass ?? ""}`} animation={props.animation}>
             {props.error?.length ? (
               <Label theme={themeColors} className={`${!value?.toString().length > 0 ? "error shrink" : "error"}`}>
                 {props.error}
