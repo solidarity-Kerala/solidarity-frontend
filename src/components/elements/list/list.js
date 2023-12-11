@@ -24,6 +24,7 @@ import Editable from "./editable";
 import Details from "./details";
 import PopupView from "../popupview";
 import { TabContainer } from "./popup/styles";
+import { food } from "../../../images";
 const SetTd = (props) => {
   if (props.viewMode === "table") {
     return <TdView {...props}></TdView>;
@@ -695,7 +696,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
       <SetTr viewMode={viewMode} theme={themeColors} className={signleRecord ? "single" : ""} key={`row-${shortName}-${data._id ?? slNo}`}>
         {profileImage && (
           <ProfileImage>
-            <img src={process.env.REACT_APP_CDN + data[profileImage]} alt="Profile"></img>
+            <img src={data[profileImage] ? process.env.REACT_APP_CDN + data[profileImage] : food} alt="Profile"></img>
           </ProfileImage>
         )}
         <ListContainerBox>
