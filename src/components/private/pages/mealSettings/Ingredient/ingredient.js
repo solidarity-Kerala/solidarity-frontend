@@ -647,7 +647,7 @@ const Ingredient = (props) => {
           type: "text",
           collection: "",
         }}
-        profileImage="photo"
+        profileImage="photoThumbnail"
         shortName={`Ingredient`}
         // formMode={`single`}
         formMode={`double`}

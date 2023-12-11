@@ -1003,7 +1003,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                   <Variant key={item._id} className={`vertical replace ${data.menuType} ${(openData.item.viewOnly ?? false) === true ? "Fixed" : ""}`}>
                                                     <Variant key={item._id} className="vertical recipe">
                                                       <ProfileImage>
-                                                        <img src={item.photo ? process.env.REACT_APP_CDN + item.photo : food} alt="icon"></img>
+                                                        <img src={item.photoThumbnail ? process.env.REACT_APP_CDN + item.photoThumbnail : food} alt="icon"></img>
                                                       </ProfileImage>
                                                       <span className="recipe">{item.title} </span>
                                                       <span>{recipeCalories.toFixed(2)} calories</span>
@@ -1088,7 +1088,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                                 item.foodmenureplacableitems.map((replacableItem, replacableIndex) => (
                                                                   <Variant key={replacableItem._id} className="horizontal child-recipe">
                                                                     <ProfileImage>
-                                                                      <img src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food} alt="icon"></img>
+                                                                      <img src={replacableItem.recipe.photoThumbnail ? process.env.REACT_APP_CDN + replacableItem.recipe.photoThumbnail : food} alt="icon"></img>
                                                                     </ProfileImage>
                                                                     <Details>
                                                                       <span className="recipe">{replacableItem.recipe.title}</span>
@@ -1218,7 +1218,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                     replacableItems.map((replacableItem, replacableIndex) => (
                                                       <Variant key={replacableItem._id} className="horizontal child-recipe">
                                                         <ProfileImage>
-                                                          <img src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food} alt="icon"></img>
+                                                          <img src={replacableItem.recipe.photoThumbnail ? process.env.REACT_APP_CDN + replacableItem.recipe.photoThumbnail : food} alt="icon"></img>
                                                         </ProfileImage>
                                                         <Details>
                                                           <span className="recipe">{replacableItem.recipe.title}</span>
@@ -1335,7 +1335,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       element={
                         <MealItem key={recipe._id}>
                           <ProfileImage>
-                            <img src={recipe.photo ? process.env.REACT_APP_CDN + recipe.photo : food} alt="icon" />
+                            <img src={recipe.photoThumbnail ? process.env.REACT_APP_CDN + recipe.photoThumbnail : food} alt="icon" />
                           </ProfileImage>
                           <Title>
                             {recipe.title ?? "Title not found!"}
