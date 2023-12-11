@@ -39,6 +39,8 @@ export const Container = styled.div`
   flex: 1 1 100%;
   overflow: auto;
   box-shadow: inset rgb(0 0 0 / 6%) 0px 0px 8px 7px;
+  max-width: 100%;
+  width: 100%;
   &.noshadow {
     box-shadow: none;
     overflow: initial;

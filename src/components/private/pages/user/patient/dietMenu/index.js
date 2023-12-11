@@ -888,7 +888,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           <React.Fragment key={`recipe-${recepeIndex}`}>
             <Recepe className={isDeleted ? "recipe deleted" : "recipe"}>
               <RecepeContent className="recipe1">
-                <RecepeImage src={recipeItem.recipe.photo ? process.env.REACT_APP_CDN + recipeItem.recipe.photo : food}></RecepeImage>
+                <RecepeImage src={recipeItem.recipe.photoThumbnail ? process.env.REACT_APP_CDN + recipeItem.recipe.photoThumbnail : food}></RecepeImage>
                 <RecepeData className="recipe2">
                   <span className="title">
                     {recipeItem.recipe.title}
@@ -1009,7 +1009,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       {replacableItems[recipeItem.foodmenuitem._id]?.map((replacableItem, replacableIndex) => (
                         <Recepe key={`replacable-receipe${replacableIndex}`} className="horizontal">
                           <RecepeContent className="child-recipe">
-                            <RecepeImage src={replacableItem.recipe.photo ? process.env.REACT_APP_CDN + replacableItem.recipe.photo : food}></RecepeImage>
+                            <RecepeImage src={replacableItem.recipe.photoThumbnail ? process.env.REACT_APP_CDN + replacableItem.recipe.photoThumbnail : food}></RecepeImage>
                             <RecepeData>
                               <span className="title">{replacableItem.recipe.title}</span>
                               <span className="light">
