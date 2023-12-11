@@ -12,6 +12,7 @@ import AppointmentMenu from "./appointment";
 // import SetupRecipe from "./setupRecipe";
 import SelfOrder from "./selfOrder";
 import axios from "axios";
+import { checkprivilege, privileges } from "../../../../functions/previliage";
 
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
@@ -20,6 +21,7 @@ const Patient = (props) => {
   useEffect(() => {
     document.title = `Patient List - Diet Food Management Portal`;
   }, []);
+  console.log("userType", props.userType);
   const themeColors = useSelector((state) => state.themeColors);
   // State to control the display of the SetupMenu popup
   const [openMenuSetup, setOpenMenuSetup] = useState(false);
@@ -188,8 +190,7 @@ const Patient = (props) => {
     },
     {
       type: "title",
-      title:
-        "For user login, the email address will serve as the username, and the CPR number will be used as the password",
+      title: "For user login, the email address will serve as the username, and the CPR number will be used as the password",
       name: "bmr",
       add: true,
       update: true,
@@ -1366,12 +1367,7 @@ const Patient = (props) => {
       updateOn: ["bookingDate", "dietician", "physical"],
       selectApi: "day-slot/avail-slot",
       placeholder: "Time Slot",
-      params: [
-        { name: "center" },
-        { name: "bookingDate" },
-        { name: "dietician" },
-        { name: "physical" },
-      ],
+      params: [{ name: "center" }, { name: "bookingDate" }, { name: "dietician" }, { name: "physical" }],
       name: "bookingSlot",
       showItem: "availableSlots",
       validation: "",
@@ -1453,63 +1449,73 @@ const Patient = (props) => {
         console.error("API request error:", error);
       });
   };
+
   const [actions] = useState([
-    {
-      element: "button",
-      type: "subItem",
-      id: "user/subscriber/web",
-      itemTitle: {
-        name: "username",
-        type: "text",
-        collection: "user",
-      },
-      title: "Medical Record",
-      attributes: medicalRecord,
-      params: {
-        api: `user/subscriber/web`,
-        parentReference: "user",
-        itemTitle: {
-          name: "username",
-          type: "text",
-          collection: "user",
-        },
-        shortName: "Medical Record",
-        addPrivilege: true,
-        delPrivilege: true,
-        updatePrivilege: true,
-        customClass: "medium",
-        formMode: "double",
-      },
-    },
-    {
-      element: "button",
-      type: "subList",
-      id: "delivery-address",
-      parentReference: "user",
-      itemTitle: {
-        name: "username",
-        type: "text",
-        collection: "user",
-      },
-      title: "Delivery Address",
-      attributes: deliveryAddress,
-      params: {
-        api: `delivery-address`,
-        parentReference: "user",
-        itemTitle: {
-          name: "username",
-          type: "text",
-          collection: "user",
-        },
-        actions: deliveryAddressActions,
-        shortName: "Delivery Address",
-        addPrivilege: true,
-        delPrivilege: true,
-        updatePrivilege: true,
-        customClass: "medium",
-        formMode: "double",
-      },
-    },
+    ...(checkprivilege([privileges.admin, privileges.doctor])
+      ? [
+          {
+            element: "button",
+            type: "subItem",
+            id: "user/subscriber/web",
+            itemTitle: {
+              name: "username",
+              type: "text",
+              collection: "user",
+            },
+            title: "Medical Record",
+            attributes: medicalRecord,
+            params: {
+              api: `user/subscriber/web`,
+              parentReference: "user",
+              itemTitle: {
+                name: "username",
+                type: "text",
+                collection: "user",
+              },
+              shortName: "Medical Record",
+              addPrivilege: true,
+              delPrivilege: true,
+              updatePrivilege: checkprivilege([privileges.admin, privileges.doctor]) ? true : false,
+              //if you want to show edit button for passed previlges then make value for condtion is 'true' or you dont want to give edit option for the pased previlges then 'false'
+              customClass: "medium",
+              formMode: "double",
+            },
+          },
+        ]
+      : []),
+    ...(checkprivilege([privileges.admin, privileges.doctor])
+      ? [
+          {
+            element: "button",
+            type: "subList",
+            id: "delivery-address",
+            parentReference: "user",
+            itemTitle: {
+              name: "username",
+              type: "text",
+              collection: "user",
+            },
+            title: "Delivery Address",
+            attributes: deliveryAddress,
+            params: {
+              api: `delivery-address`,
+              parentReference: "user",
+              itemTitle: {
+                name: "username",
+                type: "text",
+                collection: "user",
+              },
+              actions: deliveryAddressActions,
+              shortName: "Delivery Address",
+              addPrivilege: true,
+              delPrivilege: true,
+              updatePrivilege: true,
+              customClass: "medium",
+              formMode: "double",
+            },
+          },
+        ]
+      : []),
     {
       element: "button",
       type: "subList",
@@ -1659,17 +1665,7 @@ const Patient = (props) => {
   ]);
   return (
     <Container className="noshadow">
-      <ListTable
-        actions={actions}
-        api={`user`}
-        itemTitle={{ name: "fullName", type: "text", collection: "" }}
-        shortName={`Patient`}
-        parentReference={"userType"}
-        referenceId={"6471b3849fb2b29fe045887b"}
-        formMode={`double`}
-        {...props}
-        attributes={attributes}
-      ></ListTable>
+      <ListTable actions={actions} api={`user`} itemTitle={{ name: "fullName", type: "text", collection: "" }} shortName={`Patient`} parentReference={"userType"} referenceId={"6471b3849fb2b29fe045887b"} formMode={`double`} {...props} attributes={attributes}></ListTable>
       {openedMenu === "menu" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
@@ -1691,15 +1687,7 @@ const Patient = (props) => {
       {openedMenu === "diet" && openMenuSetup && openItemData && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC
-          popupData={
-            <DietMenu
-              openData={openItemData}
-              setMessage={props.setMessage}
-              {...props}
-              themeColors={themeColors}
-              key={"patient-diet"}
-            ></DietMenu>
-          }
+          popupData={<DietMenu openData={openItemData} setMessage={props.setMessage} {...props} themeColors={themeColors} key={"patient-diet"}></DietMenu>}
           themeColors={themeColors}
           closeModal={closeModal}
           itemTitle={{ name: "fullName", type: "text", collection: "" }}
