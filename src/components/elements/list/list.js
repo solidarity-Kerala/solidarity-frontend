@@ -649,7 +649,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
           {slNo + 1 + currentIndex}
         </TdView>
         {attributes.map((attribute, index) => {
-          if (attribute.view) {
+          if (attribute.view && (attribute.tag ?? false)) {
             try {
               const itemValue = attribute.collection?.length > 0 && attribute.showItem?.length > 0 ? data[attribute.collection][attribute.showItem] : data[attribute.name];
               let dynamicClass = "";
@@ -1046,7 +1046,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                     </ThView>
                     {attributes.map((attribute) => {
                       const result =
-                        attribute.view === true ? (
+                        attribute.view && (attribute.tag ?? false) ? (
                           <ThView className={headerSticky} key={shortName + attribute.name}>
                             {attribute.label}
                           </ThView>
@@ -1056,6 +1056,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                       headerSticky = false;
                       return result;
                     })}
+                    <ThView key={"actions"}></ThView>
                   </tr>
                 </thead>
                 <tbody>{users.data?.response?.length > 0 && users.data?.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}</tbody>

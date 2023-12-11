@@ -456,7 +456,7 @@ const AddRecipe = (props) => {
         api={`recipe`}
         // itemTitle={`Recipe`}
         itemTitle={{ name: "title", type: "text", collection: "" }}
-        profileImage="photo"
+        profileImage="photoThumbnail"
         shortName={`Recipe`}
         // formMode={`single`}
         formMode={`double`}
