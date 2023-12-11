@@ -12,6 +12,7 @@ import AppointmentMenu from "./appointment";
 // import SetupRecipe from "./setupRecipe";
 import SelfOrder from "./selfOrder";
 import axios from "axios";
+import InvoicePDF from "./invoicePDF";
 
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
@@ -1432,6 +1433,31 @@ const Patient = (props) => {
       },
     },
   ]);
+  const [invoice] = useState([
+    {
+      element: "button",
+      type: "callback",
+      callback: (item, data) => {
+        // Write code to set default..
+        setOpenedMenu("invoice");
+        setOpenItemData({ item, data });
+        setOpenMenuSetup(true);
+      },
+
+      icon: "menu",
+      title: "Invoice",
+      itemTitle: { name: "username", type: "text", collection: "user" },
+      params: {
+        api: ``,
+        parentReference: "",
+        // itemTitle: "username",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+      },
+    },
+  ]);
   const setDefault = async (data) => {
     props.setLoaderBox(true);
     await axios
@@ -1556,6 +1582,7 @@ const Patient = (props) => {
         },
         // itemTitle: "username",
         shortName: "Diet Package",
+        actions: invoice,
         addPrivilege: true,
         delPrivilege: true,
         updatePrivilege: true,
@@ -1563,7 +1590,6 @@ const Patient = (props) => {
         formMode: "double",
       },
     },
-
     {
       element: "button",
       type: "subList",
@@ -1716,6 +1742,23 @@ const Patient = (props) => {
               setMessage={props.setMessage}
               // Pass selected item data (Menu Title) to the popup for setting the time
             ></AppointmentMenu>
+          }
+          themeColors={themeColors}
+          closeModal={closeModal}
+          itemTitle={{ name: "username", type: "text", collection: "" }}
+          openData={openItemData} // Pass selected item data to the popup for setting the time and taking menu id and other required data from the list item
+          customClass={"medium"}
+        ></PopupView>
+      )}
+      {openedMenu === "invoice" && openMenuSetup && openItemData && (
+        <PopupView
+          // Popup data is a JSX element which is binding to the Popup Data Area like HOC
+          popupData={
+            <InvoicePDF
+              openData={openItemData}
+              setMessage={props.setMessage}
+              // Pass selected item data (Menu Title) to the popup for setting the time
+            ></InvoicePDF>
           }
           themeColors={themeColors}
           closeModal={closeModal}
