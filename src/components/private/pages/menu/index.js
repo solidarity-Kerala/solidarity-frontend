@@ -134,6 +134,18 @@ const Menu = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "checkbox",
+      placeholder: "Show In Menu",
+      name: "showInMenu",
+      validation: "",
+      default: "false",
+      label: "Show In Menu",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
   ]);
 
   const [submenuAttributes] = useState([
@@ -245,6 +257,18 @@ const Menu = (props) => {
       validation: "",
       default: "false",
       label: "Hide Header",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "checkbox",
+      placeholder: "Show In Menu",
+      name: "showInMenu",
+      validation: "",
+      default: "false",
+      label: "Show In Menu",
       required: true,
       view: true,
       add: true,
