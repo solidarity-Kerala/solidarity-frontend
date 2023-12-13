@@ -3,12 +3,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Switch from "./switch";
 import { useSelector } from "react-redux";
-import Page404 from "../private/pages/page404";
-import { Container, MainContainer, SideBar } from "../private/common/layout/styels";
+import Page404 from "../project/pages/page404";
+import { Container, MainContainer, SideBar } from "../elements/layout/styels";
 import { RowContainer } from "../styles/containers/styles";
-import Header from "../private/common/layout/header";
-import Footer from "../private/common/layout/footer";
-import Menu from "../private/common/layout/menu";
+import Header from "../elements/layout/header";
+import Footer from "../elements/layout/footer";
+import Menu from "../elements/layout/menu";
 import InternetStatusPopup from "../elements/InternetStatusPopup";
 
 const PageRouter = () => {

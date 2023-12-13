@@ -1,3 +1,4 @@
-import logo from "./public/logo.png";
-import food from "./public/menu-default.png";
-export { logo, food };
+import logo from "../components/project/brand/logo.png";
+import food from "../components/project/brand/noimage.png";
+import banner from "../components/project/brand/login-banner.jpeg";
+export { logo, food, banner };

@@ -1,6 +1,6 @@
 import { Image } from "@react-pdf/renderer";
 import { GetIcon } from "../../../../icons";
-import { dateFormat, dateTimeFormat } from "../../../functions/date";
+import { dateFormat, dateTimeFormat } from "../../functions/date";
 import { IconBox, Img } from "../styles";
 export function convertMinutesToHHMM(minutes) {
   const hours = Math.floor(minutes / 60);

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { GetCustomIcon } from "../components/project/icons";
 const Svg = styled.svg`
   height: 1em;
 `;
@@ -101,7 +102,7 @@ export const QuestionIcon = () => (
 );
 export const DefaultIcon = () => (
   <Svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-    <path  fill="currentColor" d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+    <path fill="currentColor" d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
   </Svg>
 );
 export const LocationIcon = () => (
@@ -1232,7 +1233,7 @@ export const GetIcon = ({ icon }) => {
     case "open-book":
       return <OpenBook />;
     default:
-      // console.log("missing icon", icon);
-      return <DefaultIcon />;
+      // console.log("icons from project", icon);
+      return <GetCustomIcon icon={icon} />;
   }
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Header, Overlay, Page } from "./../manage/styles";
+import { Header, Overlay, Page } from "../manage/styles";
 import { GetIcon } from "../../../../icons";
 import { CloseButton } from "../popup/styles";
 import { Footer } from "../create/styles";

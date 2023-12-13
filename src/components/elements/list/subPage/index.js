@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 // import FormInput from "../../input";
 import ListTable from "../list";
-import { Header, Overlay, Page } from "./../manage/styles";
+import { Header, Overlay, Page } from "../manage/styles";
 import { getValue } from "../functions";
 import { GetIcon } from "../../../../icons";
 import { CloseButton } from "../popup/styles";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Document, Page, Text, View, StyleSheet, PDFViewer } from "@react-pdf/renderer";
-import { Page as PageView } from "../../../elements/form/styles";
+import { Page as PageView } from "../../form/styles";
 import { getValue } from "../functions";
 
 const styles = StyleSheet.create({
