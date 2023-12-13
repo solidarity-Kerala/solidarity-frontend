@@ -67,7 +67,6 @@ import AddRecipe from "../../private/pages/mealSettings/addRecipe";
 import DaySlot from "../../private/pages/daySlot";
 import PackageOrder from "../../private/pages/order/packageOrder";
 import AvailableCalories from "../../private/pages/Calories/availableCalories";
-import FoodExchangeCalories from "../../private/pages/Calories/foodExchangeCalori.js";
 import AvailableSizes from "../../private/pages/Calories/availableSizes";
 import DietPrice from "../../private/pages/Calories/dietPrice";
 import Incredientmedicalcondition from "../../private/pages/Calories/Incredientmedicalcondition";
@@ -265,8 +264,7 @@ const Switch = ({ page, key, user, ...privileges }) => {
       return <PackageOrder key={key} {...privileges} />;
     case "available-calories":
       return <AvailableCalories key={key} {...privileges} />;
-      case "foodexchange-calories":
-      return <FoodExchangeCalories key={key} {...privileges} />;
+      
     case "available-sizes":
       return <AvailableSizes key={key} {...privileges} />;
     case "diet-price":
