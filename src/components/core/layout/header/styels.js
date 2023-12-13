@@ -10,15 +10,24 @@ export const Container = styled.div`
 `;
 export const HeaderMenu = styled.div`
   display: flex;
+  -webkit-box-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
   align-items: center;
-  border: 1px solid #d9d9d9;
+  border: 1px solid rgb(217, 217, 217);
   flex-direction: column;
-  border-radius: 50%;
-  width: 35px;
+  border-radius: 18px;
+  /* width: 35px; */
   height: 35px;
+  padding-left: 10px;
   position: relative;
   cursor: pointer;
+  flex-direction: row;
+  i {
+    margin-right: 5px;
+    font-style: normal;
+    color: #555555;
+  }
   img {
     width: 50px;
     height: 50px;
@@ -47,9 +56,7 @@ export const HeaderMenu = styled.div`
     font-size: 15px;
   }
   @media (max-width: 768px) {
-    padding: 15px;
-    width: -webkit-fill-available;
-    width: 10px;
+    padding: 15px 0px 15px 15px;
     height: 10px;
     &.vertical {
       flex-direction: column;
@@ -58,12 +65,12 @@ export const HeaderMenu = styled.div`
 `;
 export const Logo = styled.img`
   height: 65px;
-    max-width: 90%;
-    object-fit: contain;
-    width: fit-content;
-    padding-left: 0em;
-    padding-top: 0em;
-    margin-bottom: 0px;
+  max-width: 90%;
+  object-fit: contain;
+  width: fit-content;
+  padding-left: 0em;
+  padding-top: 0em;
+  margin-bottom: 0px;
   @media screen and (max-width: 768px) {
     padding-left: 0;
     padding-top: 0;
@@ -150,22 +157,21 @@ export const Logout = styled.div`
     margin-right: 10px;
   }
   @media screen and (max-width: 768px) {
-    margin-left: auto;
-    border: 1px solid;
     border-radius: 4px;
     display: flex;
+    -webkit-box-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
     align-items: center;
     height: 25px;
-    padding: 5px 10px;
     cursor: pointer;
     text-transform: uppercase;
   }
 `;
 
 export const MNavClose = styled.div`
- margin-right: 2px;
-    margin-top: 5px;
+  margin-right: 2px;
+  margin-top: 5px;
   cursor: pointer;
   justify-content: center;
   align-items: center;

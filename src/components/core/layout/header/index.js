@@ -47,11 +47,11 @@ const Header = (props) => {
             handleProfileClick();
           }}
         >
+          <i>{props.user.user?.fullName ?? props.user.user?.username}</i>
           {generateThumbnail(props.user.user?.fullName ?? props.user.user?.username ?? "", null, props.user.user.photo ?? "")}
           {isProfileBarOpen && (
             <div className="ProfileBar" onClick={(e) => e.stopPropagation()}>
               <ProfileBar setLoaderBox={props.setLoaderBox} setMessage={props.setMessage} data={props.user}></ProfileBar>
-              
             </div>
           )}
         </HeaderMenu>

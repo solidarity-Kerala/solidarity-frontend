@@ -86,13 +86,14 @@ export const ProfileIcon = styled.div`
   align-items: center;
   position: absolute;
   bottom: -15px;
-  left: 30px;
+  margin: auto;
 `;
 export const Popbar = styled.div`
   position: fixed;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  right: 28px;
+  top: 55px;
+  border-radius: 10px;
+  bottom: auto;
   border: 1px solid lightgray;
   padding: 0px;
   white-space: nowrap;
@@ -107,34 +108,41 @@ export const Popbar = styled.div`
   min-height: 200px;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 10px 2px;
   .main {
-    font-size: 15px;
-    margin-top: 50px;
+    font-size: 18px;
+    margin-top: 30px;
     font-weight: 600;
+    text-align: center;
   }
   .sub {
     font-size: 12px;
-    margin-top: 5px;
+    text-align: center;
+    margin-top: 0px;
   }
 `;
 export const Top = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  width: 100%;
+  margin: 10px;
+  width: -webkit-fill-available;
   .banner {
-    width: 100%;
     height: 100px;
-    margin: -10px;
-    background: linear-gradient(90deg, rgb(228 228 228) 0%, rgb(186 188 187) 35%, rgb(151 151 151) 100%);
+    margin: 0px;
+    background: linear-gradient(90deg, rgb(228, 228, 228) 0%, rgb(186, 188, 187) 35%, rgb(151, 151, 151) 100%);
     position: relative;
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
   }
 `;
 export const Bottom = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  background: #e4e4e4;
+  width: calc(100% - 40px);
+  background: rgb(228, 228, 228);
+  margin: 10px;
   padding: 10px;
+  border-radius: 12px;
 `;
 export const ToggleInput = styled.input`
   opacity: 0;
