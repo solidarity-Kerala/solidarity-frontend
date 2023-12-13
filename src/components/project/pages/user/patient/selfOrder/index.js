@@ -17,20 +17,20 @@ import {
   TableCell,
   Title,
 } from "./styles";
-import AutoForm from "../../../../../elements/form";
+import AutoForm from "../../../../../core/form";
 import { getData, postData, putData } from "../../../../../../backend/api";
 import { useDispatch, useSelector } from "react-redux";
 import { addSelectObject } from "../../../../../../store/actions/select";
 import { GetIcon } from "../../../../../../icons";
-// import Checkbox from "../../../../../elements/checkbox";
-import { NoData, ProfileImage } from "../../../../../elements/list/styles";
-import { getValue } from "../../../../../elements/list/functions";
+// import Checkbox from "../../../../../core/checkbox";
+import { NoData, ProfileImage } from "../../../../../core/list/styles";
+import { getValue } from "../../../../../core/list/functions";
 import axios from "axios";
 // import { GetAccessToken } from "../../../../../../backend/authentication";
 
 import { RecepeImage } from "../dietMenu/styles";
 import InvoicePDF from "./inovicePDF";
-import PopupView from "../../../../../elements/popupview";
+import PopupView from "../../../../../core/popupview";
 import { food } from "../../../../../../images";
 
 const OrderForm = styled.form`

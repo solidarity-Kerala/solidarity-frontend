@@ -3,7 +3,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { addPageObject } from "../../../../store/actions/pages";
-import withLayout from "../../../elements/layout";
+import withLayout from "../../../core/layout";
 import {
   Count,
   DashboardSection,

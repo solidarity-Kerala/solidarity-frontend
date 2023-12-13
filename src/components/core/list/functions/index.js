@@ -2,6 +2,7 @@ import { Image } from "@react-pdf/renderer";
 import { GetIcon } from "../../../../icons";
 import { dateFormat, dateTimeFormat } from "../../functions/date";
 import { IconBox, Img } from "../styles";
+import { food } from "../../../../images";
 export function convertMinutesToHHMM(minutes) {
   const hours = Math.floor(minutes / 60);
   const mins = Math.floor(minutes % 60);
@@ -18,7 +19,7 @@ export const getValue = (attribute, itemValue, display = false, isPrint = false)
       response = convertMinutesToHHMM(parseFloat(itemValue ?? 0));
       break;
     case "image":
-      response = isPrint ? <Image style={{ width: 50, height: 50 }} source={process.env.REACT_APP_CDN + itemValue} /> : <Img src={process.env.REACT_APP_CDN + itemValue} />;
+      response = isPrint ? <Image style={{ width: 50, height: 50 }} source={itemValue ? process.env.REACT_APP_CDN + itemValue : food} /> : <Img src={itemValue ? process.env.REACT_APP_CDN + itemValue : food} />;
       break;
     case "datetime":
       response = dateTimeFormat(itemValue);

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 // import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import { postData } from "../../../backend/api";
-import AutoForm from "../../elements/form";
+import AutoForm from "../../core/form";
 import Footer from "../footer";
 import { FormContainer, MainContainer } from "./styles";
 //using translation

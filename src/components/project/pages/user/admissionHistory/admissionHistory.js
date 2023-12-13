@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../../../../elements/layout";
-import ListTable from "../../../../elements/list/list";
-import { Container } from "../../../../elements/layout/styels";
+import Layout from "../../../../core/layout";
+import ListTable from "../../../../core/list/list";
+import { Container } from "../../../../core/layout/styels";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import PopupView from "../../../../elements/popupview";
+import PopupView from "../../../../core/popupview";
 import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
 
 const AdmissionHistory = (props) => {

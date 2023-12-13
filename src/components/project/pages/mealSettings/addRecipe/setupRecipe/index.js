@@ -3,7 +3,7 @@ import {
   ColumnContainer,
   RowContainer,
 } from "../../../../../styles/containers/styles";
-import FormInput from "../../../../../elements/input";
+import FormInput from "../../../../../core/input";
 import {
   Button,
   DataItem,
@@ -14,7 +14,7 @@ import {
   Title,
 } from "./styles";
 import styled from "styled-components";
-import AutoForm from "../../../../../elements/form";
+import AutoForm from "../../../../../core/form";
 import {
   deleteData,
   getData,
@@ -24,9 +24,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { addSelectObject } from "../../../../../../store/actions/select";
 import { GetIcon } from "../../../../../../icons";
-import Checkbox from "../../../../../elements/checkbox";
-import { NoData } from "../../../../../elements/list/styles";
-import { getValue } from "../../../../../elements/list/functions";
+import Checkbox from "../../../../../core/checkbox";
+import { NoData } from "../../../../../core/list/styles";
+import { getValue } from "../../../../../core/list/functions";
 
 const SetupRecipe = ({ openData, setMessage }) => {
   const [search] = useState("");

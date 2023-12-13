@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { GetIcon } from "../../../../../../icons";
 import { deleteData, getData, postData } from "../../../../../../backend/api";
-import { NoData } from "../../../../../elements/list/styles";
+import { NoData } from "../../../../../core/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
-import Search from "../../../../../elements/search";
+import Search from "../../../../../core/search";
 import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, MealCategoryCell, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant } from "./styles"; // Import styles from styles.js
 import DraggableItem from "./dragdrop/drag";
 import { HTML5Backend } from "react-dnd-html5-backend";

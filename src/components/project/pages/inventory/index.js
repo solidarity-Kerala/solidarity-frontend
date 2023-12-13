@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../../../elements/layout";
-import ListTable from "../../../elements/list/list";
-import { Container } from "../../../elements/layout/styels";
+import Layout from "../../../core/layout";
+import ListTable from "../../../core/list/list";
+import { Container } from "../../../core/layout/styels";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
 const Inventory = (props) => {

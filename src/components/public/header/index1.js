@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { HeaderContainer, Nav, Right } from "./styles";
 import { useTranslation } from "react-i18next"; // react-i18next hook for translations
 import { logo } from "../../../images";
-import LanguageTooltip from "../../elements/tooltip";
+import LanguageTooltip from "../../core/tooltip";
 const Header = () => {
   // useTranslation hook to get the i18n instance and t function for translations
   const { t } = useTranslation();
