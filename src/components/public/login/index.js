@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import AutoForm from "../../elements/form";
 import Footer from "../footer";
 import { FormContainer, MainContainer } from "./styles";
-import banner from "../../../images/public/banner.jpeg";
 //using translation
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +12,7 @@ import withLayout from "../layout";
 import { ColumnContainer } from "../../styles/containers/styles";
 import Header from "../header";
 import { clearLoginSession, fetchLogin } from "../../../store/actions/login";
+import { banner } from "../../../images";
 
 const Login = (props) => {
   useEffect(() => {

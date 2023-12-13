@@ -6,8 +6,8 @@ import { CloseButton } from "../popup/styles";
 import { GetIcon } from "../../../../icons";
 import { useSelector } from "react-redux";
 import { Header } from "../manage/styles";
-import { updateCaloriDetails, updateDailyCaloric, updateHealthDetails } from "../../../functions/health";
-import { customValidations } from "../../../private/form/validation";
+import { updateCaloriDetails, updateDailyCaloric, updateHealthDetails } from "../../functions/health";
+import { customValidations } from "../../../project/form/validation";
 const CrudForm = (props) => {
   // Use the useTranslation hook from react-i18next to handle translations
   const { t } = useTranslation();

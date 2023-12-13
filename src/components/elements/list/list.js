@@ -15,7 +15,7 @@ import SubPage from "./subPage";
 import DateRangeSelector from "../daterange";
 import * as xlsx from "xlsx";
 import { ToolTip } from "../../styles/list/styles";
-import { dateFormat, dateTimeFormat } from "../../functions/date";
+import { dateFormat, dateTimeFormat } from "../functions/date";
 import { convertMinutesToHHMM, getValue } from "./functions";
 import Popup, { DisplayInformations } from "./popup";
 import Print from "./print/print";
