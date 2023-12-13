@@ -75,7 +75,7 @@ export const ProfileStatus = styled.span`
 
 export const ProfileIcon = styled.div`
   position: relative;
-  background-color: rgb(255, 69, 0);
+  background-color: rgb(255, 255, 255);
   color: rgb(255, 255, 255);
   width: 35px;
   height: 35px;
@@ -84,26 +84,31 @@ export const ProfileIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  bottom: -15px;
+  left: 30px;
 `;
 export const Popbar = styled.div`
-  position: absolute;
-  right: 10px;
-  top: 40px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
   border: 1px solid lightgray;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 0px;
   white-space: nowrap;
   z-index: 1001;
   background: white;
   display: flex;
   flex-direction: column;
+  -webkit-box-pack: justify;
   justify-content: space-between;
   align-items: flex-start;
-  width: 200px;
+  width: 300px;
   min-height: 200px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 10px 2px;
   .main {
     font-size: 15px;
-    margin-top: 10px;
+    margin-top: 50px;
     font-weight: 600;
   }
   .sub {
@@ -114,10 +119,22 @@ export const Popbar = styled.div`
 export const Top = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 10px;
+  width: 100%;
+  .banner {
+    width: 100%;
+    height: 100px;
+    margin: -10px;
+    background: linear-gradient(90deg, rgb(228 228 228) 0%, rgb(186 188 187) 35%, rgb(151 151 151) 100%);
+    position: relative;
+  }
 `;
 export const Bottom = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  background: #e4e4e4;
+  padding: 10px;
 `;
 export const ToggleInput = styled.input`
   opacity: 0;
@@ -148,7 +165,7 @@ export const ToggleSlider = styled.span`
     background-color: white;
     transition: 0.4s;
     border-radius: 50%;
-    background-color: ${({ disable }) => disable || "red"};
+    background-color: ${({ disable }) => disable || "white"};
   }
 
   ${ToggleInput}:checked + &::before {

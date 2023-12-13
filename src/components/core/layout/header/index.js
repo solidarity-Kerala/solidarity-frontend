@@ -35,7 +35,6 @@ const Header = (props) => {
   // const navigate = useNavigate();
   return (
     <Container>
-     
       <MNav>
         <GetIcon icon={selectedMenuItem.icon} />
       </MNav>
@@ -48,10 +47,11 @@ const Header = (props) => {
             handleProfileClick();
           }}
         >
-          {generateThumbnail(props.user.user?.username ?? "", null, props.user.user.photo ?? "")}
+          {generateThumbnail(props.user.user?.fullName ?? props.user.user?.username ?? "", null, props.user.user.photo ?? "")}
           {isProfileBarOpen && (
             <div className="ProfileBar" onClick={(e) => e.stopPropagation()}>
               <ProfileBar setLoaderBox={props.setLoaderBox} setMessage={props.setMessage} data={props.user}></ProfileBar>
+              
             </div>
           )}
         </HeaderMenu>
