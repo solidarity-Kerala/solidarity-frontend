@@ -13,11 +13,11 @@ export const Header = styled.div`
   }
 `;
 export const Nav = styled.nav`
-  padding-top: 0 em;
+  padding-top: 0em;
   display: flex;
   flex-direction: column;
   color: ${(props) => props.theme.secForeground};
-  
+
   overflow-y: auto;
 
   a.main,
@@ -50,15 +50,17 @@ export const Nav = styled.nav`
     color: black;
     box-shadow: rgba(0, 0, 0, 0.16) -1px 0px 4px;
     font-weight: bold;
-    opacity: 1; 
+    opacity: 1;
   }
   a.main.active:first-child,
   a.main:hover:first-child {
     border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
   }
   a.main.active:last-child,
   a.main:hover:last-child {
     border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
   }
   a.main.active::after {
     /* content: ""; */
@@ -82,11 +84,19 @@ export const Nav = styled.nav`
 `;
 export const SubMenu = styled.nav`
   margin-left: 1em;
+  margin-right: 1em;
   padding-left: 0em;
-  border-left: 1px solid lightgrey;
-  border-radius: 12px 0 0 12px;
+  border: 1px solid #f2e5e5;
+  border-radius: 12px;
+  box-shadow: rgb(0 0 0 / 8%) 0px 0px 10px 2px;
   &.close {
     display: none;
+  }
+  a{
+    border-bottom: 1px solid #dfdfdf;
+  }
+  a:last-child{
+    border-bottom: 0;
   }
 `;
 export const MenuGroup = styled.div`
@@ -95,9 +105,9 @@ export const MenuGroup = styled.div`
   svg:last-child {
     margin-left: auto;
   }
-  &.active svg:last-child{
-    transform:rotate(180deg) scale(1.1);
-    font-weight:bold;
-    opacity:1;
+  &.active svg:last-child {
+    transform: rotate(180deg) scale(1.1);
+    font-weight: bold;
+    opacity: 1;
   }
 `;
