@@ -13,8 +13,10 @@ const ProfileBar = ({ data, setLoaderBox, setMessage }) => {
   return (
     <Popbar className="ProfileBar">
       <Top>
-        <ProfileIcon>{generateThumbnail(user?.username ?? "", null, user.photo ?? "")}</ProfileIcon>
-        <span className="main">{user.username}</span>
+        <div className="banner">
+          <ProfileIcon>{generateThumbnail(user?.fullName ?? user.username ?? "", true, user.photo ?? "")}</ProfileIcon>
+        </div>
+        <span className="main">{user.fullName ?? user.username}</span>
         <span className="sub">{user.email}</span>
       </Top>
       <Bottom>
@@ -24,7 +26,8 @@ const ProfileBar = ({ data, setLoaderBox, setMessage }) => {
             navigate("/");
           }}
         >
-          <LogoutIcon />Signout
+          <LogoutIcon />
+          Signout
         </Logout>
       </Bottom>
     </Popbar>

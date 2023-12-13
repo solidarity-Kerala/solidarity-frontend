@@ -18,7 +18,6 @@ export const HeaderMenu = styled.div`
   width: 35px;
   height: 35px;
   position: relative;
-  background-color: red;
   cursor: pointer;
   img {
     width: 50px;
@@ -89,7 +88,7 @@ export const Status = styled.div`
   display: flex;
   justify-content: left;
   align-items: center;
-  padding-right: 10px;
+  padding-right: 0px;
   @media screen and (max-width: 768px) {
     &.hm {
       display: none;
@@ -138,14 +137,14 @@ export const User = styled.div`
 `;
 export const Logout = styled.div`
   margin-right: 1em;
-  color: red;
+  color: black;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   a {
     text-decoration: none;
-    color: red;
+    color: black;
   }
   svg {
     margin-right: 10px;

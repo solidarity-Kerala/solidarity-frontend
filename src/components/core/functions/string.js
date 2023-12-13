@@ -1,79 +1,85 @@
-import { GetIcon } from "../../../icons";
-import { ProfileStatus } from "../layout/styels";
+// import { GetIcon } from "../../../icons";
 
+import { avathar } from "../../../images";
+
+// import { ProfileStatus } from "../layout/styels";
 export function generateThumbnail(name = "Azhar Pallikkandy", status = null, photo = "") {
-  if (photo?.length > 5) {
-    let statusText = "";
-    if (status === true) {
-      statusText = (
-        <ProfileStatus color="green">
-          <GetIcon icon={"approved"}></GetIcon>
-        </ProfileStatus>
-      );
-    } else if (status === false) {
-      statusText = (
-        <ProfileStatus color="red">
-          <GetIcon icon={"bannedPeople"}></GetIcon>
-        </ProfileStatus>
-      );
-    } else {
-      statusText = "";
-    }
-    return (
-      <span>
-        {<img style={{ width: "35px", height: "35px" }} src={`${process.env.REACT_APP_CDN}${photo}`} alt="Profile"></img>}
-        {statusText}
-      </span>
-    );
-  } else {
-    name.toUpperCase();
-    const words = name.split(" ");
-    let statusText = "";
-    if (status === true) {
-      statusText = (
-        <ProfileStatus color="green">
-          <GetIcon icon={"approved"}></GetIcon>
-        </ProfileStatus>
-      );
-    } else if (status === false) {
-      statusText = (
-        <ProfileStatus color="red">
-          <GetIcon icon={"bannedPeople"}></GetIcon>
-        </ProfileStatus>
-      );
-    } else {
-      statusText = "";
-    }
-    let profile = "";
-    if (words.length === 1) {
-      const [word] = words;
-      if (word.length >= 2) {
-        profile = (
-          <span style={{ position: "relative", backgroundColor: generateColorByChar(name.charAt(0)), color: "#fff" }}>
-            {word.substr(0, 1).toUpperCase() + word.substr(word.length - 1).toUpperCase()}
-            {statusText}
-          </span>
-        );
-      } else {
-        profile = (
-          <span style={{ position: "relative", backgroundColor: generateColorByChar(name.charAt(0)), color: "#fff" }}>
-            {word.substr(0, 1).toUpperCase() + word.substr(0, 1).toUpperCase()}
-            {statusText}
-          </span>
-        );
-      }
-    } else {
-      const initials = words.map((word) => word.charAt(0).toUpperCase()).join("");
-      profile = (
-        <span style={{ position: "relative", backgroundColor: generateColorByChar(name.charAt(name.length - 1)), color: "#fff" }}>
-          {initials.substr(0, 2)}
-          {statusText}
-        </span>
-      );
-    }
-    return profile;
-  }
+  
+  return <span>{}{<img style={status===null?{ width: "35px", height: "35px" }:{width: "65px", height: "65px"}} src={photo?.length > 5 ? `${process.env.REACT_APP_CDN}${photo}` : avathar} alt="P"></img>}</span>;
 }
+// export function generateThumbnail(name = "Azhar Pallikkandy", status = null, photo = "") {
+//   if (photo?.length > 5) {
+//     let statusText = "";
+//     if (status === true) {
+//       statusText = (
+//         <ProfileStatus color="green">
+//           <GetIcon icon={"approved"}></GetIcon>
+//         </ProfileStatus>
+//       );
+//     } else if (status === false) {
+//       statusText = (
+//         <ProfileStatus color="red">
+//           <GetIcon icon={"bannedPeople"}></GetIcon>
+//         </ProfileStatus>
+//       );
+//     } else {
+//       statusText = "";
+//     }
+//     return (
+//       <span>
+//         {<img style={{ width: "35px", height: "35px" }} src={`${process.env.REACT_APP_CDN}${photo}`} alt="Profile"></img>}
+//         {statusText}
+//       </span>
+//     );
+//   } else {
+//     name.toUpperCase();
+//     const words = name.split(" ");
+//     let statusText = "";
+//     if (status === true) {
+//       statusText = (
+//         <ProfileStatus color="green">
+//           <GetIcon icon={"approved"}></GetIcon>
+//         </ProfileStatus>
+//       );
+//     } else if (status === false) {
+//       statusText = (
+//         <ProfileStatus color="red">
+//           <GetIcon icon={"bannedPeople"}></GetIcon>
+//         </ProfileStatus>
+//       );
+//     } else {
+//       statusText = "";
+//     }
+//     let profile = "";
+//     if (words.length === 1) {
+//       const [word] = words;
+//       if (word.length >= 2) {
+//         profile = (
+//           <span style={{ position: "relative", backgroundColor: generateColorByChar(name.charAt(0)), color: "#fff" }}>
+//             {word.substr(0, 1).toUpperCase() + word.substr(word.length - 1).toUpperCase()}
+//             {statusText}
+//           </span>
+//         );
+//       } else {
+//         profile = (
+//           <span style={{ position: "relative", backgroundColor: generateColorByChar(name.charAt(0)), color: "#fff" }}>
+//             {word.substr(0, 1).toUpperCase() + word.substr(0, 1).toUpperCase()}
+//             {statusText}
+//           </span>
+//         );
+//       }
+//     } else {
+//       const initials = words.map((word) => word.charAt(0).toUpperCase()).join("");
+//       profile = (
+//         <span style={{ position: "relative", backgroundColor: generateColorByChar(name.charAt(name.length - 1)), color: "#fff" }}>
+//           {initials.substr(0, 2)}
+//           {statusText}
+//         </span>
+//       );
+//     }
+//     return profile;
+//   }
+// }
 
 function generateColorByChar(char) {
   const colorMap = {
