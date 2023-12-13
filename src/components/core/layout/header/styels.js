@@ -59,10 +59,12 @@ export const HeaderMenu = styled.div`
 `;
 export const Logo = styled.img`
   height: 65px;
-  width: fit-content;
-  padding-left: 1em;
-  padding-top: 1em;
-  margin-bottom: 10px;
+    max-width: 90%;
+    object-fit: contain;
+    width: fit-content;
+    padding-left: 0em;
+    padding-top: 0em;
+    margin-bottom: 0px;
   @media screen and (max-width: 768px) {
     padding-left: 0;
     padding-top: 0;
