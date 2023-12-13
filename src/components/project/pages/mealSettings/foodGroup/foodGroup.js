@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 //
 import Layout from "../../../common/layout";
-import ListTable from "../../../../elements/list/list";
+import ListTable from "../../../../core/list/list";
 import { Container } from "../../../common/layout/styels";
-import PopupView from "../../../../elements/popupview";
+import PopupView from "../../../../core/popupview";
 import Meal from "./meal/meal";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file

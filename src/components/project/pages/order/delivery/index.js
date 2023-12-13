@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
-import Layout from "../../../../elements/layout";
-import { Container } from "../../../../elements/layout/styels";
+import Layout from "../../../../core/layout";
+import { Container } from "../../../../core/layout/styels";
 import { ColumnContainer, RowContainer } from "../../../../styles/containers/styles";
-import FormInput from "../../../../elements/input";
-import { FilterBox } from "../../../../elements/list/styles";
+import FormInput from "../../../../core/input";
+import { FilterBox } from "../../../../core/list/styles";
 import { DataBox, Head, Items, Patient, SubHead } from "../styels";
 import { GetIcon } from "../../../../../icons";
 import { Patients, Recepe, RecepeContent, RecepeData, RecepeImage } from "../../user/patient/dietMenu/styles";
 import { food } from "../../../../../images";
 import { getData, postData } from "../../../../../backend/api";
-import Checkbox from "../../../../elements/checkbox";
+import Checkbox from "../../../../core/checkbox";
 import { useSelector } from "react-redux";
 
 const Delivery = (props) => {

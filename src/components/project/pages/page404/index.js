@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../../../elements/layout";
-import { MainContainer } from "../../../elements/layout/styels";
+import Layout from "../../../core/layout";
+import { MainContainer } from "../../../core/layout/styels";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../../../elements/message";
+import Message from "../../../core/message";
 import { clearLogin } from "../../../../store/actions/login";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 //
-import Layout from "../../../../elements/layout";
-import ListTable from "../../../../elements/list/list";
-import { Container } from "../../../../elements/layout/styels";
+import Layout from "../../../../core/layout";
+import ListTable from "../../../../core/list/list";
+import { Container } from "../../../../core/layout/styels";
 import { useSelector } from "react-redux";
-import PopupView from "../../../../elements/popupview";
+import PopupView from "../../../../core/popupview";
 import DietMenu from "./dietMenu";
 import SetupMenu from "../../mealSettings/foodMenu/setupMenu";
 import AppointmentMenu from "./appointment";
 // import SetupRecipe from "./setupRecipe";
 import SelfOrder from "./selfOrder";
 import axios from "axios";
-import { checkprivilege, privileges } from "../../../../elements/functions/previliage";
+import { checkprivilege, privileges } from "../../../../core/functions/previliage";
 import InvoicePDF from "./invoicePDF";
 
 //src/components/styles/page/index.js

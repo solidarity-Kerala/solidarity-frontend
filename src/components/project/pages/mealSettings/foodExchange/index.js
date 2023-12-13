@@ -1,10 +1,10 @@
 // Import necessary dependencies and components (not included in this snippet)
 import React, { useEffect, useState } from "react";
 import Layout from "../../../common/layout";
-import ListTable from "../../../../elements/list/list";
+import ListTable from "../../../../core/list/list";
 import { Container } from "../../../common/layout/styels";
 import { useSelector } from "react-redux";
-import PopupView from "../../../../elements/popupview";
+import PopupView from "../../../../core/popupview";
 import SetupMenu from "./setupMenu";
 
 // FoodMenu Component

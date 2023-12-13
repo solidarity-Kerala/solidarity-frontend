@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import { Document, Page, Text, View, StyleSheet, PDFViewer } from "@react-pdf/renderer";
-import { Page as PageView } from "../../../../elements/form/styles";
-import { dateFormat } from "../../../../elements/functions/date";
+import { Page as PageView } from "../../../../core/form/styles";
+import { dateFormat } from "../../../../core/functions/date";
 
 const styles = StyleSheet.create({
   page: {

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../../../../elements/layout";
-import ListTable from "../../../../elements/list/list";
-import { Container } from "../../../../elements/layout/styels";
-import PopupView from "../../../../elements/popupview";
+import Layout from "../../../../core/layout";
+import ListTable from "../../../../core/list/list";
+import { Container } from "../../../../core/layout/styels";
+import PopupView from "../../../../core/popupview";
 import SetupRecipe from "./setupRecipe";
 import { useSelector } from "react-redux";
 //src/components/styles/page/index.js

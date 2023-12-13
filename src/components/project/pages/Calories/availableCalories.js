@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Layout from "../../../elements/layout";
-import ListTable from "../../../elements/list/list";
-import { Container } from "../../../elements/layout/styels";
-import PopupView from "../../../elements/popupview";
+import Layout from "../../../core/layout";
+import ListTable from "../../../core/list/list";
+import { Container } from "../../../core/layout/styels";
+import PopupView from "../../../core/popupview";
 import AvailableCaloriesCustom from "./avialableCalories/availableCaloriesCustom";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file

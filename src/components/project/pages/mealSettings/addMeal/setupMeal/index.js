@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
-import FormInput from "../../../../../elements/input";
+import FormInput from "../../../../../core/input";
 import { Variant, Variants } from "./styles";
 import { GetIcon } from "../../../../../../icons";
 import { deleteData, getData, postData } from "../../../../../../backend/api";
-import { ImgBox, TagBox, TagData, TagItem, TagTitle } from "../../../../../elements/select/styles";
-import { getValue } from "../../../../../elements/list/functions";
+import { ImgBox, TagBox, TagData, TagItem, TagTitle } from "../../../../../core/select/styles";
+import { getValue } from "../../../../../core/list/functions";
 import { DataItem, DataItemContainer } from "../../addRecipe/setupRecipe/styles";
-import { NoData } from "../../../../../elements/list/styles";
+import { NoData } from "../../../../../core/list/styles";
 
 const SetupMeal = ({ openData, setMessage }) => {
   const [search] = useState("");

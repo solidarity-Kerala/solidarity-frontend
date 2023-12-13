@@ -9,7 +9,7 @@
 //   PDFViewer,
 //   Image,
 // } from "@react-pdf/renderer";
-// import { Page as PageView } from "../../../../../elements/form/styles";
+// import { Page as PageView } from "../../../../../core/form/styles";
 // import { food } from "../../../../../../images";
 
 // const staticInvoiceData = {
@@ -242,7 +242,7 @@ import {
   PDFViewer,
   Image,
 } from "@react-pdf/renderer";
-import { Page as PageView } from "../../../../../elements/form/styles";
+import { Page as PageView } from "../../../../../core/form/styles";
 import { getData } from "../../../../../../backend/api";
 import { food } from "../../../../../../images";
 import { useSelector } from "react-redux";

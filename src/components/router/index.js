@@ -4,12 +4,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Switch from "./switch";
 import { useSelector } from "react-redux";
 import Page404 from "../project/pages/page404";
-import { Container, MainContainer, SideBar } from "../elements/layout/styels";
+import { Container, MainContainer, SideBar } from "../core/layout/styels";
 import { RowContainer } from "../styles/containers/styles";
-import Header from "../elements/layout/header";
-import Footer from "../elements/layout/footer";
-import Menu from "../elements/layout/menu";
-import InternetStatusPopup from "../elements/InternetStatusPopup";
+import Header from "../core/layout/header";
+import Footer from "../core/layout/footer";
+import Menu from "../core/layout/menu";
+import InternetStatusPopup from "../core/InternetStatusPopup";
 
 const PageRouter = () => {
   const user = useSelector((state) => state.login);

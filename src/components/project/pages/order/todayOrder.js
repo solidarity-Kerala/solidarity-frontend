@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import Layout from "../../../elements/layout";
-import { Container } from "../../../elements/layout/styels";
+import Layout from "../../../core/layout";
+import { Container } from "../../../core/layout/styels";
 import { ColumnContainer } from "../../../styles/containers/styles";
 
 const TodayOrder = (props) => {

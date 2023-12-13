@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { getData, postData } from "../../../../../../backend/api";
-import { AddButton, ArrowButton, NoData } from "../../../../../elements/list/styles";
+import { AddButton, ArrowButton, NoData } from "../../../../../core/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import { TabContainer, TabButton, DayHead, Box, DayData, MealTimeHead, Recepe, RecepeImage, RecepeData, Recepes, RecepeContent, ReplacableItems, ReplacableItemsList, UserDetails, Details } from "./styles"; // Import styles from styles.js
 
 import moment from "moment";
 import { food } from "../../../../../../images";
-import { calculateAge, getValue } from "../../../../../elements/list/functions";
+import { calculateAge, getValue } from "../../../../../core/list/functions";
 import { GetIcon } from "../../../../../../icons";
-import { dateFormat } from "../../../../../elements/functions/date";
+import { dateFormat } from "../../../../../core/functions/date";
 import { ActionBox, SwitchButton, Table } from "../../../mealSettings/foodMenu/setupMenu/styles";
-import PopupView from "../../../../../elements/popupview";
-// import AutoForm from "../../../../../elements/form";
-import { Button } from "../../../../../elements/input/styles";
-import AutoForm from "../../../../../elements/autoform/AutoForm";
+import PopupView from "../../../../../core/popupview";
+// import AutoForm from "../../../../../core/form";
+import { Button } from "../../../../../core/input/styles";
+import AutoForm from "../../../../../core/autoform/AutoForm";
 import SetupMenu from "../../../mealSettings/foodMenu/setupMenu";
 const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const [userId] = useState(openData.data._id);

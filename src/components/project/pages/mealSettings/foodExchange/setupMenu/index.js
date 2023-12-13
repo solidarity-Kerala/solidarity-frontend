@@ -5,12 +5,12 @@ import {
   FilterBox,
   NoData,
   ProfileImage,
-} from "../../../../../elements/list/styles";
+} from "../../../../../core/list/styles";
 import {
   ColumnContainer,
   RowContainer,
 } from "../../../../../styles/containers/styles";
-import Search from "../../../../../elements/search";
+import Search from "../../../../../core/search";
 import {
   TabContainer,
   TabButton,
@@ -35,15 +35,15 @@ import DraggableItem from "./dragdrop/drag";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import DropTarget from "./dragdrop/drop";
-import { CloseButton } from "../../../../../elements/list/popup/styles";
-import { Header } from "../../../../../elements/list/manage/styles";
+import { CloseButton } from "../../../../../core/list/popup/styles";
+import { Header } from "../../../../../core/list/manage/styles";
 import { useRef } from "react";
-import FormInput from "../../../../../elements/input";
+import FormInput from "../../../../../core/input";
 import { food } from "../../../../../../images";
 import { MealTimeHead } from "../../../user/patient/dietMenu/styles";
-import PopupView from "../../../../../elements/popupview";
-import { getValue } from "../../../../../elements/list/functions";
-import AutoForm from "../../../../../elements/form";
+import PopupView from "../../../../../core/popupview";
+import { getValue } from "../../../../../core/list/functions";
+import AutoForm from "../../../../../core/form";
 import { useDispatch } from "react-redux";
 import { addSelectObject } from "../../../../../../store/actions/select";
 const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {

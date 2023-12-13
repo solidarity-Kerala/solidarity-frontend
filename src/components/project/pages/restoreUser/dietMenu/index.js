@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getData } from "../../../../../../backend/api";
-import { NoData } from "../../../../../elements/list/styles";
+import { NoData } from "../../../../../core/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import { TabContainer, TabButton, DayHead, Box, DayData, MealTimeHead, Recepe, RecepeImage, RecepeData, Recepes, RecepeContent, ReplacableItems, ReplacableItemsList, UserDetails, Details } from "./styles"; // Import styles from styles.js
 
 import moment from "moment";
 import { food } from "../../../../../../images";
-import { calculateAge } from "../../../../../elements/list/functions";
+import { calculateAge } from "../../../../../core/list/functions";
 import { GetIcon } from "../../../../../../icons";
 import { dateFormat } from "../../../../../functions/date";
 const DietMenu = ({ openData, themeColors, setMessage }) => {
