@@ -35,10 +35,19 @@ const Header = (props) => {
   // const navigate = useNavigate();
   return (
     <Container>
-      <MNav>
-        <GetIcon icon={selectedMenuItem.icon} />
+      <MNav
+        className="navicon"
+        onClick={() => {
+          dispatch(menuStatus(!menuCurrentStatus));
+        }}
+      >
+        <GetIcon icon={"menu"} />
       </MNav>
+
       <Status>
+        <MNav>
+          <GetIcon icon={selectedMenuItem.icon} />
+        </MNav>
         <Title>{selectedMenuItem.label}</Title>
         {/* <User>{props.user.user.email}</User> */}
         <HeaderMenu
@@ -56,14 +65,6 @@ const Header = (props) => {
           )}
         </HeaderMenu>
       </Status>
-      <MNav
-        className="navicon"
-        onClick={() => {
-          dispatch(menuStatus(!menuCurrentStatus));
-        }}
-      >
-        <GetIcon icon={"menu"} />
-      </MNav>
     </Container>
   );
 };

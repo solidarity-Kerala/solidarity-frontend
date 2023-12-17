@@ -432,7 +432,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
   const filterChange = (option, name, type) => {
     const updateValue = {
       ...filterView,
-      [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : null,
+      [name]: type === "select" ? option.id : type === "date" ? option?.toISOString() : "",
     };
     setFilterView(updateValue);
     // updating the form values
@@ -1067,7 +1067,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
             </TableContaner>
           ) : (
             <>
-              <Table className={`table ${displayColumn}`}>
+              <Table className={`table ${displayColumn} ${count > 0?'':'no-data' }`}>
                 {users.data?.response?.length > 0 && users.data.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}
                 {!users.data && !users.data?.response && <NoData className="white-list">No {shortName} found!</NoData>}
                 {users.data?.response?.length === 0 && <NoData className="white-list">No records found for {shortName}.</NoData>}

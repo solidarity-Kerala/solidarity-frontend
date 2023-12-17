@@ -30,15 +30,14 @@ const AvailableCalories = (props) => {
       placeholder: "Calories",
       name: "calories",
       validation: "",
-      default: "0",
-      tag: false,
+      default: "",
+      tag: true,
       label: "Calories",
       required: true,
       view: true,
       add: true,
       update: true,
       selectApi: [
-        
         { id: 1200, value: "1200" },
         { id: 1300, value: "1300" },
         { id: 1400, value: "1400" },
@@ -69,7 +68,7 @@ const AvailableCalories = (props) => {
       name: "mealTimeCategory",
       validation: "",
       showItem: "mealtimeCategoriesName",
-      default: "0",
+      default: "",
       tag: true,
       label: "Mealtime Category",
       required: true,
@@ -86,7 +85,7 @@ const AvailableCalories = (props) => {
       name: "diet",
       validation: "",
       showItem: "title",
-      default: "0",
+      default: "",
       tag: true,
       label: "Diet",
       required: true,
@@ -107,7 +106,7 @@ const AvailableCalories = (props) => {
       validation: "",
       showItem: "title",
       collection: "subDiet",
-      default: "0",
+      default: "",
       tag: true,
       label: "Sub Diet",
       required: true,
@@ -116,24 +115,20 @@ const AvailableCalories = (props) => {
       update: true,
       filter: false,
     },
-     {
-      type: "select",
+    {
+      type: "hidden",
       placeholder: "Category",
       name: "category",
       validation: "",
       tag: true,
-      default: "General",
+      default: "FoodExchange",
+      value: "FoodExchange",
       filter: true,
       label: "Category",
       required: true,
-      view: true,
-      add: true,
-      update: true,
-      selectApi: [
-       
-        { id: "FoodExchange", value: "Food Exchange Diet" },
-      ],
-      apiType: "JSON",
+      view: false,
+      add: false,
+      update: false,
     },
     {
       type: "number",
@@ -162,7 +157,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-    
     },
     {
       type: "number",
@@ -177,7 +171,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-    
     },
     {
       type: "number",
@@ -192,7 +185,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-    
     },
     {
       type: "number",
@@ -207,7 +199,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-   
     },
     {
       type: "number",
@@ -222,7 +213,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-   
     },
     {
       type: "number",
@@ -237,7 +227,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-   
     },
     {
       type: "number",
@@ -252,7 +241,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-    
     },
     {
       type: "number",
@@ -267,7 +255,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-   
     },
     {
       type: "number",
@@ -282,7 +269,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-    
     },
     {
       type: "number",
@@ -297,7 +283,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-    
     },
     {
       type: "number",
@@ -312,7 +297,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-   
     },
     {
       type: "number",
@@ -327,7 +311,6 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-   
     },
     {
       type: "number",
@@ -342,8 +325,7 @@ const AvailableCalories = (props) => {
       filter: false,
       add: true,
       update: true,
-   
-    }
+    },
   ]);
 
   return (
