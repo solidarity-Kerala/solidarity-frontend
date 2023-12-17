@@ -144,7 +144,6 @@ const Ingredient = (props) => {
       customClass: "small",
       placeholder: "UnSatFat (g)",
       name: "unSatFat",
-      customClass: "small",
       validation: "",
       showItem: "",
       default: "",
