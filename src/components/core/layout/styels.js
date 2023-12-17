@@ -50,7 +50,7 @@ export const Container = styled.div`
   }
   background: ${(props) => props.theme.pageBackground};
   @media screen and (max-width: 768px) {
-    padding-bottom: 20px;
+    /* padding-bottom: 20px; */
     display: block;
   }
 `;

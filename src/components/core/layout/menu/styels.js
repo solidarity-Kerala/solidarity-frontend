@@ -17,7 +17,7 @@ export const Nav = styled.nav`
   display: flex;
   flex-direction: column;
   color: ${(props) => props.theme.secForeground};
-
+  padding-bottom: 1em;
   overflow-y: auto;
 
   a.main,
@@ -52,13 +52,13 @@ export const Nav = styled.nav`
     font-weight: bold;
     opacity: 1;
   }
-  a.main.active:first-child,
-  a.main:hover:first-child {
+  .down a.main.active:first-child,
+  .down a.main:hover:first-child {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
   }
-  a.main.active:last-child,
-  a.main:hover:last-child {
+  .down a.main.active:last-child,
+  .down a.main:hover:last-child {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
   }
@@ -92,10 +92,10 @@ export const SubMenu = styled.nav`
   &.close {
     display: none;
   }
-  a{
+  a {
     border-bottom: 1px solid #dfdfdf;
   }
-  a:last-child{
+  a:last-child {
     border-bottom: 0;
   }
 `;

@@ -5,7 +5,7 @@ export const Container = styled.div`
   display: flex;
   height: 60px;
   @media (max-width: 768px) {
-    padding: 0px 0em;
+    padding: 0px 1em;
   }
 `;
 export const HeaderMenu = styled.div`
@@ -128,7 +128,7 @@ export const MNav = styled.div`
       height: 20px;
       margin-right: 0px;
       margin-left: 13px;
-      background: black;
+      background: lightgrey;
     }
   }
 `;

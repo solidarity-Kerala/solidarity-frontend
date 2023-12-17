@@ -266,7 +266,8 @@ const AvailableCalories = (props) => {
         { id: 6, value: "6" },
       ],
       apiType: "JSON",
-    }, {
+    },
+    {
       type: "select",
       placeholder: "Category",
       name: "category",
@@ -282,7 +283,6 @@ const AvailableCalories = (props) => {
       selectApi: [
         { id: "General", value: "General Diet" },
         { id: "Keto", value: "Keto Diet" },
-        { id: "FoodExchange", value: "Food Exchange Diet" },
       ],
       apiType: "JSON",
     },

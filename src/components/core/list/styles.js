@@ -19,6 +19,9 @@ export const Table = styled.div`
     column-gap: 5px;
     row-gap: 5px;
   }
+  &.no-data{
+    grid-template-columns: auto;
+  }
   @media (max-width: 768px) {
     &.double {
       grid-template-columns: auto;
@@ -597,6 +600,8 @@ export const Filters = styled.div`
       padding: 0px 10px 0 0;
       border-radius: 0;
       width: 250px;
+      position: sticky;
+      top: 0;
     }
   }
   @media (max-width: 768px) {
@@ -612,6 +617,7 @@ export const Filters = styled.div`
         margin: 0px 1em;
         padding: 10px;
         border-radius: 10px;
+        top:auto;
       }
     }
   }
@@ -942,6 +948,9 @@ export const TdView = styled.td`
 export const TrBodyView = styled.tbody``;
 export const ListContainer = styled.div`
   display: flex;
+  display: flex;
+  max-height: calc(100vh);
+  overflow: auto;
 `;
 export const ListContainerData = styled.div`
   display: flex;

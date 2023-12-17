@@ -440,6 +440,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   };
 
   const setCaloriesItems = (mealTimeCategories, single = false, recepeType = "") => {
+    // console.log("mealTimeCategories",mealTimeCategories);
     const availableCalorie = mealTimeCategories.availableCalories?.[coloriePerDay] ?? {
       calories: coloriePerDay,
       meal: 0,

@@ -317,7 +317,7 @@ export const RowContainer = styled.div`
   &.data-layout {
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 80px);
+    max-height: calc(100vh - 65px);
     max-width: 100%;
   }
   @media screen and (max-width: 768px) {

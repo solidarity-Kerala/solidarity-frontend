@@ -64,6 +64,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Gram Per Measurement Type",
       name: "gramOfType",
       validation: "number",
@@ -95,9 +96,9 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Calories (Kcal)",
       name: "calories",
-      customClass:"small",
       validation: "",
       showItem: "",
       default: "",
@@ -110,10 +111,10 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Protein (g)",
       name: "protein",
       validation: "",
-      customClass:"small",
       showItem: "",
       default: "",
       tag: true,
@@ -125,9 +126,9 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "SatFat (g)",
       name: "satFat",
-      customClass:"small",
       validation: "",
       showItem: "",
       default: "",
@@ -140,9 +141,9 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "UnSatFat (g)",
       name: "unSatFat",
-      customClass:"small",
       validation: "",
       showItem: "",
       default: "",
@@ -155,6 +156,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "TotalFat (g)",
       name: "totalFat",
       validation: "",
@@ -169,6 +171,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Cholesterol (mg)",
       name: "cholesterol",
       validation: "",
@@ -183,6 +186,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Fiber (g)",
       name: "fiber",
       validation: "",
@@ -197,6 +201,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Carbohydrate (g)",
       name: "carbohydrate",
       validation: "",
@@ -211,6 +216,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Sugar (g)",
       name: "sugars",
       validation: "",
@@ -225,6 +231,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Iron (%)",
       name: "iron",
       validation: "",
@@ -239,6 +246,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Calcium (%)",
       name: "calcium",
       validation: "",
@@ -253,6 +261,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Quantity",
       name: "quantity",
       validation: "",
@@ -267,6 +276,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Sodium (mg)",
       name: "sodium",
       validation: "",
@@ -281,6 +291,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Potassium (mg)",
       name: "potassium",
       validation: "",
@@ -295,6 +306,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Vitamin A (%)",
       name: "vitaminA",
       validation: "",
@@ -309,6 +321,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Vitamin C (%)",
       name: "vitaminC",
       validation: "",
@@ -323,6 +336,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Vitamin E (%)",
       name: "vitaminE",
       validation: "",
@@ -402,7 +416,46 @@ const Ingredient = (props) => {
       selectApi: "Meat,Bread,Fruit,Soup,Dessert,Salad,Mixed,Fat,Snacking,Other",
       apiType: "CSV",
     },
-
+    {
+      type: "number",
+      customClass: "small",
+      placeholder: "Bread %",
+      name: "mixedBreadPercentage",
+      validation: "",
+      default: 50,
+      condition: {
+        item: "typeOfIngredient",
+        if: "Mixed",
+        then: "enabled",
+        else: "disabled",
+      },
+      tag: false,
+      label: "Bread %",
+      required: true,
+      view: false,
+      add: true,
+      update: true,
+    },
+    {
+      type: "number",
+      customClass: "small",
+      placeholder: "Meat %",
+      name: "mixedMeatPercentage",
+      validation: "",
+      condition: {
+        item: "typeOfIngredient",
+        if: "Mixed",
+        then: "enabled",
+        else: "disabled",
+      },
+      default: 50,
+      tag: false,
+      label: "Meat %",
+      required: true,
+      view: false,
+      add: true,
+      update: true,
+    },
     {
       type: "checkbox",
       placeholder: "Added Sugar",
@@ -426,6 +479,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "starch",
       name: "starch",
       validation: "",
@@ -440,6 +494,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "leanMeat",
       name: "leanMeat",
       validation: "",
@@ -454,6 +509,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "skimMilk",
       name: "skimMilk",
       validation: "",
@@ -468,6 +524,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "nonStarchyVegetable",
       name: "nonStarchyVegetable",
       validation: "",
@@ -482,6 +539,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "fruits",
       name: "fruits",
       validation: "",
@@ -496,6 +554,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "fats",
       name: "fats",
       validation: "",
@@ -510,6 +569,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "sugar",
       name: "sugar",
       validation: "",
@@ -524,6 +584,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "veryLeanMeat",
       name: "veryLeanMeat",
       validation: "",
@@ -538,6 +599,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "mediumFatMeat",
       name: "mediumFatMeat",
       validation: "",
@@ -552,6 +614,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "highFatMeat",
       name: "highFatMeat",
       validation: "",
@@ -566,6 +629,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "vegetarianProtein",
       name: "vegetarianProtein",
       validation: "",
@@ -580,6 +644,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "lowfatMilk",
       name: "lowfatMilk",
       validation: "",
@@ -594,6 +659,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "regularMilk",
       name: "regularMilk",
       validation: "",
@@ -608,6 +674,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "other",
       name: "other",
       validation: "",
@@ -675,6 +742,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Preparation Time (Minutes)",
       name: "preparationTime",
       validation: "",
@@ -702,6 +770,7 @@ const Ingredient = (props) => {
 
     {
       type: "number",
+      customClass: "small",
       placeholder: "Price",
       name: "price",
       validation: "",
@@ -715,6 +784,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Offer Price",
       name: "offerPrice",
       validation: "",
@@ -728,6 +798,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Number of Servings",
       name: "numberOfPortion",
       validation: "",
@@ -757,6 +828,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Bread %",
       name: "mixedBreadPercentage",
       validation: "",
@@ -776,6 +848,7 @@ const Ingredient = (props) => {
     },
     {
       type: "number",
+      customClass: "small",
       placeholder: "Meat %",
       name: "mixedMeatPercentage",
       validation: "",
@@ -857,8 +930,7 @@ const Ingredient = (props) => {
       add: true,
       update: true,
       filter: true,
-      selectApi:
-        "Hot kitchen, Cold kitchen, Bakery, Salad section, Sandwich section",
+      selectApi: "Hot kitchen, Cold kitchen, Bakery, Salad section, Sandwich section",
       apiType: "CSV",
     },
     {
