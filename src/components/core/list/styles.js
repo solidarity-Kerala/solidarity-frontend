@@ -74,6 +74,7 @@ export const Tr = styled.div`
   padding: 10px;
   background-color: ${(props) => props.theme.background};
   border-radius: 10px;
+  cursor: pointer;
   && {
     /* .popup-child & {
       box-shadow: rgb(167 167 167 / 26%) 0px 0px 12px 0px;

@@ -518,7 +518,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         {!signleRecord && (
           <>
             <More
-              onClick={() => {
+              onClick={(event) => {
+                event.stopPropagation();
                 setIsOpen(true);
                 setOpenData({ actions, attributes, data });
                 setSubAttributes({ actions, attributes, data });
@@ -540,7 +541,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         )}
         {updatePrivilege && (
           <More
-            onClick={() => {
+            onClick={(event) => {
+              event.stopPropagation();
               isEditingHandler(data, udpateView, titleValue);
             }}
           >
@@ -549,7 +551,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         )}
         {signleRecord && (
           <More
-            onClick={() => {
+            onClick={(event) => {
+              event.stopPropagation();
               refreshView(currentIndex);
             }}
           >
@@ -558,7 +561,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         )}
         <ToolTipContainer
           ref={selectRef.current[slNo]}
-          onClick={() => {
+          onClick={(event) => {
+            event.stopPropagation();
             setCurrentAction(data._id);
           }}
         >
@@ -577,7 +581,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                       type: 2,
                       content: `Do you want to clone '${getValue({ type: itemTitle.type ?? "text" }, titleValue) ? getValue({ type: itemTitle.type ?? "text" }, titleValue) : "Item"}'?`,
                       proceed: "Clone",
-                      onProceed: async () => {
+                      onProceed: async (event) => {
+                        event.stopPropagation();
                         await updateHandler({
                           cloneId: data._id,
                           _title: titleValue,
@@ -599,7 +604,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                     <Button
                       theme={themeColors}
                       key={`custom-${item.id + "-" + index}-${data._id}`}
-                      onClick={() => {
+                      onClick={(event) => {
+                        event.stopPropagation();
                         if (item.type === "callback") {
                           item.callback(item, data);
                         } else if (item.type === "call") {
@@ -623,7 +629,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                 <Button
                   theme={themeColors}
                   key={`delete-${data._id}`}
-                  onClick={() => {
+                  onClick={(event) => {
+                    event.stopPropagation();
                     setMessage({
                       type: 2,
                       content: `Do you want to delete '${getValue({ type: itemTitle.type ?? "text" }, titleValue) ? getValue({ type: itemTitle.type ?? "text" }, titleValue) : "Item"}'?`,
@@ -693,7 +700,19 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         </TdView>
       </TrView>
     ) : (
-      <SetTr viewMode={viewMode} theme={themeColors} className={signleRecord ? "single" : ""} key={`row-${shortName}-${data._id ?? slNo}`}>
+      <SetTr
+        onClick={() => {
+          if (!signleRecord) {
+            setIsOpen(true);
+            setOpenData({ actions, attributes, data });
+            setSubAttributes({ actions, attributes, data });
+          }
+        }}
+        viewMode={viewMode}
+        theme={themeColors}
+        className={signleRecord ? "single" : ""}
+        key={`row-${shortName}-${data._id ?? slNo}`}
+      >
         {profileImage && (
           <ProfileImage>
             <img src={data[profileImage] ? process.env.REACT_APP_CDN + data[profileImage] : food} alt="Profile"></img>
@@ -792,7 +811,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                   <More
                     theme={themeColors}
                     key={`custom-${item.id + "-" + index}-${data._id}`}
-                    onClick={() => {
+                    onClick={(event) => {
+                      event.stopPropagation();
                       item.callback(item, data, refreshView);
                     }}
                     className="edit menu callBack"
@@ -1067,7 +1087,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
             </TableContaner>
           ) : (
             <>
-              <Table className={`table ${displayColumn} ${count > 0?'':'no-data' }`}>
+              <Table className={`table ${displayColumn} ${count > 0 ? "" : "no-data"}`}>
                 {users.data?.response?.length > 0 && users.data.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}
                 {!users.data && !users.data?.response && <NoData className="white-list">No {shortName} found!</NoData>}
                 {users.data?.response?.length === 0 && <NoData className="white-list">No records found for {shortName}.</NoData>}

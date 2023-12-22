@@ -14,6 +14,11 @@ export const Form = styled.div`
     gap: 10px;
     flex-flow: wrap;
   }
+  /* &.fullscreen {
+    display: flex;
+    gap: 10px;
+    flex-flow: wrap;
+  } */
   @media (max-width: 768px) {
     border: 0;
     &.double {
@@ -35,7 +40,7 @@ export const Overlay = styled.div`
   background-color: rgba(0, 0, 0, 0.2);
   overflow: auto;
   z-index: 1001;
-  &.plain{
+  &.plain {
     position: initial;
     background: transparent;
     padding: 0;
@@ -74,7 +79,10 @@ export const Page = styled.div`
   &.double {
     width: 50%;
   }
-  &.plain{
+  &.fullscreen{
+     width: 100%;
+  }
+  &.plain {
     border: 1px solid rgb(224, 224, 227);
     padding: 1em;
     border-radius: 10px;
