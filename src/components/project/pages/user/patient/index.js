@@ -1477,7 +1477,7 @@ const Patient = (props) => {
   };
 
   const [actions] = useState([
-    ...(checkprivilege([privileges.admin, privileges.doctor])
+    ...((checkprivilege([privileges.doctor]) ? false : true)
       ? [
           {
             element: "button",
@@ -1509,7 +1509,7 @@ const Patient = (props) => {
           },
         ]
       : []),
-    ...(checkprivilege([privileges.admin, privileges.doctor])
+    ...((checkprivilege([privileges.doctor]) ? false : true)
       ? [
           {
             element: "button",
