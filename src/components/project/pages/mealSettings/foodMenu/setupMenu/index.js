@@ -42,6 +42,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     mealTimeCategory: [],
     productionDepartment: [],
     proteinCategory: [],
+    cuisineCategory: [],
   });
   const [weekNumber, setWeekNumber] = useState(0);
   const [parameters, setParameters] = useState(null);
@@ -470,7 +471,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         count = (dessert || 0) + "D";
       } else if (recepeType === "Fat") {
         count = (fat || 0) + "FT";
-      }else if (recepeType === "Snacking") {
+      } else if (recepeType === "Snacking") {
         count = (dessert || 0) + "SN";
       } else if (recepeType === "Salad") {
         count = (salad || 0) + "SD";
@@ -1170,7 +1171,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={7}>
-                          {(openData.data.subDiet.category ?? "General") === "General" && (
+                          {new Set(["General", "Keto"]).has(openData.data.subDiet.category ?? "General") && (
                             <Filter
                               // className={showFilter ? "close" : "open"}
                               theme={themeColors}

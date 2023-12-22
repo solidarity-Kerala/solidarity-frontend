@@ -206,12 +206,10 @@ function CustomSelect(props) {
       </button>
 
       <ul className="options">
-        
-        {optionsVisible && initialized && (
-          
+        {((optionsVisible && initialized) || (initialized && props.listBox)) && (
           <>
-          {props.search && options.length > 8 && <Search  active={true} key={`search-inside${props.key}`} className="select" title="Search" theme={props.theme} placeholder="Search" value={searchValue} onChange={handleChange} />}
-        {props.apiSearch && <Search active={true} key="search-api-2" className={"select " + props.customClass} title="Search" theme={props.theme} placeholder={`Search ${props.label}`} value={searchKey} onChange={handleChange} />}
+            {props.search && options.length > 8 && <Search active={true} key={`search-inside${props.key}`} className="select" title="Search" theme={props.theme} placeholder="Search" value={searchValue} onChange={handleChange} />}
+            {props.apiSearch && <Search active={true} key="search-api-2" className={"select " + props.customClass} title="Search" theme={props.theme} placeholder={`Search ${props.label}`} value={searchKey} onChange={handleChange} />}
             {options.length > 0 &&
               (searchValue.length > 0 ? filteredOptions : options).map((option) => (
                 <li
