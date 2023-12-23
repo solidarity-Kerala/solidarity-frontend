@@ -8,7 +8,21 @@ export const TabContainer = styled.div`
   background: #eaeaea;
   z-index: 1;
 `;
-
+export const Seriving = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  span {
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  i {
+    font-style: normal;
+    font-size: 12px;
+  }
+`;
 export const TabButton = styled.button`
   padding: 10px 20px;
   background-color: white;
@@ -241,7 +255,7 @@ export const Title = styled.div`
 export const CommonReplace = styled.div`
   bottom: 0;
   background: white;
-  margin-top:10px;
+  margin-top: 10px;
   border-radius: 10px 10px 0 0px;
 `;
 export const Variants = styled.div`

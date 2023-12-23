@@ -1501,7 +1501,7 @@ const Patient = (props) => {
               shortName: "Medical Record",
               addPrivilege: true,
               delPrivilege: true,
-              updatePrivilege: checkprivilege([privileges.admin, privileges.doctor]) ? true : false,
+              updatePrivilege: checkprivilege([ privileges.doctor]) ? false : true,
               //if you want to show edit button for passed previlges then make value for condtion is 'true' or you dont want to give edit option for the pased previlges then 'false'
               customClass: "medium",
               formMode: "double",
