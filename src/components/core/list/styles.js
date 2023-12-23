@@ -19,7 +19,7 @@ export const Table = styled.div`
     column-gap: 5px;
     row-gap: 5px;
   }
-  &.no-data{
+  &.no-data {
     grid-template-columns: auto;
   }
   @media (max-width: 768px) {
@@ -422,12 +422,17 @@ export const ArrowPagination = styled.button`
   position: relative;
   background-color: transparent;
   margin-left: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &.button {
-    border: 1px solid lightgray;
-    font-weight: normal;
-    border-radius: 8px;
+        border-left: 1px solid lightgray;
+    border-radius: 0;
     padding: 0px 10px;
-    background-color: white;
+    background-color: #ffffff00;
+  }
+  svg{
+    margin-left:5px;
   }
   &:hover {
     color: ${(props) => props.theme.bgPrimary};
@@ -618,7 +623,7 @@ export const Filters = styled.div`
         margin: 0px 1em;
         padding: 10px;
         border-radius: 10px;
-        top:auto;
+        top: auto;
       }
     }
   }

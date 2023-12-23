@@ -68,7 +68,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       }
       if (dietCategory === "FoodExchange") {
         availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-        const availableCalorie = availableCalories?.[coloriePerDay] ?? { calories: coloriePerDay, starch: 0, leanMeat: 0, skimMilk: 0, nonStarchyVegetable: 0, fruits: 0, fats: 0, sugar: 0, veryLeanMeat: 0, mediumFatMeat: 0, highFatMeat: 0, vegetarianProtein: 0, lowfatMilk: 0, regularMilk: 0, other: 0 };
+        //const availableCalorie = availableCalories?.[coloriePerDay] ?? { calories: coloriePerDay, starch: 0, leanMeat: 0, skimMilk: 0, nonStarchyVegetable: 0, fruits: 0, fats: 0, sugar: 0, veryLeanMeat: 0, mediumFatMeat: 0, highFatMeat: 0, vegetarianProtein: 0, lowfatMilk: 0, regularMilk: 0, other: 0 };
 
         return {};
       } else {
