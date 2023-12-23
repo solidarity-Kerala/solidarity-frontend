@@ -729,6 +729,8 @@ const Patient = (props) => {
       type: "date",
       placeholder: "Wedding Day",
       name: "weddingDay",
+      minDate: moment().add(-50, "years").toDate(),
+      default: moment().toDate(),
       condition: {
         item: "maritalStatus",
         if: true,
@@ -737,7 +739,6 @@ const Patient = (props) => {
       },
       showItem: "",
       validation: "",
-      default: "",
       tag: true,
       label: "Wedding Day",
       required: false,
