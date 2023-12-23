@@ -1123,7 +1123,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
               onClick={() => {
                 setShowPageCount(true);
               }}
-            >{`${perPage} per Page`}</ArrowPagination>
+            > {`${perPage} per Page`}<GetIcon icon={'edit'}></GetIcon></ArrowPagination>
           </Count>
         ) : (
           <Count>{`Showing ${count} record${count > 1 ? "s" : ""}`}</Count>

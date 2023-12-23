@@ -369,94 +369,168 @@ const SetupRecipe = ({ openData, setMessage }) => {
               {nutritionInfo && (
                 <>
                   {portion > 1 ? (
-                    <tr key={0}>
-                      <TableCell colSpan={4}>
-                        <DataItemContainer>
-                          <DataItem className="head">
-                            <GetIcon icon={"info"}></GetIcon>Total Nutrition Info {portion > 1 && ` of ${1}/${portion}`}
-                          </DataItem>
-                          <DataItem>
-                            Gram:
-                            {getValue({ type: "number" }, nutritionInfo.gram / portion)}/{getValue({ type: "number" }, nutritionInfo.gram)}
-                          </DataItem>
-                          <DataItem>
-                            Calories:
-                            {getValue({ type: "number" }, nutritionInfo.calories / portion)}/{getValue({ type: "number" }, nutritionInfo.calories)}
-                          </DataItem>
-                          <DataItem>
-                            Protein: {getValue({ type: "number" }, nutritionInfo.protein / portion)}/ {getValue({ type: "number" }, nutritionInfo.protein)}
-                          </DataItem>
-                          <DataItem>
-                            Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat / portion)}/{getValue({ type: "number" }, nutritionInfo.satFat)}
-                          </DataItem>
-                          <DataItem>
-                            Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat / portion)}/{getValue({ type: "number" }, nutritionInfo.unSatFat)}
-                          </DataItem>
-                          <DataItem>
-                            Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat / portion)}/{getValue({ type: "number" }, nutritionInfo.totalFat)}
-                          </DataItem>
-                          <DataItem>
-                            Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol / portion)}/{getValue({ type: "number" }, nutritionInfo.cholesterol)}
-                          </DataItem>
-                          <DataItem>
-                            Fiber: {getValue({ type: "number" }, nutritionInfo.fiber / portion)}/{getValue({ type: "number" }, nutritionInfo.fiber)}
-                          </DataItem>
-                          <DataItem>
-                            Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate / portion)}/{getValue({ type: "number" }, nutritionInfo.carbohydrate)}
-                          </DataItem>
-                          <DataItem>
-                            Sugars: {getValue({ type: "number" }, nutritionInfo.sugars / portion)}/{getValue({ type: "number" }, nutritionInfo.sugars)}
-                          </DataItem>
-                          <DataItem>
-                            Iron: {getValue({ type: "number" }, nutritionInfo.iron / portion)}/{getValue({ type: "number" }, nutritionInfo.iron)}
-                          </DataItem>
-                          <DataItem>
-                            Calcium: {getValue({ type: "number" }, nutritionInfo.calcium / portion)}/{getValue({ type: "number" }, nutritionInfo.calcium)}
-                          </DataItem>
-                          <DataItem>
-                            Sodium: {getValue({ type: "number" }, nutritionInfo.sodium / portion)}/{getValue({ type: "number" }, nutritionInfo.sodium)}
-                          </DataItem>
-                          <DataItem>
-                            Potassium: {getValue({ type: "number" }, nutritionInfo.potassium / portion)}/{getValue({ type: "number" }, nutritionInfo.potassium)}
-                          </DataItem>
-                          <DataItem>Vitamin A: {getValue({ type: "number" }, nutritionInfo.vitaminA)}</DataItem>
-                          <DataItem>Vitamin C: {getValue({ type: "number" }, nutritionInfo.vitaminC)}</DataItem>
-                          <DataItem>Vitamin E: {getValue({ type: "number" }, nutritionInfo.vitaminE)}</DataItem>
-                        </DataItemContainer>
-                      </TableCell>
-                    </tr>
+                    <>
+                      <tr key={0}>
+                        <TableCell colSpan={4}>
+                          <DataItemContainer>
+                            <DataItem className="head">
+                              <GetIcon icon={"info"}></GetIcon>Recipe General Info {portion > 1 && ` of ${1}/${portion}`}
+                            </DataItem>
+                            <DataItem>
+                              Gram:
+                              {getValue({ type: "number" }, nutritionInfo.gram / portion)}/{getValue({ type: "number" }, nutritionInfo.gram)}
+                            </DataItem>
+                            <DataItem>
+                              Calories:
+                              {getValue({ type: "number" }, nutritionInfo.calories / portion)}/{getValue({ type: "number" }, nutritionInfo.calories)}
+                            </DataItem>
+                            <DataItem>
+                              Protein: {getValue({ type: "number" }, nutritionInfo.protein / portion)}/ {getValue({ type: "number" }, nutritionInfo.protein)}
+                            </DataItem>
+                            <DataItem>
+                              Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat / portion)}/{getValue({ type: "number" }, nutritionInfo.satFat)}
+                            </DataItem>
+                            <DataItem>
+                              Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat / portion)}/{getValue({ type: "number" }, nutritionInfo.unSatFat)}
+                            </DataItem>
+                            <DataItem>
+                              Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat / portion)}/{getValue({ type: "number" }, nutritionInfo.totalFat)}
+                            </DataItem>
+                            <DataItem>
+                              Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol / portion)}/{getValue({ type: "number" }, nutritionInfo.cholesterol)}
+                            </DataItem>
+                            <DataItem>
+                              Fiber: {getValue({ type: "number" }, nutritionInfo.fiber / portion)}/{getValue({ type: "number" }, nutritionInfo.fiber)}
+                            </DataItem>
+                            <DataItem>
+                              Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate / portion)}/{getValue({ type: "number" }, nutritionInfo.carbohydrate)}
+                            </DataItem>
+                            <DataItem>
+                              Sugars: {getValue({ type: "number" }, nutritionInfo.sugars / portion)}/{getValue({ type: "number" }, nutritionInfo.sugars)}
+                            </DataItem>
+                            <DataItem>
+                              Iron: {getValue({ type: "number" }, nutritionInfo.iron / portion)}/{getValue({ type: "number" }, nutritionInfo.iron)}
+                            </DataItem>
+                            <DataItem>
+                              Calcium: {getValue({ type: "number" }, nutritionInfo.calcium / portion)}/{getValue({ type: "number" }, nutritionInfo.calcium)}
+                            </DataItem>
+                            <DataItem>
+                              Sodium: {getValue({ type: "number" }, nutritionInfo.sodium / portion)}/{getValue({ type: "number" }, nutritionInfo.sodium)}
+                            </DataItem>
+                            <DataItem>
+                              Potassium: {getValue({ type: "number" }, nutritionInfo.potassium / portion)}/{getValue({ type: "number" }, nutritionInfo.potassium)}
+                            </DataItem>
+                            <DataItem>Vitamin A: {getValue({ type: "number" }, nutritionInfo.vitaminA)}</DataItem>
+                            <DataItem>Vitamin C: {getValue({ type: "number" }, nutritionInfo.vitaminC)}</DataItem>
+                            <DataItem>Vitamin E: {getValue({ type: "number" }, nutritionInfo.vitaminE)}</DataItem>
+                          </DataItemContainer>
+                        </TableCell>
+                      </tr>
+                      <tr key={0}>
+                        <TableCell colSpan={4}>
+                          <DataItemContainer>
+                            <DataItem className="head">
+                              <GetIcon icon={"info"}></GetIcon>Recipe Food Exchange Info {portion > 1 && ` of ${1}/${portion}`}
+                            </DataItem>
+                            <DataItem>
+                              Starch: {getValue({ type: "number" }, nutritionInfo.starch / portion)}/{getValue({ type: "number" }, nutritionInfo.starch)}
+                            </DataItem>
+                            <DataItem>
+                              Lean Meat: {getValue({ type: "number" }, nutritionInfo.leanMeat / portion)}/{getValue({ type: "number" }, nutritionInfo.leanMeat)}
+                            </DataItem>
+                            <DataItem>
+                              Skim Milk: {getValue({ type: "number" }, nutritionInfo.skimMilk / portion)}/{getValue({ type: "number" }, nutritionInfo.skimMilk)}
+                            </DataItem>
+                            <DataItem>
+                              Non-Starchy Vegetable: {getValue({ type: "number" }, nutritionInfo.nonStarchyVegetable / portion)}/{getValue({ type: "number" }, nutritionInfo.nonStarchyVegetable)}
+                            </DataItem>
+                            <DataItem>
+                              Fruits: {getValue({ type: "number" }, nutritionInfo.fruits / portion)}/{getValue({ type: "number" }, nutritionInfo.fruits)}
+                            </DataItem>
+                            <DataItem>
+                              Fats: {getValue({ type: "number" }, nutritionInfo.fats / portion)}/{getValue({ type: "number" }, nutritionInfo.fats)}
+                            </DataItem>
+                            <DataItem>
+                              Sugar: {getValue({ type: "number" }, nutritionInfo.sugar / portion)}/{getValue({ type: "number" }, nutritionInfo.sugar)}
+                            </DataItem>
+                            <DataItem>
+                              Very Lean Meat: {getValue({ type: "number" }, nutritionInfo.veryLeanMeat / portion)}/{getValue({ type: "number" }, nutritionInfo.veryLeanMeat)}
+                            </DataItem>
+                            <DataItem>
+                              Medium Fat Meat: {getValue({ type: "number" }, nutritionInfo.mediumFatMeat / portion)}/{getValue({ type: "number" }, nutritionInfo.mediumFatMeat)}
+                            </DataItem>
+                            <DataItem>
+                              High Fat Meat: {getValue({ type: "number" }, nutritionInfo.highFatMeat / portion)}/{getValue({ type: "number" }, nutritionInfo.highFatMeat)}
+                            </DataItem>
+                            <DataItem>
+                              Vegetarian Protein: {getValue({ type: "number" }, nutritionInfo.vegetarianProtein / portion)}/{getValue({ type: "number" }, nutritionInfo.vegetarianProtein)}
+                            </DataItem>
+                            <DataItem>
+                              Low-Fat Milk: {getValue({ type: "number" }, nutritionInfo.lowfatMilk / portion)}/{getValue({ type: "number" }, nutritionInfo.lowfatMilk)}
+                            </DataItem>
+                            <DataItem>
+                              Regular Milk: {getValue({ type: "number" }, nutritionInfo.regularMilk / portion)}/{getValue({ type: "number" }, nutritionInfo.regularMilk)}
+                            </DataItem>
+                          </DataItemContainer>
+                        </TableCell>
+                      </tr>
+                    </>
                   ) : (
-                    <tr key={0}>
-                      <TableCell colSpan={4}>
-                        <DataItemContainer>
-                          <DataItem className="head">
-                            <GetIcon icon={"info"}></GetIcon>Total Nutrition Info
-                          </DataItem>
-                          <DataItem>Gram: {getValue({ type: "number" }, nutritionInfo.gram)}</DataItem>
-                          <DataItem className="span">
-                            <span>Bread: {getValue({ type: "percentage" }, nutritionInfo.breadGram)}</span>
-                            <span>Meat: {getValue({ type: "percentage" }, nutritionInfo.meatGram)}</span>
-                            <span>Other: {getValue({ type: "percentage" }, nutritionInfo.otherGram)}</span>
-                          </DataItem>
-                          <DataItem>Calories: {getValue({ type: "number" }, nutritionInfo.calories)}</DataItem>
-                          <DataItem>Protein: {getValue({ type: "number" }, nutritionInfo.protein)}</DataItem>
-                          <DataItem>Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat)}</DataItem>
-                          <DataItem>Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat)}</DataItem>
-                          <DataItem>Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat)}</DataItem>
-                          <DataItem>Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol)}</DataItem>
-                          <DataItem>Fiber: {getValue({ type: "number" }, nutritionInfo.fiber)}</DataItem>
-                          <DataItem>Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate)}</DataItem>
-                          <DataItem>Sugars: {getValue({ type: "number" }, nutritionInfo.sugars)}</DataItem>
-                          <DataItem>Iron: {getValue({ type: "number" }, nutritionInfo.iron)}</DataItem>
-                          <DataItem>Calcium: {getValue({ type: "number" }, nutritionInfo.calcium)}</DataItem>
-                          <DataItem>Sodium: {getValue({ type: "number" }, nutritionInfo.sodium)}</DataItem>
-                          <DataItem>Potassium: {getValue({ type: "number" }, nutritionInfo.potassium)}</DataItem>
-                          <DataItem>Vitamin A: {getValue({ type: "number" }, nutritionInfo.vitaminA)}</DataItem>
-                          <DataItem>Vitamin C: {getValue({ type: "number" }, nutritionInfo.vitaminC)}</DataItem>
-                          <DataItem>Vitamin E: {getValue({ type: "number" }, nutritionInfo.vitaminE)}</DataItem>
-                        </DataItemContainer>
-                      </TableCell>
-                    </tr>
+                    <>
+                      <tr key={0}>
+                        <TableCell colSpan={4}>
+                          <DataItemContainer>
+                            <DataItem className="head">
+                              <GetIcon icon={"info"}></GetIcon>Recipe General Info
+                            </DataItem>
+                            <DataItem>Gram: {getValue({ type: "number" }, nutritionInfo.gram)}</DataItem>
+                            <DataItem className="span">
+                              <span>Bread: {getValue({ type: "percentage" }, nutritionInfo.breadGram)}</span>
+                              <span>Meat: {getValue({ type: "percentage" }, nutritionInfo.meatGram)}</span>
+                              <span>Other: {getValue({ type: "percentage" }, nutritionInfo.otherGram)}</span>
+                            </DataItem>
+                            <DataItem>Calories: {getValue({ type: "number" }, nutritionInfo.calories)}</DataItem>
+                            <DataItem>Protein: {getValue({ type: "number" }, nutritionInfo.protein)}</DataItem>
+                            <DataItem>Saturated Fat: {getValue({ type: "number" }, nutritionInfo.satFat)}</DataItem>
+                            <DataItem>Unsaturated Fat: {getValue({ type: "number" }, nutritionInfo.unSatFat)}</DataItem>
+                            <DataItem>Total Fat: {getValue({ type: "number" }, nutritionInfo.totalFat)}</DataItem>
+                            <DataItem>Cholesterol: {getValue({ type: "number" }, nutritionInfo.cholesterol)}</DataItem>
+                            <DataItem>Fiber: {getValue({ type: "number" }, nutritionInfo.fiber)}</DataItem>
+                            <DataItem>Carbohydrate: {getValue({ type: "number" }, nutritionInfo.carbohydrate)}</DataItem>
+                            <DataItem>Sugars: {getValue({ type: "number" }, nutritionInfo.sugars)}</DataItem>
+                            <DataItem>Iron: {getValue({ type: "number" }, nutritionInfo.iron)}</DataItem>
+                            <DataItem>Calcium: {getValue({ type: "number" }, nutritionInfo.calcium)}</DataItem>
+                            <DataItem>Sodium: {getValue({ type: "number" }, nutritionInfo.sodium)}</DataItem>
+                            <DataItem>Potassium: {getValue({ type: "number" }, nutritionInfo.potassium)}</DataItem>
+                            <DataItem>Vitamin A: {getValue({ type: "number" }, nutritionInfo.vitaminA)}</DataItem>
+                            <DataItem>Vitamin C: {getValue({ type: "number" }, nutritionInfo.vitaminC)}</DataItem>
+                            <DataItem>Vitamin E: {getValue({ type: "number" }, nutritionInfo.vitaminE)}</DataItem>
+                          </DataItemContainer>{" "}
+                        </TableCell>
+                      </tr>
+                      <tr key={0}>
+                        <TableCell colSpan={4}>
+                          <DataItemContainer>
+                            <DataItem className="head">
+                              <GetIcon icon={"info"}></GetIcon>Recipe Food Exchange Info
+                            </DataItem>
+                            <DataItem>Starch: {nutritionInfo.starch}</DataItem>
+                            <DataItem>Lean Meat: {nutritionInfo.leanMeat}</DataItem>
+                            <DataItem>Skim Milk: {nutritionInfo.skimMilk}</DataItem>
+                            <DataItem>Non-Starchy Vegetable: {nutritionInfo.nonStarchyVegetable}</DataItem>
+                            <DataItem>Fruits: {nutritionInfo.fruits}</DataItem>
+                            <DataItem>Fats: {nutritionInfo.fats}</DataItem>
+                            <DataItem>Sugar: {nutritionInfo.sugar}</DataItem>
+                            <DataItem>Very Lean Meat: {nutritionInfo.veryLeanMeat}</DataItem>
+                            <DataItem>Medium Fat Meat: {nutritionInfo.mediumFatMeat}</DataItem>
+                            <DataItem>High Fat Meat: {nutritionInfo.highFatMeat}</DataItem>
+                            <DataItem>Vegetarian Protein: {nutritionInfo.vegetarianProtein}</DataItem>
+                            <DataItem>Low-Fat Milk: {nutritionInfo.lowfatMilk}</DataItem>
+                            <DataItem>Regular Milk: {nutritionInfo.regularMilk}</DataItem>
+                          </DataItemContainer>
+                        </TableCell>
+                      </tr>
+                    </>
                   )}
                 </>
               )}
