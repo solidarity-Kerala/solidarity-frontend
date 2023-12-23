@@ -4,7 +4,7 @@ import { deleteData, getData, postData } from "../../../../../../backend/api";
 import { Filter, FilterBox, NoData, ProfileImage } from "../../../../../core/list/styles";
 import { ColumnContainer, RowContainer } from "../../../../../styles/containers/styles";
 import Search from "../../../../../core/search";
-import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection, ShowCalorie, CommonReplace } from "./styles"; // Import styles from styles.js
+import { TabContainer, TabButton, Table, TableHeader, TableBody, TableRow, Div, TableCell, TabData, TabDataItem, MealItem, Title, Variants, Variant, ReplacableItems, DayHead, Details, WeekSelection, ShowCalorie, CommonReplace, Seriving } from "./styles"; // Import styles from styles.js
 import DraggableItem from "./dragdrop/drag";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
@@ -59,55 +59,64 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const [coloriePerDay, setColoriePerDay] = useState(900);
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories, calorieOnly = true) => {
-      availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-      const availableCalorie = availableCalories?.[coloriePerDay] ?? {
-        calories: coloriePerDay,
-        meal: 0,
-        bread: 0,
-        dessert: 0,
-        fruit: 0,
-        fat: 0,
-        salad: 0,
-        snacking: 0,
-        soup: 0,
-      };
-      if (!availableCalorie) {
-        console.log("Not Found Available Calori: ", availableCalorie);
-        return 0;
-      }
+      const dietCategory = openData.data.subDiet.category ?? "General";
       let { numberOfPortion, recipeIngredients } = recipe;
       let nutritionInfoDetails = [];
       let nutritionInfo = {};
       if (numberOfPortion === 0) {
         numberOfPortion = 1;
       }
-      ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Fat", "Snacking", "Other"].map((typeOfIngredient) => {
-        let info = { typeOfIngredient, ingredients: 0 };
-        const typeOfIngredientLower = typeOfIngredient.toLowerCase();
-        let count = availableCalorie[typeOfIngredientLower === "meat" ? "meal" : typeOfIngredientLower];
-        count = count ? (count === 0 ? 1 : count) : 1;
-        recipeIngredients.forEach((ingredient) => {
-          if (ingredient.isCalculated) {
-            if (typeOfIngredient === ingredient.data.typeOfIngredient) {
-              ["calories", "gram", "protein", "saturatedFat", "totalFat", "cholesterol", "fiber", "carbohydrate", "sugars", "iron", "calcium", "potassium", "sodium", "vitaminA", "vitaminE", "vitaminC"].map((nutrition) => {
-                const nutritionLower = nutrition.toLowerCase();
-                info[nutrition] = (info[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
-                nutritionInfo[nutrition] = (nutritionInfo[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
-                return null;
-              });
-              nutritionInfo["ingredients"] += (nutritionInfo["ingredients"] ?? 0) + 1;
+      if (dietCategory === "FoodExchange") {
+        availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
+        const availableCalorie = availableCalories?.[coloriePerDay] ?? { calories: coloriePerDay, starch: 0, leanMeat: 0, skimMilk: 0, nonStarchyVegetable: 0, fruits: 0, fats: 0, sugar: 0, veryLeanMeat: 0, mediumFatMeat: 0, highFatMeat: 0, vegetarianProtein: 0, lowfatMilk: 0, regularMilk: 0, other: 0 };
+
+        return {};
+      } else {
+        availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
+        const availableCalorie = availableCalories?.[coloriePerDay] ?? {
+          calories: coloriePerDay,
+          meal: 0,
+          bread: 0,
+          dessert: 0,
+          fruit: 0,
+          fat: 0,
+          salad: 0,
+          snacking: 0,
+          soup: 0,
+        };
+        if (!availableCalorie) {
+          console.log("Not Found Available Calori: ", availableCalorie);
+          return 0;
+        }
+
+        ["Meat", "Bread", "Fruit", "Dessert", "Soup", "Salad", "Fat", "Snacking", "Other"].map((typeOfIngredient) => {
+          let info = { typeOfIngredient, ingredients: 0 };
+          const typeOfIngredientLower = typeOfIngredient.toLowerCase();
+          let count = availableCalorie[typeOfIngredientLower === "meat" ? "meal" : typeOfIngredientLower];
+          count = count ? (count === 0 ? 1 : count) : 1;
+          recipeIngredients.forEach((ingredient) => {
+            if (ingredient.isCalculated) {
+              if (typeOfIngredient === ingredient.data.typeOfIngredient) {
+                ["calories", "gram", "protein", "saturatedFat", "totalFat", "cholesterol", "fiber", "carbohydrate", "sugars", "iron", "calcium", "potassium", "sodium", "vitaminA", "vitaminE", "vitaminC"].map((nutrition) => {
+                  const nutritionLower = nutrition.toLowerCase();
+                  info[nutrition] = (info[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
+                  nutritionInfo[nutrition] = (nutritionInfo[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * count;
+                  return null;
+                });
+                nutritionInfo["ingredients"] += (nutritionInfo["ingredients"] ?? 0) + 1;
+              }
             }
-          }
+            return null;
+          });
+          nutritionInfo["ingredients"] = recipeIngredients.length;
+          nutritionInfoDetails.push(info);
           return null;
         });
-        nutritionInfo["ingredients"] = recipeIngredients.length;
-        nutritionInfoDetails.push(info);
-        return null;
-      });
 
-      return calorieOnly ? nutritionInfo.calories ?? 0 : nutritionInfo;
+        return calorieOnly ? nutritionInfo.calories ?? 0 : nutritionInfo;
+      }
     },
-    [coloriePerDay, menuData?.mealTimeCategories]
+    [coloriePerDay, menuData?.mealTimeCategories, openData.data.subDiet.category]
   );
   useEffect(() => {
     if (menuData?.foodMenu) {
@@ -441,52 +450,132 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   };
 
   const setCaloriesItems = (mealTimeCategories, single = false, recepeType = "") => {
-    // console.log("mealTimeCategories",mealTimeCategories);
-    const availableCalorie = mealTimeCategories.availableCalories?.[coloriePerDay] ?? {
-      calories: coloriePerDay,
-      meal: 0,
-      bread: 0,
-      dessert: 0,
-      fruit: 0,
-      fat: 0,
-      salad: 0,
-      snacking: 0,
-      soup: 0,
-    };
-    const { bread, meal: meat, fruit, dessert, soup, salad, fat, snacking } = availableCalorie;
-    if (!single) {
-      const text = `${meat && meat > 0 ? meat + "M" : ""}${bread && bread > 0 ? bread + "B" : ""}${fruit > 0 ? fruit + "F" : ""}${dessert > 0 ? dessert + "D" : ""}${salad > 0 ? salad + "SD" : ""}${soup > 0 ? soup + "SP" : ""}${fat > 0 ? fat + "FT" : ""}${snacking > 0 ? snacking + "SN" : ""}`;
-      return text.length > 0 ? "/ " + text : "";
+    const dietCategory = openData.data.subDiet.category ?? "General";
+
+    if (dietCategory === "FoodExchange") {
+      const availableCalorie = mealTimeCategories.availableCalories?.[coloriePerDay] ?? {
+        calories: coloriePerDay,
+        starch: 0,
+        leanMeat: 0,
+        skimMilk: 0,
+        nonStarchyVegetable: 0,
+        fruits: 0,
+        fats: 0,
+        sugar: 0,
+        veryLeanMeat: 0,
+        mediumFatMeat: 0,
+        highFatMeat: 0,
+        vegetarianProtein: 0,
+        lowfatMilk: 0,
+        regularMilk: 0,
+        other: 0,
+      };
+
+      const { starch, leanMeat, skimMilk, nonStarchyVegetable, fruits, fats, sugar, veryLeanMeat, mediumFatMeat, highFatMeat, vegetarianProtein, lowfatMilk, regularMilk, other } = availableCalorie;
+
+      const items = [
+        { name: "Starch", value: starch },
+        { name: "Lean Meat", value: leanMeat },
+        { name: "Skim Milk", value: skimMilk },
+        { name: "Non-Starchy Vegetable", value: nonStarchyVegetable },
+        { name: "Fruits", value: fruits },
+        { name: "Fats", value: fats },
+        { name: "Sugar", value: sugar },
+        { name: "Very Lean Meat", value: veryLeanMeat },
+        { name: "Medium Fat Meat", value: mediumFatMeat },
+        { name: "High Fat Meat", value: highFatMeat },
+        { name: "Vegetarian Protein", value: vegetarianProtein },
+        { name: "Low-Fat Milk", value: lowfatMilk },
+        { name: "Regular Milk", value: regularMilk },
+        { name: "Other", value: other },
+      ];
+
+      const text = items
+        .filter((item) => item.value > 0)
+        .map((item) => (
+          <span key={item.name}>
+            {item.name} x {item.value}{" "}
+          </span>
+        ));
+
+      return text.length > 0 ? (
+        <>
+          <i>Seriving: </i>
+          {text}
+        </>
+      ) : null;
     } else {
-      let count = 0;
-      if (recepeType === "Meat") {
-        count = (meat || 0) + "M";
-      } else if (recepeType === "Bread") {
-        count = (bread || 0) + "B";
-      } else if (recepeType === "Fruit") {
-        count = (fruit || 0) + "F";
-      } else if (recepeType === "Soup") {
-        count = (soup || 0) + "SP";
-      } else if (recepeType === "Dessert") {
-        count = (dessert || 0) + "D";
-      } else if (recepeType === "Fat") {
-        count = (fat || 0) + "FT";
-      } else if (recepeType === "Snacking") {
-        count = (dessert || 0) + "SN";
-      } else if (recepeType === "Salad") {
-        count = (salad || 0) + "SD";
-      } else if (recepeType === "Mixed") {
-        count = meat + "M" + bread + "B";
+      const availableCalorie = mealTimeCategories.availableCalories?.[coloriePerDay] ?? {
+        calories: coloriePerDay,
+        meal: 0,
+        bread: 0,
+        dessert: 0,
+        fruit: 0,
+        fat: 0,
+        salad: 0,
+        snacking: 0,
+        soup: 0,
+      };
+
+      const { bread, meal: meat, fruit, dessert, soup, salad, fat, snacking } = availableCalorie;
+      if (!single) {
+        const items = [
+          { name: "Meat", value: meat },
+          { name: "Bread", value: bread },
+          { name: "Fruit", value: fruit },
+          { name: "Dessert", value: dessert },
+          { name: "Salad", value: salad },
+          { name: "Soup", value: soup },
+          { name: "Fat", value: fat },
+          { name: "Snacking", value: snacking },
+        ];
+
+        const text = items
+          .filter((item) => item.value > 0)
+          .map((item) => (
+            <span key={item.name}>
+              {item.name} x {item.value}{" "}
+            </span>
+          ));
+
+        return text.length > 0 ? (
+          <>
+            <i>Seriving: </i>
+            {text}
+          </>
+        ) : null;
       } else {
-        count = "0";
+        let count = 0;
+        if (recepeType === "Meat") {
+          count = `${meat || 0} Meat`;
+        } else if (recepeType === "Bread") {
+          count = `${bread || 0} Bread`;
+        } else if (recepeType === "Fruit") {
+          count = `${fruit || 0} Fruit`;
+        } else if (recepeType === "Soup") {
+          count = `${soup || 0} Soup`;
+        } else if (recepeType === "Dessert") {
+          count = `${dessert || 0} Dessert`;
+        } else if (recepeType === "Fat") {
+          count = `${fat || 0} Fat`;
+        } else if (recepeType === "Snacking") {
+          count = `${dessert || 0} Snacking`;
+        } else if (recepeType === "Salad") {
+          count = `${salad || 0} Salad`;
+        } else if (recepeType === "Mixed") {
+          count = `${meat} Meat ${bread} Bread`;
+        } else {
+          count = "0";
+        }
+
+        return count.length > 0 ? count : null;
       }
-      return count;
     }
   };
 
   useEffect(() => {
     setLoaderBox(true);
-    getData({ menuId: openData.data._id, weekNumber, category: openData.data.subDiet.category ?? "General" }, "food-menu/get-a-menu")
+    getData({ menuId: openData.data._id, weekNumber, category: openData.data.subDiet.category ?? "General", subDiet: openData.data.subDiet._id }, "food-menu/get-a-menu")
       .then((response) => {
         if (response.status === 200) {
           setMenuData(response.data);
@@ -494,7 +583,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         }
       })
       .catch(() => [setLoaderBox(false)]);
-  }, [openData.data._id, weekNumber, setLoaderBox, openData.data.subDiet.category]);
+  }, [openData.data._id, weekNumber, setLoaderBox, openData.data.subDiet.category, openData.data.subDiet._id]);
   const [item] = useState({
     type: "select",
     placeholder: "Calories",
@@ -970,7 +1059,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                           }))
                         }
                       >
-                        {`${mealTimeCategory.mealtimeCategoriesName} ${setCaloriesItems(mealTimeCategory)}`}
+                        {`${mealTimeCategory.mealtimeCategoriesName} `}
                         <GetIcon icon={"down"}></GetIcon>
                       </MealTimeHead>
                     </TableCell>
@@ -978,6 +1067,11 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
 
                   {(selectedMealTime[`${mealTimeCategory._id}-${weekNumber}`] === true || expandAll) && (
                     <React.Fragment>
+                      <TableRow>
+                        <TableCell colSpan={7}>
+                          <Seriving>{setCaloriesItems(mealTimeCategory)}</Seriving>
+                        </TableCell>
+                      </TableRow>
                       <TableRow key={mealTimeCategory._id}>
                         {daysOfWeek.map((day, dayNumber) => {
                           if (showAllReplacable) {
@@ -1373,7 +1467,9 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   <TableHeader colSpan={2}>Nutrition Info</TableHeader>
                 </tr>
                 <tr>
-                  <TableHeader colSpan={2}>{` Base Calori: ${coloriePerDay} | Serving: ${popupData.Serving}`}</TableHeader>
+                  <TableHeader colSpan={2}>
+                    {` Base Calori: ${coloriePerDay} | Serving: `} {popupData.Serving}
+                  </TableHeader>
                 </tr>
               </thead>
               <TableBody>
