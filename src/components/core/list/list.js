@@ -211,7 +211,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
               let bool = value[item.name]?.toString() === "true" ? true : false;
               updateValuesTemp[item.name] = bool;
             } else if (item.type === "number") {
-              updateValuesTemp[item.name] = parseInt(value[item.name]);
+              updateValuesTemp[item.name] = updateValuesTemp[item.name] = parseFloat(value[item.name]);
             } else if (item.type === "select") {
               updateValuesTemp[item.name] = typeof value[item.name] === "undefined" ? "" : typeof value[item.name] === "string" || typeof value[item.name] === "number" ? value[item.name] : value[item.name]?._id ? value[item.name]._id : "";
             } else if (item.type === "multiSelect") {
@@ -1123,7 +1123,11 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
               onClick={() => {
                 setShowPageCount(true);
               }}
-            > {`${perPage} per Page`}<GetIcon icon={'edit'}></GetIcon></ArrowPagination>
+            >
+              {" "}
+              {`${perPage} per Page`}
+              <GetIcon icon={"edit"}></GetIcon>
+            </ArrowPagination>
           </Count>
         ) : (
           <Count>{`Showing ${count} record${count > 1 ? "s" : ""}`}</Count>
