@@ -76,7 +76,7 @@ const AvailableCalories = (props) => {
     {
       type: "select",
       placeholder: "Meal",
-      name: "meal",
+      name: "meat",
       validation: "",
       tag: true,
       default: "",
