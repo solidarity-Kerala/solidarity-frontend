@@ -6,12 +6,10 @@ const Title = styled.span`
   border: 1px solid ${(props) => getColor(props.color)};
   color: ${(props) => getColor(props.color)};
   border-radius: 5px;
-  padding: 0px 5px;
   margin-left: 5px;
   font-weight: 400;
-  padding: 5px;
-  font-size: 12px !important;
-  margin-top: -3px;
+  padding: 2px 5px;
+  font-size: 10px !important;
 `;
 const Highlight = ({ highlight, data }) => {
   const getColor = () => {

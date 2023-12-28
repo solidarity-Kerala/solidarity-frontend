@@ -1124,9 +1124,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                 setShowPageCount(true);
               }}
             >
-              {" "}
               {`${perPage} per Page`}
-              <GetIcon icon={"edit"}></GetIcon>
+              <GetIcon icon={"settings"}></GetIcon>
             </ArrowPagination>
           </Count>
         ) : (

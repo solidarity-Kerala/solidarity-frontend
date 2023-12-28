@@ -93,6 +93,17 @@ export const TableHeader = styled.th`
   &:first-child {
     border-left: 0;
   }
+  i {
+    font-style: normal;
+  }
+  > span {
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+    display: inline-flex;
+    margin: 2px 2px;
+  }
 `;
 
 export const TableBody = styled.tbody``;
@@ -291,7 +302,7 @@ export const Variants = styled.div`
   }
 `;
 export const Details = styled.div`
-  width: calc(100% - 60px);
+  /* width: calc(100% - 60px); */
   text-align: left;
   span {
     width: 100%;

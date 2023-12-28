@@ -56,7 +56,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       handleTabClick(selctedRecipeType, event.target.value);
     }, 300);
   };
-  const [coloriePerDay, setColoriePerDay] = useState(900);
+  const [coloriePerDay, setColoriePerDay] = useState(1200);
   const getCalories = useCallback(
     (recipe, mealTimeCategory, availableCalories, calorieOnly = true) => {
       const dietCategory = openData.data.subDiet.category ?? "General";
@@ -67,17 +67,20 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         numberOfPortion = 1;
       }
       if (dietCategory === "FoodExchange") {
+        let info = { ingredients: 0 };
         availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
-        //const availableCalorie = availableCalories?.[coloriePerDay] ?? { calories: coloriePerDay, starch: 0, leanMeat: 0, skimMilk: 0, nonStarchyVegetable: 0, fruits: 0, fats: 0, sugar: 0, veryLeanMeat: 0, mediumFatMeat: 0, highFatMeat: 0, vegetarianProtein: 0, lowfatMilk: 0, regularMilk: 0, other: 0 };
+        const availableCalorie = availableCalories?.[coloriePerDay] ?? { calories: coloriePerDay, starch: 0, leanMeat: 0, skimMilk: 0, nonStarchyVegetable: 0, fruits: 0, fats: 0, sugar: 0, veryLeanMeat: 0, mediumFatMeat: 0, highFatMeat: 0, vegetarianProtein: 0, lowfatMilk: 0, regularMilk: 0, other: 0 };
         recipeIngredients.forEach((ingredient, index) => {
           if (ingredient.isCalculated) {
             ["starch", "leanMeat", "skimMilk", "nonStarchyVegetable", "fruits", "fats", "sugar", "veryLeanMeat", "mediumFatMeat", "highFatMeat", "vegetarianProtein", "lowfatMilk", "regularMilk"].map((nutrition) => {
               const nutritionLower = nutrition;
               nutritionInfo[nutritionLower] = (nutritionInfo[nutritionLower] ?? 0) + (ingredient[nutritionLower] ?? 0);
+              info[nutrition] = (info[nutrition] ?? 0) + ((ingredient[nutritionLower] ?? 0) / (numberOfPortion ?? 1)) * availableCalorie[nutritionLower];
               return null;
             });
           }
         });
+        return calorieOnly ? nutritionInfo.calories ?? 0 : nutritionInfo;
       } else {
         availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
         const availableCalorie = availableCalories?.[coloriePerDay] ?? {
@@ -525,7 +528,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       };
 
       const { bread, meal: meat, fruit, dessert, soup, salad, fat, snacking } = availableCalorie;
-      if (!single) {
+      if (!single || single) {
         const items = [
           { name: "Meat", value: meat },
           { name: "Bread", value: bread },
@@ -541,7 +544,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           .filter((item) => item.value > 0)
           .map((item) => (
             <span key={item.name}>
-              {item.name} x {item.value}{" "}
+              {item.name} x {item.value}
             </span>
           ));
 
@@ -604,8 +607,13 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     view: true,
     add: true,
     update: true,
-    selectApi: "800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200",
-    apiType: "CSV",
+    selectApi: [800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200].map((value) => {
+      if (typeof value === "number") {
+        return { id: value, value };
+      }
+      return value; // If it's already an object, leave it unchanged
+    }),
+    apiType: "JSON",
   });
   const [weeks] = useState({
     type: "select",
@@ -894,6 +902,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     });
   };
   function addSpaceBeforeCaps(str) {
+    console.log(str);
     str = str.replace(/([a-z])([A-Z])/g, "$1 $2");
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -1098,7 +1107,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                         <Variants className="vertical">
                                           {items?.recipes?.length > 0
                                             ? items.recipes.map((item, recipeIndex) => {
-                                                let recipeCalories = getCalories(item ?? [], mealTimeCategory._id);
+                                                let recipeCalories = getCalories(item ?? [], mealTimeCategory._id) ?? 0;
                                                 mealtimeCalories += recipeCalories;
                                                 // Render your items inside the FoodButton here
                                                 // For example, you can render a list of items like this
@@ -1109,7 +1118,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                         <img src={item.photoThumbnail ? process.env.REACT_APP_CDN + item.photoThumbnail : food} alt="icon"></img>
                                                       </ProfileImage>
                                                       <span className="recipe">{item.title} </span>
-                                                      <span>{recipeCalories?.toFixed(2)} calories</span>
+                                                      {(openData.data.subDiet.category ?? "General") === "General" && <span>{recipeCalories.toFixed(2)} calories</span>}
                                                       <div className="actions">
                                                         <span
                                                           className="info"
@@ -1475,17 +1484,19 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 </tr>
                 <tr>
                   <TableHeader colSpan={2}>
-                    {` Base Calori: ${coloriePerDay} | Serving: `} {popupData.Serving}
+                    {` Base Calori: ${coloriePerDay} | `} {popupData.Serving}
                   </TableHeader>
                 </tr>
               </thead>
               <TableBody>
-                {Object.entries(popupData.nutritionInfo ?? {}).map(([key, value]) => (
-                  <TableRow key={key}>
-                    <TableCell>{addSpaceBeforeCaps(key)}</TableCell>
-                    <TableCell>{getValue({ type: "number" }, value)}</TableCell>
-                  </TableRow>
-                ))}
+                {Object.entries(popupData.nutritionInfo ?? {})
+                  .sort(([keyA, valueA], [keyB, valueB]) => valueB - valueA)
+                  .map(([key, value]) => (
+                    <TableRow key={key}>
+                      <TableCell>{addSpaceBeforeCaps(key)}</TableCell>
+                      <TableCell>{getValue({ type: "number" }, value)}</TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           }
