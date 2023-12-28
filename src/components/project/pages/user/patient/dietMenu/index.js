@@ -78,7 +78,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         calories: menuData.user.diet.calories,
         recipeSchedule,
         userId,
-        mealTimeCategory, 
+        mealTimeCategory,
         foodMenu,
         isCommon,
       },
@@ -887,7 +887,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
 
   const renderRecipe = (recipes, index, date, categoryIndex, isDeleted) => {
     return recipes.map((recipeItem, recepeIndex) => {
-      const commonReplacableItems = replacableItems[recipeItem.foodMenu]?.filter((replaceRecipe) => replaceRecipe.typeOfRecipe===recipeItem.recipe.typeOfRecipe && replaceRecipe.mealTimeCategory === recipeItem.mealTimeCategory);
+      const commonReplacableItems = replacableItems[recipeItem.foodMenu]?.filter((replaceRecipe) => replaceRecipe.typeOfRecipe === recipeItem.recipe.typeOfRecipe && replaceRecipe.mealTimeCategory === recipeItem.mealTimeCategory);
       return (
         (recipeItem.isDeleted ?? false) === isDeleted && (
           <React.Fragment key={`recipe-${recepeIndex}`}>
@@ -1011,7 +1011,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   </button>
                   {replacableItems[recipeItem.foodmenuitem._id] && (
                     <ReplacableItemsList>
-                      {[...replacableItems[recipeItem.foodmenuitem._id],...commonReplacableItems]?.map((replacableItem, replacableIndex) => (
+                      {[...replacableItems[recipeItem.foodmenuitem._id], ...commonReplacableItems]?.map((replacableItem, replacableIndex) => (
                         <Recepe key={`replacable-receipe${replacableIndex}`} className="horizontal">
                           <RecepeContent className="child-recipe">
                             <RecepeImage src={replacableItem.recipe.photoThumbnail ? process.env.REACT_APP_CDN + replacableItem.recipe.photoThumbnail : food}></RecepeImage>
@@ -1098,9 +1098,11 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                         active={selectedDayNumber === formattedDay}
                         onClick={() => {
                           const day = menuData.result.find((item) => item._id === formattedDay);
-                          const item = day.menu[0].recipes[0];
-                          getReplacableItems(item.foodMenuItem, item._id, item.mealTimeCategory, item.foodMenu, true);
-                          setSelectedDayNumber(formattedDay);
+                          const item = day?.menu[0]?.recipes?.[0];
+                          if (item) {
+                            getReplacableItems(item.foodMenuItem, item._id, item.mealTimeCategory, item.foodMenu, true);
+                            setSelectedDayNumber(formattedDay);
+                          }
                         }}
                       >
                         <DayHead>
