@@ -326,7 +326,23 @@ const PackageManagement = (props) => {
   ]);
 
   const [packagePrice] = useState([
-    
+    {
+      type: "select",
+      apiType: "API",
+      selectApi: "mealtime-category/select",
+      placeholder: "Mealtime Category",
+      name: "mealTimeCategory",
+      validation: "",
+      showItem: "mealtimeCategoriesName",
+      default: "",
+      tag: true,
+      label: "Mealtime Category",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+    },
     {
       type: "number",
       placeholder: "Price",
