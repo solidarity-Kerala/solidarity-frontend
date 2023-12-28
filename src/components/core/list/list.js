@@ -575,14 +575,14 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                 <Button
                   theme={themeColors}
                   key={`clone-${data._id}`}
-                  onClick={() => {
+                  onClick={(event) => {
+                    event.stopPropagation();
                     setUpdateId(data._id);
                     setMessage({
                       type: 2,
                       content: `Do you want to clone '${getValue({ type: itemTitle.type ?? "text" }, titleValue) ? getValue({ type: itemTitle.type ?? "text" }, titleValue) : "Item"}'?`,
                       proceed: "Clone",
-                      onProceed: async (event) => {
-                        event.stopPropagation();
+                      onProceed: async () => {
                         await updateHandler({
                           cloneId: data._id,
                           _title: titleValue,
