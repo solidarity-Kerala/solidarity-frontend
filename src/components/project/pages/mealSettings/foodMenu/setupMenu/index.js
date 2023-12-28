@@ -69,8 +69,15 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       if (dietCategory === "FoodExchange") {
         availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
         //const availableCalorie = availableCalories?.[coloriePerDay] ?? { calories: coloriePerDay, starch: 0, leanMeat: 0, skimMilk: 0, nonStarchyVegetable: 0, fruits: 0, fats: 0, sugar: 0, veryLeanMeat: 0, mediumFatMeat: 0, highFatMeat: 0, vegetarianProtein: 0, lowfatMilk: 0, regularMilk: 0, other: 0 };
-
-        return {};
+        recipeIngredients.forEach((ingredient, index) => {
+          if (ingredient.isCalculated) {
+            ["starch", "leanMeat", "skimMilk", "nonStarchyVegetable", "fruits", "fats", "sugar", "veryLeanMeat", "mediumFatMeat", "highFatMeat", "vegetarianProtein", "lowfatMilk", "regularMilk"].map((nutrition) => {
+              const nutritionLower = nutrition;
+              nutritionInfo[nutritionLower] = (nutritionInfo[nutritionLower] ?? 0) + (ingredient[nutritionLower] ?? 0);
+              return null;
+            });
+          }
+        });
       } else {
         availableCalories = availableCalories ?? menuData.mealTimeCategories.find((item) => mealTimeCategory === item._id)?.availableCalories;
         const availableCalorie = availableCalories?.[coloriePerDay] ?? {
@@ -1102,7 +1109,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                         <img src={item.photoThumbnail ? process.env.REACT_APP_CDN + item.photoThumbnail : food} alt="icon"></img>
                                                       </ProfileImage>
                                                       <span className="recipe">{item.title} </span>
-                                                      <span>{recipeCalories.toFixed(2)} calories</span>
+                                                      <span>{recipeCalories?.toFixed(2)} calories</span>
                                                       <div className="actions">
                                                         <span
                                                           className="info"
