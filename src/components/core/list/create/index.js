@@ -268,7 +268,26 @@ const CrudForm = (props) => {
         value = event;
       } else if (type === "select") {
         value = event.id;
+        if ((field.arrayOut ?? false) === true && type !== "multiSelect") {
+          formValues[field.name + "Array"] = event;
+        }
       } else if (type === "multiSelect") {
+        if ((field.arrayOut ?? false) === true) {
+          let items = formValues[field.name + "Array"];
+          if (!items) {
+            items = [];
+          }
+          const index = items.findIndex((item) => item.id === event.id);
+
+          if (index === -1) {
+            // If event._id doesn't exist, push it to the items array
+            items.push(event);
+          } else {
+            // If event._id already exists, remove it from the items array
+            items.splice(index, 1);
+          }
+          formValues[field.name + "Array"] = items;
+        }
         const items = formValues[field.name];
         const index = items.findIndex((item) => item === event.id);
 
@@ -296,7 +315,7 @@ const CrudForm = (props) => {
       } else {
         value = event.target.getAttribute("value");
       }
-
+     
       let udpateValue = {
         ...formValues,
         [field.name]: value,
@@ -318,9 +337,14 @@ const CrudForm = (props) => {
           });
         }
       }
+      if (typeof field.onChange === "function") {
+        udpateValue = field.onChange(field.name,udpateValue);
+        console.log(udpateValue);
+      }
       // Creating an updated field
       // updating the formm values
       setFormValues(udpateValue);
+
       // console.log("udpateValue", udpateValue);
       // Validating the fields
       if (validation(formState, udpateValue, formErrors)) {

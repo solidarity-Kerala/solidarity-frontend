@@ -99,7 +99,7 @@ const AutoForm = (props) => {
         }
       });
     }
-console.log(formVal);
+    console.log(formVal);
     setFormValues(formVal);
     setFormErrors(tempFormErrors);
     // validation(props.formInput, formVal);
@@ -432,7 +432,7 @@ console.log(formVal);
             onSubmit={(event) => {
               event.preventDefault();
               alert("yes");
-            }}
+            }}  
             action="#"
             method="POST"
             className={`${props.css ?? ""}  ${props.plainForm ? "plain" : "popup"}`}

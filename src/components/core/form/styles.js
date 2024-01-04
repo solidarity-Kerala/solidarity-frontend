@@ -14,6 +14,7 @@ export const Form = styled.div`
   &.plain {
     border-radius: 10px;
     display: flex;
+    gap:10px;
   }
   &.sub {
     flex: 100%;
@@ -178,7 +179,7 @@ export const Footer = styled.div`
 `;
 export const ErrorMessage = styled.div`
   padding-left: 0;
-  margin: -6px 7px 8px;
+  margin: 5px 10px 0px;
   color: #fe7b7b;
   font-size: 12px;
   width: 100%;

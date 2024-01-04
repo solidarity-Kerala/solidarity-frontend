@@ -48,10 +48,7 @@ const PackageManagement = (props) => {
       listView: true,
       name: "calories",
       validation: "",
-      default: [
-        800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900,
-        2000, 2100, 2200,
-      ],
+      default: [800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200],
       label: "Calories",
       required: true,
       view: true,
@@ -83,7 +80,6 @@ const PackageManagement = (props) => {
       apiType: "API",
       selectApi: "food-menu/select",
       placeholder: "Food Menu",
-      search: false,
       tags: [
         {
           type: "text",
@@ -141,7 +137,7 @@ const PackageManagement = (props) => {
       add: true,
       update: true,
       filter: false,
-      search:true,
+      search: true,
     },
     {
       type: "number",
@@ -338,7 +334,7 @@ const PackageManagement = (props) => {
       tag: true,
       label: "Mealtime Category",
       required: true,
-      view: true,
+      view: false,
       add: true,
       update: true,
       filter: true,
@@ -427,7 +423,6 @@ const PackageManagement = (props) => {
       add: true,
       update: true,
     },
-   
   ]);
 
   const themeColors = useSelector((state) => state.themeColors);
@@ -459,9 +454,9 @@ const PackageManagement = (props) => {
         api: `package-price`,
         parentReference: "package",
         itemTitle: {
-          name: "packageName",
+          name: "mealtimeCategoriesName",
           type: "text",
-          collection: "package",
+          collection: "mealTimeCategory",
         },
         shortName: "Package Price",
         addPrivilege: true,

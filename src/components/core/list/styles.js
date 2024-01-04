@@ -271,7 +271,7 @@ export const TrBody = styled.div`
     font-size: 13px;
   }
   &.single {
-    padding: 15px 17px 15px 26px;
+    padding: 10px 15px 10px 15px;
   }
   &.actions {
     display: flex;

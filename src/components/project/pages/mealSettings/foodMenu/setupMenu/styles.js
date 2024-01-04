@@ -273,6 +273,7 @@ export const Variants = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   overflow-wrap: anywhere;
   margin-top: 10px;
   column-gap: 10px;
@@ -326,6 +327,7 @@ export const Variant = styled.div`
   font-weight: bolder;
   font-size: 14px;
   width: auto;
+  min-width: 80px;
   flex-direction: column;
   display: flex;
   border: 1px solid #ccc;
