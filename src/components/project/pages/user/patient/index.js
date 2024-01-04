@@ -14,6 +14,7 @@ import SelfOrder from "./selfOrder";
 import axios from "axios";
 import { checkprivilege, privileges } from "../../../../core/functions/previliage";
 import InvoicePDF from "./invoicePDF";
+import { putData } from "../../../../../backend/api";
 
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
@@ -412,6 +413,7 @@ const Patient = (props) => {
       add: true,
       update: true,
     },
+
     {
       type: "select",
       apiType: "JSON",
@@ -1407,6 +1409,7 @@ const Patient = (props) => {
       element: "button",
       type: "callback",
       callback: (item, data) => {
+        console.log("item and data : ", item, data)
         setDefault(data);
         // Write code to set default..
       },
@@ -1417,7 +1420,7 @@ const Patient = (props) => {
         item: "isDefault",
         if: "true",
         then: false,
-        else: false,
+        else: true,
       },
       params: {
         api: ``,
@@ -1430,6 +1433,7 @@ const Patient = (props) => {
       },
     },
   ]);
+
   const [invoice] = useState([
     {
       element: "button",
@@ -1457,9 +1461,11 @@ const Patient = (props) => {
   ]);
   const setDefault = async (data) => {
     props.setLoaderBox(true);
+    console.log("default data : ", {data})
     await axios
       .put(`${process.env.REACT_APP_API}delivery-address/default`, data)
       .then((response) => {
+        console.log("console", {console})
         props.setLoaderBox(false);
         console.log(response);
         if (response.data) {
@@ -1532,7 +1538,7 @@ const Patient = (props) => {
                 type: "text",
                 collection: "user",
               },
-              actions: deliveryAddressActions,
+              actions: deliveryAddressActions, invoice,
               shortName: "Delivery Address",
               addPrivilege: true,
               delPrivilege: true,
