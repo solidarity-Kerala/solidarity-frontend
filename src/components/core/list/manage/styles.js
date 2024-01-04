@@ -31,6 +31,7 @@ export const Overlay = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
   overflow: auto;
   z-index: 1001;
+  backdrop-filter: blur(4px);
   @media (max-width: 768px) {
     width: 100%;
     padding: 0;

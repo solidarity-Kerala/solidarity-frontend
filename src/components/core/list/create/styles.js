@@ -34,6 +34,7 @@ export const Overlay = styled.div`
   background-color: rgba(0, 0, 0, 0.2);
   overflow: auto;
   z-index: 1001;
+      backdrop-filter: blur(4px);
   &.plain {
     position: initial;
     background: transparent;
