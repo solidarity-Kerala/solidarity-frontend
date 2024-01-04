@@ -200,6 +200,57 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       }
     }
   };
+  const onChange = (name, updateValue) => {
+    const { calories, mealTimeCategoryArray, packageArray, numberofDays } = updateValue;
+
+    // Validate required data
+    if (typeof calories !== "number" || !Array.isArray(mealTimeCategoryArray) || mealTimeCategoryArray.length === 0 || !packageArray || typeof packageArray.discountfor3Month !== "number" || typeof packageArray.discountfor6Month !== "number" || typeof packageArray.discountforMonth !== "number" || typeof packageArray.discountforWeek !== "number" || typeof numberofDays !== "number") {
+      // Handle the case where required data is missing or not in the expected format
+      console.error("Invalid data format or missing required data");
+      return updateValue; // or handle the error in a way that makes sense for your application
+    }
+
+    let pricePerDay = 0;
+    let discount = 0;
+    mealTimeCategoryArray.forEach((mealTime) => {
+      const { upto1000, upto1500, upto2000, upto2500, upto3000 } = mealTime;
+      let hike = 0;
+
+      if (calories <= 1000) {
+        hike = upto1000;
+      } else if (calories <= 1500) {
+        hike = upto1500;
+      } else if (calories <= 2000) {
+        hike = upto2000;
+      } else if (calories <= 2500) {
+        hike = upto2500;
+      } else if (calories > 2500) {
+        hike = upto3000;
+      }
+
+      const price = mealTime.price + (mealTime.price * hike) / 100;
+      pricePerDay += price;
+    });
+
+    if (numberofDays > 6 && numberofDays < 29) {
+      discount = packageArray.discountforWeek;
+    } else if (numberofDays > 29 && numberofDays < 89) {
+      discount = packageArray.discountforMonth;
+    } else if (numberofDays > 89 && numberofDays < 179) {
+      discount = packageArray.discountfor3Month;
+    } else if (numberofDays > 179) {
+      discount = packageArray.discountfor6Month;
+    }
+
+    updateValue["discount"] = discount;
+    const totalAmount = pricePerDay * parseInt(numberofDays > 0 ? numberofDays : 0);
+    updateValue["totalPrice"] = totalAmount - totalAmount * (discount / 100);
+    updateValue["pricePerDay"] = pricePerDay;
+    updateValue["daySelected"] = numberofDays > 0 ? numberofDays : 0;
+
+    return updateValue;
+  };
+
   const addDiet = async () => {
     setParameters([
       {
@@ -209,6 +260,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         placeholder: "Package",
         name: "package",
         validation: "",
+        arrayOut: true,
         collection: "package",
         showItem: "title",
         default: "",
@@ -295,7 +347,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       },
       {
         type: "title",
-        title: "Menu Settings",
+        title: "Diet Settings",
         name: "menuSettings",
         add: true,
         update: true,
@@ -309,6 +361,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         name: "calories",
         showItem: "",
         validation: "",
+        onChange: onChange,
         default: "",
         tag: true,
         label: "Calories",
@@ -326,6 +379,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         validation: "",
         default: [0, 1, 2, 3, 4, 5, 6],
         label: "Select Days of Week",
+        onChange: onChange,
         required: true,
         view: true,
         customClass: "list",
@@ -347,7 +401,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         type: "multiSelect",
         placeholder: "Select Meal Times",
         name: "mealTimeCategory",
+        displayValue: "mealtimeCategoriesName",
         updateOn: "foodMenu",
+        onChange: onChange,
+        params: [{ name: "package" }, { name: "foodMenu" }],
         label: "Select Meal Times",
         required: true,
         view: true,
@@ -355,8 +412,23 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         add: true,
         update: true,
         apiType: "API",
+        arrayOut: true,
         search: false,
         selectApi: "mealtime-category/select-by-menu",
+      },
+      {
+        type: "textarea",
+        placeholder: "Remarks",
+        name: "remarks",
+        showItem: "",
+        validation: "",
+        default: "",
+        tag: true,
+        label: "Remarks",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
       },
       {
         type: "title",
@@ -370,6 +442,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         placeholder: "Start Date & Time",
         name: "startDate",
         showItem: "",
+        onChange: onChange,
         validation: "",
         default: "",
         tag: true,
@@ -380,28 +453,94 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         update: true,
       },
       {
-        type: "number",
-        placeholder: "Number of Days",
+        type: "select",
+        placeholder: "Select Validity",
+        listView: true,
         name: "numberofDays",
+        validation: "",
+        default: [0, 1, 2, 3, 4, 5, 6],
+        label: "Select Validity",
+        onChange: onChange,
+        required: true,
+        view: true,
+        customClass: "list",
+        add: true,
+        update: true,
+        apiType: "JSON",
+        search: false,
+        selectApi: [
+          { value: "1 Day", id: 1 },
+          { value: "2 Days", id: 2 },
+          { value: "3 Days", id: 3 },
+          { value: "1 Week", id: 7 },
+          { value: "1 Month", id: 30 },
+          { value: "3 Month", id: 90 },
+          { value: "6 Month", id: 180 },
+        ],
+      },
+
+      {
+        type: "title",
+        title: "View Pricing",
+        name: "menuSettings",
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Per Day",
+        name: "pricePerDay",
+        disabled: true,
         showItem: "",
         validation: "",
         default: "",
         tag: true,
-        label: "Number of Days",
-        required: true,
+        label: "Per Day",
+        required: false,
         view: true,
         add: true,
         update: true,
       },
       {
-        type: "textarea",
-        placeholder: "Remarks",
-        name: "remarks",
+        type: "number",
+        placeholder: "Number of Days",
+        name: "daySelected",
+        showItem: "",
+        validation: "",
+        disabled: true,
+        default: "",
+        tag: true,
+        label: "Number of Days",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Discount",
+        name: "discount",
+        showItem: "",
+        validation: "",
+        disabled: true,
+        default: "",
+        tag: true,
+        label: "Discount",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Amount to Pay",
+        name: "totalPrice",
+        disabled: true,
         showItem: "",
         validation: "",
         default: "",
         tag: true,
-        label: "Remarks",
+        label: "Amount to Pay",
         required: false,
         view: true,
         add: true,
@@ -693,12 +832,18 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
 
   const updateHandler = async (post) => {
     setLoaderBox(true);
+    const filteredData = Object.keys(post).reduce((acc, key) => {
+      if (!key.includes("Array")) {
+        acc[key] = post[key];
+      }
+      return acc;
+    }, {});
     await postData(
       {
         ...(menuData.user.diet ? { foodMenu: menuData.user.diet.foodMenu } : {}),
         user: menuData.user.profile.user._id,
         weekNumber: parseInt(0),
-        ...post,
+        ...filteredData,
       },
       isOpen.api
     ).then((response) => {
@@ -1399,107 +1544,97 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   <div>Active Diet</div>
                   <GetIcon icon={"down"}></GetIcon>
                 </Details>
-                {selectedMealTime[`active-diet`] === true && (
-                  <>
+                {selectedMealTime[`active-diet`] === true &&
+                  (menuData.user.diet ? (
+                    <>
+                      <Details>
+                        <div>Diet, Sub diet </div>
+                        <div>{`${menuData.user.diet.diet?.title}, ${menuData.user.diet.subDiet?.title}`}</div>
+                      </Details>
+                      <Details>
+                        <div>Choosen Days</div>
+                        <div>{populateArray(menuData.user.diet.eligibleDays, "days")}</div>
+                      </Details>
+                      <Details>
+                        <div>Selected Meal Times</div>
+                        <div>{populateArray(menuData.user.diet.mealTimeCategory, "mealtimeCategoriesName")}</div>
+                      </Details>
+                      <Details>
+                        <div>Start Date</div>
+                        <div>{dateFormat(menuData.user.diet.startDate)}</div>
+                      </Details>
+                      <Details>
+                        <div>No of Days</div>
+                        <div>{menuData.user.diet.numberofDays}</div>
+                      </Details>
+                      <Details>
+                        <div>Calorie Intake</div>
+                        <div>{menuData.user.diet.calories} (Per day)</div>
+                      </Details>
+                      <Details>
+                        <div>End Date</div>
+                        <div>{calculateExpiryDate(menuData.user.diet.startDate, menuData.user.diet.numberofDays, menuData.user.diet.eligibleDays, [])}</div>
+                      </Details>
+                    </>
+                  ) : (
                     <Details>
-                      <div>Diet, Sub diet </div>
-                      <div>{`${menuData.user.diet.diet?.title}, ${menuData.user.diet.subDiet?.title}`}</div>
+                      <div>No active diet found!</div>
                     </Details>
-                    <Details>
-                      <div>Choosen Days</div>
-                      <div>{populateArray(menuData.user.diet.eligibleDays, "days")}</div>
-                    </Details>
-                    <Details>
-                      <div>Selected Meal Times</div>
-                      <div>{populateArray(menuData.user.diet.mealTimeCategory, "mealtimeCategoriesName")}</div>
-                    </Details>
-                    <Details>
-                      <div>Start Date</div>
-                      <div>{dateFormat(menuData.user.diet.startDate)}</div>
-                    </Details>
-                    <Details>
-                      <div>No of Days</div>
-                      <div>{menuData.user.diet.numberofDays}</div>
-                    </Details>
-                    <Details>
-                      <div>Calorie Intake</div>
-                      <div>{menuData.user.diet.calories} (Per day)</div>
-                    </Details>
-                    <Details>
-                      <div>End Date</div>
-                      <div>{calculateExpiryDate(menuData.user.diet.startDate, menuData.user.diet.numberofDays, menuData.user.diet.eligibleDays, [])}</div>
-                    </Details>
-                  </>
-                )}
+                  ))}
               </UserDetails>
-              <UserDetails>
-                <Details
-                  className={`head ${selectedMealTime[`diagnose`] ?? ""}`}
-                  onClick={() =>
-                    setSelectedMealTime((prev) => ({
-                      ...prev,
-                      [`diagnose`]: !prev[`diagnose`] ?? true,
-                    }))
-                  }
-                >
-                  <div>Diagnose Report</div>
-                  <GetIcon icon={"down"}></GetIcon>
-                </Details>
-                {selectedMealTime[`diagnose`] === true && (
-                  <Details>
-                    <div>{menuData.user.diet?.diagnoseNote?.length > 0 ? menuData.user.diet?.diagnoseNote : "No diagnose found!"}</div>
-                    <button onClick={() => editNotes("diagnose")}>
-                      <GetIcon icon={"edit"}></GetIcon>
-                    </button>
-                  </Details>
-                )}
-              </UserDetails>
-              <UserDetails>
-                <Details
-                  className={`head ${selectedMealTime[`remarks`] ?? ""}`}
-                  onClick={() =>
-                    setSelectedMealTime((prev) => ({
-                      ...prev,
-                      [`remarks`]: !prev[`remarks`] ?? true,
-                    }))
-                  }
-                >
-                  <div>Kitchen Note</div>
-                  <GetIcon icon={"down"}></GetIcon>
-                </Details>
-                {selectedMealTime[`remarks`] === true && (
-                  <Details>
-                    <div>{menuData.user.diet?.kitchenNote?.length > 0 ? menuData.user.diet?.kitchenNote : "No diagnose found!"}</div>
-                    <button onClick={() => editNotes("kitchen")}>
-                      <GetIcon icon={"edit"}></GetIcon>
-                    </button>
-                  </Details>
-                )}
-              </UserDetails>
+              {menuData.user.diet && (
+                <>
+                  <UserDetails>
+                    <Details
+                      className={`head ${selectedMealTime[`diagnose`] ?? ""}`}
+                      onClick={() =>
+                        setSelectedMealTime((prev) => ({
+                          ...prev,
+                          [`diagnose`]: !prev[`diagnose`] ?? true,
+                        }))
+                      }
+                    >
+                      <div>Diagnose Report</div>
+                      <GetIcon icon={"down"}></GetIcon>
+                    </Details>
+                    {selectedMealTime[`diagnose`] === true && (
+                      <Details>
+                        <div>{menuData.user.diet?.diagnoseNote?.length > 0 ? menuData.user.diet?.diagnoseNote : "No diagnose found!"}</div>
+                        <button onClick={() => editNotes("diagnose")}>
+                          <GetIcon icon={"edit"}></GetIcon>
+                        </button>
+                      </Details>
+                    )}
+                  </UserDetails>
+
+                  <UserDetails>
+                    <Details
+                      className={`head ${selectedMealTime[`remarks`] ?? ""}`}
+                      onClick={() =>
+                        setSelectedMealTime((prev) => ({
+                          ...prev,
+                          [`remarks`]: !prev[`remarks`] ?? true,
+                        }))
+                      }
+                    >
+                      <div>Kitchen Note</div>
+                      <GetIcon icon={"down"}></GetIcon>
+                    </Details>
+                    {selectedMealTime[`remarks`] === true && (
+                      <Details>
+                        <div>{menuData.user.diet?.kitchenNote?.length > 0 ? menuData.user.diet?.kitchenNote : "No diagnose found!"}</div>
+                        <button onClick={() => editNotes("kitchen")}>
+                          <GetIcon icon={"edit"}></GetIcon>
+                        </button>
+                      </Details>
+                    )}
+                  </UserDetails>
+                </>
+              )}
             </>
           )}
         </RowContainer>
         {isOpen && (
-          // <AutoForm
-          //   userId={openData.data._id}
-          //   useCaptcha={true}
-          //   useCheckbox={false}
-          //   customClass={isOpen.customClass ?? ""}
-          //   description={isOpen.description}
-          //   formValues={{}}
-          //   css={isOpen.customClass ?? "double"}
-          //   key={isOpen.header}
-          //   formType={"post"}
-          //   header={isOpen.header}
-          //   formInput={parameters}
-          //   submitHandler={updateHandler}
-          //   button={isOpen.submit}
-          //   isOpenHandler={(value) => {
-          //     closeEdit(value);
-          //   }}
-          //   isOpen={true}
-          //   plainForm={false}
-          // ></AutoForm>
           <AutoForm
             userId={openData.data._id}
             useCaptcha={true}
@@ -1530,6 +1665,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 openData={openItemData}
                 setMessage={setMessage}
                 setLoaderBox={setLoaderBox}
+                themeColors={themeColors}
                 // Pass selected item data (Menu Title) to the popup for setting the time
               ></SetupMenu>
             }

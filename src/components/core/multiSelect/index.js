@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../../backend/api";
 import { ItemBox, Label, SelectBox } from "./styles";
-import { DownIcon, TickIcon } from "../../../icons";
+import { DownIcon, GetIcon, TickIcon } from "../../../icons";
 import { useTranslation } from "react-i18next";
 import { addSelectObject } from "../../../store/actions/select";
 import { ErrorMessage } from "../form/styles";
@@ -54,7 +54,7 @@ function MultiSelect(props) {
           setOptions(data);
           setInitialized(true);
           try {
-            const selected = data.filter((itemValue) => itemValue.id === selectedId)[0].value;
+            const selected = data.filter((itemValue) => itemValue.id === selectedId)[0]?.value;
             setSelectedValue(selected ? selected : props.placeHolder);
           } catch (error) {
             console.log(error);
@@ -64,7 +64,6 @@ function MultiSelect(props) {
           .then((response) => {
             if (response.status === 200) {
               optionHandler(response.data);
-              console.log(response.data);
               const selectedData = (props.value || [])
                 .map((itemValue) => {
                   const foundItem = response.data.find((dataItem) => dataItem.id.toString() === itemValue?.toString());
@@ -182,7 +181,6 @@ function MultiSelect(props) {
       document.removeEventListener("click", handleClick);
     };
   }, []);
-
   return (
     <SelectBox theme={props.theme} className={`custom-select ${optionsVisible ? "open" : "close"} ${props.customClass}  ${props.dynamicClass}`} ref={selectRef}>
       <button className={`${selectedId !== null && selectedId.length !== 0 ? "has" : ""}`} onClick={toggleOptions}>
@@ -238,7 +236,7 @@ function MultiSelect(props) {
                       // toggleOptions();
                     }}
                   >
-                    {props.displayValue ? option[props.displayValue] : option.value} <TickIcon />
+                    {props.displayValue ? option[props.displayValue] : option.value} <GetIcon icon="Close" />
                   </li>
                 );
               })}
@@ -255,6 +253,7 @@ function MultiSelect(props) {
                         className={`${selectedIndex > -1}`}
                         key={option.id}
                         onClick={(event) => {
+                          
                           event.stopPropagation();
                           props.onSelect(option, props.id, props.type);
                           // setSelectedValue(option.value);
@@ -293,8 +292,9 @@ function MultiSelect(props) {
                         {props.viewButton && (
                           <Button
                             onClick={(event) => {
-                              event.stopPropagation();
+                              
                               props.viewButton?.callback(option);
+                              event.stopPropagation();
                             }}
                           >
                             View Menu

@@ -129,7 +129,7 @@ export const Header = styled.div`
   align-items: center;
   padding: 0.4em 30px;
   font-weight: 500;
-  font-size: 1.3em;
+  font-size: 1em;
   && {
     .filter & {
       padding:5px 10px;

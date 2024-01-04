@@ -156,7 +156,7 @@ const RenderPage = (page, key, user, privileges) => {
       return <MedicationList key={key} {...privileges} />;
     case "activeness-Status":
       return <ActivenessStatus key={key} {...privileges} />;
-    case "package-management":
+    case "subscriptionPlans":
       return <PackageManagement key={key} {...privileges} />;
     case "discount-type":
       return <DiscountTypeName key={key} {...privileges} />;

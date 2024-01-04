@@ -57,7 +57,7 @@ export const SelectBox = styled.div`
     width: 100%;
     border-radius: 10px;
     border: 0px solid silver;
-    height: 50px;
+    height: 40px;
     padding-left: 1em;
     font-weight: 700;
     box-shadow: none;
@@ -69,7 +69,7 @@ export const SelectBox = styled.div`
     display: flex;
     align-items: center;
     cursor: pointer;
-    margin: 0 0px 10px 0;
+    margin: 0 0px 0px 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -97,7 +97,7 @@ export const SelectBox = styled.div`
     transform: rotate(0deg) !important;
   }
   button.has {
-    padding-top: 20px;
+    padding-top: 15px;
   }
   button.has label {
     position: absolute;
@@ -105,7 +105,7 @@ export const SelectBox = styled.div`
     font-weight: normal;
     top: 5px;
     left: 13px;
-    font-size: 12px;
+    font-size: 10px;
   }
   button.has svg:first-child {
     margin-right: 5px;
@@ -158,7 +158,8 @@ export const SelectBox = styled.div`
     flex-direction: column;
     position: absolute;
     z-index: 1004;
-    top: 36px;
+    margin: 0;
+    top: 42px;
     transition: all 1s ease-out 0s;
   }
   .options li.selected {

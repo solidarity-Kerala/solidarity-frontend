@@ -1104,7 +1104,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                   return (
                                     <Div key={`drop-${optionsIndex + mealTimeCategory._id + dayNumber + items.optionNo}`}>
                                       <>
-                                        <Variants className="vertical">
+                                        <Variants className={showAllReplacable === false ? "vertical" : ""}>
                                           {items?.recipes?.length > 0
                                             ? items.recipes.map((item, recipeIndex) => {
                                                 let recipeCalories = getCalories(item ?? [], mealTimeCategory._id) ?? 0;
@@ -1115,7 +1115,14 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                   <Variant key={item._id} className={`vertical replace ${data.menuType} ${(openData.item.viewOnly ?? false) === true ? "Fixed" : ""}`}>
                                                     <Variant key={item._id} className="vertical recipe">
                                                       <ProfileImage>
-                                                        <img src={item.photoThumbnail ? process.env.REACT_APP_CDN + item.photoThumbnail : food} alt="icon"></img>
+                                                        <img
+                                                          src={item.photoThumbnail ? process.env.REACT_APP_CDN + item.photoThumbnail : food}
+                                                          onError={(e) => {
+                                                            console.error("Error loading image:", e.target.src);
+                                                            e.target.src = food; // Hide the image on error
+                                                          }}
+                                                          alt="icon"
+                                                        ></img>
                                                       </ProfileImage>
                                                       <span className="recipe">{item.title} </span>
                                                       {(openData.data.subDiet.category ?? "General") === "General" && <span>{recipeCalories.toFixed(2)} calories</span>}
@@ -1200,7 +1207,14 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                                 item.foodmenureplacableitems.map((replacableItem, replacableIndex) => (
                                                                   <Variant key={replacableItem._id} className="horizontal child-recipe">
                                                                     <ProfileImage>
-                                                                      <img src={replacableItem.recipe.photoThumbnail ? process.env.REACT_APP_CDN + replacableItem.recipe.photoThumbnail : food} alt="icon"></img>
+                                                                      <img
+                                                                        src={replacableItem.recipe.photoThumbnail ? process.env.REACT_APP_CDN + replacableItem.recipe.photoThumbnail : food}
+                                                                        alt="icon"
+                                                                        onError={(e) => {
+                                                                          console.error("Error loading image:", e.target.src);
+                                                                          e.target.src = food; // Hide the image on error
+                                                                        }}
+                                                                      ></img>
                                                                     </ProfileImage>
                                                                     <Details>
                                                                       <span className="recipe">{replacableItem.recipe.title}</span>
@@ -1281,14 +1295,13 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={7}>
-                          {new Set(["General", "Keto"]).has(openData.data.subDiet.category ?? "General") && (
+                          {new Set(["General", "Keto"]).has(openData.data.subDiet.category ?? "General") && (!openData.item.viewOnly ?? false) && (
                             <Filter
                               // className={showFilter ? "close" : "open"}
                               theme={themeColors}
                               className="inner-long"
                               onClick={() => {
                                 setActiveCustomReplaceRecipeType(typeOfRecipesTitles[0].id);
-
                                 setActiveCustomReplace(activeCustomReplace && activeCustomReplace.id === mealTimeCategory._id ? null : { id: mealTimeCategory._id, name: mealTimeCategory.mealtimeCategoriesName });
                               }}
                             >
@@ -1330,7 +1343,14 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                                     replacableItems.map((replacableItem, replacableIndex) => (
                                                       <Variant key={replacableItem._id} className="horizontal child-recipe">
                                                         <ProfileImage>
-                                                          <img src={replacableItem.recipe.photoThumbnail ? process.env.REACT_APP_CDN + replacableItem.recipe.photoThumbnail : food} alt="icon"></img>
+                                                          <img
+                                                            src={replacableItem.recipe.photoThumbnail ? process.env.REACT_APP_CDN + replacableItem.recipe.photoThumbnail : food}
+                                                            alt="icon"
+                                                            onError={(e) => {
+                                                              console.error("Error loading image:", e.target.src);
+                                                              e.target.src = food; // Hide the image on error
+                                                            }}
+                                                          ></img>
                                                         </ProfileImage>
                                                         <Details>
                                                           <span className="recipe">{replacableItem.recipe.title}</span>
@@ -1447,7 +1467,14 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       element={
                         <MealItem key={recipe._id}>
                           <ProfileImage>
-                            <img src={recipe.photoThumbnail ? process.env.REACT_APP_CDN + recipe.photoThumbnail : food} alt="icon" />
+                            <img
+                              src={recipe.photoThumbnail ? process.env.REACT_APP_CDN + recipe.photoThumbnail : food}
+                              alt="icon"
+                              onError={(e) => {
+                                console.error("Error loading image:", e.target.src);
+                                e.target.src = food; // Hide the image on error
+                              }}
+                            />
                           </ProfileImage>
                           <Title>
                             {recipe.title ?? "Title not found!"}

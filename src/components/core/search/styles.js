@@ -6,13 +6,13 @@ export const SearchInput = styled.div`
   animation-duration: 0.2s;
   margin-bottom: 5px;
   margin-top: 4px;
- 
+
   &.select {
     top: 0;
     z-index: 1;
     display: inherit;
     position: sticky;
-    top: 0;
+    top: 5px;
   }
   input {
     box-sizing: border-box;
@@ -25,8 +25,6 @@ export const SearchInput = styled.div`
     font-weight: 700;
     box-shadow: none;
     transition: all 0.2s ease-out 0s;
-    color: ${(props) => props.theme.foreground};
-    background: ${(props) => props.theme.background};
     margin-right: 10px;
     border-radius: 12px;
     width: 40px;
@@ -34,20 +32,26 @@ export const SearchInput = styled.div`
     &:focus {
       width: 200px;
       border-radius: 10px;
-      color: ${(props) => props.theme.foreground};
       padding-left: 45px;
     }
   }
+
   &.sticky {
     position: sticky;
   }
   && {
-    /* .popup-child & {
-        input {
-          color: ${(props) => props.theme.secForeground};
-          background: ${(props) => props.theme.secBackground};
-        }
-      } */
+    .options & {
+      input {
+        border: 1px solid gainsboro;
+        height: 30px;
+        margin: 0px 10px 0px 0px;
+        padding: 13px 10px 13px 40px;
+        border-radius: 10px;
+      }
+      svg {
+        top: 7px;
+      }
+    }
   }
   &.active input {
     width: 200px;
@@ -65,7 +69,7 @@ export const SearchInput = styled.div`
     margin-left: 0;
     border-bottom: 1px solid rgb(239, 237, 237);
     position: sticky;
-    top: 0px;
+    top: 5px;
     z-index: 1;
     margin-bottom: 0;
   }

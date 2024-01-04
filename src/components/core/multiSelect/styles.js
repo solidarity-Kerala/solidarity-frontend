@@ -42,7 +42,7 @@ export const SelectBox = styled.div`
     width: 100%;
     border-radius: 10px;
     border: 0px solid silver;
-    height: 50px;
+    height: 40px;
     padding-left: 1em;
     font-weight: 700;
     box-shadow: none;
@@ -54,7 +54,7 @@ export const SelectBox = styled.div`
     display: flex;
     align-items: center;
     cursor: pointer;
-    margin: 0 0px 10px 0;
+    margin: 0 0px 0px 0;
   }
   &.filter button {
     min-height: 40px;
@@ -77,7 +77,7 @@ export const SelectBox = styled.div`
     transform: rotate(0deg) !important;
   }
   button.has {
-    padding-top: 20px;
+    padding-top: 15px;
   }
   button.has label {
     position: absolute;
@@ -85,7 +85,7 @@ export const SelectBox = styled.div`
     font-weight: normal;
     top: 5px;
     left: 13px;
-    font-size: 12px;
+    font-size: 10px;
   }
   button.has svg:first-child {
     margin-right: 5px;
@@ -113,6 +113,7 @@ export const SelectBox = styled.div`
     -ms-transform: scale(1) translateY(0);
     transform: scale(1) translateY(0);
     max-height: 250px;
+    min-height: 70px;
     overflow-y: auto;
     width: 100%;
     background-color: white;
@@ -124,14 +125,15 @@ export const SelectBox = styled.div`
     flex-direction: column;
     position: absolute;
     z-index: 1;
-    top: 36px;
+    margin: 0;
+    top: 42px;
     transition: all 1s ease-out 0s;
   }
   .options li.true {
     background: rgb(234, 234, 234);
     color: #0f0f0f;
     font-weight: bold;
-    border-bottom: 1px solid rgb(224, 224, 227);
+    border: 1px solid rgb(224, 224, 227);
     justify-content: left;
     display: flex;
     align-items: center;
@@ -142,8 +144,8 @@ export const SelectBox = styled.div`
   }
   .options li {
     cursor: pointer;
-    border-bottom: 1px solid rgb(224, 224, 227);
-    padding: 10px 10px;
+    border: 1px solid rgb(224, 224, 227);
+    padding: 5px 10px;
     margin: 0 00px;
   }
   .options li svg {
@@ -152,7 +154,7 @@ export const SelectBox = styled.div`
     transform: rotate(0deg);
   }
   .options li:last-child {
-    border-bottom: 0px solid rgb(224, 224, 227);
+    /* border-bottom: 0px solid rgb(224, 224, 227); */
   }
   .options li:hover {
     background: rgb(234, 234, 234);

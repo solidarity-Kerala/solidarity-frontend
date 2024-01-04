@@ -47,14 +47,14 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
     error: null,
   });
   useEffect(() => {
-    setUsers(
-      userData[`${api}`] ?? {
-        data: null,
-        isLoading: true,
-        error: null,
-      }
-    );
+    const alldata = userData[`${api}`] ?? {
+      data: null,
+      isLoading: true,
+      error: null,
+    };
+    setUsers(alldata);
   }, [userData, api]);
+
   const [showSublist, setShowSubList] = useState(false);
   const [currentApi] = useState(`${api}`);
   const [subAttributes, setSubAttributes] = useState(null);
@@ -77,6 +77,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
   const setLoaderBox = (status) => {
     setShowLoader(status);
   };
+
   // processing attributes
   const [initialized, setInitialized] = useState(false);
   const [prevCrud, setPrevCrud] = useState("");
@@ -88,6 +89,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
   const [udpateView, setUpdateView] = useState(() => {});
   const [hasFilter, setHasFilter] = useState(false);
   const [filterView, setFilterView] = useState(referenceId !== 0 ? { [parentReference]: referenceId, ...preFilter } : { ...preFilter });
+
   useEffect(() => {
     const addValuesTemp = {
       addValues: {},
@@ -315,7 +317,16 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
     setLoaderBox(true);
 
     const saveData = referenceId === 0 ? { ...data } : { ...data, [parentReference]: referenceId };
-    await postData(saveData, currentApi)
+
+    // Filter and remove keys that have "*Array"
+    const filteredData = Object.keys(saveData).reduce((acc, key) => {
+      if (!key.includes("Array")) {
+        acc[key] = saveData[key];
+      }
+      return acc;
+    }, {});
+    console.log("filteredData:", filteredData);
+    await postData(filteredData, currentApi)
       .then((response) => {
         if (response.status === 200) {
           if (response.data.customMessage?.length > 0) {
@@ -373,7 +384,16 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         setLoaderBox(false);
       });
   };
-
+  useEffect(() => {
+    if (users?.data?.response) {
+      const data = users?.data?.response.find((item) => item._id === updateId);
+      if (data) {
+        console.log("data","Udpated")
+        setOpenData((prev) => ({ ...prev, data: data }));
+        setSubAttributes((prev) => ({ ...prev, data: data }));
+      }
+    }
+  }, [users, isEditing, updateId, setOpenData, setSubAttributes]);
   const updateHandler = async (data) => {
     setLoaderBox(true);
     data = { ...data, id: updateId };
@@ -715,7 +735,13 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
       >
         {profileImage && (
           <ProfileImage>
-            <img src={data[profileImage] ? process.env.REACT_APP_CDN + data[profileImage] : food} alt="Profile"></img>
+            <img
+              src={data[profileImage] ? process.env.REACT_APP_CDN + data[profileImage] : food}
+              onError={(e) => {
+                e.target.src = food; // Hide the image on error
+              }}
+              alt="Profile"
+            ></img>
           </ProfileImage>
         )}
         <ListContainerBox>
@@ -1135,13 +1161,15 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         <Count>{`No records found`}</Count>
       )}
       {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"post"} header={`Add a ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
-      {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
+
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
-      {showLoader && <Loader></Loader>}
-      {isOpen && <Popup formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Popup>}
+     
+      {isOpen && <Popup selectedMenuItem={selectedMenuItem} formMode={formMode} closeModal={closeModal} themeColors={themeColors} isEditingHandler={isEditingHandler} updateValue={udpateView} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData} updatePrivilege={updatePrivilege}></Popup>}
+      {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {detailView && <Details formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Details>}
       {showSublist && subAttributes?.item?.attributes?.length > 0 && <SubPage themeColors={themeColors} formMode={formMode} closeModal={closeModal} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} subAttributes={subAttributes}></SubPage>}
       {isPrint && <PopupView customClass={"print"} popupData={<Print orientation={orientation} key={shortName} data={printData} themeColors={themeColors} formMode={formMode} closeModal={() => setIsPrint(false)} setMessage={setMessage} setLoaderBox={setLoaderBox} shortName={shortName} attributes={attributes}></Print>} themeColors={themeColors} closeModal={() => setIsPrint(false)} itemTitle={{ name: "title", type: "text", collection: "" }} openData={{ data: { key: "print_preparation", title: "Print " + shortName } }}></PopupView>}
+      {showLoader && <Loader></Loader>}
       {showPageCount && (
         <PopupView
           // Popup data is a JSX element which is binding to the Popup Data Area like HOC

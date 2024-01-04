@@ -35,7 +35,7 @@ function FormInput(props) {
                 {`${t(props.label)}${props.required ? " *" : ""}`}
               </Label>
             )}
-            <Input {...(props.maxLength > 0 ? { maxLength: props.maxLength } : {})}  disabled={props.disabled ?? false} autoComplete="on" theme={themeColors} className={`input ${props.value.toString().length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} type={props.type} value={props.value}  onChange={(event) => props.onChange(event, props.id, props.type, props.sub)} />
+            <Input {...(props.maxLength > 0 ? { maxLength: props.maxLength } : {})} disabled={props.disabled ?? false} autoComplete="on" theme={themeColors} className={`input ${props.value.toString().length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} type={props.type} value={props.value} onChange={(event) => props.onChange(event, props.id, props.type, props.sub)} />
             {props.error?.length > 0 && <ErrorMessage dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
           </InputContainer>
         );
@@ -47,7 +47,6 @@ function FormInput(props) {
             console.log("event", "aborted");
             event.preventDefault();
           }
-          console.log("event", event.keyCode);
         };
         return (
           <InputContainer className={`${props.dynamicClass ?? ""} ${props.customClass ?? ""}`} animation={props.animation}>
@@ -62,6 +61,7 @@ function FormInput(props) {
               </Label>
             )}
             <Input
+              disabled={props.disabled ?? false}
               onKeyDown={handleKeyDown} // Attach the onKeyDown event handler
               onWheel={(e) => e.target.blur()}
               autoComplete="on"
@@ -148,7 +148,7 @@ function FormInput(props) {
           <FileContainer className={`${props.dynamicClass ?? ""}`} theme={themeColors}>
             <button onClick={handleButtonClick}>
               <UploadIcon />
-              {t("upload", { label: t(props.label) }) + (props.required ? " *" : "") + (props.value.length > 0 ? ` : ${props.value[0].name} (${size})` : "")}
+              {t(props.type, { label: t(props.label) }) + (props.required ? " *" : "") + (props.value.length > 0 ? ` : ${props.value[0].name} (${size})` : "")}
             </button>
             <Input ref={fileInputRef} style={{ display: "none" }} theme={themeColors} accept={props.type === "image" ? `image/*` : ``} className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholder={t(props.placeholder)} type={`file`} onChange={(event) => props.onChange(event, props.id, props.type)} />
             {props.error?.length > 0 && <ErrorMessage className="image" dangerouslySetInnerHTML={{ __html: props.error }} />}

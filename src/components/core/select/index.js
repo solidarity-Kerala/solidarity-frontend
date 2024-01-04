@@ -216,7 +216,8 @@ function CustomSelect(props) {
                   value={option.id === selectedId}
                   className={option.id === selectedId ? "selected" : ""}
                   key={option.id}
-                  onClick={() => {
+                  onClick={(event) => {
+                    event.stopPropagation();
                     const listBox = props.listBox ?? false;
                     if (!listBox) {
                       toggleOptions();
@@ -275,7 +276,8 @@ function CustomSelect(props) {
 
                   {props.viewButton && (
                     <Button
-                      onClick={() => {
+                      onClick={(event) => {
+                        event.stopPropagation();
                         props.viewButton?.callback(option);
                       }}
                     >

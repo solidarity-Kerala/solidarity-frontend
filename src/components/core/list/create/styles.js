@@ -1,24 +1,18 @@
 import styled, { keyframes } from "styled-components";
 export const Form = styled.div`
   border: 1px solid rgb(224, 224, 227);
-  padding: 1em;
-  border-radius: 10px;
+  padding: .5em 0px;
+  border-left: 10px;
+  border-right: 0;
+  border-radius: 0;
   display: flex;
   flex-direction: column;
+  gap: 10px;
   &.double {
-    //display: grid;
-    //grid-template-columns: 1fr 1fr; /* Two equal-width columns */
-    //grid-gap: 10px; /* Adjust the gap between columns if desired */
     display: flex;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
     flex-flow: wrap;
   }
-  /* &.fullscreen {
-    display: flex;
-    gap: 10px;
-    flex-flow: wrap;
-  } */
   @media (max-width: 768px) {
     border: 0;
     &.double {
@@ -75,12 +69,12 @@ export const Page = styled.div`
   animation: ${zoomAnimation} 1s ease-in-out;
   animation-duration: 0.2s;
   margin: auto;
-  padding: 1em;
+  padding: 1em 2em;
   &.double {
     width: 50%;
   }
-  &.fullscreen{
-     width: 100%;
+  &.fullscreen {
+    width: 100%;
   }
   &.plain {
     border: 1px solid rgb(224, 224, 227);

@@ -9,10 +9,10 @@ export const CloseButton = styled.button`
   border: 0px solid #ddd;
   border: 0px solid #ddd;
   cursor: pointer;
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   margin-right: 0px;
-  padding: 12px;
+  padding: 6px;
   background: ${(props) => props.theme.secBackground};
   border-radius: 50%;
   margin-top: 4px;
@@ -23,7 +23,7 @@ export const CloseButton = styled.button`
 `;
 export const Td = styled.div`
   text-align: left;
-     padding: 5px 20px;
+  padding: 5px 20px;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -113,13 +113,18 @@ export const Head = styled.span`
   width: "100%";
   display: flex;
   align-items: "center";
-      padding: 5px 15px 5px 15px;
-  svg {
+  padding: 5px 15px 5px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  span > svg {
     margin-right: 10px;
   }
 `;
 export const DataHead = styled.span`
-  padding: 10px 5px;
+  margin: 10px 5px;
+  display: flex;
+  align-items: center;
 `;
 export const DataItem = styled.span`
   font-weight: bold;

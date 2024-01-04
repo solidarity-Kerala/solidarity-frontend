@@ -81,13 +81,12 @@ export const FileContainer = styled.div`
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  padding: 20px 10px;
+  padding: 10px 10px;
   outline: none !important;
   width: 100%;
   border-radius: 10px;
   border: 0px solid Black;
-  margin: 0 0px 10px 0;
-  padding-left: 1em;
+  margin: 0 0px 0px 0;
   font-weight: 700;
   box-shadow: none;
   -webkit-transition: all 0.2s ease-out 0s;
@@ -109,7 +108,7 @@ export const FileContainer = styled.div`
     cursor: pointer;
     svg {
       font-size: 20px;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
     }
   }
 `;
@@ -118,7 +117,7 @@ export const Label = styled.label`
   pointer-events: none;
   top: 5px;
   left: 13px;
-  font-size: 12px;
+  font-size: 10px;
   transition: all 0.1s ease;
   color: ${(props) => props.theme.lightForeground};
   &.shrink {
@@ -191,8 +190,8 @@ export const Input = styled.input`
   width: 100%;
   border-radius: 10px;
   border: 0px solid ${(props) => props.theme.border};
-  height: 50px;
-  margin: 0 0px 10px 0;
+  height: 40px;
+  margin: 0 0px 0px 0;
   padding-left: 1em;
   font-weight: 700;
   box-shadow: none;
@@ -200,7 +199,7 @@ export const Input = styled.input`
   color: ${(props) => props.theme.secForeground};
   background: ${(props) => props.theme.secBackground};
   &.shrink {
-    padding: 1.6em 13px 0;
+    padding: 1.2em 13px 0;
   }
   -webkit-appearance: none;
 `;
@@ -210,8 +209,8 @@ export const DatetimeInput = styled(DatePicker)`
   width: 100%;
   border-radius: 10px;
   border: 0px solid ${(props) => props.theme.border};
-  margin: 0 0px 10px 0;
-  height: 50px;
+  margin: 0 0px 0px 0;
+  height: 40px;
   padding-left: 1em;
   font-weight: 700;
   box-shadow: none;
@@ -219,7 +218,7 @@ export const DatetimeInput = styled(DatePicker)`
   color: ${(props) => props.theme.secForeground};
   background: ${(props) => props.theme.secBackground};
   &.shrink {
-    padding: 1.6em 13px 0;
+    padding: 1.2em 13px 0px;
     color: black;
   }
   && {
@@ -239,7 +238,7 @@ export const DatetimeInputDirectOrder = styled(DatePicker)`
   border-radius: 10px;
   border: 0px solid ${(props) => props.theme.border};
   margin: 0 0px 10px 0;
-  height: 50px;
+  height: 40px;
   padding-left: 1em;
   font-weight: 700;
   box-shadow: none;
@@ -253,12 +252,12 @@ export const DatetimeInputDirectOrder = styled(DatePicker)`
 `;
 export const Button = styled.button`
   background: ${(props) => props.theme.backgroundInvert};
-  border-radius: 12px;
+  border-radius: 10px;
   color: ${(props) => props.theme.foregroundInvert};
   transition: all 0.5s ease;
   margin-top: 10px;
   max-width: 400px;
-  padding: 15px 20px;
+  padding: 10px 20px;
   min-width: 155px;
   border-color: ${(props) => props.theme.border};
   border-style: solid;
@@ -284,8 +283,8 @@ export const TextArea = styled.textarea`
   width: 100%;
   border-radius: 10px;
   border: 0px solid ${(props) => props.theme.border};
-  height: 100px;
-  margin: 0 0px 10px 0;
+  height: 70px;
+  margin: 0 0px 0px 0;
   padding-left: 1em;
   font-weight: 700;
   box-shadow: none;
@@ -294,7 +293,7 @@ export const TextArea = styled.textarea`
   color: ${(props) => props.theme.secForeground};
   background: ${(props) => props.theme.secBackground};
   &.shrink {
-    padding: 2em 13px 0;
+    padding: 1.5em 13px 0px;
   }
 `;
 export const Info = styled.div`
@@ -317,7 +316,8 @@ export const SubHead = styled.div`
   width: 100%;
   border-bottom: 1px solid rgb(235, 244, 235);
   margin: 0px 10px;
-  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 5px;
   font-size: 14px;
   font-weight: 600;
 `;

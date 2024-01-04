@@ -947,7 +947,7 @@ const Patient = (props) => {
       placeholder: "Contact Person for Delivery",
       name: "contactPerson",
       validation: "",
-      default: "false",
+      default: "Self",
       tag: true,
       label: "Contact Person for Delivery",
       required: true,
