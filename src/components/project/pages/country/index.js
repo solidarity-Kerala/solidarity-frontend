@@ -4,47 +4,13 @@ import ListTable from "../../../core/list/list";
 import { Container } from "../../../core/layout/styels";
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file
-const DaySlot = (props) => {
+const Country = (props) => {
   //to update the page title
   useEffect(() => {
     document.title = `Country - Diet Food Management Portal`;
   }, []);
 
   const [attributes] = useState([
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "user/select?userType=6471b34d9fb2b29fe0458878",
-      placeholder: "Dietician",
-      name: "dietician",
-      validation: "",
-      showItem: "username",
-      default: "",
-      tag: true,
-      label: "Dietician",
-      required: true,
-      view: true,
-      add: true,
-      update: true,
-      filter: false,
-    },
-    {
-      type: "select",
-      placeholder: "Day",
-      name: "day",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Day",
-      showItem: "",
-      required: true,
-      view: true,
-      filter: false,
-      add: true,
-      update: true,
-      apiType: "CSV",
-      selectApi: "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
-    },
     {
       type: "text",
       placeholder: "Country",
@@ -226,7 +192,7 @@ const DaySlot = (props) => {
         // actions={actions}
         api={`country`}
         itemTitle={{
-          name: "name",
+          name: "title",
           type: "text",
           collection: "",
         }}
@@ -239,4 +205,4 @@ const DaySlot = (props) => {
   );
 };
 
-export default Layout(DaySlot);
+export default Layout(Country);

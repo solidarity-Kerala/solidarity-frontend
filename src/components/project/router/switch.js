@@ -69,6 +69,7 @@ import DaySlot from "../pages/daySlot/index.js";
 import PackageOrder from "../pages/order/packageOrder.js";
 import AvailableCalories from "../pages/Calories/availableCalories.js";
 import Country from "../pages/country/index.js";
+import PlanCategory from "../pages/packageManagement/planCategory.js";
 import FoodExchangeCalories from "../pages/Calories/foodExchangeCalori.js";
 import AvailableSizes from "../pages/Calories/availableSizes.js";
 import DietPrice from "../pages/Calories/dietPrice.js";
@@ -101,6 +102,7 @@ import Aibot from "../pages/order/aibot/index.js";
 import LabelPrintSetting from "../pages/labelPrintSetting/index.js";
 import FixedReplacableRecipe from "../pages/fixedReplacableRecipe/index.js";
 import InvoiceSetting from "../pages/InvoiceSetting/index.js";
+
 
 const RenderPage = (page, key, user, privileges) => {
   switch (page) {
@@ -294,8 +296,10 @@ const RenderPage = (page, key, user, privileges) => {
       return <FixedReplacableRecipe key={key} {...privileges} />;
     case "invoice-setting":
       return <InvoiceSetting key={key} {...privileges} />;
-      case "country":
+    case "country":
       return <Country key={key} {...privileges} />;
+      case "planCategory":
+      return <PlanCategory key={key} {...privileges} />;
     default:
       return <Page404 key={key}></Page404>;
   }

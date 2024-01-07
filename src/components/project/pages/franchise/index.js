@@ -88,6 +88,23 @@ const Franchise = (props) => {
       add: true,
       update: true,
     },
+    {
+      type: "select",
+      apiType: "API",
+      selectApi: "country/select",
+      placeholder: "Country",
+      name: "country",
+      validation: "",
+      showItem: "title",
+      default: "",
+      tag: true,
+      label: "Country",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+      filter: true,
+    },
    
   ]);
 
