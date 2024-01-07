@@ -23,6 +23,7 @@ import TypeOfDiet from "../pages/diet/typeOfDiet/index.js";
 import WeeklyMealPlan from "../pages/mealSettings/weeklyMealPlan/index.js";
 import RedeemCoupen from "../pages/dispatch/redeemCoupon/index.js";
 import Patient from "../pages/user/patient/index.js";
+
 import MedicationList from "../pages/registrationSettings/medicationList/index.js";
 import PackageManagement from "../pages/packageManagement/index.js";
 import Supplement from "../pages/registrationSettings/supplement/index.js";
@@ -67,6 +68,7 @@ import AddRecipe from "../pages/mealSettings/addRecipe/index.js";
 import DaySlot from "../pages/daySlot/index.js";
 import PackageOrder from "../pages/order/packageOrder.js";
 import AvailableCalories from "../pages/Calories/availableCalories.js";
+import Country from "../pages/country/index.js";
 import FoodExchangeCalories from "../pages/Calories/foodExchangeCalori.js";
 import AvailableSizes from "../pages/Calories/availableSizes.js";
 import DietPrice from "../pages/Calories/dietPrice.js";
@@ -292,6 +294,8 @@ const RenderPage = (page, key, user, privileges) => {
       return <FixedReplacableRecipe key={key} {...privileges} />;
     case "invoice-setting":
       return <InvoiceSetting key={key} {...privileges} />;
+      case "country":
+      return <Country key={key} {...privileges} />;
     default:
       return <Page404 key={key}></Page404>;
   }
