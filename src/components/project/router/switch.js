@@ -102,6 +102,7 @@ import Aibot from "../pages/order/aibot/index.js";
 import LabelPrintSetting from "../pages/labelPrintSetting/index.js";
 import FixedReplacableRecipe from "../pages/fixedReplacableRecipe/index.js";
 import InvoiceSetting from "../pages/InvoiceSetting/index.js";
+import Invoice from "../pages/packageManagement/invoice.js";
 
 
 const RenderPage = (page, key, user, privileges) => {
@@ -298,8 +299,10 @@ const RenderPage = (page, key, user, privileges) => {
       return <InvoiceSetting key={key} {...privileges} />;
     case "country":
       return <Country key={key} {...privileges} />;
-      case "planCategory":
+    case "planCategory":
       return <PlanCategory key={key} {...privileges} />;
+      case "invoice":
+      return <Invoice key={key} {...privileges} />;
     default:
       return <Page404 key={key}></Page404>;
   }
