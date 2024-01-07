@@ -127,8 +127,8 @@ const AvailableCalories = (props) => {
       label: "Category",
       required: true,
       view: true,
-      add: false,
-      update: false,
+      add: true,
+      update: true,
     },
     {
       type: "number",
@@ -159,7 +159,7 @@ const AvailableCalories = (props) => {
       update: true,
     },
     {
-      type: "text",
+      type: "number",
       placeholder: "Skim Milk",
       name: "skimMilk",
       validation: "",

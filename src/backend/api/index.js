@@ -33,11 +33,12 @@ const postData = async (fields, ulr, dispatch, navigate) => {
         },
       });
 
-      if (response.status === 440) {
+      if (response.status === 440 || response.status === 401) {
         try {
           dispatch(clearLogin());
           navigate("/");
           navigate(0);
+          return resolve({ status: response.status, data: [] });
         } catch (error) {
           console.log(error);
         }
@@ -89,11 +90,12 @@ const putData = async (fields, ulr, dispatch, navigate) => {
         Authorization: "Bearer " + token,
       },
     });
-    if (response.status === 440) {
+    if (response.status === 440 || response.status === 401) {
       try {
         dispatch(clearLogin());
         navigate("/");
         navigate(0);
+        return { status: response.status, data: [] };
       } catch (error) {
         console.log(error);
       }
@@ -120,7 +122,7 @@ const getData = async (fields, ulr, dispatch, navigate) => {
           Authorization: "Bearer " + token,
         },
       });
-      if (response.status === 440) {
+      if (response.status === 440 || response.status === 401) {
         try {
           localStorage.removeItem("user");
           navigate("/");
@@ -132,7 +134,7 @@ const getData = async (fields, ulr, dispatch, navigate) => {
       resolve({ status: response.status, data: response.data });
     } catch (error) {
       if (error.response?.status) {
-        if (error.response?.status === 440) {
+        if (error.response?.status === 440 || error.response?.status === 401) {
           try {
             localStorage.removeItem("user");
             navigate("/");
@@ -160,7 +162,7 @@ const deleteData = async (fields, ulr, dispatch, navigate) => {
       const response = await axios.delete(`${process.env.REACT_APP_API}${ulr}?${queryString}`, {
         headers: { Authorization: "Bearer " + token },
       });
-      if (response.status === 440) {
+      if (response.status === 440 || response.status === 401) {
         try {
           localStorage.removeItem("user");
           navigate("/");
