@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import Layout from "../../../core/layout";
 import ListTable from "../../../core/list/list";
 import { Container } from "../../../core/layout/styels";
@@ -12,7 +11,6 @@ const PlanCategory = (props) => {
     document.title = `Plan Category - Diet Food Management Portal`;
   }, []);
 
-  const themeColors = useSelector((state) => state.themeColors);
 
   const [attributes] = useState([
     {
