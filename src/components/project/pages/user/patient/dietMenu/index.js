@@ -26,6 +26,8 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   const [currentDate, setCurrentDate] = useState(moment());
   const [selectedDayNumber, setSelectedDayNumber] = useState(moment().format("YYYY-MM-DD"));
   const [popupData, setPopupData] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   // State to control the display of the SetupMenu popup
   const [openMenuSetup, setOpenMenuSetup] = useState(false);
   const [openedMenu, setOpenedMenu] = useState("");
@@ -46,6 +48,8 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         if (response.status === 200) {
           setMenuData(response.data);
           setPause(response.data.user?.diet?.isPaused ?? false);
+          setStartDate(response.data.user.startDate);
+          setEndDate(response.data.user.endDate);
           const today = moment();
           if (currentDate.isSameOrAfter(today)) {
             setSelectedDayNumber(currentDate.clone().format("YYYY-MM-DD"));
@@ -126,7 +130,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     }
   };
 
-  function calculateExpiryDate(startDate, totalDays, excludedDays, skippedDays) {
+  function calculateExpiryDate(startDate, totalDays, excludedDays, skippedDays, isDate = false) {
     // Adjust total days considering skipped days and excluded days
     const eligibleDays = totalDays;
 
@@ -142,9 +146,11 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       // Move to the next day
       currentDate.add(1, "day");
     }
-
-    // currentDate now holds the eligible expiry date
-    return dateFormat(currentDate.toDate());
+    if (isDate) {
+      return currentDate.isBefore(moment());
+    } else {
+      return dateFormat(currentDate.toDate());
+    }
   }
   const getWeekDays = () => {
     const startOfWeek = moment(currentDate).startOf("week");
@@ -200,8 +206,9 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       }
     }
   };
+
   const onChange = (name, updateValue) => {
-    const { calories, mealTimeCategoryArray, packageArray, numberofDays } = updateValue;
+    const { calories, mealTimeCategoryArray, packageArray, numberofDays, tax } = updateValue;
 
     // Validate required data
     if (typeof calories !== "number" || !Array.isArray(mealTimeCategoryArray) || mealTimeCategoryArray.length === 0 || !packageArray || typeof packageArray.discountfor3Month !== "number" || typeof packageArray.discountfor6Month !== "number" || typeof packageArray.discountforMonth !== "number" || typeof packageArray.discountforWeek !== "number" || typeof numberofDays !== "number") {
@@ -241,17 +248,26 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     } else if (numberofDays > 179) {
       discount = packageArray.discountfor6Month;
     }
-
-    updateValue["discount"] = discount;
-    const totalAmount = pricePerDay * parseInt(numberofDays > 0 ? numberofDays : 0);
-    updateValue["totalPrice"] = totalAmount - totalAmount * (discount / 100);
-    updateValue["pricePerDay"] = pricePerDay;
     updateValue["daySelected"] = numberofDays > 0 ? numberofDays : 0;
+    updateValue["discount"] = discount;
 
+    const price = pricePerDay * parseInt(numberofDays > 0 ? numberofDays : 0);
+    const discountOnPrice = price * (discount / 100);
+    const discountedPrice = price - discountOnPrice;
+    const taxAmount = (discountedPrice * (tax ?? 0)) / 100;
+
+    updateValue["pricePerDay"] = pricePerDay.toFixed(2);
+    updateValue["price"] = price;
+    updateValue["discountOnPrice"] = discountOnPrice.toFixed(2);
+    updateValue["discountedPrice"] = discountedPrice.toFixed(2);
+    updateValue["taxPrice"] = taxAmount.toFixed(2);
+    updateValue["total"] = (discountedPrice + taxAmount).toFixed(2);
     return updateValue;
   };
 
   const addDiet = async () => {
+    const response = menuData.user?.diet?._id ? await getData({ id: menuData.user?.diet?._id ?? "renew", package: menuData.user?.diet?.package }, "patient-diet") : { data: {} };
+    const existingData = response.data;
     setParameters([
       {
         type: "select",
@@ -263,7 +279,8 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         arrayOut: true,
         collection: "package",
         showItem: "title",
-        default: "",
+        default: existingData.package ?? "",
+        defaultArray: existingData.packages ?? null,
         tag: true,
         label: "Package",
         required: true,
@@ -336,7 +353,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         validation: "",
         showItem: "value",
         collection: "foodMenu",
-        default: "",
+        default: existingData.foodMenu ?? "",
         tag: true,
         label: "Menu",
         required: false,
@@ -358,11 +375,11 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         updateOn: "package",
         apiType: "API",
         placeholder: "Calories",
+        default: existingData.calories ?? "",
         name: "calories",
         showItem: "",
         validation: "",
         onChange: onChange,
-        default: "",
         tag: true,
         label: "Calories",
         filter: false,
@@ -377,7 +394,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         listView: true,
         name: "eligibleDays",
         validation: "",
-        default: [0, 1, 2, 3, 4, 5, 6],
+        default: existingData.eligibleDays ?? [0, 1, 2, 3, 4, 5, 6],
         label: "Select Days of Week",
         onChange: onChange,
         required: true,
@@ -404,11 +421,12 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         displayValue: "mealtimeCategoriesName",
         updateOn: "foodMenu",
         onChange: onChange,
+        default: existingData.mealTimeCategory ?? "",
+        defaultArray: existingData.mealTimeCategoryArray ?? [],
         params: [{ name: "package" }, { name: "foodMenu" }],
         label: "Select Meal Times",
         required: true,
         view: true,
-        default: "",
         add: true,
         update: true,
         apiType: "API",
@@ -444,7 +462,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         showItem: "",
         onChange: onChange,
         validation: "",
-        default: "",
+        default: "empty",
         tag: true,
         label: "Start Date",
         required: true,
@@ -458,7 +476,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         listView: true,
         name: "numberofDays",
         validation: "",
-        default: [0, 1, 2, 3, 4, 5, 6],
+        default: "",
         label: "Select Validity",
         onChange: onChange,
         required: true,
@@ -478,26 +496,50 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           { value: "6 Month", id: 180 },
         ],
       },
-
       {
         type: "title",
-        title: "View Pricing",
+        title: "Tax & Currency",
         name: "menuSettings",
         add: true,
         update: true,
       },
+
       {
         type: "number",
-        placeholder: "Per Day",
-        name: "pricePerDay",
-        disabled: true,
+        placeholder: "Tax Rate %",
+        name: "tax",
         showItem: "",
+        onChange: onChange,
         validation: "",
-        default: "",
+        default: "18",
         tag: true,
-        label: "Per Day",
+        label: "Tax Rate %",
         required: false,
         view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "select",
+        placeholder: "Currency",
+        listView: true,
+        name: "currency",
+        validation: "",
+        default: "BD",
+        label: "Currency",
+        required: true,
+        view: true,
+        customClass: "list",
+        add: true,
+        update: true,
+        apiType: "JSON",
+        search: false,
+        selectApi: [{ value: "Bahraini Dinar", id: "BD" }],
+      },
+      {
+        type: "title",
+        title: "View & Confirm Final Price",
+        name: "menuSettings",
         add: true,
         update: true,
       },
@@ -508,6 +550,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         showItem: "",
         validation: "",
         disabled: true,
+        customClass: "small",
         default: "",
         tag: true,
         label: "Number of Days",
@@ -518,14 +561,15 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       },
       {
         type: "number",
-        placeholder: "Discount",
-        name: "discount",
+        placeholder: "Per Day Cost",
+        name: "pricePerDay",
+        disabled: true,
         showItem: "",
         validation: "",
-        disabled: true,
+        customClass: "small",
         default: "",
         tag: true,
-        label: "Discount",
+        label: "Per Day Cost",
         required: false,
         view: true,
         add: true,
@@ -533,16 +577,120 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       },
       {
         type: "number",
-        placeholder: "Amount to Pay",
-        name: "totalPrice",
+        placeholder: "Price",
+        name: "price",
+        showItem: "",
+        customClass: "small",
+        validation: "",
+        disabled: true,
+        default: "",
+        tag: true,
+        label: "Price",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Discount %",
+        name: "discount",
+        showItem: "",
+        validation: "",
+        disabled: true,
+        customClass: "small",
+        default: "",
+        tag: true,
+        label: "Discount %",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Discounted",
+        name: "discountOnPrice",
+        showItem: "",
+        customClass: "small",
+        validation: "",
+        disabled: true,
+        default: "",
+        tag: true,
+        label: "Discount Amount",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "After Discount",
+        name: "discountedPrice",
+        showItem: "",
+        customClass: "small",
+        validation: "",
+        disabled: true,
+        default: "",
+        tag: true,
+        label: "After Discount",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Tax Rate %",
+        name: "tax",
+        showItem: "",
+        customClass: "small",
+        disabled: true,
+        validation: "",
+        default: "18",
+        tag: true,
+        label: "Tax Rate %",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Tax Amount",
+        name: "taxPrice",
+        showItem: "",
+        validation: "",
+        customClass: "small",
+        disabled: true,
+        default: "",
+        tag: true,
+        label: "Tax Price",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Total Price",
+        name: "total",
+        customClass: "small",
         disabled: true,
         showItem: "",
         validation: "",
         default: "",
         tag: true,
-        label: "Amount to Pay",
+        label: "Total Price",
         required: false,
         view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "info",
+        content: "Please note: When adding a diet, it will directly create an invoice against the subscription.",
+        name: "menuSettings",
         add: true,
         update: true,
       },
@@ -553,17 +701,38 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       api: "patient-diet",
       header: "Add Diet",
       description: "",
+      useCaptcha: true,
     });
   };
   const editDiet = async (option) => {
-    console.log(menuData.user.diet.mealTimeCategory.map((item) => item._id));
+    const response = await getData({ id: menuData.user.diet._id, package: menuData.user.diet.package }, "patient-diet");
+    const existingData = response.data;
     setParameters([
+      moment(existingData.startDate).isSameOrBefore(moment())
+        ? {}
+        : {
+            type: "date",
+            placeholder: "Start Date & Time",
+            name: "startDate",
+            showItem: "",
+            onChange: onChange,
+            validation: "",
+            default: existingData.startDate,
+            minDate: moment().add(2, "day").toDate(),
+            tag: true,
+            label: "Start Date",
+            required: true,
+            view: true,
+            add: true,
+            update: true,
+          },
       {
         type: "select",
         apiType: "API",
         selectApi: "package/food-menu",
         updateOn: "package",
-        params: [{ name: "package", value: menuData.user.diet.package }],
+        arrayOut: true,
+        params: [{ name: "package", value: existingData.package }],
         placeholder: "Menu",
         tags: [
           {
@@ -616,7 +785,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         validation: "",
         showItem: "value",
         collection: "foodMenu",
-        default: menuData.user.diet.foodMenu,
+        default: existingData.foodMenu,
         tag: true,
         label: "Menu",
         required: false,
@@ -628,14 +797,14 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       {
         type: "select",
         selectApi: "package/calories",
-        params: [{ name: "package", value: menuData.user.diet.package }],
+        params: [{ name: "package", value: existingData.package }],
         updateOn: "package",
         apiType: "API",
         placeholder: "Calories",
         name: "calories",
         showItem: "",
         validation: "",
-        default: menuData.user.diet.calories,
+        default: existingData.calories,
         tag: true,
         label: "Calories",
         filter: false,
@@ -650,7 +819,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         listView: true,
         name: "eligibleDays",
         validation: "",
-        default: menuData.user.diet.eligibleDays.map((item) => parseInt(item)),
+        default: existingData.eligibleDays.map((item) => parseInt(item)),
         label: "Select Days of Week",
         required: true,
         view: true,
@@ -673,12 +842,15 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         type: "multiSelect",
         placeholder: "Select Meal Times",
         name: "mealTimeCategory",
-        default: menuData.user.diet.mealTimeCategory.map((item) => item._id),
+        params: [{ name: "package", value: existingData.package }],
+        default: existingData.mealTimeCategory.map((item) => item),
         updateOn: "foodMenu",
+        customClass: "list",
         label: "Select Meal Times",
         required: true,
         view: true,
         add: true,
+        arrayOut: true,
         update: true,
         apiType: "API",
         search: false,
@@ -690,7 +862,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         name: "patientDiet",
         showItem: "",
         validation: "",
-        default: menuData.user.diet._id,
+        default: existingData._id,
         // tag: true,
         label: "patientDeit",
         required: true,
@@ -703,13 +875,443 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       type: "editDiet",
       submit: "Udpate Now",
       api: "patient-diet/modify-diet",
-      header: "Mofify Diet",
+      header: "Modify Diet",
       description: "",
+      useCaptcha: true,
     });
   };
 
   const editNotes = async (type, item, index = { date: 0, categoryIndex: 0, recepeIndex: 0 }) => {
+    console.log(item);
     switch (type) {
+      case "editGeneralDiet":
+        setParameters([
+          {
+            type: "select",
+            placeholder: "Meal",
+            name: "meat",
+            validation: "",
+            tag: true,
+            default: item.meat,
+            filter: false,
+            label: "Meal",
+            required: true,
+            view: true,
+            add: true,
+            update: true,
+            selectApi: [
+              { id: 0, value: "0" },
+              { id: 1, value: "1" },
+              { id: 2, value: "2" },
+              { id: 3, value: "3" },
+              { id: 4, value: "4" },
+              { id: 5, value: "5" },
+              { id: 6, value: "6" },
+              { id: 7, value: "7" },
+            ],
+            apiType: "JSON",
+          },
+          {
+            type: "select",
+            placeholder: "Bread",
+            name: "bread",
+            validation: "",
+            tag: true,
+            default: item.bread,
+            label: "Bread",
+            filter: false,
+            required: true,
+            view: true,
+            add: true,
+            update: true,
+            selectApi: [
+              { id: 0, value: "0" },
+              { id: 1, value: "1" },
+              { id: 2, value: "2" },
+              { id: 3, value: "3" },
+              { id: 4, value: "4" },
+              { id: 5, value: "5" },
+              { id: 6, value: "6" },
+              { id: 7, value: "7" },
+            ],
+            apiType: "JSON",
+          },
+          {
+            type: "select",
+            placeholder: "Dessert",
+            name: "dessert",
+            validation: "",
+            tag: true,
+            default: item.dessert,
+            label: "Dessert",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+            selectApi: [
+              { id: 0, value: "0" },
+              { id: 1, value: "1" },
+              { id: 2, value: "2" },
+              { id: 3, value: "3" },
+              { id: 4, value: "4" },
+              { id: 5, value: "5" },
+              { id: 6, value: "6" },
+            ],
+            apiType: "JSON",
+          },
+          {
+            type: "select",
+            placeholder: "Fruit Exchange",
+            name: "fruit",
+            validation: "",
+            tag: true,
+            default: item.fruit,
+            label: "Fruit Exchange",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+            selectApi: [
+              { id: 0, value: "0" },
+              { id: 1, value: "1" },
+              { id: 2, value: "2" },
+              { id: 3, value: "3" },
+              { id: 4, value: "4" },
+              { id: 5, value: "5" },
+              { id: 6, value: "6" },
+            ],
+            apiType: "JSON",
+          },
+          {
+            type: "select",
+            placeholder: "Salad",
+            name: "salad",
+            validation: "",
+            tag: true,
+            default: item.salad,
+            label: "Salad",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+            selectApi: [
+              { id: 0, value: "0" },
+              { id: 1, value: "1" },
+              { id: 2, value: "2" },
+              { id: 3, value: "3" },
+              { id: 4, value: "4" },
+              { id: 5, value: "5" },
+              { id: 6, value: "6" },
+            ],
+            apiType: "JSON",
+          },
+          {
+            type: "select",
+            placeholder: "Soup",
+            name: "soup",
+            validation: "",
+            tag: true,
+            default: item.soup,
+            label: "Soup",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+            selectApi: [
+              { id: 0, value: "0" },
+              { id: 1, value: "1" },
+              { id: 2, value: "2" },
+              { id: 3, value: "3" },
+              { id: 4, value: "4" },
+              { id: 5, value: "5" },
+              { id: 6, value: "6" },
+            ],
+            apiType: "JSON",
+          },
+          {
+            type: "select",
+            placeholder: "Snacking",
+            name: "snacking",
+            validation: "",
+            tag: true,
+            default: item.snacking,
+            label: "Snacking",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+            selectApi: [
+              { id: 0, value: "0" },
+              { id: 1, value: "1" },
+              { id: 2, value: "2" },
+              { id: 3, value: "3" },
+              { id: 4, value: "4" },
+              { id: 5, value: "5" },
+              { id: 6, value: "6" },
+            ],
+            apiType: "JSON",
+          },
+          {
+            type: "select",
+            placeholder: "Fat",
+            name: "fat",
+            default: item.fat,
+            validation: "",
+            tag: true,
+            label: "Fat",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+            selectApi: [
+              { id: 0, value: "0" },
+              { id: 1, value: "1" },
+              { id: 2, value: "2" },
+              { id: 3, value: "3" },
+              { id: 4, value: "4" },
+              { id: 5, value: "5" },
+              { id: 6, value: "6" },
+            ],
+            apiType: "JSON",
+          },
+          {
+            type: "hidden",
+            placeholder: "recipeSchedule",
+            name: "id",
+            showItem: "",
+            validation: "",
+            default: item._id,
+            label: "recipeSchedule",
+            required: true,
+            view: true,
+            add: false,
+            update: true,
+          },
+        ]);
+        setIsOpen({
+          type,
+          index,
+          submit: "Udpate Now",
+          api: "recipe-schedule/update-diet-values",
+          header: "Update Diet Values",
+          description: "",
+          useCaptcha: false,
+        });
+        break;
+      case "editFoodExchange":
+        setParameters([
+          {
+            type: "number",
+            placeholder: "Starch",
+            name: "starch",
+            validation: "",
+            tag: false,
+            default: item.starch,
+            label: "Starch",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "Lean Meat",
+            name: "leanMeat",
+            validation: "",
+            tag: false,
+            default: item.leanMeat,
+            label: "Lean Meat",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "text",
+            placeholder: "Skim Milk",
+            name: "skimMilk",
+            validation: "",
+            tag: false,
+            default: item.skimMilk,
+            label: "Skim Milk",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "Non-Starchy Vegetable",
+            name: "nonStarchyVegetable",
+            validation: "",
+            tag: false,
+            default: item.nonStarchyVegetable,
+            label: "Non-Starchy Vegetable",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "Fruits",
+            name: "fruits",
+            validation: "",
+            tag: false,
+            default: item.fruits,
+            label: "Fruits",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "Fats",
+            name: "fats",
+            validation: "",
+            tag: false,
+            default: item.fats,
+            label: "Fats",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "Sugar",
+            name: "sugar",
+            validation: "",
+            tag: false,
+            default: item.sugar,
+            label: "Sugar",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "Very Lean Meat",
+            name: "veryLeanMeat",
+            validation: "",
+            tag: false,
+            default: item.veryLeanMeat,
+            label: "Very Lean Meat",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "Medium Fat Meat / Egg",
+            name: "mediumFatMeat",
+            validation: "",
+            tag: false,
+            default: item.mediumFatMeat,
+            label: "Medium Fat Meat / Egg",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "High Fat Meat",
+            name: "highFatMeat",
+            validation: "",
+            tag: false,
+            default: item.highFatMeat,
+            label: "High Fat Meat",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "Vegetarian Protein",
+            name: "vegetarianProtein",
+            validation: "",
+            tag: false,
+            default: item.vegetarianProtein,
+            label: "Vegetarian Protein",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "Low Fat Milk",
+            name: "lowfatMilk",
+            validation: "",
+            tag: false,
+            default: item.lowfatMilk,
+            label: "Low Fat Milk",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "number",
+            placeholder: "Regular Milk",
+            name: "regularMilk",
+            validation: "",
+            tag: false,
+            default: item.regularMilk,
+            label: "Regular Milk",
+            required: true,
+            view: true,
+            filter: false,
+            add: true,
+            update: true,
+          },
+          {
+            type: "hidden",
+            placeholder: "recipeSchedule",
+            name: "id",
+            showItem: "",
+            validation: "",
+            default: item._id,
+            label: "recipeSchedule",
+            required: true,
+            view: true,
+            add: false,
+            update: true,
+          },
+        ]);
+        setIsOpen({
+          type,
+          index,
+          submit: "Udpate Now",
+          api: "recipe-schedule/update-diet-values",
+          header: "Update Diet Values",
+          description: "",
+          useCaptcha: false,
+        });
+        break;
       case "diagnose":
         setParameters([
           {
@@ -742,6 +1344,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         ]);
         setIsOpen({
           type,
+          index,
           submit: "Udpate Now",
           api: "patient-diet/update-patient-diet",
           header: "Edit Diagnose Report",
@@ -890,6 +1493,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               });
             }
             break;
+          case "editGeneralDiet":
+          case "editFoodExchange":
+            updateRecipeData(isOpen.index.categoryIndex, isOpen.index.recepeIndex, isOpen.index.date, response.data.data);
+            break;
           default:
             break;
         }
@@ -1012,6 +1619,16 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     // Update the menuData
     setMenuData(menuDataTemp);
   };
+  const updateRecipeData = (categoryIndex, recepeIndex, date, data) => {
+    const menuDataTemp = { ...menuData };
+    // Find the day based on the date
+    let day = menuDataTemp.result.find((item) => item._id === date.format("YYYY-MM-DD"));
+    console.log(day.menu[categoryIndex].recipes[recepeIndex], data);
+    const dataTemp = day.menu[categoryIndex].recipes[recepeIndex];
+    day.menu[categoryIndex].recipes[recepeIndex] = { ...dataTemp }; // Fixed splice syntax
+    // Update the menuData
+    setMenuData(menuDataTemp);
+  };
   const updateDiet = (item, value) => {
     // Create a copy of menuData, including a copy of the user and diet objects
     const updatedMenuData = {
@@ -1080,20 +1697,34 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       <GetIcon icon={"info"} />
                     </span>
                     {!isDeleted && (
-                      <span
-                        className="edit"
-                        title="Modify Recipe Note"
-                        onClick={() => {
-                          // deleteItem(item.foodMenuItem, recipeIndex, "recipe", mealTimeCategory._id, dayNumber, items.optionNo);
-                          editNotes("recipe", recipeItem, {
-                            date,
-                            categoryIndex,
-                            recepeIndex,
-                          });
-                        }}
-                      >
-                        <GetIcon icon={"edit"} />
-                      </span>
+                      <>
+                        <span
+                          className="edit"
+                          title="Modify Recipe Note"
+                          onClick={() => {
+                            editNotes("recipe", recipeItem, {
+                              date,
+                              categoryIndex,
+                              recepeIndex,
+                            });
+                          }}
+                        >
+                          <GetIcon icon={"note"} />
+                        </span>
+                        <span
+                          className="edit"
+                          title="Modify Diet Values"
+                          onClick={() => {
+                            editNotes(menuData.user.diet.dietCategory === "General" ? "editGeneralDiet" : "editFoodExchange", recipeItem, {
+                              date,
+                              categoryIndex,
+                              recepeIndex,
+                            });
+                          }}
+                        >
+                          <GetIcon icon={"edit"} />
+                        </span>
+                      </>
                     )}
                     {recipeItem.foodmenuitem.replacableItems > 0 && (recipeItem.isReplaced ?? false) && (
                       <span
@@ -1234,30 +1865,37 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                   <GetIcon icon={"previous"} />
                 </ArrowButton>
                 <TabContainer>
-                  {getWeekDays().map((day, index) => {
-                    const dateName = getRelativeDay(day);
-                    const formattedDay = day.format("YYYY-MM-DD");
-                    return (
-                      <TabButton
-                        key={`${index}-${day}`}
-                        active={selectedDayNumber === formattedDay}
-                        onClick={() => {
-                          const day = menuData.result.find((item) => item._id === formattedDay);
-                          const item = day?.menu[0]?.recipes?.[0];
-                          if (item) {
-                            getReplacableItems(item.foodMenuItem, item._id, item.mealTimeCategory, item.foodMenu, true);
-                            setSelectedDayNumber(formattedDay);
-                          }
-                        }}
-                      >
-                        <DayHead>
-                          {dateName === "Unknown" ? <div className="dayName">{`${day.format("ddd")}`}</div> : <div className="dayName">{dateName}</div>}
-                          <div className="day">{day.format("D MMM")}</div>
-                        </DayHead>
-                      </TabButton>
-                    );
-                  })}
+                  {(() => {
+                    return getWeekDays().map((day, index) => {
+                      const dateName = getRelativeDay(day);
+                      const formattedDay = day.format("YYYY-MM-DD");
+
+                      const isBetween = moment(day).startOf("day").isBetween(startDate, endDate, null, "[]") || moment(day).isSame(startDate, "day") || moment(day).isSame(endDate, "day");
+
+                      return (
+                        <TabButton
+                          key={`${index}-${day}`}
+                          className={isBetween ? "between" : "noplan"}
+                          active={selectedDayNumber === formattedDay}
+                          onClick={() => {
+                            const day = menuData.result.find((item) => item._id === formattedDay);
+                            const item = day?.menu[0]?.recipes?.[0];
+                            if (item) {
+                              getReplacableItems(item.foodMenuItem, item._id, item.mealTimeCategory, item.foodMenu, true);
+                              setSelectedDayNumber(formattedDay);
+                            }
+                          }}
+                        >
+                          <DayHead>
+                            {dateName === "Unknown" ? <div className="dayName">{`${day.format("ddd")}`}</div> : <div className="dayName">{dateName}</div>}
+                            <div className="day">{day.format("D MMM")}</div>
+                          </DayHead>
+                        </TabButton>
+                      );
+                    });
+                  })()}
                 </TabContainer>
+
                 <ArrowButton
                   className="normal"
                   onClick={() => {
@@ -1455,16 +2093,35 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         </RowContainer>
 
         <RowContainer className="user-details">
-          {menuData?.user.diet && (
+          {menuData?.user.diet ? (
             <ActionBox>
-              <SwitchButton enableBg={"white"} enableColor={"black"} active={pause} onClick={() => pauseStartDiet()}>
-                <span>{pause ? "Restart Diet" : "Pause Diet"}</span> <GetIcon icon={pause ? "play" : "pause"} />
-              </SwitchButton>
-              <SwitchButton enableBg={"white"} enableColor={"black"} active={pause} onClick={() => editDiet()}>
-                <span>{"Modify Diet"}</span> <GetIcon icon={"edit"} />
+              {menuData.user.endDate && moment(menuData.user.endDate).isBefore(moment()) ? (
+                <SwitchButton enableBg={"white"} enableColor={"black"} active={pause} onClick={() => addDiet()}>
+                  <GetIcon icon={"reload"} />
+                  <span>{"Renew Plan"}</span>
+                </SwitchButton>
+              ) : (
+                <>
+                  <SwitchButton enableBg={"white"} enableColor={"black"} active={pause} onClick={() => pauseStartDiet()}>
+                    <GetIcon icon={pause ? "play" : "pause"} />
+                    <span>{pause ? "Restart Plan" : "Pause Plan"}</span>
+                  </SwitchButton>
+
+                  <SwitchButton enableBg={"white"} enableColor={"black"} active={pause} onClick={() => editDiet()}>
+                    <GetIcon icon={"edit"} /> <span>{"Modify Plan"}</span>
+                  </SwitchButton>
+                </>
+              )}
+            </ActionBox>
+          ) : (
+            <ActionBox>
+              <SwitchButton enableBg={"white"} enableColor={"black"} active={pause} onClick={() => addDiet()}>
+                <GetIcon icon={"add"} />
+                <span>{"Add Diet"}</span>
               </SwitchButton>
             </ActionBox>
           )}
+
           {menuData && menuData.user && (
             <>
               <UserDetails>
@@ -1637,7 +2294,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         {isOpen && (
           <AutoForm
             userId={openData.data._id}
-            useCaptcha={true}
+            useCaptcha={isOpen.useCaptcha}
             useCheckbox={false}
             customClass={isOpen.customClass ?? ""}
             description={isOpen.description}

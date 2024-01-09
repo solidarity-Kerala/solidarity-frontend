@@ -300,7 +300,11 @@ export const Info = styled.div`
   padding-left: 0px;
   font-size: 14px;
   width: 100%;
-  margin: 0px 10px 10px 15px;
+  margin: 5px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 5px;
   &.disabled {
     display: none;
   }

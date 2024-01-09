@@ -14,7 +14,6 @@ import SelfOrder from "./selfOrder";
 import axios from "axios";
 import { checkprivilege, privileges } from "../../../../core/functions/previliage";
 import InvoicePDF from "./invoicePDF";
-import { putData } from "../../../../../backend/api";
 
 //src/components/styles/page/index.js
 //if you want to write custom style wirte in above file

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import CrudForm from "../list/create";
+import moment from "moment";
 
-const AutoForm = ({ header, api, formType = "post", formMode, formInput: tempFormInput, formValues: tempFormValues, submitHandler, isOpenHandler, isCreating, css = "" }) => {
+const AutoForm = ({ header, api, formType = "post", formMode, formInput: tempFormInput, formValues: tempFormValues, submitHandler, isOpenHandler, isCreating, useCaptcha, css = "" }) => {
   const [formValues, setFormValues] = useState([]);
   const [formErrors, setFormErrors] = useState([]);
   const [formInput] = useState(tempFormInput);
@@ -22,12 +23,17 @@ const AutoForm = ({ header, api, formType = "post", formMode, formInput: tempFor
         formVal[item.name] = [];
       } else if (item.type === "multiSelect") {
         formVal[item.name] = item.default?.length > 0 ? item.default : [];
+        if (item.defaultArray) {
+          formVal[item.name + "Array"] = item.defaultArray;
+        }
       } else if (item.type === "select") {
         formVal[item.name] = item.default?.toString()?.length > 0 ? item.default : "";
+        if (item.defaultArray) {
+          formVal[item.name + "Array"] = item.defaultArray;
+        }
         console.log("select", item.name, formVal[item.name]);
       } else if (item.type === "date") {
-        item.default ? (date = new Date(item.default)) : (date = new Date());
-        formVal[item.name] = date.toISOString();
+        formVal[item.name] = item.default === "empty" ? "" : moment(item.default).isValid() ? moment(item.default).toISOString() : date.toISOString();
       } else if (item.type === "multiple") {
         formVal[item.name] = [];
         tempFormErrors[item.name] = [];
@@ -52,19 +58,19 @@ const AutoForm = ({ header, api, formType = "post", formMode, formInput: tempFor
     });
     tempFormErrors["captchaError"] = "";
     tempFormErrors["agreementAccept"] = "";
+    console.log("formVal1", formVal);
     if (tempFormValues) {
       Object.keys(formVal).forEach((key) => {
         if (tempFormValues[key]) {
-          formVal[key] = tempFormValues[key]??formVal[key];
+          formVal[key] = tempFormValues[key] ?? formVal[key];
         }
       });
     }
-    console.log(formVal);
-    console.log(tempFormInput);
+    console.log("formVal2", formVal);
     setFormValues(formVal);
     setFormErrors(tempFormErrors);
     // validation(props.formInput, formVal);
   }, [tempFormInput, tempFormValues]);
-  return formInput?.length > 0 && Object.keys(formValues).length > 0 && formErrors && <CrudForm api={api} formMode={formMode} formType={formType} header={header} formInput={formInput} formValues={formValues} formErrors={formErrors} submitHandler={submitHandler} isOpenHandler={isOpenHandler} isOpen={isCreating} css={css}></CrudForm>;
+  return formInput?.length > 0 && Object.keys(formValues).length > 0 && formErrors && <CrudForm api={api} formMode={formMode} formType={formType} header={header} formInput={formInput} formValues={formValues} formErrors={formErrors} submitHandler={submitHandler} isOpenHandler={isOpenHandler} useCaptcha={useCaptcha} isOpen={isCreating} css={css}></CrudForm>;
 };
 export default AutoForm;

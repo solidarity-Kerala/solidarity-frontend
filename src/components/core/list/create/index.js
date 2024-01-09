@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { Header } from "../manage/styles";
 import { updateCaloriDetails, updateDailyCaloric, updateHealthDetails } from "../../functions/health";
 import { customValidations } from "../../../project/form/validation";
+import Captcha from "../../captcha";
 const CrudForm = (props) => {
   // Use the useTranslation hook from react-i18next to handle translations
   const { t } = useTranslation();
@@ -21,6 +22,9 @@ const CrudForm = (props) => {
   // State to store the form values
   const [formValues, setFormValues] = useState(props.formValues);
 
+  //State to store Captcha Status Validations Status
+  const [captchaStatus, setCaptchaStatus] = useState(false);
+
   // State to store the validation messages
   const [formErrors, setFormErrors] = useState(props.formErrors);
   const themeColors = useSelector((state) => state.themeColors);
@@ -32,8 +36,17 @@ const CrudForm = (props) => {
    *
    * @returns {number} flags - The number of validation errors for the field
    */
+  const catchaValidation = (captchaStatus, useCaptcha) => {
+    let flag = 0;
+    let tempformError = "";
+    if (captchaStatus === false && useCaptcha === true) {
+      tempformError = t("required", { label: t("captcha") });
+      flag += 1;
+    }
+    return { flag, tempformError };
+  };
 
-  const validation = (fields, udpatedValue, formErrors, agreement, useCheckbox) => {
+  const validation = (fields, udpatedValue, formErrors, agreement, useCheckbox, useCaptcha) => {
     const tempformErrors = { ...formErrors };
     let flags = 0;
     fields.forEach((item) => {
@@ -58,9 +71,13 @@ const CrudForm = (props) => {
       }
     });
 
-    const agreementRes = agreementValidation(agreement, useCheckbox);
-    tempformErrors["captchaError"] = agreementRes.tempformError;
-    flags += agreementRes.flag; //?res.flag:0;
+    const captchaRes = catchaValidation(agreement, useCaptcha);
+    tempformErrors["captchaError"] = captchaRes.tempformError;
+    flags += captchaRes.flag; //?res.flag:0;
+
+      // const agreementRes = agreementValidation(agreement, useCheckbox);
+      // tempformErrors["captchaError"] = agreementRes.tempformError;
+      // flags += agreementRes.flag; //?res.flag:0;
 
     setFormErrors(tempformErrors);
     setSubmitDisabled(flags > 0 ? true : false);
@@ -249,15 +266,15 @@ const CrudForm = (props) => {
 
   useEffect(() => {}, [formState]);
 
-  const agreementValidation = (agreement, useCheckbox) => {
-    let flag = 0;
-    let tempformError = "";
-    if (agreement !== true && useCheckbox === true) {
-      tempformError = t("required", { label: t("agreement") });
-      flag += 1;
-    }
-    return { flag, tempformError };
-  };
+  // const agreementValidation = (agreement, useCheckbox) => {
+  //   let flag = 0;
+  //   let tempformError = "";
+  //   if (agreement !== true && useCheckbox === true) {
+  //     tempformError = t("required", { label: t("agreement") });
+  //     flag += 1;
+  //   }
+  //   return { flag, tempformError };
+  // };
 
   const handleChange = (event, id, type = "text", sub = null) => {
     // Getting current field
@@ -315,7 +332,7 @@ const CrudForm = (props) => {
       } else {
         value = event.target.getAttribute("value");
       }
-     
+
       let udpateValue = {
         ...formValues,
         [field.name]: value,
@@ -338,16 +355,16 @@ const CrudForm = (props) => {
         }
       }
       if (typeof field.onChange === "function") {
-        udpateValue = field.onChange(field.name,udpateValue);
+        udpateValue = field.onChange(field.name, udpateValue);
         console.log(udpateValue);
       }
       // Creating an updated field
       // updating the formm values
       setFormValues(udpateValue);
 
-      // console.log("udpateValue", udpateValue);
+      console.log("udpateValue", udpateValue);
       // Validating the fields
-      if (validation(formState, udpateValue, formErrors)) {
+      if (validation(formState, udpateValue, formErrors, captchaStatus, props.useCheckbox, props.useCaptcha)) {
         // Here we can write any state updation
       }
     } else {
@@ -363,10 +380,13 @@ const CrudForm = (props) => {
       }
     }
   };
-
+  const setCaptchaStatusHandler = (status) => {
+    setCaptchaStatus(status);
+    validation(formState, formValues, formErrors, status, props.useCheckbox, props.useCaptcha);
+  };
   const submitChange = (event) => {
     event.preventDefault();
-    if (validation(formState, formValues, formErrors)) {
+    if (validation(formState, formValues, formErrors, captchaStatus, props.useCheckbox, props.useCaptcha)) {
       props.submitHandler(formValues, formState);
     }
   };
@@ -413,6 +433,7 @@ const CrudForm = (props) => {
                 return null;
               }
             })}
+          {props.useCaptcha === true && <Captcha error={formErrors["captchaError"]} label={t("captcha")} key="1" setCaptchaStatus={setCaptchaStatusHandler}></Captcha>}
         </Form>
 
         <Footer>

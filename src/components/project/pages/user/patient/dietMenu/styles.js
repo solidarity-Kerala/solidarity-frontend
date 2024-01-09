@@ -23,6 +23,10 @@ export const TabButton = styled.button`
   cursor: pointer;
   border-bottom: 1px solid ${({ active }) => (active ? "#EB6B55" : "rgb(204, 204, 204)")};
   color: ${({ active }) => (active ? "#EB6B55" : "black")};
+  &.noplan{
+    opacity:.5;
+    cursor: inherit;
+  }
 `;
 
 export const Table = styled.table`

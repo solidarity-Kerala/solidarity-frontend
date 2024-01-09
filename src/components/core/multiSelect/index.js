@@ -236,7 +236,7 @@ function MultiSelect(props) {
                       // toggleOptions();
                     }}
                   >
-                    {props.displayValue ? option[props.displayValue] : option.value} <GetIcon icon="Close" />
+                    {props.displayValue ? option[props.displayValue]??option.value : option.value} <GetIcon icon="Close" />
                   </li>
                 );
               })}
