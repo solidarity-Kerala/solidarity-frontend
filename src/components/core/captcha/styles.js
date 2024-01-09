@@ -5,7 +5,8 @@ export const CpatchaContainer = styled.div`
 `;
 export const Canvas = styled.div`
   display: flex;
-  height: 48px;
+  height: 38px;
+  margin-right: 10px;
   border: 1px solid lightgray;
   border-radius: 10px;
   canvas {

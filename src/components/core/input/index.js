@@ -92,6 +92,7 @@ function FormInput(props) {
       // Render a date input with date picker
       case "date":
         let userFriendlyDate = typeof props.value === "undefined" || props.value === null ? null : props.value.length > 0 ? new Date(props.value) : null;
+        console.log("props.value",props.value,userFriendlyDate)
         return (
           <InputContainer className={`${props.dynamicClass ?? ""} ${props.customClass ?? ""}`}>
             <DatetimeInput showYearDropdown yearDropdownItemNumber={70} minDate={props.minDate ?? moment().toDate()} maxDate={props.maxDate ?? moment().add(1, "year").toDate()} dateFormat={"yyyy-MM-dd"} theme={themeColors} className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholderText={`${t(props.label)}${props.required ? " *" : ""}`} type={props.type} value={userFriendlyDate} selected={userFriendlyDate} onChange={(event) => props.onChange(event, props.id, props.type)} />
