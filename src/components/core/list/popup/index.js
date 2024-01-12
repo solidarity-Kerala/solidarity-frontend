@@ -79,7 +79,7 @@ const Popup = ({ formMode, selectedMenuItem, viewMode, themeColors, openData, se
       ),
     });
     setTabs(tempTab);
-  }, [setMessage, setLoaderBox, openData, formMode, titleValue, udpateView, isEditingHandler, updatePrivilege, selectedMenuItem.icon]);
+  }, [setMessage, setLoaderBox, openData,themeColors, formMode, titleValue, udpateView, isEditingHandler, updatePrivilege, selectedMenuItem.icon]);
 
   const [tabs, setTabs] = useState([]);
 
