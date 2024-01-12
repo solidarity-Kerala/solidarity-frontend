@@ -45,7 +45,7 @@ export const SelectBox = styled.div`
     height: 40px;
     padding-left: 1em;
     font-weight: 700;
-    box-shadow: none;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
     -webkit-transition: all 0.2s ease-out 0s;
     transition: all 0.2s ease-out 0s;
     color: ${(props) => props.theme.secForeground};

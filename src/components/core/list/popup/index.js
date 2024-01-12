@@ -63,6 +63,7 @@ const Popup = ({ formMode, selectedMenuItem, viewMode, themeColors, openData, se
             <div>
               {updatePrivilege && (
                 <More
+                  theme={themeColors}
                   onClick={(event) => {
                     event.stopPropagation();
                     isEditingHandler(openData?.data, udpateView, titleValue);
@@ -90,7 +91,7 @@ const Popup = ({ formMode, selectedMenuItem, viewMode, themeColors, openData, se
     <Overlay>
       <Page className={`${openData?.item?.params?.customClass ?? "medium"} popup-child`}>
         <Header>
-          <span>{`${getValue(itemTitle, titleValue)}`}</span>
+          <span >{`${getValue(itemTitle, titleValue)}`}</span>
           <CloseButton theme={themeColors} onClick={closeModal}>
             <GetIcon icon={"Close"} />
           </CloseButton>

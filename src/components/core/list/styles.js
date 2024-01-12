@@ -3,21 +3,23 @@ export const Table = styled.div`
   border-collapse: collapse;
   display: flex;
   flex-direction: column;
-  row-gap: 5px;
+  row-gap: 0px;
   font-family: Arial, sans-serif;
   margin-bottom: auto;
   border-top: 0px solid #d9d9d9;
   width: 100%;
   width: -webkit-fill-available;
+  padding: 10px 0;
   &.record {
     border-top: 0px solid #d9d9d9;
+    padding: 0px 0px;
   }
   &.double {
     display: grid;
     grid-template-columns: 1fr 1fr;
     border-bottom: 0px solid #d9d9d9;
-    column-gap: 5px;
-    row-gap: 5px;
+    column-gap: 0px;
+    row-gap: 0px;
   }
   &.no-data {
     grid-template-columns: auto;
@@ -68,12 +70,13 @@ export const Th = styled.th`
 `;
 
 export const Tr = styled.div`
-  border-bottom: 1px solid ${(props) => props.theme.border};
+  /* border-bottom: 1px solid ${(props) => props.theme.border}; */
   display: flex;
   margin: 0em 2em 0px;
   padding: 10px;
   background-color: ${(props) => props.theme.background};
-  border-radius: 10px;
+  border-radius: 0px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   cursor: pointer;
   && {
     /* .popup-child & {
@@ -101,7 +104,7 @@ export const Tr = styled.div`
     border-bottom-left-radius: 12px;
   }
   .double.table & {
-    border-radius: 12px;
+    border-radius: 0px;
     &:first-child {
       border-top-left-radius: 12px;
     }
@@ -109,7 +112,7 @@ export const Tr = styled.div`
       border-top-right-radius: 12px;
     }
     &:nth-child(odd) {
-      border-right: 1px solid ${(props) => props.theme.border};
+      border-right: 0px solid ${(props) => props.theme.border};
       margin-right: 0;
     }
     &:nth-child(even) {
@@ -192,7 +195,7 @@ export const Tr = styled.div`
   /* box-shadow: rgb(167 167 167 / 26%) 0px 0px 12px 0px; */
   &:hover {
     /* background-color: #ddedeb; */
-    box-shadow: 0px 4px 12px 0px rgba(136, 173, 74, 0.25);
+    box-shadow: 0px 4px 12px 0px rgba(${(props) => props.theme.theme}, 1);
 
     /* border: 1px solid ${(props) => props.theme.border}; */
   }
@@ -200,6 +203,7 @@ export const Tr = styled.div`
     padding: 0;
     margin: 0;
     margin: 20px 30px 30px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px !important;
   }
   &.single:hover {
     /* background-color: initial; */
@@ -276,7 +280,7 @@ export const TrBody = styled.div`
   &.actions {
     display: flex;
     justify-content: right;
-    margin-top: 5px;
+    margin: 5px;
   }
   @media (max-width: 768px) {
     &.nowrap {
@@ -426,13 +430,13 @@ export const ArrowPagination = styled.button`
   justify-content: center;
   align-items: center;
   &.button {
-        border-left: 1px solid lightgray;
+    border-left: 1px solid lightgray;
     border-radius: 0;
     padding: 0px 10px;
     background-color: #ffffff00;
   }
-  svg{
-    margin-left:5px;
+  svg {
+    margin-left: 5px;
   }
   &:hover {
     color: ${(props) => props.theme.bgPrimary};
@@ -443,10 +447,7 @@ export const ButtonPanel = styled.div`
   align-items: center;
   padding: 1em 2em 0.5em;
   justify-content: space-between;
-  margin-bottom: 0.5em;
-  /* position: sticky; */
-  /* top: -5px; */
-  background: #eaeaea;
+  margin-bottom: 0em;
   z-index: 100;
   height: 50px;
   svg {
@@ -467,12 +468,16 @@ export const AddButton = styled.button`
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   background: ${(props) => props.theme.background};
   outline: 0px;
-  border: 0px;
+  border: 0px solid rgb(221, 221, 221);
   margin: 0px;
   cursor: pointer;
   padding: 12px;
   margin-right: 0em;
   outline: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   &.skip {
     border: 1px solid #8b8989;
@@ -495,7 +500,8 @@ export const AddButton = styled.button`
     } */
   }
   &:hover {
-    color: ${(props) => props.theme.bgPrimary};
+    color: ${(props) => props.theme.themeForeground};
+    background-color: ${(props) => props.theme.theme};
   }
   & > svg {
     margin-right: 10px;
@@ -540,7 +546,7 @@ export const Filter = styled.button`
   margin-right: 0.5em;
   outline: none;
   border: 0px solid #ddd;
-  border: 0px solid #ddd;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   cursor: pointer;
   height: 40px;
   width: 40px;
@@ -551,6 +557,7 @@ export const Filter = styled.button`
   border-radius: 12px;
   margin-top: 4px;
   cursor: pointer;
+  transition: 0.2s ease-in-out;
   &.single {
     padding: 0 0.5em;
     margin-top: 0;
@@ -575,7 +582,11 @@ export const Filter = styled.button`
     margin-left: auto;
   }
   &:hover {
-    color: ${(props) => props.theme.bgPrimary};
+    color: ${(props) => props.theme.theme};
+    svg{
+      transition: 0.2s ease-in-out;
+      transform:scale(1.1)
+    }
   }
   &.open {
     color: green;
@@ -600,9 +611,9 @@ export const Filters = styled.div`
   }
   && {
     .show-filter & {
-      margin: 0px 0px 0px 30px;
+      margin: 7px 0px 0px 30px;
       display: table;
-      border-right: 1px solid lightgrey;
+      border-right: 0px solid lightgrey;
       padding: 0px 10px 0 0;
       border-radius: 0;
       width: 250px;
@@ -652,12 +663,12 @@ export const NoData = styled.div`
   align-items: center;
   height: 100px;
   flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   &.small {
     height: auto;
   }
   &.white-list {
     margin: 0em 2em 0px;
-    background: #f8f8f8;
     border-radius: 10px;
   }
   @media screen and (max-width: 768px) {
@@ -668,7 +679,6 @@ export const NoData = styled.div`
     }
   }
   &.white {
-    background: #f8f8f8;
     border-radius: 10px;
     padding: 50px;
     display: flex;
@@ -684,7 +694,6 @@ export const NoData = styled.div`
   button {
     padding: 10px;
     font-size: 12px;
-    border: 1px solid #a5a5a5;
   }
   button svg {
     font-size: 15px;
@@ -741,7 +750,8 @@ export const More = styled.div`
     width: auto;
     border-radius: 10px;
     padding: 0 10px;
-    border: 1px solid rgb(221, 221, 221);
+    /* border: 1px solid rgb(221, 221, 221); */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
     font-size: 12px;
     svg {
       margin-right: 5px;
@@ -755,7 +765,7 @@ export const More = styled.div`
   &.active,
   &:hover {
     color: white;
-    background-color: #77998e;
+    background-color: ${(props) => props.theme.theme};
   }
 `;
 export const Actions = styled.div`
@@ -806,7 +816,7 @@ export const IconBox = styled.span`
   }
 `;
 export const TableContaner = styled.div`
-  margin: 0em 2em 0px;
+  margin: 3px 2em 0px;
   padding: 0em 1em 0em;
   background-color: white;
   border-radius: 10px;
@@ -814,6 +824,8 @@ export const TableContaner = styled.div`
   overflow: auto;
   width: -webkit-fill-available;
   background: white;
+  /* border: 1px solid rgb(221, 221, 221); */
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   && {
     .show-filter & {
       margin: 0em 2em 0 10px;
@@ -884,7 +896,8 @@ export const ThView = styled.th`
 `;
 
 export const TrView = styled.tr`
-  border-top: 1px solid #ccc;
+  border-top: 1px solid rgb(241 241 241);
+
   /* &:hover {
     background-color: #eaeaea;
     border-radius: 12px;
@@ -975,8 +988,10 @@ export const PageNumber = styled.button`
   cursor: pointer;
   border-radius: 10px;
   min-width: 40px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   &.true {
-    background-color: #ccc;
+    background-color: ${(props) => props.theme.theme};
+    color: ${(props) => props.theme.themeForeground};
     font-weight: normal;
   }
 `;

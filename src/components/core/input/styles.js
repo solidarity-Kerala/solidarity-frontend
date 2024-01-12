@@ -88,7 +88,7 @@ export const FileContainer = styled.div`
   border: 0px solid Black;
   margin: 0 0px 0px 0;
   font-weight: 700;
-  box-shadow: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   -webkit-transition: all 0.2s ease-out 0s;
   transition: all 0.2s ease-out 0s;
   color: ${(props) => props.theme.secForeground};
@@ -194,7 +194,7 @@ export const Input = styled.input`
   margin: 0 0px 0px 0;
   padding-left: 1em;
   font-weight: 700;
-  box-shadow: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.2s ease-out 0s;
   color: ${(props) => props.theme.secForeground};
   background: ${(props) => props.theme.secBackground};
@@ -213,7 +213,7 @@ export const DatetimeInput = styled(DatePicker)`
   height: 40px;
   padding-left: 1em;
   font-weight: 700;
-  box-shadow: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.2s ease-out 0s;
   color: ${(props) => props.theme.secForeground};
   background: ${(props) => props.theme.secBackground};
@@ -241,7 +241,7 @@ export const DatetimeInputDirectOrder = styled(DatePicker)`
   height: 40px;
   padding-left: 1em;
   font-weight: 700;
-  box-shadow: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.2s ease-out 0s;
   color: ${(props) => props.theme.secForeground};
   background: ${(props) => props.theme.secBackground};
@@ -251,24 +251,23 @@ export const DatetimeInputDirectOrder = styled(DatePicker)`
   }
 `;
 export const Button = styled.button`
-  background: ${(props) => props.theme.backgroundInvert};
   border-radius: 10px;
+  background: white;
   color: ${(props) => props.theme.foregroundInvert};
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.5s ease;
   margin-top: 10px;
   max-width: 400px;
   padding: 10px 20px;
   min-width: 155px;
   border-color: ${(props) => props.theme.border};
-  border-style: solid;
   cursor: pointer;
-  border-width: ${(props) => props.theme.borderThinkness};
+  border-width: 0;
   &.close {
     background: transparent;
     color: gray;
     margin-right: 1em;
     min-width: 120px;
-    border: 1px solid;
   }
   &:disabled {
     background-color: ${(props) => props.theme.disabledBackground};
@@ -287,7 +286,7 @@ export const TextArea = styled.textarea`
   margin: 0 0px 0px 0;
   padding-left: 1em;
   font-weight: 700;
-  box-shadow: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.2s ease-out 0s;
   padding: 13px 10px;
   color: ${(props) => props.theme.secForeground};

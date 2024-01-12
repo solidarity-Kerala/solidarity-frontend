@@ -31,7 +31,6 @@ const AutoForm = ({ header, api, formType = "post", formMode, formInput: tempFor
         if (item.defaultArray) {
           formVal[item.name + "Array"] = item.defaultArray;
         }
-        console.log("select", item.name, formVal[item.name]);
       } else if (item.type === "date") {
         formVal[item.name] = item.default === "empty" ? "" : moment(item.default).isValid() ? moment(item.default).toISOString() : date.toISOString();
       } else if (item.type === "multiple") {

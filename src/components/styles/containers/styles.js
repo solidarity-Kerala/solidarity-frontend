@@ -116,7 +116,7 @@ export const RowContainer = styled.div`
   flex-direction: column;
   flex: 1 1 100%;
   margin-bottom: auto;
-  background-color: ${(props) => props.theme.pageBackground};
+  /* background-color: ${(props) => props.theme.pageBackground}; */
   &.quarter {
     width: 300px;
     flex: 1 1 300px;

@@ -17,8 +17,9 @@ export const TabHeader = styled.div`
   align-items: flex-end;
   justify-content: flex-start;
   overflow: auto;
-  margin: 0px 30px 0;
+  margin: 0px 28px;
   gap: 5px;
+  padding: 3px 2px;
 `;
 
 export const Tab = styled.div`
@@ -49,6 +50,7 @@ export const TabLink = styled.div`
   flex: inherit;
   min-width: 60px;
   border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   &:first-child {
     border-radius: 10px;
   }
@@ -57,9 +59,9 @@ export const TabLink = styled.div`
   }
   &.active {
     background-color: ${(props) => props.theme.pageForeground};
-    color:black;
+    color: ${(props) => props.theme.theme};
     box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
-    font-weight: 600;
+    font-weight: bold;
     font-size: 16px;
     z-index: 1001;
     height: 35px;

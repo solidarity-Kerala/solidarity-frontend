@@ -397,7 +397,7 @@ const CrudForm = (props) => {
     <Overlay key={props.referenceId} className={props.css ?? ""}>
       <Page className={`${props.css ?? ""} ${props.formMode ?? "single"}`}>
         <Header className="form">
-          <span>{props.header ? props.header : "Login"}</span>
+          <span dangerouslySetInnerHTML={{__html:props.header ? props.header : "Login"}}></span>
           {(props.css ?? "") === "" && (
             <CloseButton theme={themeColors} onClick={closeModal}>
               <GetIcon icon={"Close"} />
