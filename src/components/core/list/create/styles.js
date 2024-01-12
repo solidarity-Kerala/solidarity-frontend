@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 export const Form = styled.div`
-  border: 1px solid rgb(224, 224, 227);
+  border: 0px solid rgb(224, 224, 227);
   padding: .5em 0px;
   border-left: 10px;
   border-right: 0;
@@ -8,6 +8,7 @@ export const Form = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding:1em 1.5em;
   &.double {
     display: flex;
     grid-template-columns: 1fr 1fr;
@@ -70,7 +71,7 @@ export const Page = styled.div`
   animation: ${zoomAnimation} 1s ease-in-out;
   animation-duration: 0.2s;
   margin: auto;
-  padding: 1em 2em;
+  padding: 0em 0em 0em;
   &.double {
     width: 50%;
   }
@@ -109,12 +110,13 @@ export const Footer = styled.div`
   display: flex;
   justify-content: flex-end;
   justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 0px;
+    padding: 0.5em 0px 1em;
   @media (max-width: 768px) {
     position: sticky;
     bottom: 0;
     background: white;
     padding-bottom: 10px;
-    border-top: 1px solid rgb(224, 224, 227);
   }
 `;
 export const ErrorMessage = styled.div`

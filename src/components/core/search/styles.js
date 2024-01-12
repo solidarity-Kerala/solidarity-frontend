@@ -17,13 +17,13 @@ export const SearchInput = styled.div`
   input {
     box-sizing: border-box;
     outline: none !important;
-    border: 0px solid Black;
+    border: 0px solid rgb(221, 221, 221);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
     height: 40px;
     margin: 0px 0;
     padding: 13px 10px;
     padding-left: 1em;
     font-weight: 700;
-    box-shadow: none;
     transition: all 0.2s ease-out 0s;
     margin-right: 10px;
     border-radius: 12px;
@@ -67,16 +67,19 @@ export const SearchInput = styled.div`
   }
   &.menu {
     margin-left: 0;
+    border: 0;
     border-bottom: 1px solid rgb(239, 237, 237);
     position: sticky;
-    top: 5px;
+    top: 0px;
     z-index: 1;
     margin-bottom: 0;
+    box-shadow:none !important;
   }
   &.menu input {
     width: 100% !important;
     padding-left: 55px;
     border-radius: 0;
+    box-shadow:none;
   }
   &.menu svg {
     left: 20px;

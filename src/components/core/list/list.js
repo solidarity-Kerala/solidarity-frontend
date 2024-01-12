@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Table, Button, Td, Tr, Count, AddButton, ButtonPanel, Filter, Filters, ToggleContainer, ToggleInput, ToggleSlider, NoData, FilterBox, More, Actions, Title, DataItem, ToolTipContainer, Head, TrBody, TableView, TrView, ThView, TdView, TableContaner, ProfileImage, ArrowPagination, ListContainer, PageNumber, ListContainerData, ListContainerBox } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { RowContainer } from "../../styles/containers/styles";
-import { AddIcon, GetIcon, NextIcon, PreviousIcon } from "../../../icons";
+import { AddIcon, GetIcon} from "../../../icons";
 import { useNavigate } from "react-router-dom";
 import { deleteData, getData, postData, putData } from "../../../backend/api";
 import CrudForm from "./create";
@@ -388,7 +388,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
     if (users?.data?.response) {
       const data = users?.data?.response.find((item) => item._id === updateId);
       if (data) {
-        console.log("data","Udpated")
+        console.log("data", "Udpated");
         setOpenData((prev) => ({ ...prev, data: data }));
         setSubAttributes((prev) => ({ ...prev, data: data }));
       }
@@ -475,8 +475,10 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
   const closeManage = () => {
     setActions([]);
   };
-
-  const TableRowWithActions = ({ attributes, data, slNo }) => {
+  let renderedCount=0;
+  const TableRowWithActions = React.memo(({ attributes, data, slNo }) => {
+    renderedCount+=1;
+    console.log(renderedCount);
     selectRef.current[slNo] = useRef(null);
     const titleValue = (itemTitle.collection?.length > 0 ? (data[itemTitle.collection] ? data[itemTitle.collection][itemTitle.name] : "NIl") : data[itemTitle.name]) ?? shortName;
     const signleRecord = viewMode === "list" || viewMode === "subList" || viewMode === "table" ? false : true;
@@ -538,6 +540,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         {!signleRecord && (
           <>
             <More
+            theme={themeColors}
               onClick={(event) => {
                 event.stopPropagation();
                 setIsOpen(true);
@@ -561,6 +564,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         )}
         {updatePrivilege && (
           <More
+          theme={themeColors}
             onClick={(event) => {
               event.stopPropagation();
               isEditingHandler(data, udpateView, titleValue);
@@ -571,6 +575,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         )}
         {signleRecord && (
           <More
+          theme={themeColors}
             onClick={(event) => {
               event.stopPropagation();
               refreshView(currentIndex);
@@ -586,7 +591,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
             setCurrentAction(data._id);
           }}
         >
-          <More className={currentAction === data._id ? `active` : ``}>
+          <More  theme={themeColors} className={currentAction === data._id ? `active` : ``}>
             <GetIcon icon={"dots"}></GetIcon>
           </More>
           <ToolTip className={currentAction === data._id ? `actions` : `actions hide`}>
@@ -853,7 +858,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         </ListContainerBox>
       </SetTr>
     );
-  };
+  });
   const closeModal = () => {
     setShowSubList(false);
     setIsOpen(false);
@@ -1001,11 +1006,12 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
       }
     });
   }, [formInput, setHasFilter, datefilter]);
+  const tablerender = useMemo(() => (users.data?.response?.length > 0 ? users.data.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />) : null), [users.data?.response, attributes, shortName]);
 
   //end crud functions
   return viewMode === "list" || viewMode === "subList" || viewMode === "table" ? (
     <RowContainer theme={themeColors} className={"data-layout " + viewMode}>
-      <ButtonPanel>
+      <ButtonPanel  theme={themeColors} >
         <FilterBox>
           {hasFilter && (
             <Filter
@@ -1106,7 +1112,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                     <ThView key={"actions"}></ThView>
                   </tr>
                 </thead>
-                <tbody>{users.data?.response?.length > 0 && users.data?.response.map((item, index) => <TableRowWithActions key={`${shortName}-${index}`} slNo={index} attributes={attributes} data={item} />)}</tbody>
+                <tbody>{tablerender}</tbody>
               </TableView>
               {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
               {users.data?.response?.length === 0 && <NoData>No records found for {shortName}.</NoData>}
@@ -1133,7 +1139,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                 setCurrentIndex((prev) => (prev > 9 ? prev - perPage : 0));
               }}
             >
-              <PreviousIcon />
+              <GetIcon icon={'previous'}/>
             </ArrowPagination>
             {`Showing ${currentIndex + 1} - ${currentIndex + perPage > count ? count : currentIndex + perPage} out of ${count} records`}
             <ArrowPagination
@@ -1142,7 +1148,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                 setCurrentIndex((prev) => (prev + perPage > count ? currentIndex : currentIndex + perPage));
               }}
             >
-              <NextIcon />
+              <GetIcon icon={'next'}/>
             </ArrowPagination>
             <ArrowPagination
               className="button"
@@ -1163,9 +1169,9 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
       {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"post"} header={`Add a ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
 
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
-     
+
       {isOpen && <Popup selectedMenuItem={selectedMenuItem} formMode={formMode} closeModal={closeModal} themeColors={themeColors} isEditingHandler={isEditingHandler} updateValue={udpateView} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData} updatePrivilege={updatePrivilege}></Popup>}
-      {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
+      {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? `Update ${shortName}: ` : `Clone ${shortName}: `}  <span style="font-weight:bold">'${updateValues._title}'</span>`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {detailView && <Details formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Details>}
       {showSublist && subAttributes?.item?.attributes?.length > 0 && <SubPage themeColors={themeColors} formMode={formMode} closeModal={closeModal} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} subAttributes={subAttributes}></SubPage>}
       {isPrint && <PopupView customClass={"print"} popupData={<Print orientation={orientation} key={shortName} data={printData} themeColors={themeColors} formMode={formMode} closeModal={() => setIsPrint(false)} setMessage={setMessage} setLoaderBox={setLoaderBox} shortName={shortName} attributes={attributes}></Print>} themeColors={themeColors} closeModal={() => setIsPrint(false)} itemTitle={{ name: "title", type: "text", collection: "" }} openData={{ data: { key: "print_preparation", title: "Print " + shortName } }}></PopupView>}
@@ -1179,6 +1185,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                 <div className="head">Items Per Page</div>
                 {[10, 25, 50, 100, 250].map((num) => (
                   <PageNumber
+                    theme={themeColors}
                     key={`per-${num}`}
                     className={"nomargin " + (perPage === num)}
                     onClick={() => {
@@ -1254,7 +1261,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
       {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
       {users.data?.response?.length === 0 && <NoData>No {shortName} found!</NoData>}
       {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} api={api} formMode={formMode} formType={"post"} header={`Add a ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
-      {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? "Update" : "Clone"} '${updateValues._title}'`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
+      {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? `Update ${shortName}: ` : `Clone ${shortName}: `} <span style="font-weight:bold">'${updateValues._title}' </span>`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
       {isOpen && <Popup data={openData} actions={actions}></Popup>}
       {showLoader && <Loader></Loader>}

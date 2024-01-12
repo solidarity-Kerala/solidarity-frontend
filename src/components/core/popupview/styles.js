@@ -16,6 +16,7 @@ export const CloseButton = styled.button`
   background: ${(props) => props.theme.secBackground};
   border-radius: 50%;
   margin-top: 4px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   cursor: pointer;
   &:hover {
     color: ${(props) => props.theme.bgPrimary};

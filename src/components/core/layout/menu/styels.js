@@ -47,7 +47,7 @@ export const Nav = styled.nav`
   a.main.active,
   a.main:hover {
     background: linear-gradient(102deg, rgb(2, 0, 36) 0%, rgb(232 232 232) 0%, rgb(255, 255, 255) 83%);
-    color: ${(props) => props.theme.secForeground};
+    color: ${(props) => props.theme.theme};
     box-shadow: rgba(0, 0, 0, 0.16) -1px 0px 4px;
     font-weight: bold;
     opacity: 1;
@@ -93,7 +93,7 @@ export const SubMenu = styled.nav`
     display: none;
   }
   a {
-    border-bottom: 1px solid #dfdfdf;
+    border-bottom: 1px solid rgb(241 241 241);
   }
   a:last-child {
     border-bottom: 0;

@@ -8,6 +8,7 @@ export const CloseButton = styled.button`
   outline: none;
   border: 0px solid #ddd;
   border: 0px solid #ddd;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   cursor: pointer;
   height: 30px;
   width: 30px;
@@ -16,6 +17,9 @@ export const CloseButton = styled.button`
   background: ${(props) => props.theme.secBackground};
   border-radius: 50%;
   margin-top: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   &:hover {
     color: ${(props) => props.theme.bgPrimary};
@@ -135,6 +139,7 @@ export const TabContainer = styled.div`
   border-radius: 12px;
   background-color: white;
   margin: 20px 30px 30px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   .head {
     width: 100%;
     background-color: rgb(75, 75, 75);
@@ -148,6 +153,7 @@ export const TabContainer = styled.div`
     display: flex;
     flex-flow: wrap;
     gap: 5px;
+    padding:10px;
     background-color: transparent;
   }
 `;

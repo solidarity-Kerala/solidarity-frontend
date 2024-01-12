@@ -37,7 +37,6 @@ const postData = async (fields, ulr, dispatch, navigate) => {
         try {
           dispatch(clearLogin());
           navigate("/");
-          navigate(0);
           return resolve({ status: response.status, data: [] });
         } catch (error) {
           console.log(error);
@@ -47,7 +46,6 @@ const postData = async (fields, ulr, dispatch, navigate) => {
       resolve({ status: response.status, data: response.data });
     } catch (error) {
       // console.log("error", error);
-      alert("Something went wrong!");
       resolve({
         status: error?.response?.status,
         customMessage: error?.response?.data?.customMessage ?? "Something went wrong!",

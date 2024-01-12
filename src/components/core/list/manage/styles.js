@@ -128,21 +128,26 @@ export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.4em 30px;
-  font-weight: 500;
+  padding: 1em 30px 1em;
+  font-weight: bold;
   font-size: 1em;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 0px;
+  > span{
+   font-size: 18px;
+  }
   && {
     .filter & {
-      padding:5px 10px;
+      padding: 5px 10px;
     }
   }
   &.form {
-    padding: 0.5em 0.5em;
+    /* padding: 0.5em 0.5em; */
+
   }
   &.small {
     padding: 5px;
     padding: 5px;
-    border-bottom: 1px solid rgb(243, 243, 243);
+    /* border-bottom: 1px solid rgb(243, 243, 243); */
     margin-bottom: 10px;
   }
   &.small button {

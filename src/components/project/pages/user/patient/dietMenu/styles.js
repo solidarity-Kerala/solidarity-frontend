@@ -5,7 +5,6 @@ export const TabContainer = styled.div`
   flex-direction: row;
   overflow: auto;
   width: 100%;
-  background: rgb(234, 234, 234);
   z-index: 1;
   min-height: 64px;
   position: sticky;
@@ -23,8 +22,8 @@ export const TabButton = styled.button`
   cursor: pointer;
   border-bottom: 1px solid ${({ active }) => (active ? "#EB6B55" : "rgb(204, 204, 204)")};
   color: ${({ active }) => (active ? "#EB6B55" : "black")};
-  &.noplan{
-    opacity:.5;
+  &.noplan {
+    opacity: 0.5;
     cursor: inherit;
   }
 `;
@@ -203,7 +202,6 @@ export const Details = styled.article`
   padding: 10px;
   font-size: 12px;
   &.head {
-    background: rgb(248, 248, 248);
     color: black;
     font-weight: 600;
     padding: 10px;
@@ -691,9 +689,9 @@ export const ReplacableItemsList = styled.div`
 export const UserDetails = styled.div`
   margin-bottom: 10px;
   border-radius: 10px;
-  background: white;
   overflow: hidden;
   display: grid;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   &.double {
     display: grid;
     grid-template-columns: 1fr repeat(auto-fill, minmax(50%, 1fr));

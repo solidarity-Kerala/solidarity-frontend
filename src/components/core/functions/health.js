@@ -7,7 +7,6 @@ const defaultValues = {
 
 // Define the updateHealthDetails function
 export const updateHealthDetails = (data = {}) => {
-  console.log({data})
   try {
     const {
       gender = "Male",
@@ -80,16 +79,19 @@ export const updateHealthDetails = (data = {}) => {
     const percentageOfProtein = (calories * 0.2) / 4; // 20% of total calories, assuming 4 calories per gram of protein
 
     // Update the data object with the calculated values
-    data.bmi = isNaN(bmi) ? 0 : bmi;
-    data.bmr = isNaN(bmr) ? 0 : bmr;
-    data.ibw = isNaN(ibw) ? 0 : ibw;
-    data.calories = isNaN(calories) ? 0 : calories;
-    data.percentageOfCarbs = isNaN(percentageOfCarbs) ? 0 : percentageOfCarbs;
-    data.percentageOfFat = isNaN(percentageOfFat) ? 0 : percentageOfFat;
-    data.dailyCalorie = isNaN(defaultValues?.formaintaining * calories) ? 0 : (defaultValues?.formaintaining * calories) / 100
+    data.bmi = isNaN(bmi) ? 0 : parseFloat(bmi.toFixed(2));
+    data.bmr = isNaN(bmr) ? 0 : parseFloat(bmr.toFixed(2));
+    data.ibw = isNaN(ibw) ? 0 : parseFloat(ibw.toFixed(2));
+    data.calories = isNaN(calories) ? 0 : parseFloat(calories.toFixed(2));
+    data.percentageOfCarbs = isNaN(percentageOfCarbs) ? 0 : parseFloat(percentageOfCarbs.toFixed(2));
+    data.percentageOfFat = isNaN(percentageOfFat) ? 0 : parseFloat(percentageOfFat.toFixed(2));
+    data.dailyCalorie = isNaN(defaultValues?.formaintaining * calories) 
+        ? 0 
+        : parseFloat(((defaultValues?.formaintaining * calories) / 100).toFixed(2));
     data.percentageOfProtein = isNaN(percentageOfProtein)
-      ? 0
-      : percentageOfProtein;
+        ? 0
+        : parseFloat(percentageOfProtein.toFixed(2));
+    
   } catch (error) {
     console.log(error);
   }

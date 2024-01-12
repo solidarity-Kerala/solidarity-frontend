@@ -39,8 +39,8 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       {
         userId,
         details: true,
-        startDate: currentDate.clone().startOf("week").toDate().toISOString(),
-        endDate: currentDate.clone().endOf("week").toDate().toISOString(),
+        startDate: currentDate.clone().startOf("week").hour(15).toDate().toISOString(),
+        endDate: currentDate.clone().endOf("week").hour(15).toDate().toISOString(),
       },
       "patient-diet/food-schedule"
     )
@@ -107,7 +107,6 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         { value: "Friday", id: 5 },
         { value: "Saturday", id: 6 },
       ];
-      console.log(items);
       const filteredDays = days.filter((day) => items.includes(day.id.toString()));
       return filteredDays?.map((item, index) => (element === "span" ? <span key={index + element}>{item["value"]}</span> : <div key={index + element}>{item["value"]}</div>));
     } else {
@@ -130,31 +129,42 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     }
   };
 
-  function calculateExpiryDate(startDate, totalDays, excludedDays, skippedDays, isDate = false) {
-    // Adjust total days considering skipped days and excluded days
-    const eligibleDays = totalDays;
-
-    let currentDate = moment(startDate);
+  function calculateExpiryDate(startDate, totalDays, eligibleDayList, skippedDays, isDate = false) {
+    let currentDate = moment(startDate).hours(15);
     let eligibleCount = 0;
 
-    // Iterate through each day and find the eligible expiry date
-    while (eligibleCount < eligibleDays) {
-      // Check if the current day is not an excluded day or a skipped day
-      if (excludedDays.indexOf(currentDate.day()) === -1 && skippedDays.indexOf(currentDate.day()) === -1) {
+    // Iterate through each day to find the eligible expiry date
+    while (eligibleCount < totalDays) {
+      const dayNumber = currentDate.day().toString();
+
+      // Check if the day is eligible
+      const isEligibleDay = eligibleDayList.indexOf(dayNumber) !== -1;
+
+      // Check if the day is skipped
+      const isSkipped = skippedDays.some((skip) => moment(skip.skippedDate).format("YYYY-MM-DD") === currentDate.format("YYYY-MM-DD"));
+
+      // Increment count only if it's an eligible day and not skipped
+      if (isEligibleDay && !isSkipped) {
         eligibleCount++;
       }
+
       // Move to the next day
-      currentDate.add(1, "day");
+      if (eligibleCount !== totalDays) {
+        currentDate.add(1, "day");
+      }
     }
+
+    // Return the expiry date
     if (isDate) {
       return currentDate.isBefore(moment());
     } else {
       return dateFormat(currentDate.toDate());
     }
   }
+
   const getWeekDays = () => {
     const startOfWeek = moment(currentDate).startOf("week");
-    return Array.from({ length: 7 }, (_, i) => moment(startOfWeek).add(i, "days"));
+    return Array.from({ length: 7 }, (_, i) => moment(startOfWeek).add(i, "days").add(10, "hours"));
   };
   function addSpaceBeforeCaps(str) {
     str = str.replace(/([a-z])([A-Z])/g, "$1 $2");
@@ -1504,6 +1514,12 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       closeEdit();
     });
   };
+  function getNextDate() {
+    // Check if current time is before 2 PM
+    const isBefore2PM = moment().isBefore(moment().hours(17).minute(0));
+    // If it's before 2 PM, return tomorrow's date; otherwise, return the day after tomorrow's date
+    return isBefore2PM ? moment().add(1, "days").toDate() : moment().add(2, "days").toDate();
+  }
   const pauseStartDiet = () => {
     pause
       ? setParameters([
@@ -1511,7 +1527,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             type: "date",
             placeholder: "When do you want to restart?",
             name: "restartDate",
-            minDate1: moment().add(1, "days").toDate(),
+            minDate: getNextDate(),
             showItem: "",
             validation: "",
             tag: true,
@@ -1541,10 +1557,10 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             type: "date",
             placeholder: "Pause Starts From?",
             name: "pauseDate",
-            minDate: moment().add(1, "days").toDate(),
+            minDate: getNextDate(),
             showItem: "",
             validation: "",
-            default: "",
+            default: "empty",
             tag: true,
             label: "Pause Starts From?",
             required: false,
@@ -1554,23 +1570,22 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
           },
           {
             type: "checkbox",
-            placeholder: "Do you want to add restart date?",
+            placeholder: "Do you want to add days to restart?",
             name: "reschedule",
             showItem: "",
             validation: "",
             default: "",
             tag: true,
-            label: "Do you want to add restart date?",
+            label: "Do you want to add days to restart?",
             required: false,
             view: true,
             add: true,
             update: true,
           },
           {
-            type: "date",
-            placeholder: "Restart Date",
-            name: "restartDate",
-            minDate: moment().add(1, "days").toDate(),
+            type: "number",
+            placeholder: "Restart in (Days) ",
+            name: "restartDays",
             condition: {
               item: "reschedule",
               if: true,
@@ -1581,7 +1596,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             validation: "",
             default: "",
             tag: true,
-            label: "Restart Date",
+            label: "Restart in (Days) ",
             required: false,
             view: true,
             add: true,
@@ -1623,7 +1638,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     const menuDataTemp = { ...menuData };
     // Find the day based on the date
     let day = menuDataTemp.result.find((item) => item._id === date.format("YYYY-MM-DD"));
-    console.log(day.menu[categoryIndex].recipes[recepeIndex], data);
+    // console.log(day.menu[categoryIndex].recipes[recepeIndex], data);
     const dataTemp = day.menu[categoryIndex].recipes[recepeIndex];
     day.menu[categoryIndex].recipes[recepeIndex] = { ...dataTemp }; // Fixed splice syntax
     // Update the menuData
@@ -1869,8 +1884,8 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                     return getWeekDays().map((day, index) => {
                       const dateName = getRelativeDay(day);
                       const formattedDay = day.format("YYYY-MM-DD");
-
-                      const isBetween = moment(day).startOf("day").isBetween(startDate, endDate, null, "[]") || moment(day).isSame(startDate, "day") || moment(day).isSame(endDate, "day");
+                      const isSkipped = menuData.user.skippedDays.some((skip) => moment(skip.skippedDate).format("YYYY-MM-DD") === day.format("YYYY-MM-DD"));
+                      const isBetween = !isSkipped & moment(day).startOf("day").isBetween(startDate, endDate, null, "[]") || moment(day).isSame(startDate, "day") || moment(day).isSame(endDate, "day");
 
                       return (
                         <TabButton
@@ -1913,6 +1928,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               {menuData &&
                 getWeekDays().map((date, index) => {
                   // const date = moment(day._id);
+
                   const day = menuData.result.find((item) => item._id === date.format("YYYY-MM-DD"));
                   const formattedDay = date.format("YYYY-MM-DD");
                   const calories = day?.menu?.reduce((sumMenu, menu) => {
@@ -1938,8 +1954,9 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                                 proceed: "Skip",
                                 onProceed: async () => {
                                   try {
-                                    const response = await postData({ formattedDay }, "patient-diet/skip-this-day");
+                                    const response = await postData({ dateToSkip: date.toISOString(), userId }, "patient-diet/skip-this-day");
                                     if (response.status === 200) {
+                                      setCurrentDate(moment());
                                     }
                                   } catch (error) {
                                     // Handle any errors that occur during the deletion process
@@ -2230,7 +2247,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       </Details>
                       <Details>
                         <div>End Date</div>
-                        <div>{calculateExpiryDate(menuData.user.diet.startDate, menuData.user.diet.numberofDays, menuData.user.diet.eligibleDays, [])}</div>
+                        <div>{calculateExpiryDate(menuData.user.diet.startDate, menuData.user.diet.numberofDays, menuData.user.diet.eligibleDays, menuData.user.skippedDays)}</div>
                       </Details>
                     </>
                   ) : (
