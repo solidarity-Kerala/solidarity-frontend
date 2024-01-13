@@ -120,7 +120,7 @@ export const Page = styled.div`
       width: 100%;
       min-width: 250px;
       max-width: 100%;
-      padding: 10px;
+      padding: 0px;
     }
   }
 `;

@@ -160,6 +160,11 @@ export const RowContainer = styled.div`
     padding: 0px 30px;
     max-height: calc(100vh - 100px);
     overflow: auto;
+    @media screen and (max-width: 768px) {
+      max-width: calc(100%);
+    width: calc(100%);
+    flex: 1 1 calc(100%);
+    }
   }
   &.menu {
     max-width: calc(100% - 450px);

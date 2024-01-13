@@ -252,7 +252,7 @@ export const DatetimeInputDirectOrder = styled(DatePicker)`
 `;
 export const Button = styled.button`
   border-radius: 10px;
-  background: white;
+  background: ${(props) => props.theme.theme};;
   color: ${(props) => props.theme.foregroundInvert};
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.5s ease;

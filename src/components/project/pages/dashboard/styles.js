@@ -17,7 +17,7 @@ export const DashboardSection = styled.div`
 
 export const Tile = styled.div`
   background-color: rgb(255, 255, 255);
-  border: 1px solid rgb(221, 221, 221);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   padding: 20px;
   display: flex;
   flex-direction: row;
@@ -34,13 +34,13 @@ export const TitleBox = styled.div`
   flex-direction: column;
 `;
 export const Title = styled.span`
-  font-size: 16px;
+  font-size: 14px;
   color: gray;
   white-space: nowrap;
 `;
 
 export const Count = styled.div`
-  font-size: 30px;
+  font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
 `;

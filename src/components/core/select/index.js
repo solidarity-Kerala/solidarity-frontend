@@ -299,7 +299,7 @@ function CustomSelect(props) {
         )}
       </ul>
 
-      {props.error?.length > 0 && <ErrorMessage dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
+      {props.error?.length > 0 && <ErrorMessage  className="margin" dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
     </SelectBox>
   );
 }
