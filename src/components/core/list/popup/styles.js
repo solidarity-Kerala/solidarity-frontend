@@ -140,6 +140,9 @@ export const TabContainer = styled.div`
   background-color: white;
   margin: 20px 30px 30px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+  @media (max-width: 768px) {
+    margin: 15px 15px 30px;
+  }
   .head {
     width: 100%;
     background-color: rgb(75, 75, 75);
@@ -153,7 +156,7 @@ export const TabContainer = styled.div`
     display: flex;
     flex-flow: wrap;
     gap: 5px;
-    padding:10px;
+    padding: 10px;
     background-color: transparent;
   }
 `;

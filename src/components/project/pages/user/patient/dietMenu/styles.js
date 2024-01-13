@@ -11,6 +11,14 @@ export const TabContainer = styled.div`
   top: -10px;
   justify-content: space-around;
   align-items: center;
+  background-color: ${(props) => props.theme.pageBackground};
+  &.margin{
+    padding: 0 5px;
+    width:calc(100% - 5px);
+  }  @media (max-width: 768px) {
+      overflow: auto;
+    display: inline-flex;
+    justify-content: flex-start;}
 `;
 
 export const TabButton = styled.button`
@@ -23,7 +31,7 @@ export const TabButton = styled.button`
   border-bottom: 1px solid ${({ active }) => (active ? "#EB6B55" : "rgb(204, 204, 204)")};
   color: ${({ active }) => (active ? "#EB6B55" : "black")};
   &.noplan {
-    opacity: 0.5;
+    opacity: 0.2;
     cursor: inherit;
   }
 `;
@@ -437,6 +445,7 @@ export const Recepes = styled.div`
 `;
 export const Recepe = styled.div`
   padding: 0px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   display: flex;
   flex-direction: column;
   margin: 0px;

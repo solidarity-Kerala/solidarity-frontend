@@ -204,6 +204,9 @@ export const Tr = styled.div`
     margin: 0;
     margin: 20px 30px 30px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px !important;
+    @media (max-width: 768px) {
+      margin: 10px 15px 30px;
+    }
   }
   &.single:hover {
     /* background-color: initial; */
@@ -394,6 +397,7 @@ export const Count = styled.div`
 `;
 export const ArrowButton = styled.button`
   border: 0;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   outline: none;
   cursor: pointer;
   font-weight: bold;
@@ -412,7 +416,7 @@ export const ArrowButton = styled.button`
   width: 50px;
   border-radius: 10px;
   margin: 4px 0px;
-  background-color: rgb(248, 248, 248);
+  background-color: ${(props) => props.theme.pageBackground};
   &:hover {
     color: ${(props) => props.theme.bgPrimary};
   }
@@ -480,12 +484,13 @@ export const AddButton = styled.button`
   align-items: center;
   cursor: pointer;
   &.skip {
-    border: 1px solid #8b8989;
+    border: 0px solid #8b8989;
     padding: 5px 20px;
     height: 35px;
     justify-content: center;
     align-items: center;
     display: flex;
+    background-color:${(props) => props.theme.pageBackground};
   }
   &.skip svg {
     margin: 0px;
@@ -674,7 +679,6 @@ export const NoData = styled.div`
   @media screen and (max-width: 768px) {
     &.white-list {
       margin: 0em 1em 0px;
-      background: #f8f8f8;
       border-radius: 10px;
     }
   }

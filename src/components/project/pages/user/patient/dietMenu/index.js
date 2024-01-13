@@ -880,6 +880,204 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         add: false,
         update: true,
       },
+      {
+        type: "title",
+        title: "Tax & Currency",
+        name: "menuSettings",
+        add: true,
+        update: true,
+      },
+
+      {
+        type: "number",
+        placeholder: "Tax Rate %",
+        name: "tax",
+        showItem: "",
+        onChange: onChange,
+        validation: "",
+        default: "18",
+        tag: true,
+        label: "Tax Rate %",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "select",
+        placeholder: "Currency",
+        listView: true,
+        name: "currency",
+        validation: "",
+        default: "BD",
+        label: "Currency",
+        required: true,
+        view: true,
+        customClass: "list",
+        add: true,
+        update: true,
+        apiType: "JSON",
+        search: false,
+        selectApi: [{ value: "Bahraini Dinar", id: "BD" }],
+      },
+      {
+        type: "title",
+        title: "View & Confirm Final Price",
+        name: "menuSettings",
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Number of Days",
+        name: "daySelected",
+        showItem: "",
+        validation: "",
+        disabled: true,
+        customClass: "small",
+        default: "",
+        tag: true,
+        label: "Number of Days",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Per Day Cost",
+        name: "pricePerDay",
+        disabled: true,
+        showItem: "",
+        validation: "",
+        customClass: "small",
+        default: "",
+        tag: true,
+        label: "Per Day Cost",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Price",
+        name: "price",
+        showItem: "",
+        customClass: "small",
+        validation: "",
+        disabled: true,
+        default: "",
+        tag: true,
+        label: "Price",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Discount %",
+        name: "discount",
+        showItem: "",
+        validation: "",
+        disabled: true,
+        customClass: "small",
+        default: "",
+        tag: true,
+        label: "Discount %",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Discounted",
+        name: "discountOnPrice",
+        showItem: "",
+        customClass: "small",
+        validation: "",
+        disabled: true,
+        default: "",
+        tag: true,
+        label: "Discount Amount",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "After Discount",
+        name: "discountedPrice",
+        showItem: "",
+        customClass: "small",
+        validation: "",
+        disabled: true,
+        default: "",
+        tag: true,
+        label: "After Discount",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Tax Rate %",
+        name: "tax",
+        showItem: "",
+        customClass: "small",
+        disabled: true,
+        validation: "",
+        default: "18",
+        tag: true,
+        label: "Tax Rate %",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Tax Amount",
+        name: "taxPrice",
+        showItem: "",
+        validation: "",
+        customClass: "small",
+        disabled: true,
+        default: "",
+        tag: true,
+        label: "Tax Price",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "number",
+        placeholder: "Total Price",
+        name: "total",
+        customClass: "small",
+        disabled: true,
+        showItem: "",
+        validation: "",
+        default: "",
+        tag: true,
+        label: "Total Price",
+        required: false,
+        view: true,
+        add: true,
+        update: true,
+      },
+      {
+        type: "info",
+        content: "Please note: When adding a diet, it will directly create an invoice against the subscription.",
+        name: "menuSettings",
+        add: true,
+        update: true,
+      },
     ]);
     setIsOpen({
       type: "editDiet",
@@ -1864,7 +2062,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         <RowContainer className="menu-schedule">
           {menuData?.user.diet ? (
             <>
-              <TabContainer>
+              <TabContainer className="margin" theme={themeColors}>
                 <SwitchButton className="custom" enableBg={"rgb(239 239 239)"} enableColor={"black"} active={expandAll} onClick={() => setExpandAll((prev) => !prev)}>
                   <GetIcon icon={"open-book"} />
                 </SwitchButton>
@@ -1872,6 +2070,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             <span>{expandAll ? "Collapse All" : "Expand All"}</span> <GetIcon icon={"open-book"} />
           </SwitchButton> */}
                 <ArrowButton
+                  theme={themeColors}
                   className="normal"
                   onClick={() => {
                     ChangeDate(-1);
@@ -1885,12 +2084,12 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       const dateName = getRelativeDay(day);
                       const formattedDay = day.format("YYYY-MM-DD");
                       const isSkipped = menuData.user.skippedDays.some((skip) => moment(skip.skippedDate).format("YYYY-MM-DD") === day.format("YYYY-MM-DD"));
-                      const isBetween = !isSkipped & moment(day).startOf("day").isBetween(startDate, endDate, null, "[]") || moment(day).isSame(startDate, "day") || moment(day).isSame(endDate, "day");
+                      const isBetween =  moment(day).startOf("day").isBetween(startDate, endDate, null, "[]") || moment(day).isSame(startDate, "day") || moment(day).isSame(endDate, "day");
 
                       return (
                         <TabButton
                           key={`${index}-${day}`}
-                          className={isBetween ? "between" : "noplan"}
+                          className={isBetween && !isSkipped ? "between" : "noplan"}
                           active={selectedDayNumber === formattedDay}
                           onClick={() => {
                             const day = menuData.result.find((item) => item._id === formattedDay);
@@ -1912,6 +2111,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                 </TabContainer>
 
                 <ArrowButton
+                  theme={themeColors}
                   className="normal"
                   onClick={() => {
                     ChangeDate(1);
@@ -1947,6 +2147,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                             <span>{calories.toFixed(2)}KCal </span>
                           </MealTimeHead>
                           <AddButton
+                            theme={themeColors}
                             onClick={() => {
                               setMessage({
                                 type: 2,
@@ -1968,7 +2169,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                             }}
                             className="skip"
                           >
-                            Skip Day<GetIcon icon={"next"}></GetIcon>
+                            Skip This Day<GetIcon icon={"close"}></GetIcon>
                           </AddButton>
                         </ColumnContainer>
 
@@ -2111,7 +2312,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
 
         <RowContainer className="user-details">
           {menuData?.user.diet ? (
-            <ActionBox>
+            <ActionBox theme={themeColors}>
               {menuData.user.endDate && moment(menuData.user.endDate).isBefore(moment()) ? (
                 <SwitchButton enableBg={"white"} enableColor={"black"} active={pause} onClick={() => addDiet()}>
                   <GetIcon icon={"reload"} />
@@ -2131,7 +2332,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               )}
             </ActionBox>
           ) : (
-            <ActionBox>
+            <ActionBox theme={themeColors}>
               <SwitchButton enableBg={"white"} enableColor={"black"} active={pause} onClick={() => addDiet()}>
                 <GetIcon icon={"add"} />
                 <span>{"Add Diet"}</span>

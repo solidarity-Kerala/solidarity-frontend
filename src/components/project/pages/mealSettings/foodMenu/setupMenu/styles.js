@@ -549,12 +549,13 @@ export const ActionBox = styled.div`
   column-gap: 10px;
   padding: 0px 0px;
   border: none;
-  border-radius: 4px;
+  border-radius: 0px;
   align-items: center;
   font-size: 14px;
   padding-bottom: 10px;
   position: sticky;
   top: 0;
+  background-color: ${(props) => props.theme.pageBackground};
 `;
 export const SwitchButton = styled.div`
   border: 0;
@@ -575,7 +576,7 @@ export const SwitchButton = styled.div`
   text-wrap: nowrap;
   padding: 0 15px;
   position: relative;
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   &.custom {
     margin: auto;
     margin-right: 10px;

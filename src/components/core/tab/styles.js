@@ -20,6 +20,9 @@ export const TabHeader = styled.div`
   margin: 0px 28px;
   gap: 5px;
   padding: 3px 2px;
+  @media (max-width: 768px) {
+     margin: 0px 15px;
+  }
 `;
 
 export const Tab = styled.div`

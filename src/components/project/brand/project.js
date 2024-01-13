@@ -7,7 +7,7 @@ export const projectSettings = {
     doctor: "6459f25d7f6e9664fbd7486f",
   },
   theme: {
-    theme:"rgb(2 129 54)",
+    theme: "rgb(2 129 54)",
     pageBackground: "white",
     background: "white",
     foreground: "#4f4f4f",

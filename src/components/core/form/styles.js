@@ -14,7 +14,7 @@ export const Form = styled.div`
   &.plain {
     border-radius: 10px;
     display: flex;
-    gap:10px;
+    gap: 10px;
   }
   &.sub {
     flex: 100%;
@@ -178,11 +178,23 @@ export const Footer = styled.div`
   }
 `;
 export const ErrorMessage = styled.div`
-  padding-left: 0;
+  /* padding-left: 0;
   margin: 5px 10px 0px;
   color: #fe7b7b;
   font-size: 12px;
-  width: 100%;
+  width: 100%; */
+  margin: 0;
+  color: rgb(254, 123, 123);
+  font-size: 12px;
+  top: 0;
+  padding: 12px;
+  position: absolute;
+  right: 0;
+  background-color:white;
+  pointer-events: none;
+  &.margin {
+    right: 30px;
+  }
 `;
 export const Description = styled.div`
   flex: 1 1 100%;
