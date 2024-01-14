@@ -55,6 +55,7 @@ export const SearchInput = styled.div`
   }
   &.active input {
     width: 200px;
+    max-width:100%;
     border-radius: 10px;
     color: ${(props) => props.theme.foreground};
     padding-left: 45px;

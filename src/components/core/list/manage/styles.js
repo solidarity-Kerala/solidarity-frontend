@@ -128,7 +128,7 @@ export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1em 30px 1em;
+  padding:  0.5em 30px;
   font-weight: bold;
   font-size: 1em;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 0px;

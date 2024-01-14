@@ -12,13 +12,15 @@ export const TabContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   background-color: ${(props) => props.theme.pageBackground};
-  &.margin{
+  &.margin {
     padding: 0 5px;
-    width:calc(100% - 5px);
-  }  @media (max-width: 768px) {
-      overflow: auto;
+    width: calc(100% - 5px);
+  }
+  @media (max-width: 768px) {
+    overflow: auto;
     display: inline-flex;
-    justify-content: flex-start;}
+    justify-content: flex-start;
+  }
 `;
 
 export const TabButton = styled.button`
@@ -390,7 +392,8 @@ export const MealTimeHead = styled.div`
   margin-bottom: 10px;
   margin-bottom: 0px;
   cursor: pointer;
-  background-color: ${({ active }) => (active ? "#4b4b4b" : "#f8f8f8;")};
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+  background-color: ${({ active }) => (active ? "#4b4b4b" : "white;")};
   color: ${({ active }) => (active ? "white" : "black")};
   transform: rotate(0deg);
   text-align: left;

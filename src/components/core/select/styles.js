@@ -115,7 +115,7 @@ export const SelectBox = styled.div`
     top: 10px;
   }
   &.filter .options {
-    top: 31px;
+    top: 50px;
     position: initial;
     margin: 0;
   }

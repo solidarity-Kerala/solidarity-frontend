@@ -5,8 +5,9 @@ export const TabContainer = styled.div`
   flex-direction: row;
   position: sticky;
   top: 0;
-  background: #eaeaea;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   z-index: 1;
+  border-radius: 10px;
 `;
 export const Seriving = styled.div`
   display: flex;
@@ -17,6 +18,7 @@ export const Seriving = styled.div`
     border-radius: 10px;
     padding: 5px 10px;
     font-size: 12px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   }
   i {
     font-style: normal;
@@ -25,7 +27,7 @@ export const Seriving = styled.div`
 `;
 export const TabButton = styled.button`
   padding: 10px 20px;
-  background-color: white;
+  background-color: transparent;
   font-weight: bold;
   &.true {
     background-color: #ccc;
@@ -33,7 +35,8 @@ export const TabButton = styled.button`
   }
   border: none;
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
   &.nomargin {
     margin: 0;
   }
@@ -61,8 +64,8 @@ export const PageNumber = styled.button`
   }
 `;
 export const Table = styled.table`
-  width: calc(100% - 40px);
-  margin-left: 30px;
+  width: calc(100% - 31px);
+  margin-left: 24px;
   margin-right: 10px;
   border-collapse: collapse;
   tr.head th {
@@ -82,14 +85,16 @@ export const Table = styled.table`
 `;
 
 export const TableHeader = styled.th`
-  padding: 10px;
+  padding: 5px;
   text-align: center;
   border-radius: ${({ active }) => (active ? "0px" : "0")} !important;
   margin-bottom: 5px;
-  background-color: ${({ active }) => (active ? "#f9f9f9" : "rgb(234, 234, 234)")} !important;
-  border-left: 1px solid rgb(204, 204, 204);
-  border-bottom: 1px solid rgb(204, 204, 204);
-  border-top: 1px solid rgb(204, 204, 204);
+  background-color: ${({ active }) => (active ? "#f9f9f9" : "white")} !important;
+  /* border-left: 1px solid rgb(204, 204, 204); */
+  /* border-bottom: 1px solid rgb(204, 204, 204);
+  border-top: 1px solid rgb(204, 204, 204); */
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+  position: pointer;
   &:first-child {
     border-left: 0;
   }
@@ -114,6 +119,10 @@ export const DayHead = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 5px;
+  padding: 9px 5px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+  cursor: pointer;
   .calories {
     font-size: 12px;
     background-color: white;
@@ -121,6 +130,7 @@ export const DayHead = styled.div`
     border-radius: 10px;
     width: auto;
     align-self: center;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   }
   .day {
     font-size: 15px;
@@ -226,7 +236,6 @@ export const FoodButton = styled.button`
 
 export const TabData = styled.div`
   padding: 5px 10px;
-  border: 1px solid #d2d2d2;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -237,6 +246,7 @@ export const TabDataItem = styled.div`
 export const MealItem = styled.div`
   background: white;
   padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   margin-bottom: 5px;
   border-radius: 10px;
   flex-direction: row;
@@ -332,6 +342,7 @@ export const Variant = styled.div`
   display: flex;
   border: 1px solid #ccc;
   position: relative;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   span {
     font-size: 10px;
     text-align: left;
@@ -352,7 +363,7 @@ export const Variant = styled.div`
     font-size: 10px;
     font-weight: bolder;
     text-align: left;
-    margin-top: 5px;
+    margin-top: 0px;
   }
   &.vertical .offer {
     justify-content: left;
@@ -497,6 +508,7 @@ export const WeekSelection = styled.div`
     border: 0;
     outline: none;
     display: flex;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
     -webkit-box-pack: center;
     justify-content: center;
     min-height: 40px;
