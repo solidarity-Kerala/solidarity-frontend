@@ -8,6 +8,7 @@ export const projectSettings = {
   },
   theme: {
     theme: "rgb(2 129 54)",
+    themeLight:"#f7fffa",
     pageBackground: "white",
     background: "white",
     foreground: "#4f4f4f",
