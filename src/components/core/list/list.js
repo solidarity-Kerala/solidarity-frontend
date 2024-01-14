@@ -677,7 +677,13 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
     );
     let sticky = true;
     return viewMode === "table" ? (
-      <TrView style={{ zIndex: users.data?.response?.length - slNo }} key={`${shortName}-${slNo}`}>
+      <TrView onClick={() => {
+        if (!signleRecord) {
+          setIsOpen(true);
+          setOpenData({ actions, attributes, data });
+          setSubAttributes({ actions, attributes, data });
+        }
+      }} style={{ zIndex: users.data?.response?.length - slNo }} key={`${shortName}-${slNo}`}>
         <TdView className={sticky} key={-1}>
           {slNo + 1 + currentIndex}
         </TdView>
@@ -1091,7 +1097,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         <ListContainerData>
           {viewMode === "table" ? (
             <TableContaner>
-              <TableView>
+              <TableView theme={themeColors}>
                 <thead>
                   <tr>
                     <ThView className={headerSticky} key={"slno"}>
@@ -1114,8 +1120,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                 </thead>
                 <tbody>{tablerender}</tbody>
               </TableView>
-              {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
-              {users.data?.response?.length === 0 && <NoData>No records found for {shortName}.</NoData>}
+              {!users.data && !users.data?.response && <NoData className="noshadow">No {shortName} found!</NoData>}
+              {users.data?.response?.length === 0 && <NoData className="noshadow">No records found for {shortName}.</NoData>}
             </TableContaner>
           ) : (
             <>
@@ -1258,8 +1264,8 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         </ButtonPanel>
       )}
       <Table className={users.data?.response?.length === 0 ? "norecord" : "record"}>{users.data?.response?.length > 0 && <TableRowWithActions key={`${shortName}-${0}`} slNo={0} attributes={attributes} data={users.data?.response[0]} />}</Table>
-      {!users.data && !users.data?.response && <NoData>No {shortName} found!</NoData>}
-      {users.data?.response?.length === 0 && <NoData>No {shortName} found!</NoData>}
+      {!users.data && !users.data?.response && <NoData>1No {shortName} found!</NoData>}
+      {users.data?.response?.length === 0 && <NoData>2No {shortName} found!</NoData>}
       {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} api={api} formMode={formMode} formType={"post"} header={`Add a ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
       {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? `Update ${shortName}: ` : `Clone ${shortName}: `} <span style="font-weight:bold">'${updateValues._title}' </span>`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}

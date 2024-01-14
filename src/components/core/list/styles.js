@@ -666,7 +666,7 @@ export const ToggleInput = styled.input`
 `;
 export const NoData = styled.div`
   padding: 10px;
-  border: 1px solid #ddedeb;
+  /* border: 1px solid #ddedeb; */
   justify-content: center;
   display: flex;
   align-items: center;
@@ -675,6 +675,9 @@ export const NoData = styled.div`
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   &.small {
     height: auto;
+  }
+  &.noshadow {
+    box-shadow: none;
   }
   &.white-list {
     margin: 0em 2em 0px;
@@ -852,13 +855,15 @@ export const TableView = styled.table`
   font-family: Arial, sans-serif;
   margin-bottom: auto;
   thead > tr {
-    background-color: white;
+    /* background-color: white; */
   }
   th {
     background-color: ${(props) => props.theme.pageBackground};
   }
   tr:hover {
-    background-color: ${(props) => props.theme.pageBackground};
+    background-color: ${(props) => props.theme.themeLight};
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+    border-radius:12px;
   }
   &.auto {
     width: auto;
@@ -905,7 +910,7 @@ export const ThView = styled.th`
 
 export const TrView = styled.tr`
   border-top: 1px solid rgb(241 241 241);
-
+cursor: pointer;
   /* &:hover {
     background-color: #eaeaea;
     border-radius: 12px;
@@ -933,7 +938,7 @@ export const CoutSelector = styled.td`
 `;
 export const TdView = styled.td`
   text-align: left;
-  background-color: white;
+  /* background-color: white; */
   /* border-right: 1px solid rgb(238 238 238); */
   padding: 8px;
   height: 30px;
@@ -941,7 +946,7 @@ export const TdView = styled.td`
   &.true {
     position: sticky;
     left: 0px;
-    background: white;
+    /* background: white; */
   }
   &.no,
   &.name {

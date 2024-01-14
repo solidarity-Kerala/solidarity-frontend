@@ -192,6 +192,10 @@ export const ErrorMessage = styled.div`
   right: 0;
   background-color:white;
   pointer-events: none;
+      pointer-events: none;
+    white-space: nowrap;
+    max-width: 100%;
+    border-radius: 10px;
   &.margin {
     right: 30px;
   }
