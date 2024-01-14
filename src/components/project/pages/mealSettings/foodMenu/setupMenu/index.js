@@ -787,7 +787,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         update: true,
         apiType: "API",
         search: false,
-        selectApi: `mealtime-category/select-by-menu/${openData.data._id}`,
+        selectApi: `mealtime-category/select-by-menu-id/${openData.data._id}`,
       },
       {
         type: "select",
