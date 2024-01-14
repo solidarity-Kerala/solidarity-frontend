@@ -95,7 +95,7 @@ export const SelectBox = styled.div`
     top: 10px;
   }
   &.filter .options {
-    top: 31px;
+    top: 50px;
   }
   &.open svg.down {
     transition: all 0.2s ease-out 0s;

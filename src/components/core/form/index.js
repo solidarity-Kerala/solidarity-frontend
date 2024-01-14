@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FormInput from "../input";
 import { useTranslation } from "react-i18next";
-import { ButtonContanter, Description, ErrorMessage, Footer, Form, Header, Overlay, Page, Plus } from "./styles";
+import { ButtonContanter, Description, Footer, Form, Header, Overlay, Page, Plus } from "./styles";
 import Captcha from "../captcha";
 import { CloseIcon } from "../../../icons";
 
@@ -495,7 +495,7 @@ const AutoForm = (props) => {
                 );
               })}
             {/* This Error Message Component will show the eroror while the state of validationMessage is updated! */}
-            {submitDisabled && <ErrorMessage>{t("mandatory")}</ErrorMessage>}
+            {/* {submitDisabled && <ErrorMessage>{t("mandatory")}</ErrorMessage>} */}
             {props.useCaptcha === true && <Captcha error={formErrors["captchaError"]} label={t("captcha")} key="1" setCaptchaStatus={setCaptchaStatusHandler}></Captcha>}
             {props.enterSubmit === true && (
               <div style={{ display: "none" }}>

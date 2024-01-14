@@ -533,9 +533,13 @@ export const FilterBox = styled.div`
     position: sticky;
     top: 0;
     padding-bottom: 5px;
-    background: #eaeaea;
+    background: white;
     flex-wrap: wrap;
     column-gap: 5px;
+    margin: -10px;
+    padding: 10px;
+    padding-bottom: 0;
+    margin-bottom: 15px;
   }
   &.gap {
     gap: 10px;
