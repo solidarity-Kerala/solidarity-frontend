@@ -42,10 +42,14 @@ export const ProfileImage = styled.div`
   background: #ececec;
   font-size: 10px;
   margin-right: 10px;
+  transition: all 0.1s ease-in 0s;
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  :hover {
+    /* height: 62px; */
   }
 `;
 export const Th = styled.th`
@@ -490,7 +494,7 @@ export const AddButton = styled.button`
     justify-content: center;
     align-items: center;
     display: flex;
-    background-color:${(props) => props.theme.pageBackground};
+    background-color: ${(props) => props.theme.pageBackground};
   }
   &.skip svg {
     margin: 0px;
@@ -592,9 +596,9 @@ export const Filter = styled.button`
   }
   &:hover {
     color: ${(props) => props.theme.theme};
-    svg{
+    svg {
       transition: 0.2s ease-in-out;
-      transform:scale(1.1)
+      transform: scale(1.1);
     }
   }
   &.open {
@@ -697,6 +701,7 @@ export const NoData = styled.div`
     align-items: center;
     flex: inherit;
     gap: 10px;
+    margin: 5px 0;
   }
   svg {
     margin: auto;
@@ -863,7 +868,7 @@ export const TableView = styled.table`
   tr:hover {
     background-color: ${(props) => props.theme.themeLight};
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
-    border-radius:12px;
+    border-radius: 12px;
   }
   &.auto {
     width: auto;
@@ -910,7 +915,7 @@ export const ThView = styled.th`
 
 export const TrView = styled.tr`
   border-top: 1px solid rgb(241 241 241);
-cursor: pointer;
+  cursor: pointer;
   /* &:hover {
     background-color: #eaeaea;
     border-radius: 12px;

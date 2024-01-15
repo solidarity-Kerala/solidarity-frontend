@@ -8,6 +8,7 @@ export const TabContainer = styled.div`
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   z-index: 1;
   border-radius: 10px;
+      margin: 5px 0;
 `;
 export const Seriving = styled.div`
   display: flex;
@@ -32,6 +33,7 @@ export const TabButton = styled.button`
   &.true {
     background-color: #ccc;
     font-weight: normal;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px inset;
   }
   border: none;
   font-size: 14px;
