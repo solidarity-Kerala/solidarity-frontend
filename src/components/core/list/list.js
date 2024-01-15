@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Table, Button, Td, Tr, Count, AddButton, ButtonPanel, Filter, Filters, ToggleContainer, ToggleInput, ToggleSlider, NoData, FilterBox, More, Actions, Title, DataItem, ToolTipContainer, Head, TrBody, TableView, TrView, ThView, TdView, TableContaner, ProfileImage, ArrowPagination, ListContainer, PageNumber, ListContainerData, ListContainerBox } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { RowContainer } from "../../styles/containers/styles";
-import { AddIcon, GetIcon} from "../../../icons";
+import { AddIcon, GetIcon } from "../../../icons";
 import { useNavigate } from "react-router-dom";
 import { deleteData, getData, postData, putData } from "../../../backend/api";
 import CrudForm from "./create";
@@ -25,6 +25,7 @@ import Details from "./details";
 import PopupView from "../popupview";
 import { TabContainer } from "./popup/styles";
 import { food } from "../../../images";
+import ImagePopup from "./image";
 const SetTd = (props) => {
   if (props.viewMode === "table") {
     return <TdView {...props}></TdView>;
@@ -56,6 +57,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
   }, [userData, api]);
 
   const [showSublist, setShowSubList] = useState(false);
+  const [showImage, setShowImage] = useState(false);
   const [currentApi] = useState(`${api}`);
   const [subAttributes, setSubAttributes] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -475,9 +477,9 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
   const closeManage = () => {
     setActions([]);
   };
-  let renderedCount=0;
+  let renderedCount = 0;
   const TableRowWithActions = React.memo(({ attributes, data, slNo }) => {
-    renderedCount+=1;
+    renderedCount += 1;
     console.log(renderedCount);
     selectRef.current[slNo] = useRef(null);
     const titleValue = (itemTitle.collection?.length > 0 ? (data[itemTitle.collection] ? data[itemTitle.collection][itemTitle.name] : "NIl") : data[itemTitle.name]) ?? shortName;
@@ -540,7 +542,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         {!signleRecord && (
           <>
             <More
-            theme={themeColors}
+              theme={themeColors}
               onClick={(event) => {
                 event.stopPropagation();
                 setIsOpen(true);
@@ -564,7 +566,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         )}
         {updatePrivilege && (
           <More
-          theme={themeColors}
+            theme={themeColors}
             onClick={(event) => {
               event.stopPropagation();
               isEditingHandler(data, udpateView, titleValue);
@@ -575,7 +577,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         )}
         {signleRecord && (
           <More
-          theme={themeColors}
+            theme={themeColors}
             onClick={(event) => {
               event.stopPropagation();
               refreshView(currentIndex);
@@ -591,7 +593,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
             setCurrentAction(data._id);
           }}
         >
-          <More  theme={themeColors} className={currentAction === data._id ? `active` : ``}>
+          <More theme={themeColors} className={currentAction === data._id ? `active` : ``}>
             <GetIcon icon={"dots"}></GetIcon>
           </More>
           <ToolTip className={currentAction === data._id ? `actions` : `actions hide`}>
@@ -677,13 +679,17 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
     );
     let sticky = true;
     return viewMode === "table" ? (
-      <TrView onClick={() => {
-        if (!signleRecord) {
-          setIsOpen(true);
-          setOpenData({ actions, attributes, data });
-          setSubAttributes({ actions, attributes, data });
-        }
-      }} style={{ zIndex: users.data?.response?.length - slNo }} key={`${shortName}-${slNo}`}>
+      <TrView
+        onClick={() => {
+          if (!signleRecord) {
+            setIsOpen(true);
+            setOpenData({ actions, attributes, data });
+            setSubAttributes({ actions, attributes, data });
+          }
+        }}
+        style={{ zIndex: users.data?.response?.length - slNo }}
+        key={`${shortName}-${slNo}`}
+      >
         <TdView className={sticky} key={-1}>
           {slNo + 1 + currentIndex}
         </TdView>
@@ -750,6 +756,11 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
               src={data[profileImage] ? process.env.REACT_APP_CDN + data[profileImage] : food}
               onError={(e) => {
                 e.target.src = food; // Hide the image on error
+              }}
+              onClick={(e) => {
+                //image popup
+                e.stopPropagation();
+                setShowImage({ src: e.target.src.replace("/thumbnail","") });
               }}
               alt="Profile"
             ></img>
@@ -1017,7 +1028,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
   //end crud functions
   return viewMode === "list" || viewMode === "subList" || viewMode === "table" ? (
     <RowContainer theme={themeColors} className={"data-layout " + viewMode}>
-      <ButtonPanel  theme={themeColors} >
+      <ButtonPanel theme={themeColors}>
         <FilterBox>
           {hasFilter && (
             <Filter
@@ -1145,7 +1156,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                 setCurrentIndex((prev) => (prev > 9 ? prev - perPage : 0));
               }}
             >
-              <GetIcon icon={'previous'}/>
+              <GetIcon icon={"previous"} />
             </ArrowPagination>
             {`Showing ${currentIndex + 1} - ${currentIndex + perPage > count ? count : currentIndex + perPage} out of ${count} records`}
             <ArrowPagination
@@ -1154,7 +1165,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
                 setCurrentIndex((prev) => (prev + perPage > count ? currentIndex : currentIndex + perPage));
               }}
             >
-              <GetIcon icon={'next'}/>
+              <GetIcon icon={"next"} />
             </ArrowPagination>
             <ArrowPagination
               className="button"
@@ -1181,6 +1192,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
       {detailView && <Details formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Details>}
       {showSublist && subAttributes?.item?.attributes?.length > 0 && <SubPage themeColors={themeColors} formMode={formMode} closeModal={closeModal} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} subAttributes={subAttributes}></SubPage>}
       {isPrint && <PopupView customClass={"print"} popupData={<Print orientation={orientation} key={shortName} data={printData} themeColors={themeColors} formMode={formMode} closeModal={() => setIsPrint(false)} setMessage={setMessage} setLoaderBox={setLoaderBox} shortName={shortName} attributes={attributes}></Print>} themeColors={themeColors} closeModal={() => setIsPrint(false)} itemTitle={{ name: "title", type: "text", collection: "" }} openData={{ data: { key: "print_preparation", title: "Print " + shortName } }}></PopupView>}
+      {showImage && <ImagePopup onClose={() => setShowImage(null)} src={showImage.src}></ImagePopup>}
       {showLoader && <Loader></Loader>}
       {showPageCount && (
         <PopupView

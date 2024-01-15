@@ -194,6 +194,7 @@ export const RowContainer = styled.div`
     overflow: auto;
     padding: 1em 0 0;
     border-radius: 12px;
+    min-height: 100px;
   }
   &.popup-data.small {
     overflow: auto;

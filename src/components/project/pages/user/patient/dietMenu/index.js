@@ -2302,7 +2302,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             <RowContainer>
               <NoData className="white">
                 <GetIcon icon={"recipe"}></GetIcon> {isLoaded ? "No Diet Schedule Found" : "Loading"}
-                <Button onClick={() => addDiet()}>
+                <Button theme={themeColors} onClick={() => addDiet()}>
                   <GetIcon icon={"add"}></GetIcon>
                 </Button>
               </NoData>
