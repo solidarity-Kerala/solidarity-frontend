@@ -122,6 +122,7 @@ function MultiSelect(props) {
   // }, [props.updateValue, updateValue, fetchData, props.updateOn]);
   useEffect(() => {
     if (props.updateOn) {
+      // console.log("multiselct",props,props.updateOn)
       const isObjectEqual = (obj1, obj2) => {
         const keys1 = Object.keys(obj1 ?? {});
         const keys2 = Object.keys(obj2 ?? {});
@@ -135,18 +136,19 @@ function MultiSelect(props) {
             return false;
           }
         }
-
         return true;
       };
       const equal = isObjectEqual(updateValue, props.updateValue);
+
       if (!equal) {
         setUpdateValue(props.updateValue);
         let values = {};
         props.params?.forEach((item) => {
-          if (!item.value) {
-            item.value = props.formValues?.[item.name] ?? "";
+          if (item.dynamic ?? true) {
+            item.value = props.updateValue[item.name] ?? props.formValues?.[item.name] ?? item.value;
           }
           values[item.name] = item.value;
+          console.log({ values });
         });
         fetchData(props.updateValue, true, props.updateOn, "", values);
       }
@@ -236,7 +238,7 @@ function MultiSelect(props) {
                       // toggleOptions();
                     }}
                   >
-                    {props.displayValue ? option[props.displayValue]??option.value : option.value} <GetIcon icon="Close" />
+                    {props.displayValue ? option[props.displayValue] ?? option.value : option.value} <GetIcon icon="Close" />
                   </li>
                 );
               })}
@@ -253,7 +255,6 @@ function MultiSelect(props) {
                         className={`${selectedIndex > -1}`}
                         key={option.id}
                         onClick={(event) => {
-                          
                           event.stopPropagation();
                           props.onSelect(option, props.id, props.type);
                           // setSelectedValue(option.value);
@@ -292,7 +293,6 @@ function MultiSelect(props) {
                         {props.viewButton && (
                           <Button
                             onClick={(event) => {
-                              
                               props.viewButton?.callback(option);
                               event.stopPropagation();
                             }}

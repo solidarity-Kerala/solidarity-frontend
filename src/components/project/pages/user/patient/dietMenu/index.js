@@ -429,7 +429,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         placeholder: "Select Meal Times",
         name: "mealTimeCategory",
         displayValue: "mealtimeCategoriesName",
-        updateOn: "foodMenu",
+        updateOn: ["foodMenu", "package"],
         onChange: onChange,
         default: existingData.mealTimeCategory ?? "",
         defaultArray: existingData.mealTimeCategoryArray ?? [],
@@ -737,6 +737,21 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
             update: true,
           },
       {
+        type: "hidden",
+        placeholder: "package",
+        name: "package",
+        showItem: "",
+        validation: "",
+        default: existingData.package,
+        defaultArray: existingData.packages ?? null,
+        // tag: true,
+        label: "package",
+        required: false,
+        view: false,
+        add: false,
+        update: false,
+      },
+      {
         type: "select",
         apiType: "API",
         selectApi: "package/food-menu",
@@ -852,9 +867,14 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         type: "multiSelect",
         placeholder: "Select Meal Times",
         name: "mealTimeCategory",
-        params: [{ name: "package", value: existingData.package }],
+        // params: [{ name: "package", value: existingData.package }],
         default: existingData.mealTimeCategory.map((item) => item),
+        defaultArray: existingData.mealTimeCategoryArray ?? [],
         updateOn: "foodMenu",
+        params: [
+          { name: "package", value: existingData.package },
+          { name: "foodMenu", value: existingData.foodMenu },
+        ],
         customClass: "list",
         label: "Select Meal Times",
         required: true,
@@ -2084,7 +2104,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
                       const dateName = getRelativeDay(day);
                       const formattedDay = day.format("YYYY-MM-DD");
                       const isSkipped = menuData.user.skippedDays.some((skip) => moment(skip.skippedDate).format("YYYY-MM-DD") === day.format("YYYY-MM-DD"));
-                      const isBetween =  moment(day).startOf("day").isBetween(startDate, endDate, null, "[]") || moment(day).isSame(startDate, "day") || moment(day).isSame(endDate, "day");
+                      const isBetween = moment(day).startOf("day").isBetween(startDate, endDate, null, "[]") || moment(day).isSame(startDate, "day") || moment(day).isSame(endDate, "day");
 
                       return (
                         <TabButton

@@ -27,7 +27,7 @@ const PopupContainer = styled.div`
   max-height: 90vh;
   display: flex;
   justify-content: center;
-  animation: ${zoomAnimation} .3s ease-in-out;
+  animation: ${zoomAnimation} 0.3s ease-in-out;
 `;
 
 const PopupImage = styled.img`
@@ -35,8 +35,8 @@ const PopupImage = styled.img`
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   max-height: 90vh;
   object-fit: contain;
-  background-color:white;
-  border-radius:12px;
+  background-color: white;
+  border-radius: 12px;
 `;
 
 const ImageContainer = styled.div`
@@ -52,9 +52,13 @@ const ImagePopup = ({ src, alt, onClose }) => {
     >
       <PopupOverlay>
         <PopupContainer>
-          <PopupImage onError={(e) => {
-                e.target.src = food; // Hide the image on error
-              }} src={src} alt={alt} />
+          <PopupImage
+            onError={(e) => {
+              e.target.src = food; // Hide the image on error
+            }}
+            src={src}
+            alt={alt}
+          />
         </PopupContainer>
       </PopupOverlay>
     </ImageContainer>

@@ -75,9 +75,9 @@ const CrudForm = (props) => {
     tempformErrors["captchaError"] = captchaRes.tempformError;
     flags += captchaRes.flag; //?res.flag:0;
 
-      // const agreementRes = agreementValidation(agreement, useCheckbox);
-      // tempformErrors["captchaError"] = agreementRes.tempformError;
-      // flags += agreementRes.flag; //?res.flag:0;
+    // const agreementRes = agreementValidation(agreement, useCheckbox);
+    // tempformErrors["captchaError"] = agreementRes.tempformError;
+    // flags += agreementRes.flag; //?res.flag:0;
 
     setFormErrors(tempformErrors);
     setSubmitDisabled(flags > 0 ? true : false);
@@ -362,7 +362,6 @@ const CrudForm = (props) => {
       // updating the formm values
       setFormValues(udpateValue);
 
-      console.log("udpateValue", udpateValue);
       // Validating the fields
       if (validation(formState, udpateValue, formErrors, captchaStatus, props.useCheckbox, props.useCaptcha)) {
         // Here we can write any state updation
@@ -397,7 +396,7 @@ const CrudForm = (props) => {
     <Overlay key={props.referenceId} className={props.css ?? ""}>
       <Page className={`${props.css ?? ""} ${props.formMode ?? "single"}`}>
         <Header className="form">
-          <span dangerouslySetInnerHTML={{__html:props.header ? props.header : "Login"}}></span>
+          <span dangerouslySetInnerHTML={{ __html: props.header ? props.header : "Login" }}></span>
           {(props.css ?? "") === "" && (
             <CloseButton theme={themeColors} onClick={closeModal}>
               <GetIcon icon={"Close"} />
