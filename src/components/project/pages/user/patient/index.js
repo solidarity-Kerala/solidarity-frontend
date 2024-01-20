@@ -532,6 +532,13 @@ const Patient = (props) => {
       update: true,
     },
     {
+      type: "title",
+      title: "Diet History",
+      name: "bmr",
+      add: true,
+      update: true,
+    },
+    {
       type: "multiSelect",
       apiType: "API",
       selectApi: "aimof-programs/select",
@@ -694,6 +701,58 @@ const Patient = (props) => {
       filter: false,
     },
     {
+      type: "time",
+      placeholder: "Usual WakeUp Time",
+      name: "usualWakeUpTime",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Usual WakeUp Time",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "time",
+      placeholder: "Usual Bed Time",
+      name: "usualBedtime",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Usual Bed Time",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Water Intake(Litre)",
+      name: "waterIntake",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Water Intake(Litre)",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Other Information",
+      name: "otherInformation",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Other Information",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
       type: "checkbox",
       placeholder: "Marital Status",
       name: "maritalStatus",
@@ -789,6 +848,159 @@ const Patient = (props) => {
       update: true,
       apiType: "CSV",
       selectApi: "1st Trimester, 2nd Trimester, 3rd Trimester",
+    },
+    {
+      type: "select",
+      placeholder: "Gestation Type",
+      name: "gestationType",
+      condition: {
+        item: "isPregnant",
+        if: true,
+        then: "enabled",
+        else: "disabled",
+      },
+      validation: "",
+      default: "IN",
+      tag: true,
+      editable: true,
+      label: "Gestation Type",
+      showItem: "",
+      required: false,
+      view: true,
+      filter: false,
+      add: true,
+      update: true,
+      apiType: "CSV",
+      selectApi: "Single Pregnancy, Multiple Pregnancy",
+    },
+    {
+      type: "date",
+      placeholder: "Last Menstrual Date",
+      name: "lastMenstrualDate",
+      condition: {
+        item: "isPregnant",
+        if: true,
+        then: "enabled",
+        else: "disabled",
+      },
+      validation: "",
+      default: "",
+      tag: true,
+      editable: true,
+      label: "Last Menstrual Date",
+      showItem: "",
+      required: false,
+      view: true,
+      filter: false,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Observation",
+      name: "observation",
+      condition: {
+        item: "isPregnant",
+        if: true,
+        then: "enabled",
+        else: "disabled",
+      },
+      validation: "",
+      default: "",
+      tag: true,
+      editable: true,
+      label: "Observation",
+      showItem: "",
+      required: false,
+      view: true,
+      filter: false,
+      add: true,
+      update: true,
+    },
+    {
+      type: "checkbox",
+      placeholder: "Lactation",
+      name: "lactation",
+      condition: {
+        item: "maritalStatus",
+        if: true,
+        then: "enabled",
+        else: "disabled",
+      },
+      validation: "",
+      default: "false",
+      tag: true,
+      label: "Lactation",
+      required: true,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "date",
+      placeholder: "Begining Of Lactation",
+      name: "beginingOfLactation",
+      condition: {
+        item: "lactation",
+        if: true,
+        then: "enabled",
+        else: "disabled",
+      },
+      validation: "",
+      default: "",
+      tag: true,
+      editable: true,
+      label: "Begining Of Lactation",
+      showItem: "",
+      required: false,
+      view: true,
+      filter: false,
+      add: true,
+      update: true,
+    },
+    {
+      type: "number",
+      placeholder: "Duration Of Lactation In Month",
+      name: "durationOfLactationInMonth",
+      condition: {
+        item: "lactation",
+        if: true,
+        then: "enabled",
+        else: "disabled",
+      },
+      validation: "",
+      default: "",
+      tag: true,
+      editable: true,
+      label: "Duration Of Lactation In Month",
+      showItem: "",
+      required: false,
+      view: true,
+      filter: false,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Observation",
+      name: "observation",
+      condition: {
+        item: "lactation",
+        if: true,
+        then: "enabled",
+        else: "disabled",
+      },
+      validation: "",
+      default: "",
+      tag: true,
+      editable: true,
+      label: "Observation",
+      showItem: "",
+      required: false,
+      view: true,
+      filter: false,
+      add: true,
+      update: true,
     },
   ]);
 
@@ -1403,6 +1615,90 @@ const Patient = (props) => {
     },
   ]);
 
+  const [addFile] = useState([
+    {
+      type: "text",
+      placeholder: "Name",
+      name: "name",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Name",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "date",
+      placeholder: "Date",
+      name: "date",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Date",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "textarea",
+      placeholder: "Description",
+      name: "description",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Description",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Files Attached",
+      name: "fileAttachment",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Files Attached",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+  ]);
+
+  const [measurement] = useState([
+    {
+      type: "date",
+      placeholder: "Date",
+      name: "date",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Date",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+    {
+      type: "text",
+      placeholder: "Weight",
+      name: "weight",
+      validation: "",
+      default: "",
+      tag: true,
+      label: "Weight",
+      required: false,
+      view: true,
+      add: true,
+      update: true,
+    },
+  ]);
+
   const [deliveryAddressActions] = useState([
     {
       element: "button",
@@ -1460,11 +1756,11 @@ const Patient = (props) => {
   ]);
   const setDefault = async (data) => {
     props.setLoaderBox(true);
-    console.log("default data : ", {data})
+    console.log("default data : ", { data })
     await axios
       .put(`${process.env.REACT_APP_API}delivery-address/default`, data)
       .then((response) => {
-        console.log("console", {console})
+        console.log("console", { console })
         props.setLoaderBox(false);
         console.log(response);
         if (response.data) {
@@ -1485,68 +1781,68 @@ const Patient = (props) => {
   const [actions] = useState([
     ...((checkprivilege([privileges.doctor]) ? false : true)
       ? [
-          {
-            element: "button",
-            type: "subItem",
-            id: "user/subscriber/web",
-            itemTitle: {
-              name: "username",
-              type: "text",
-              collection: "user",
-            },
-            title: "Medical Record",
-            attributes: medicalRecord,
-            params: {
-              api: `user/subscriber/web`,
-              parentReference: "user",
-              itemTitle: {
-                name: "username",
-                type: "text",
-                collection: "user",
-              },
-              shortName: "Medical Record",
-              addPrivilege: true,
-              delPrivilege: true,
-              updatePrivilege: checkprivilege([privileges.doctor]) ? false : true,
-              //if you want to show edit button for passed previlges then make value for condtion is 'true' or you dont want to give edit option for the pased previlges then 'false'
-              customClass: "medium",
-              formMode: "double",
-            },
+        {
+          element: "button",
+          type: "subItem",
+          id: "user/subscriber/web",
+          itemTitle: {
+            name: "username",
+            type: "text",
+            collection: "user",
           },
-        ]
-      : []),
-    ...((checkprivilege([privileges.doctor]) ? false : true)
-      ? [
-          {
-            element: "button",
-            type: "subList",
-            id: "delivery-address",
+          title: "Medical Record",
+          attributes: medicalRecord,
+          params: {
+            api: `user/subscriber/web`,
             parentReference: "user",
             itemTitle: {
               name: "username",
               type: "text",
               collection: "user",
             },
-            title: "Delivery Address",
-            attributes: deliveryAddress,
-            params: {
-              api: `delivery-address`,
-              parentReference: "user",
-              itemTitle: {
-                name: "username",
-                type: "text",
-                collection: "user",
-              },
-              actions: deliveryAddressActions, invoice,
-              shortName: "Delivery Address",
-              addPrivilege: true,
-              delPrivilege: true,
-              updatePrivilege: true,
-              customClass: "medium",
-              formMode: "double",
-            },
+            shortName: "Medical Record",
+            addPrivilege: true,
+            delPrivilege: true,
+            updatePrivilege: checkprivilege([privileges.doctor]) ? false : true,
+            //if you want to show edit button for passed previlges then make value for condtion is 'true' or you dont want to give edit option for the pased previlges then 'false'
+            customClass: "medium",
+            formMode: "double",
           },
-        ]
+        },
+      ]
+      : []),
+    ...((checkprivilege([privileges.doctor]) ? false : true)
+      ? [
+        {
+          element: "button",
+          type: "subList",
+          id: "delivery-address",
+          parentReference: "user",
+          itemTitle: {
+            name: "username",
+            type: "text",
+            collection: "user",
+          },
+          title: "Delivery Address",
+          attributes: deliveryAddress,
+          params: {
+            api: `delivery-address`,
+            parentReference: "user",
+            itemTitle: {
+              name: "username",
+              type: "text",
+              collection: "user",
+            },
+            actions: deliveryAddressActions, invoice,
+            shortName: "Delivery Address",
+            addPrivilege: true,
+            delPrivilege: true,
+            updatePrivilege: true,
+            customClass: "medium",
+            formMode: "double",
+          },
+        },
+      ]
       : []),
     {
       element: "button",
@@ -1635,6 +1931,52 @@ const Patient = (props) => {
     },
     {
       element: "button",
+      type: "subList",
+      id: "addFile",
+      itemTitle: { name: "name", type: "text", collection: "" },
+      title: "Add File",
+      attributes: addFile,
+      params: {
+        api: `user`,
+        parentReference: "",
+        itemTitle: {
+          name: "name",
+          type: "text",
+          collection: "",
+        },
+        shortName: "Add File",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+        formMode: "double",
+      },
+    },
+    {
+      element: "button",
+      type: "subList",
+      id: "measurement",
+      itemTitle: { name: "weight", type: "text", collection: "" },
+      title: "Measurements",
+      attributes: measurement,
+      params: {
+        api: `user`,
+        parentReference: "",
+        itemTitle: {
+          name: "weight",
+          type: "text",
+          collection: "",
+        },
+        shortName: "Measurements",
+        addPrivilege: true,
+        delPrivilege: true,
+        updatePrivilege: true,
+        customClass: "medium",
+        formMode: "double",
+      },
+    },
+    {
+      element: "button",
       type: "callback",
       callback: (item, data) => {
         // Set the data for the clicked item and open the SetupMenu popup
@@ -1706,7 +2048,7 @@ const Patient = (props) => {
               openData={openItemData}
               setMessage={props.setMessage}
               {...props}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
@@ -1734,7 +2076,7 @@ const Patient = (props) => {
             <AppointmentMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></AppointmentMenu>
           }
           themeColors={themeColors}
@@ -1751,7 +2093,7 @@ const Patient = (props) => {
             <InvoicePDF
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></InvoicePDF>
           }
           themeColors={themeColors}

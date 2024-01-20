@@ -104,6 +104,7 @@ import FixedReplacableRecipe from "../pages/fixedReplacableRecipe/index.js";
 import InvoiceSetting from "../pages/InvoiceSetting/index.js";
 import Invoice from "../pages/packageManagement/invoice.js";
 import Elements from "../pages/settings/elements/index.js";
+import Measurement from "../pages/measurement/index.js";
 
 const RenderPage = (page, key, user, privileges) => {
   switch (page) {
@@ -306,6 +307,8 @@ const RenderPage = (page, key, user, privileges) => {
       return <Invoice key={key} {...privileges} />;
     case "elements":
       return <Elements key={key} {...privileges} />;
+    case "measurement":
+      return <Measurement key={key} {...privileges} />;
     default:
       return <Page404 key={key}></Page404>;
   }
