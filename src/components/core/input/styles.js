@@ -252,7 +252,7 @@ export const DatetimeInputDirectOrder = styled(DatePicker)`
 `;
 export const Button = styled.button`
   border-radius: 10px;
-  background: ${(props) => props.theme.theme};;
+  background: ${(props) => props.theme.theme};
   color: ${(props) => props.theme.foregroundInvert};
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.5s ease;
@@ -263,11 +263,35 @@ export const Button = styled.button`
   border-color: ${(props) => props.theme.border};
   cursor: pointer;
   border-width: 0;
+  justify-content: center;
   &.close {
     background: transparent;
-    color: gray;
+    color: black;
     margin-right: 1em;
     min-width: 120px;
+  }
+  &.custom {
+    margin: 0;
+    gap: 5px;
+    display: flex;
+    align-items: center;
+  }
+  &.left {
+    margin: 0;
+    margin-right: auto;
+  }
+  &.right {
+    margin: 0;
+    margin-left: auto;
+  }
+  &.center {
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  &.secondary {
+    background: white;
+    color: black;
   }
   &:disabled {
     background-color: ${(props) => props.theme.disabledBackground};

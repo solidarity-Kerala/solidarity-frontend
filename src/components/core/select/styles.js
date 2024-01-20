@@ -74,12 +74,43 @@ export const SelectBox = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  &.custom {
+    max-width: 200px;
+    display: flex;
+  }
+
+  &.left {
+    margin: 0;
+    margin-right: auto;
+  }
+  &.right {
+    margin: 0;
+    margin-left: auto;
+  }
+  &.center {
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  &.custom button {
+    min-height: 40px;
+    min-width: 150px;
+    font-weight: normal;
+    background: ${(props) => props.theme.background};
+  }
   &.filter button {
     min-height: 40px;
     height: 40px;
     margin: 4px 0;
     min-width: 150px;
     background: ${(props) => props.theme.background};
+  }
+  &.form {
+    max-width: 100%;
+    display: flex;
+    button {
+      font-weight: 700;
+    }
   }
   &.filter {
     margin: 0px;
@@ -119,7 +150,7 @@ export const SelectBox = styled.div`
     position: initial;
     margin: 0;
   }
-  &.single .options{
+  &.single .options {
     top: 47px;
     position: absolute;
     margin: 0px;
@@ -200,7 +231,7 @@ export const SelectBox = styled.div`
     }
     &.filter {
       flex: 1 1 100%; /* flex-grow, flex-shrink, flex-basis */
-    max-width: 200px; /* Maximum width for flexibility */
+      max-width: 200px; /* Maximum width for flexibility */
     }
   }
 `;

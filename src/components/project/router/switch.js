@@ -103,10 +103,11 @@ import LabelPrintSetting from "../pages/labelPrintSetting/index.js";
 import FixedReplacableRecipe from "../pages/fixedReplacableRecipe/index.js";
 import InvoiceSetting from "../pages/InvoiceSetting/index.js";
 import Invoice from "../pages/packageManagement/invoice.js";
-
+import Elements from "../pages/settings/elements/index.js";
 
 const RenderPage = (page, key, user, privileges) => {
   switch (page) {
+
     case "login":
       return <Login key={key} />;
     case "menu":
@@ -301,8 +302,10 @@ const RenderPage = (page, key, user, privileges) => {
       return <Country key={key} {...privileges} />;
     case "planCategory":
       return <PlanCategory key={key} {...privileges} />;
-      case "invoice":
+    case "invoice":
       return <Invoice key={key} {...privileges} />;
+    case "elements":
+      return <Elements key={key} {...privileges} />;
     default:
       return <Page404 key={key}></Page404>;
   }

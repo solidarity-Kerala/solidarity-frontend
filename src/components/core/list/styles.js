@@ -576,6 +576,22 @@ export const Filter = styled.button`
     margin-top: 0;
     height: auto;
   }
+  &.custom{
+    margin:0;
+  }
+  &.left {
+    margin: 0;
+    margin-right: auto;
+  }
+  &.right {
+    margin: 0;
+    margin-left: auto;
+  }
+  &.center {
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
   &.inner-long {
     width: auto;
     text-wrap: nowrap;

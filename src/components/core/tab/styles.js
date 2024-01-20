@@ -20,8 +20,11 @@ export const TabHeader = styled.div`
   margin: 0px 28px;
   gap: 5px;
   padding: 3px 2px;
+  &.custom {
+    margin: 0;
+  }
   @media (max-width: 768px) {
-     margin: 0px 15px;
+    margin: 0px 15px;
   }
 `;
 
@@ -32,6 +35,11 @@ export const Tab = styled.div`
   /* box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px; */
   border-radius: 10px;
   flex-direction: column;
+  &.custom {
+    margin: 10px 0px 0px;
+    padding: 12px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+  }
   ${(props) =>
     props.active &&
     `
@@ -55,10 +63,10 @@ export const TabLink = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.1s ease-in;
-  :hover{
-    transition: padding 0s ease-in;
-    font-weight: bold;
-    padding: 5px 13.1px;
+  :hover {
+    /* transition: padding 0s ease-in; */
+    /* font-weight: bold; */
+    /* padding: 5px 13.1px; */
   }
   &:first-child {
     border-radius: 10px;
@@ -72,7 +80,6 @@ export const TabLink = styled.div`
     box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
     font-weight: bold;
     font-size: 16px;
-    padding: 5px 13px;
     z-index: 1001;
     /* height: 35px; */
     border-radius: 10px;

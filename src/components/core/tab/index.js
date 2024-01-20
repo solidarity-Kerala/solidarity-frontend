@@ -3,7 +3,7 @@ import { Tab, TabContainer, TabHeader, TabLink } from "./styles";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
-const Tabs = ({ tabs = [] }) => {
+const Tabs = ({ tabs = [], className="" }) => {
   const [t] = useTranslation();
   const themeColors = useSelector((state) => state.themeColors);
   const [activeTab, setActiveTab] = useState(tabs[0]?.name);
@@ -16,7 +16,7 @@ const Tabs = ({ tabs = [] }) => {
   }, [tabs, activeTab]);
   return (
     <TabContainer>
-      <TabHeader>
+      <TabHeader className={className}>
         {tabs.map((tab) => {
           return (
             <TabLink
@@ -36,7 +36,7 @@ const Tabs = ({ tabs = [] }) => {
       {/* tab for parking process */}
       {tabs.map((tab, index) => {
         return (
-          <Tab theme={themeColors} key={`${tab.name}-tab-content`} active={activeTab === tab.name}>
+          <Tab  className={className} theme={themeColors} key={`${tab.name}-tab-content`} active={activeTab === tab.name}>
             {(openedTab[tab.name] === true || index === 0) && tab.element}
           </Tab>
         );

@@ -432,7 +432,7 @@ const AutoForm = (props) => {
             onSubmit={(event) => {
               event.preventDefault();
               alert("yes");
-            }}  
+            }}
             action="#"
             method="POST"
             className={`${props.css ?? ""}  ${props.plainForm ? "plain" : "popup"}`}

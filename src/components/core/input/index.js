@@ -27,12 +27,12 @@ function FormInput(props) {
           <InputContainer className={`${props.dynamicClass ?? ""}`} animation={props.animation}>
             {props.error?.length ? (
               <Label theme={themeColors} className={`${!props.value.toString().length > 0 ? "error shrink" : "error"}`}>
-                {`${t(props.label)}${props.required ? " *" : ""}`} 
+                {`${t(props.label)}${props.required ? " *" : ""}`}
               </Label>
             ) : (
               <Label theme={themeColors} className={`${!props.value.toString().length > 0 ? "shrink" : ""}`}>
                 <TickIcon />
-                {`${t(props.label)}${props.required ? " *" : ""}`} 
+                {`${t(props.label)}${props.required ? " *" : ""}`}
               </Label>
             )}
             <Input {...(props.maxLength > 0 ? { maxLength: props.maxLength } : {})} disabled={props.disabled ?? false} autoComplete="on" theme={themeColors} className={`input ${props.value.toString().length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} type={props.type} value={props.value} onChange={(event) => props.onChange(event, props.id, props.type, props.sub)} />
@@ -79,10 +79,10 @@ function FormInput(props) {
         );
       // Render a time input with time picker
       case "time":
-        let userFriendlyTime = new Date(props.value);
+        let userFriendlyTime = typeof props.value === "undefined" || props.value === null ? null : props.value.length > 0 ? new Date(props.value) : null;
         return (
           <InputContainer className={`${props.dynamicClass ?? ""}`}>
-            <DatetimeInput theme={themeColors} showTimeSelect showTimeSelectOnly timeIntervals={15} timeCaption="Time" selected={userFriendlyTime} dateFormat="h:mm aa" className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholder={t(props.placeholder)} type={props.type} onChange={(event) => props.onChange(event, props.id, props.type)} />
+            <DatetimeInput theme={themeColors} showTimeSelect showTimeSelectOnly timeIntervals={15} timeCaption="Time" selected={userFriendlyTime} dateFormat="h:mm aa" className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholderText={`${t(props.label)}${props.required ? " *" : ""}`} type={props.type} onChange={(event) => props.onChange(event, props.id, props.type)} />
             <Label theme={themeColors} className={`${!props.value.length > 0 ? "shrink" : ""}`}>
               {t(props.label)}
             </Label>
@@ -92,7 +92,7 @@ function FormInput(props) {
       // Render a date input with date picker
       case "date":
         let userFriendlyDate = typeof props.value === "undefined" || props.value === null ? null : props.value.length > 0 ? new Date(props.value) : null;
-        console.log("props.value",props.value,userFriendlyDate)
+        console.log("props.value", props.value, userFriendlyDate);
         return (
           <InputContainer className={`${props.dynamicClass ?? ""} ${props.customClass ?? ""}`}>
             <DatetimeInput showYearDropdown yearDropdownItemNumber={70} minDate={props.minDate ?? moment().toDate()} maxDate={props.maxDate ?? moment().add(1, "year").toDate()} dateFormat={"yyyy-MM-dd"} theme={themeColors} className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholderText={`${t(props.label)}${props.required ? " *" : ""}`} type={props.type} value={userFriendlyDate} selected={userFriendlyDate} onChange={(event) => props.onChange(event, props.id, props.type)} />
@@ -170,6 +170,7 @@ function FormInput(props) {
               </Label>
             )}
             <TextArea theme={themeColors} className={`input ${props.value.length > 0 ? "shrink" : ""}`} placeholder={`${t(props.placeholder)}${props.required ? " *" : ""}`} value={props.value} onChange={(event) => props.onChange(event, props.id)} />
+            {props.error?.length > 0 && <ErrorMessage className="image" dangerouslySetInnerHTML={{ __html: props.error }} />}
           </InputContainer>
         );
       case "htmleditor":
@@ -178,6 +179,13 @@ function FormInput(props) {
       case "submit":
         return (
           <Button theme={themeColors} className="submit" disabled={props.disabled} type={props.type} onClick={props.onChange}>
+            {props.value}
+          </Button>
+        );
+      case "button":
+        return (
+          <Button theme={themeColors} className={props.customClass} disabled={props.disabled} type={props.type} onClick={props.onChange}>
+            {props.icon ? <GetIcon icon={props.icon}></GetIcon> : null}
             {props.value}
           </Button>
         );
