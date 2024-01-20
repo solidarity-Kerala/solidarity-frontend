@@ -20,6 +20,7 @@ const CheckboxCheckmark = styled.span`
   width: 12px;
   height: 12px;
   border-radius: 7px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   border: ${(props) =>
     props.checked
       ? "2px solid " + props.theme.secBackground
