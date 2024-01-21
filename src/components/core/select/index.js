@@ -8,6 +8,7 @@ import { addSelectObject } from "../../../store/actions/select";
 import { ErrorMessage } from "../form/styles";
 import Search from "../search";
 import { getValue } from "../list/functions";
+import { Checkbox, ElementContainer } from "../elements";
 // import { Variants, Variant } from "../../private/pages/recipe/styles";
 
 function CustomSelect(props) {
@@ -19,6 +20,7 @@ function CustomSelect(props) {
   const [selectedValue, setSelectedValue] = useState(props.label);
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
+  const [radioButton] = useState(props.radioButton ?? false);
   const selectData = useSelector((state) => state.select[props.selectApi]);
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -184,7 +186,50 @@ function CustomSelect(props) {
       document.removeEventListener("click", handleClick);
     };
   }, [props.listBox, props.customClass]);
-  return (
+  return radioButton ? (
+    <ElementContainer ref={selectRef} className="column box">
+      <div className={`${selectedId !== null && selectedId.length !== 0 ? "has title" : "title"}`} onClick={toggleOptions}>
+        {props.value.length === 0 ? `` : <TickIcon />} {`${t(props.label)} ${props.required ? " *" : ""}`}
+      </div>
+      <ElementContainer ref={selectRef} className="left">
+        {options.length > 0
+          ? (searchValue.length > 0 ? filteredOptions : options).map((option) => {
+              const isSelected = option.id === selectedId;
+              console.log({ isSelected });
+              return (
+                <Checkbox
+                  key={option.id}
+                  align="left"
+                  customClass="round"
+                  label={props.displayValue ? option[props.displayValue] : option.value}
+                  onChange={(event) => {
+                    const listBox = props.listBox ?? false;
+                    if (!listBox) {
+                      toggleOptions();
+                      if (selectedId === option.id) {
+                        props.onSelect({ id: defaultValue, value: props.label }, props.id, props.type);
+                        setSelectedValue(props.label);
+                        setSelectedId(defaultValue);
+                      } else {
+                        props.onSelect(option, props.id, props.type);
+                        setSelectedValue(option.value);
+                        setSelectedId(option.id);
+                      }
+                    } else {
+                      props.onSelect(option, props.id, props.type);
+                      setSelectedValue(option.value);
+                      setSelectedId(option.id);
+                    }
+                  }}
+                  value={isSelected}
+                ></Checkbox>
+              );
+            })
+          : null}
+      </ElementContainer>
+      {props.error?.length > 0 && <ErrorMessage className="margin" dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
+    </ElementContainer>
+  ) : (
     <SelectBox key={props.key} theme={props.theme} className={`custom-select ${props.listBox ? "list-box" : ""} ${optionsVisible ? "open" : "close"} ${props.customClass} ${props.dynamicClass}`} ref={selectRef}>
       <button className={`${selectedId !== null && selectedId?.length !== 0 ? "has" : ""}`} onClick={toggleOptions}>
         {props.error?.length ? (
@@ -299,7 +344,7 @@ function CustomSelect(props) {
         )}
       </ul>
 
-      {props.error?.length > 0 && <ErrorMessage  className="margin" dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
+      {props.error?.length > 0 && <ErrorMessage className="margin" dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
     </SelectBox>
   );
 }

@@ -33,6 +33,9 @@ export const Overlay = styled.div`
   background-color: rgba(0, 0, 0, 0.2);
   overflow: auto;
   z-index: 1001;
+  &.hidden {
+    display: none;
+  }
   &.filter {
     width: 300px;
     left: auto;

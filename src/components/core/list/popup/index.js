@@ -39,7 +39,7 @@ export const DisplayInformations = ({ attributes, data, formMode }) => {
     </TrBody>
   );
 };
-const Popup = ({ formMode, selectedMenuItem, viewMode, themeColors, openData, setLoaderBox, setMessage, closeModal, itemTitle, updatePrivilege, isEditingHandler, udpateView }) => {
+const Popup = ({formMode, selectedMenuItem, viewMode, themeColors, openData, setLoaderBox, setMessage, closeModal, itemTitle, updatePrivilege, isEditingHandler, udpateView }) => {
   const titleValue = (itemTitle.collection?.length > 0 ? openData?.data?.[itemTitle.collection]?.[itemTitle.name] ?? "" : openData?.data?.[itemTitle.name]) || "Please update the itemTitle.";
 
   const tabHandler = useCallback(() => {

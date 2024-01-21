@@ -9,6 +9,7 @@ import { ErrorMessage } from "../form/styles";
 import Search from "../search";
 import { Button, ImgBox, TagBox, TagData, TagItem, TagTitle } from "../select/styles";
 import { getValue } from "../list/functions";
+import { Checkbox, ElementContainer } from "../elements";
 
 function MultiSelect(props) {
   const [optionsVisible, setOptionsVisible] = useState(false);
@@ -18,6 +19,7 @@ function MultiSelect(props) {
   const [selectedValue, setSelectedValue] = useState("");
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
+  const [checkboxDesign] = useState(props.checkboxDesign ?? false);
   const selectData = useSelector((state) => state.select[props.selectApi]);
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -183,7 +185,49 @@ function MultiSelect(props) {
       document.removeEventListener("click", handleClick);
     };
   }, []);
-  return (
+  return checkboxDesign ? (
+    <ElementContainer ref={selectRef} className="column box">
+      <div className={`${selectedId !== null && selectedId.length !== 0 ? "has title" : "title"}`} onClick={toggleOptions}>
+        {props.value.length === 0 ? `` : <TickIcon />} {`${t(props.label)} ${props.required ? " *" : ""}`}
+      </div>
+      <ElementContainer ref={selectRef} className="left">
+        {options.length > 0
+          ? (searchValue.length > 0 ? filteredOptions : options).map((option) => {
+              const selectedIndex = selectedId.findIndex((item) => item.id === option.id);
+              return (
+                <Checkbox
+                  key={option.id}
+                  align="left"
+                  label={props.displayValue ? option[props.displayValue] : option.value}
+                  onChange={(event) => {
+                    props.onSelect(option, props.id, props.type);
+                    // setSelectedValue(option.value);
+                    // setSelectedId(option.id);
+
+                    const items = selectedId;
+                    const index = items.findIndex((item) => item.id === option.id);
+
+                    if (index === -1) {
+                      // If event._id doesn't exist, push it to the items array
+                      items.push(option);
+                    } else {
+                      // If event._id already exists, remove it from the items array
+                      items.splice(index, 1);
+                    }
+                    setSelectedId(items);
+
+                    setSelectedValue(items.length > 0 ? `${items[0].value} ${items.length > 1 ? " (" + (items.length - 1) + " more)" : ""}` : props.label);
+                    // toggleOptions();
+                  }}
+                  value={selectedIndex > -1}
+                ></Checkbox>
+              );
+            })
+          : null}
+      </ElementContainer>
+      {props.error?.length > 0 && <ErrorMessage className="margin" dangerouslySetInnerHTML={{ __html: props.error }}></ErrorMessage>}
+    </ElementContainer>
+  ) : (
     <SelectBox theme={props.theme} className={`custom-select ${optionsVisible ? "open" : "close"} ${props.customClass}  ${props.dynamicClass}`} ref={selectRef}>
       <button className={`${selectedId !== null && selectedId.length !== 0 ? "has" : ""}`} onClick={toggleOptions}>
         {props.error?.length ? (

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Button, Date, DateTime, ElementContainer, Select, TextArea, TextBox, Time } from "../../../../../core/elements";
+import { Button, Checkbox, Date, DateTime, ElementContainer, MultiSelect, Select, TextArea, TextBox, Time, Title } from "../../../../../core/elements";
 export const Tab2 = () => {
   const [textData, setTextData] = useState("");
   const [textarea, setTextArea] = useState("");
   const [datetime, setDatetime] = useState("");
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
+  const [checked, setChecked] = useState(false);
   const [textDataError, setTextDataError] = useState("");
   const [textAreaError, setAreaError] = useState("");
   const [dateDataError, setDateDataError] = useState("");
@@ -13,6 +14,8 @@ export const Tab2 = () => {
   const [dateTimeDataError, setDateTimeDataError] = useState("");
   const [selectDataError, setSelectDataError] = useState("");
   const [select, setSelect] = useState("");
+  const [multiSelectDataError, setMultiSelectDataError] = useState("");
+  const [multiSelect, setMultiSelect] = useState([]);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
 
   useEffect(() => {
@@ -22,18 +25,21 @@ export const Tab2 = () => {
     const isTimeValid = time.trim().length > 0;
     const isDateValid = date.trim().length > 0;
     const isSelectValid = select.trim().length > 0;
-  
+    const isMultiSelectValid = multiSelect.length > 0;
+
     setTextDataError(isTextDataValid ? "" : "There should be a valid text!!");
     setAreaError(isTextareaValid ? "" : "There should be a valid text!!");
     setDateTimeDataError(isDatetimeValid ? "" : "There should be a valid text!!");
     setTimeDataError(isTimeValid ? "" : "There should be a valid text!!");
     setDateDataError(isDateValid ? "" : "There should be a valid text!!");
     setSelectDataError(isSelectValid ? "" : "There should be a valid text!!");
-    setDisabledSubmit(!(isSelectValid && isTextDataValid && isTextareaValid && isDatetimeValid && isTimeValid && isDateValid));
-  }, [textData, textarea, datetime, time, date, select]);
-  
+    setMultiSelectDataError(isMultiSelectValid ? "" : "There should be valid items!!");
+    setDisabledSubmit(!(isMultiSelectValid && isSelectValid && isTextDataValid && isTextareaValid && isDatetimeValid && isTimeValid && isDateValid));
+  }, [textData, textarea, datetime, time, date, select, multiSelect]);
+
   return (
     <ElementContainer className="column">
+      <Title title="Custom Form"></Title>
       <TextBox
         label="Text Box Sample"
         value={textData}
@@ -55,7 +61,8 @@ export const Tab2 = () => {
       <Select
         align={"form"}
         error={selectDataError}
-        label="Select an Item"
+        radioButton={true}
+        label="Single Select Sample"
         value={select}
         selectApi={[
           { id: "1", value: "Item 1" },
@@ -67,6 +74,22 @@ export const Tab2 = () => {
           setSelect(item.id ?? null);
         }}
       ></Select>
+      <MultiSelect
+        align={"form"}
+        error={multiSelectDataError}
+        checkBox={true}
+        label="Multi Select Sample"
+        value={multiSelect}
+        selectApi={[
+          { id: "1", value: "Item 1" },
+          { id: "2", value: "Item 2" },
+          { id: "3", value: "Item 3" },
+        ]}
+        onSelect={(item) => {
+          console.log("Multi Selected Value", item);
+          setMultiSelect(item);
+        }}
+      ></MultiSelect>
       <DateTime
         label="Date Time Sample"
         value={datetime}
@@ -94,6 +117,15 @@ export const Tab2 = () => {
           setDate(value);
         }}
       ></Date>
+      <Checkbox
+        label="Check Box Sample"
+        value={checked}
+        error={dateDataError}
+        onChange={(value) => {
+          console.log("Text Changed", value);
+          setChecked(value);
+        }}
+      ></Checkbox>
       <Button
         isDisabled={disabledSubmit}
         align="right"

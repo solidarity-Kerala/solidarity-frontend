@@ -17,6 +17,7 @@ export const TabContainer = styled.div`
   flex-direction: row;
   position: sticky;
   top: 0;
+  height: 40px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   z-index: 1;
   border-radius: 10px;
@@ -44,6 +45,9 @@ export const TabButton = styled.button`
   padding: 10px 20px;
   background-color: transparent;
   font-weight: bold;
+  gap:10px;
+  display:flex;
+  align-items:center;
   &.true {
     background-color: #ccc;
     font-weight: normal;
