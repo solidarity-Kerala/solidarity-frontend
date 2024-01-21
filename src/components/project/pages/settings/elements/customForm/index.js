@@ -42,7 +42,7 @@ export const Tab2 = () => {
       <Title title="Custom Form"></Title>
       <TextBox
         label="Text Box Sample"
-        value={textData}
+        value={textData} 
         error={textDataError}
         onChange={(value) => {
           console.log("Text Changed", value);
