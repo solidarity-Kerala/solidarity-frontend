@@ -10,7 +10,12 @@ export const InputContainer = styled.div`
   animation: ${(props) => props.animation};
   flex-direction: column;
   &.checkbox {
-    flex: 100%;
+    flex: none;
+    height: 40px;
+    -webkit-box-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
   }
   &.disabled {
     display: none;
@@ -134,7 +139,6 @@ export const Label = styled.label`
   &.checkbox {
     position: initial;
     pointer-events: initial;
-    margin-bottom: 10px;
     display: flex;
     align-items: center;
   }
@@ -251,6 +255,7 @@ export const DatetimeInputDirectOrder = styled(DatePicker)`
   }
 `;
 export const Button = styled.button`
+  height: 40px;
   border-radius: 10px;
   background: ${(props) => props.theme.theme};
   color: ${(props) => props.theme.foregroundInvert};
@@ -258,12 +263,13 @@ export const Button = styled.button`
   transition: all 0.5s ease;
   margin-top: 10px;
   max-width: 400px;
-  padding: 10px 20px;
-  min-width: 155px;
+  padding: 10px 15px;
+  width: auto;
   border-color: ${(props) => props.theme.border};
   cursor: pointer;
   border-width: 0;
   justify-content: center;
+  min-width: 130px;
   &.close {
     background: transparent;
     color: black;
@@ -275,6 +281,8 @@ export const Button = styled.button`
     gap: 5px;
     display: flex;
     align-items: center;
+    text-wrap: nowrap;
+    width: fit-content;
   }
   &.left {
     margin: 0;
@@ -347,4 +355,7 @@ export const SubHead = styled.div`
   padding-bottom: 5px;
   font-size: 14px;
   font-weight: 600;
+  &.custom{
+     margin: 0px 0px;
+  }
 `;

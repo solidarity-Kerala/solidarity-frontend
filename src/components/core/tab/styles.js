@@ -57,8 +57,10 @@ export const TabLink = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+  font-weight: bold;
   height: 30px;
   flex: inherit;
+  gap: 10px;
   min-width: 60px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
@@ -77,12 +79,7 @@ export const TabLink = styled.div`
   &.active {
     background-color: ${(props) => props.theme.pageForeground};
     color: ${(props) => props.theme.theme};
-    box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
     font-weight: bold;
-    font-size: 16px;
-    z-index: 1001;
-    /* height: 35px; */
-    border-radius: 10px;
     @media (max-width: 768px) {
       font-size: 14px;
     }

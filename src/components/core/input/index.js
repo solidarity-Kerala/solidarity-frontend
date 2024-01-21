@@ -186,7 +186,7 @@ function FormInput(props) {
         return (
           <Button theme={themeColors} className={props.customClass} disabled={props.disabled} type={props.type} onClick={props.onChange}>
             {props.icon ? <GetIcon icon={props.icon}></GetIcon> : null}
-            {props.value}
+            <span> {props.value}</span>
           </Button>
         );
       // Render a close button
@@ -199,11 +199,12 @@ function FormInput(props) {
       // Render a cehckbox
       case "checkbox":
         return (
-          <InputContainer className={`checkbox ${props.dynamicClass ?? ""}`}>
+          <InputContainer className={`checkbox ${props.dynamicClass ?? ""} ${props.customClass ?? ""} `}>
             <Label className="checkbox">
               <Checkbox
                 theme={themeColors}
                 label={t(props.placeholder)}
+                className={props.customClass}
                 type={props.type}
                 checked={props.value}
                 onChange={(event) => {

@@ -760,7 +760,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
               onClick={(e) => {
                 //image popup
                 e.stopPropagation();
-                setShowImage({ src: e.target.src.replace("/thumbnail","") });
+                setShowImage({ src: e.target.src.replace("/thumbnail", "") });
               }}
               alt="Profile"
             ></img>
