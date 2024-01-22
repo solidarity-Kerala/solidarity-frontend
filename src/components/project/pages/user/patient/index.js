@@ -1961,7 +1961,7 @@ const Patient = (props) => {
       title: "Measurements",
       attributes: measurement,
       params: {
-        api: `user`,
+        api: `measurement`,
         parentReference: "",
         itemTitle: {
           name: "weight",
