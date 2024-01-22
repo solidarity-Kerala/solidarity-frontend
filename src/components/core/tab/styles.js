@@ -7,7 +7,7 @@ export const TabContainer = styled.div`
   padding: 0px 0px;
   &.vertical-menu {
     flex-direction: row;
-    align-items: baseline;
+    align-items: flex-start;
   }
   @media (max-width: 768px) {
     padding: 0;
@@ -21,17 +21,17 @@ export const TabHeader = styled.div`
   align-items: flex-end;
   justify-content: flex-start;
   overflow: auto;
-  margin: 0px 28px;
+  margin: -2px 28px;
   gap: 5px;
-  padding: 3px 2px;
+  padding: 5px;
   && {
     .vertical-menu & {
       flex-direction: column;
-      align-items: baseline;
+      align-items: flex-start;
       margin-bottom: 20px;
-      position:sticky;
-      top:0;
-      gap:5px;
+      position: sticky;
+      top: 0;
+      gap: 5px;
     }
   }
   &.custom {
@@ -41,7 +41,18 @@ export const TabHeader = styled.div`
     margin: 0px 15px;
   }
 `;
-
+export const TabContents = styled.div`
+ 
+  flex: auto;
+  width:100%;
+  margin-bottom:30px;
+  && {
+    .vertical-menu & {
+      display: flex;
+      width:inherit;
+    }
+  }
+`;
 export const Tab = styled.div`
   padding: 0px;
   /* border-top: 1px solid #d0d0d0; */
@@ -81,12 +92,13 @@ export const TabLink = styled.div`
   gap: 10px;
   min-width: 60px;
   border-radius: 10px;
-     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.1s ease-in;
   && {
     .vertical-menu & {
       width: -webkit-fill-available;
       justify-content: left;
+      text-align: left;
     }
   }
   :hover {

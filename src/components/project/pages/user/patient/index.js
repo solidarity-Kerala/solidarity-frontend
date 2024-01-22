@@ -1495,7 +1495,7 @@ const Patient = (props) => {
               collection: "user",
             },
             icon:"user",
-            title: "Medical Record",
+            title: "Medical Record",  
             attributes: medicalRecord,
             params: {
               api: `user/subscriber/web`,

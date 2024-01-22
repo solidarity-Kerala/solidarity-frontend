@@ -4,39 +4,52 @@ import { getValue } from "../functions";
 import { GetIcon } from "../../../../icons";
 import { CloseButton, DataHead, DataItem, Head, TabContainer, Td, Title, TrBody } from "./styles";
 import Tabs from "../../tab";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { RowContainer } from "../../../styles/containers/styles";
 import ListTable from "../list";
 import { More } from "../styles";
+import ImagePopup from "../image";
 export const DisplayInformations = ({ attributes, data, formMode }) => {
+  const [showImage, setShowImage] = useState(false);
   return (
-    <TrBody className={formMode}>
-      {attributes.map((attribute, index) => {
-        if (attribute.view) {
-          try {
-            const itemValue = attribute.collection?.length > 0 && attribute.showItem?.length > 0 ? data[attribute.collection][attribute.showItem] : data[attribute.name];
-            // if (attribute.type === "image") {
-            //   return "";
-            // }
-            return (
-              <Td key={index}>
-                <Title>{attribute.label}</Title>
-                <DataItem>{getValue(attribute, itemValue, true)} </DataItem>
-              </Td>
-            );
-          } catch (error) {
-            return (
-              <Td key={index}>
-                <Title>{attribute.label}</Title>
-                <DataItem>{`--`} </DataItem>
-              </Td>
-            );
+    <React.Fragment>
+      <TrBody className={formMode}>
+        {attributes.map((attribute, index) => {
+          if (attribute.view) {
+            try {
+              const itemValue = attribute.collection?.length > 0 && attribute.showItem?.length > 0 ? data[attribute.collection][attribute.showItem] : data[attribute.name];
+              // if (attribute.type === "image") {
+              //   return "";
+              // }
+              return (
+                <Td key={index}>
+                  <Title>{attribute.label}</Title>
+                  {attribute.type === "image" ? (
+                    <DataItem>
+                      {getValue(attribute, itemValue, true, false, (src) => {
+                        setShowImage(src);
+                      })}
+                    </DataItem>
+                  ) : (
+                    <DataItem>{getValue(attribute, itemValue, true)} </DataItem>
+                  )}
+                </Td>
+              );
+            } catch (error) {
+              return (
+                <Td key={index}>
+                  <Title>{attribute.label}</Title>
+                  <DataItem>{`--`} </DataItem>
+                </Td>
+              );
+            }
           }
-        }
 
-        return null;
-      })}
-    </TrBody>
+          return null;
+        })}
+      </TrBody>
+      {showImage && <ImagePopup onClose={() => setShowImage(null)} src={showImage.src}></ImagePopup>}
+    </React.Fragment>
   );
 };
 const Popup = ({ popupMenu, formMode, selectedMenuItem, viewMode, themeColors, openData, setLoaderBox, setMessage, closeModal, itemTitle, updatePrivilege, isEditingHandler, udpateView }) => {
@@ -57,7 +70,7 @@ const Popup = ({ popupMenu, formMode, selectedMenuItem, viewMode, themeColors, o
       icon: "info",
       element: (
         <TabContainer>
-          <Head>
+          <Head className="sticky">
             <DataHead>
               <GetIcon icon={selectedMenuItem.icon}></GetIcon>
               <span>Basic Details</span>

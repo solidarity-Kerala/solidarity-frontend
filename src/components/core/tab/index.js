@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Tab, TabContainer, TabHeader, TabLink } from "./styles";
+import { Tab, TabContainer, TabContents, TabHeader, TabLink } from "./styles";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { GetIcon } from "../../../icons";
 
-const Tabs = ({ tabs = [], className = "",popupMenu ="horizontal" }) => {
+const Tabs = ({ tabs = [], className = "", popupMenu = "horizontal" }) => {
   const [t] = useTranslation();
   const themeColors = useSelector((state) => state.themeColors);
   const [activeTab, setActiveTab] = useState(tabs[0]?.name);
@@ -36,14 +36,15 @@ const Tabs = ({ tabs = [], className = "",popupMenu ="horizontal" }) => {
         })}
       </TabHeader>
       {/* tab for parking process */}
-      
-      {tabs.map((tab, index) => {
-        return (
-          <Tab className={className} theme={themeColors} key={`${tab.name}-tab-content`} active={activeTab === tab.name}>
-            {(openedTab[tab.name] === true || index === 0) && tab.element}
-          </Tab>
-        );
-      })}
+      <TabContents>
+        {tabs.map((tab, index) => {
+          return (
+            <Tab className={className} theme={themeColors} key={`${tab.name}-tab-content`} active={activeTab === tab.name}>
+              {(openedTab[tab.name] === true || index === 0) && tab.element}
+            </Tab>
+          );
+        })}
+      </TabContents>
     </TabContainer>
   );
 };

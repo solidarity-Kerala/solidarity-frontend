@@ -12,14 +12,29 @@ export function convertMinutesToHHMM(minutes) {
 
   return `${hoursStr}:${minsStr}`;
 }
-export const getValue = (attribute, itemValue, display = false, isPrint = false) => {
+export const getValue = (attribute, itemValue, display = false, isPrint = false, onClick = () => {}) => {
   let response = "";
   switch (attribute.type) {
     case "minute":
       response = convertMinutesToHHMM(parseFloat(itemValue ?? 0));
       break;
     case "image":
-      response = isPrint ? <Image style={{ width: 50, height: 50 }} source={itemValue ? process.env.REACT_APP_CDN + itemValue : food} /> : <Img src={itemValue ? process.env.REACT_APP_CDN + itemValue : food} />;
+      response = isPrint ? (
+        <Image
+          onClick={(e) => {
+            onClick({ src: e.target.src.replace("/thumbnail", "") });
+          }}
+          style={{ width: 50, height: 50 }}
+          source={itemValue ? process.env.REACT_APP_CDN + itemValue : food}
+        />
+      ) : (
+        <Img
+          onClick={(e) => {
+            onClick({ src: e.target.src.replace("/thumbnail", "") });
+          }}
+          src={itemValue ? process.env.REACT_APP_CDN + itemValue : food}
+        />
+      );
       break;
     case "datetime":
       response = dateTimeFormat(itemValue);
