@@ -1656,7 +1656,7 @@ const Patient = (props) => {
       update: true,
     },
     {
-      type: "text",
+      type: "file",
       placeholder: "Files Attached",
       name: "fileAttachment",
       validation: "",
