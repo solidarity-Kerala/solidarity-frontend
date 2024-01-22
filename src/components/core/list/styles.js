@@ -857,7 +857,7 @@ export const IconBox = styled.span`
   }
 `;
 export const TableContaner = styled.div`
-  margin: 3px 0em 0px;
+  margin: 3px 3px 3px;
   padding: 0em 1em 0em;
   background-color: white;
   border-radius: 10px;
