@@ -5,6 +5,10 @@ export const TabContainer = styled.div`
   flex-direction: column;
   flex: 1 1 100%;
   padding: 0px 0px;
+  &.vertical-menu {
+    flex-direction: row;
+    align-items: baseline;
+  }
   @media (max-width: 768px) {
     padding: 0;
   }
@@ -20,6 +24,16 @@ export const TabHeader = styled.div`
   margin: 0px 28px;
   gap: 5px;
   padding: 3px 2px;
+  && {
+    .vertical-menu & {
+      flex-direction: column;
+      align-items: baseline;
+      margin-bottom: 20px;
+      position:sticky;
+      top:0;
+      gap:5px;
+    }
+  }
   &.custom {
     margin: 0;
   }
@@ -37,8 +51,12 @@ export const Tab = styled.div`
   flex-direction: column;
   &.custom {
     margin: 10px 0px 0px;
-    padding: 12px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+    padding: 0px;
+  }
+  && {
+    .vertical-menu & {
+      flex: auto;
+    }
   }
   ${(props) =>
     props.active &&
@@ -63,8 +81,14 @@ export const TabLink = styled.div`
   gap: 10px;
   min-width: 60px;
   border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.1s ease-in;
+  && {
+    .vertical-menu & {
+      width: -webkit-fill-available;
+      justify-content: left;
+    }
+  }
   :hover {
     /* transition: padding 0s ease-in; */
     /* font-weight: bold; */

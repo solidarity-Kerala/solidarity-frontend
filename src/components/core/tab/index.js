@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { GetIcon } from "../../../icons";
 
-const Tabs = ({ tabs = [], className = "" }) => {
+const Tabs = ({ tabs = [], className = "",popupMenu ="horizontal" }) => {
   const [t] = useTranslation();
   const themeColors = useSelector((state) => state.themeColors);
   const [activeTab, setActiveTab] = useState(tabs[0]?.name);
@@ -16,7 +16,7 @@ const Tabs = ({ tabs = [], className = "" }) => {
     }
   }, [tabs, activeTab]);
   return (
-    <TabContainer>
+    <TabContainer className={popupMenu}>
       <TabHeader className={className}>
         {tabs.map((tab) => {
           return (
@@ -36,6 +36,7 @@ const Tabs = ({ tabs = [], className = "" }) => {
         })}
       </TabHeader>
       {/* tab for parking process */}
+      
       {tabs.map((tab, index) => {
         return (
           <Tab className={className} theme={themeColors} key={`${tab.name}-tab-content`} active={activeTab === tab.name}>

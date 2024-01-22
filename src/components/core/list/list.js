@@ -40,7 +40,7 @@ const SetTr = (props) => {
     return <Tr {...props}></Tr>;
   }
 };
-const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, clonePrivilege = false, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list" }) => {
+const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, clonePrivilege = false, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list", popupMenu="horizontal" }) => {
   const userData = useSelector((state) => state.pages);
   const [users, setUsers] = useState({
     data: null,
@@ -1187,7 +1187,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
 
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
 
-      {isOpen && <Popup selectedMenuItem={selectedMenuItem} formMode={formMode} closeModal={closeModal} themeColors={themeColors} isEditingHandler={isEditingHandler} updateValue={udpateView} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData} updatePrivilege={updatePrivilege}></Popup>}
+      {isOpen && <Popup popupMenu={popupMenu} selectedMenuItem={selectedMenuItem} formMode={formMode} closeModal={closeModal} themeColors={themeColors} isEditingHandler={isEditingHandler} updateValue={udpateView} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData} updatePrivilege={updatePrivilege}></Popup>}
       {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? `Update ${shortName}: ` : `Clone ${shortName}: `}  <span style="font-weight:bold">'${updateValues._title}'</span>`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {detailView && <Details formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Details>}
       {showSublist && subAttributes?.item?.attributes?.length > 0 && <SubPage themeColors={themeColors} formMode={formMode} closeModal={closeModal} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} subAttributes={subAttributes}></SubPage>}
@@ -1281,7 +1281,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
       {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} api={api} formMode={formMode} formType={"post"} header={`Add a ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
       {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? `Update ${shortName}: ` : `Clone ${shortName}: `} <span style="font-weight:bold">'${updateValues._title}' </span>`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
-      {isOpen && <Popup data={openData} actions={actions}></Popup>}
+      {isOpen && <Popup  popupMenu={popupMenu} data={openData} actions={actions}></Popup>}
       {showLoader && <Loader></Loader>}
     </RowContainer>
   );

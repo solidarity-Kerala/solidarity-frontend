@@ -39,7 +39,7 @@ export const DisplayInformations = ({ attributes, data, formMode }) => {
     </TrBody>
   );
 };
-const Popup = ({formMode, selectedMenuItem, viewMode, themeColors, openData, setLoaderBox, setMessage, closeModal, itemTitle, updatePrivilege, isEditingHandler, udpateView }) => {
+const Popup = ({ popupMenu, formMode, selectedMenuItem, viewMode, themeColors, openData, setLoaderBox, setMessage, closeModal, itemTitle, updatePrivilege, isEditingHandler, udpateView }) => {
   const titleValue = (itemTitle.collection?.length > 0 ? openData?.data?.[itemTitle.collection]?.[itemTitle.name] ?? "" : openData?.data?.[itemTitle.name]) || "Please update the itemTitle.";
 
   const tabHandler = useCallback(() => {
@@ -48,11 +48,13 @@ const Popup = ({formMode, selectedMenuItem, viewMode, themeColors, openData, set
       .map((item, index) => ({
         name: `${item.id}-${index}`,
         title: item.title,
+        icon: item.icon,
         element: <ListTable viewMode={item.type ?? "subList"} setMessage={setMessage} setLoaderBox={setLoaderBox} parentReference={item?.params?.parentReference} referenceId={openData?.data?._id} attributes={item.attributes} {...item.params}></ListTable>,
       }));
     tempTab.unshift({
       name: `information-${openData.data._id}`,
       title: "Informations",
+      icon: "info",
       element: (
         <TabContainer>
           <Head>
@@ -79,7 +81,7 @@ const Popup = ({formMode, selectedMenuItem, viewMode, themeColors, openData, set
       ),
     });
     setTabs(tempTab);
-  }, [setMessage, setLoaderBox, openData,themeColors, formMode, titleValue, udpateView, isEditingHandler, updatePrivilege, selectedMenuItem.icon]);
+  }, [setMessage, setLoaderBox, openData, themeColors, formMode, titleValue, udpateView, isEditingHandler, updatePrivilege, selectedMenuItem.icon]);
 
   const [tabs, setTabs] = useState([]);
 
@@ -91,13 +93,13 @@ const Popup = ({formMode, selectedMenuItem, viewMode, themeColors, openData, set
     <Overlay>
       <Page className={`${openData?.item?.params?.customClass ?? "medium"} popup-child`}>
         <Header>
-          <span >{`${getValue(itemTitle, titleValue)}`}</span>
+          <span>{`${getValue(itemTitle, titleValue)}`}</span>
           <CloseButton theme={themeColors} onClick={closeModal}>
             <GetIcon icon={"Close"} />
           </CloseButton>
         </Header>
         <RowContainer theme={themeColors} className="popup-data">
-          {tabs.length > 0 && <Tabs tabs={tabs}></Tabs>}
+          {tabs.length > 0 && <Tabs popupMenu={popupMenu} tabs={tabs}></Tabs>}
         </RowContainer>
       </Page>
     </Overlay>

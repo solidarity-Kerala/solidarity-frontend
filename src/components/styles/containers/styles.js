@@ -162,8 +162,8 @@ export const RowContainer = styled.div`
     overflow: auto;
     @media screen and (max-width: 768px) {
       max-width: calc(100%);
-    width: calc(100%);
-    flex: 1 1 calc(100%);
+      width: calc(100%);
+      flex: 1 1 calc(100%);
     }
   }
   &.menu {
@@ -195,6 +195,7 @@ export const RowContainer = styled.div`
     padding: 1em 0 0;
     border-radius: 12px;
     min-height: 100px;
+    display: flex;
   }
   &.popup-data.small {
     overflow: auto;
@@ -254,6 +255,9 @@ export const RowContainer = styled.div`
     .second & {
       background-color: transparent;
     }
+    .vertical-menu & {
+         padding: 0px 30px 0 0;
+    }
   }
   &.full {
     flex: 1 1 calc(100vh - 100px);
@@ -302,6 +306,9 @@ export const RowContainer = styled.div`
       text-decoration: none;
     }
   }
+  .data-layout {
+    padding: 1.5em 2em 0;
+  }
   &.booking {
     flex: 1 1 500px;
     height: calc(100vh - 200px);
@@ -323,8 +330,13 @@ export const RowContainer = styled.div`
   &.data-layout {
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 65px);
+    max-height: calc(100vh - 84px);
     max-width: 100%;
+  }
+  && {
+    .custom &.data-layout {
+      padding: 0em 0em;
+    }
   }
   @media screen and (max-width: 768px) {
     max-width: 100%;
