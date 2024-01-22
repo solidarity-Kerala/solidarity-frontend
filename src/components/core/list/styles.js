@@ -76,7 +76,7 @@ export const Th = styled.th`
 export const Tr = styled.div`
   /* border-bottom: 1px solid ${(props) => props.theme.border}; */
   display: flex;
-  margin: 0em 2em 0px;
+  margin: 0em 2px 0px;
   padding: 10px;
   background-color: ${(props) => props.theme.background};
   border-radius: 0px;
@@ -206,10 +206,19 @@ export const Tr = styled.div`
   &.single {
     padding: 0;
     margin: 0;
-    margin: 20px 30px 30px;
+    margin: 0px 2px 30px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px !important;
+
     @media (max-width: 768px) {
       margin: 10px 15px 30px;
+    }
+    && {
+      .popup-data & {
+        margin: 20px 30px 30px;
+      }
+      .vertical-menu & {
+        margin:0;
+      }
     }
   }
   &.single:hover {
@@ -453,7 +462,7 @@ export const ArrowPagination = styled.button`
 export const ButtonPanel = styled.div`
   display: flex;
   align-items: center;
-  padding: 1em 2em 0.5em;
+  padding: 0em 0em 0.5em;
   justify-content: space-between;
   margin-bottom: 0em;
   z-index: 100;
@@ -576,8 +585,8 @@ export const Filter = styled.button`
     margin-top: 0;
     height: auto;
   }
-  &.custom{
-    margin:0;
+  &.custom {
+    margin: 0;
   }
   &.left {
     margin: 0;
@@ -700,7 +709,7 @@ export const NoData = styled.div`
     box-shadow: none;
   }
   &.white-list {
-    margin: 0em 2em 0px;
+    margin: 0em 2px 0px;
     border-radius: 10px;
   }
   @media screen and (max-width: 768px) {
@@ -848,7 +857,7 @@ export const IconBox = styled.span`
   }
 `;
 export const TableContaner = styled.div`
-  margin: 3px 2em 0px;
+  margin: 3px 0em 0px;
   padding: 0em 1em 0em;
   background-color: white;
   border-radius: 10px;

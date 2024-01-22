@@ -143,6 +143,11 @@ export const TabContainer = styled.div`
   @media (max-width: 768px) {
     margin: 15px 15px 30px;
   }
+  && {
+    .vertical-menu & {
+      margin: 0 30px 30px 0;
+    }
+  }
   .head {
     width: 100%;
     background-color: rgb(75, 75, 75);
