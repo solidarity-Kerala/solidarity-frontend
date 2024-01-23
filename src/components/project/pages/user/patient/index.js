@@ -1756,11 +1756,11 @@ const Patient = (props) => {
   ]);
   const setDefault = async (data) => {
     props.setLoaderBox(true);
-    console.log("default data : ", {data})
+    console.log("default data : ", { data })
     await axios
       .put(`${process.env.REACT_APP_API}delivery-address/default`, data)
       .then((response) => {
-        console.log("console", {console})
+        console.log("console", { console })
         props.setLoaderBox(false);
         console.log(response);
         if (response.data) {
@@ -1781,75 +1781,77 @@ const Patient = (props) => {
   const [actions] = useState([
     ...((checkprivilege([privileges.doctor]) ? false : true)
       ? [
-          {
-            element: "button",
-            type: "subItem",
-            id: "user/subscriber/web",
-            itemTitle: {
-              name: "username",
-              type: "text",
-              collection: "user",
-            },
-            icon:"user",
-            title: "Medical Record",  
-            attributes: medicalRecord,
-            params: {
-              api: `user/subscriber/web`,
-              parentReference: "user",
-              itemTitle: {
-                name: "username",
-                type: "text",
-                collection: "user",
-              },
-              shortName: "Medical Record",
-              addPrivilege: true,
-              delPrivilege: true,
-              updatePrivilege: checkprivilege([privileges.doctor]) ? false : true,
-              //if you want to show edit button for passed previlges then make value for condtion is 'true' or you dont want to give edit option for the pased previlges then 'false'
-              customClass: "medium",
-              formMode: "double",
-            },
+        {
+          element: "button",
+          type: "subItem",
+          id: "user/subscriber/web",
+          itemTitle: {
+            name: "username",
+            type: "text",
+            collection: "user",
           },
-        ]
-      : []),
-    ...((checkprivilege([privileges.doctor]) ? false : true)
-      ? [
-          {
-            element: "button",
-            type: "subList",
-            id: "delivery-address",
+          icon: "user",
+          title: "Medical Record",
+          attributes: medicalRecord,
+          params: {
+            api: `user/subscriber/web`,
             parentReference: "user",
             itemTitle: {
               name: "username",
               type: "text",
               collection: "user",
             },
-            title: "Delivery Address",
-            attributes: deliveryAddress,
-            params: {
-              api: `delivery-address`,
-              parentReference: "user",
-              itemTitle: {
-                name: "username",
-                type: "text",
-                collection: "user",
-              },
-              actions: deliveryAddressActions, invoice,
-              shortName: "Delivery Address",
-              addPrivilege: true,
-              delPrivilege: true,
-              updatePrivilege: true,
-              customClass: "medium",
-              formMode: "double",
-            },
+            shortName: "Medical Record",
+            addPrivilege: true,
+            delPrivilege: true,
+            updatePrivilege: checkprivilege([privileges.doctor]) ? false : true,
+            //if you want to show edit button for passed previlges then make value for condtion is 'true' or you dont want to give edit option for the pased previlges then 'false'
+            customClass: "medium",
+            formMode: "double",
           },
-        ]
+        },
+      ]
+      : []),
+    ...((checkprivilege([privileges.doctor]) ? false : true)
+      ? [
+        {
+          element: "button",
+          type: "subList",
+          id: "delivery-address",
+          parentReference: "user",
+          itemTitle: {
+            name: "username",
+            type: "text",
+            collection: "user",
+          },
+          icon: "delivery-address",
+          title: "Delivery Address",
+          attributes: deliveryAddress,
+          params: {
+            api: `delivery-address`,
+            parentReference: "user",
+            itemTitle: {
+              name: "username",
+              type: "text",
+              collection: "user",
+            },
+            actions: deliveryAddressActions, invoice,
+            shortName: "Delivery Address",
+            addPrivilege: true,
+            delPrivilege: true,
+            updatePrivilege: true,
+            customClass: "medium",
+            formMode: "double",
+          },
+        },
+      ]
       : []),
     {
       element: "button",
       type: "subList",
       id: "patient-history",
       itemTitle: { name: "admissionDate", type: "text", collection: "" },
+      icon: "admissionHistory",
       title: "Admission History",
       attributes: admissionHistory,
       params: {
@@ -1879,6 +1881,7 @@ const Patient = (props) => {
         collection: "diet",
       },
       // itemTitle: "username",
+      icon: "typeOfDiet",
       title: "Diet Package",
       attributes: patientDiet,
       params: {
@@ -1910,6 +1913,7 @@ const Patient = (props) => {
         collection: "dietician",
       },
       exportPrivilege: true,
+      icon: "appointment",
       title: "Appointment",
       attributes: appointment,
       params: {
@@ -1935,22 +1939,24 @@ const Patient = (props) => {
       type: "subList",
       id: "addFile",
       itemTitle: { name: "name", type: "text", collection: "" },
-      title: "Add File",
+      icon: "add-file",
+      title: "Files",
       attributes: attachments,
       params: {
-        api: `user`,
+        api: `add-file`,
         parentReference: "",
         itemTitle: {
           name: "name",
           type: "text",
           collection: "",
         },
-        shortName: "Add File",
+        shortName: "Files",
         addPrivilege: true,
         delPrivilege: true,
         updatePrivilege: true,
         customClass: "medium",
         formMode: "double",
+        // viewMode: "table",
       },
     },
     {
@@ -1958,6 +1964,7 @@ const Patient = (props) => {
       type: "subList",
       id: "measurement",
       itemTitle: { name: "weight", type: "text", collection: "" },
+      icon: "measurement",
       title: "Measurements",
       attributes: measurement,
       params: {
@@ -1974,6 +1981,7 @@ const Patient = (props) => {
         updatePrivilege: true,
         customClass: "medium",
         formMode: "double",
+        viewMode: "table",
       },
     },
     {
@@ -2049,7 +2057,7 @@ const Patient = (props) => {
               openData={openItemData}
               setMessage={props.setMessage}
               {...props}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></SetupMenu>
           }
           themeColors={themeColors}
@@ -2077,7 +2085,7 @@ const Patient = (props) => {
             <AppointmentMenu
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></AppointmentMenu>
           }
           themeColors={themeColors}
@@ -2094,7 +2102,7 @@ const Patient = (props) => {
             <InvoicePDF
               openData={openItemData}
               setMessage={props.setMessage}
-              // Pass selected item data (Menu Title) to the popup for setting the time
+            // Pass selected item data (Menu Title) to the popup for setting the time
             ></InvoicePDF>
           }
           themeColors={themeColors}
