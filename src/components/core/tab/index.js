@@ -17,7 +17,7 @@ const Tabs = ({ tabs = [], className = "", popupMenu = "horizontal" }) => {
   }, [tabs, activeTab]);
   return (
     <TabContainer className={popupMenu}>
-      <TabHeader className={className}>
+      <TabHeader className={`${className} ${popupMenu}`}>
         {tabs.map((tab) => {
           return (
             <TabLink
@@ -36,10 +36,10 @@ const Tabs = ({ tabs = [], className = "", popupMenu = "horizontal" }) => {
         })}
       </TabHeader>
       {/* tab for parking process */}
-      <TabContents>
+      <TabContents className={popupMenu}>
         {tabs.map((tab, index) => {
           return (
-            <Tab className={className} theme={themeColors} key={`${tab.name}-tab-content`} active={activeTab === tab.name}>
+            <Tab className={`${className} ${popupMenu}`} theme={themeColors} key={`${tab.name}-tab-content`} active={activeTab === tab.name}>
               {(openedTab[tab.name] === true || index === 0) && tab.element}
             </Tab>
           );

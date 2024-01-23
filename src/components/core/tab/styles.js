@@ -24,15 +24,14 @@ export const TabHeader = styled.div`
   margin: -2px 28px;
   gap: 5px;
   padding: 5px;
-  && {
-    .vertical-menu & {
-      flex-direction: column;
-      align-items: flex-start;
-      margin-bottom: 20px;
-      position: sticky;
-      top: 0;
-      gap: 5px;
-    }
+  &.vertical-menu {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    position: sticky;
+    top: 0;
+    gap: 5px;
+    min-width: 190px;
   }
   &.custom {
     margin: 0;
@@ -42,15 +41,12 @@ export const TabHeader = styled.div`
   }
 `;
 export const TabContents = styled.div`
- 
   flex: auto;
-  width:100%;
-  margin-bottom:30px;
-  && {
-    .vertical-menu & {
-      display: flex;
-      width:inherit;
-    }
+  width: 100%;
+  margin-bottom: 30px;
+  &.vertical-menu {
+    display: flex;
+    width: inherit;
   }
 `;
 export const Tab = styled.div`
@@ -64,10 +60,8 @@ export const Tab = styled.div`
     margin: 10px 0px 0px;
     padding: 0px;
   }
-  && {
-    .vertical-menu & {
+  &.vertical-menu  {
       flex: auto;
-    }
   }
   ${(props) =>
     props.active &&
