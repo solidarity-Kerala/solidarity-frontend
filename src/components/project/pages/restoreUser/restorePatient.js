@@ -13,19 +13,6 @@ const RestorePatient = (props) => {
 
   const themeColors = useSelector((state) => state.themeColors);
   const [attributes] = useState([
-  
-    {
-      type: "text",
-      placeholder: "Employee ID",
-      name: "employeeID",
-      validation: "",
-      default: "",
-      label: "Employee ID",
-      required: false,
-      view: true,
-      add: false,
-      update: false,
-    },
     {
       type: "select",
       apiType: "API",
@@ -56,23 +43,6 @@ const RestorePatient = (props) => {
       update: false,
     },
     {
-      type: "select",
-      placeholder: "Gender",
-      name: "gender",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Gender",
-      showItem: "Gender",
-      required: true,
-      view: false,
-      filter: false,
-      add: true,
-      update: false,
-      apiType: "CSV",
-      selectApi: "Male,Female",
-    },
-    {
       type: "email",
       placeholder: "E-Mail",
       name: "email",
@@ -80,95 +50,6 @@ const RestorePatient = (props) => {
       default: "",
       tag: true,
       label: "E-Mail",
-      required: true,
-      view: true,
-      add: true,
-      update: false,
-    },
-    {
-      type: "select",
-      placeholder: "Gender",
-      name: "subscriber",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Gender",
-      showItem: "gender",
-      required: true,
-      view: true,
-      add: false,
-      update: false,
-      filter: false,
-      // apiType: "CSV",
-      // selectApi: "Male,Female",
-    },
-    {
-      type: "password",
-      placeholder: "password",
-      name: "password",
-      validation: "",
-      default: "",
-      // tag: true,
-      label: "password",
-      required: true,
-      view: false,
-      add: true,
-      update: false,
-    },
-    {
-      type: "textarea",
-      apiType: "",
-      selectApi: "",
-      placeholder: "Address",
-      name: "address",
-      collection: "subscriber",
-      validation: "",
-      showItem: "address",
-      default: "",
-      tag: true,
-      label: "Address",
-      required: true,
-      view: true,
-      add: true,
-      update: false,
-    },
-    {
-      type: "image",
-      placeholder: "Image",
-      name: "userImage",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Image",
-      required: true,
-      view: true,
-      add: true,
-      update: false,
-    },
-    {
-      type: "select",
-      placeholder: "Identity Type",
-      name: "identityType",
-      validation: "",
-      default: "",
-      tag: false,
-      label: "Identity Type",
-      required: true,
-      view: true,
-      add: true,
-      update: false,
-      selectApi: "Passport, License",
-      apiType: "CSV",
-      filter: false,
-    },
-    {
-      type: "image",
-      placeholder: "Identity Doc",
-      name: "identityDocument",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Identity Doc",
       required: true,
       view: true,
       add: true,
@@ -208,9 +89,17 @@ const RestorePatient = (props) => {
       element: "button",
       type: "callback",
       callback: (item, data) => {
+        // Display a confirmation dialog
+        const isConfirmed = window.confirm("Are you sure you want to restore?");
+        if (!isConfirmed) {
+          return;
+        }
         console.log(item, data);
         setOpenItemData({ item, data });
         setOpenMenuSetup(true);
+
+        // Add the following line to reload the page
+        window.location.reload();
       },
       itemTitle: {
         name: "userDisplayName",
