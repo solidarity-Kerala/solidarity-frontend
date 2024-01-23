@@ -216,8 +216,10 @@ export const Tr = styled.div`
       .popup-data & {
         margin: 20px 30px 30px;
       }
-      .vertical-menu & {
-        margin:0;
+      .horizontal & .vertical-menu & {
+        margin: 0;
+        .horizontal & {
+        }
       }
     }
   }

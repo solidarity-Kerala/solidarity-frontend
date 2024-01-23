@@ -1615,7 +1615,7 @@ const Patient = (props) => {
     },
   ]);
 
-  const [addFile] = useState([
+  const [attachments] = useState([
     {
       type: "text",
       placeholder: "Name",
@@ -1941,7 +1941,7 @@ const Patient = (props) => {
       itemTitle: { name: "name", type: "text", collection: "" },
       icon: "add-file",
       title: "Files",
-      attributes: addFile,
+      attributes: attachments,
       params: {
         api: `add-file`,
         parentReference: "",

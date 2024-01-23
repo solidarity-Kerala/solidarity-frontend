@@ -40,7 +40,7 @@ const SetTr = (props) => {
     return <Tr {...props}></Tr>;
   }
 };
-const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, clonePrivilege = false, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list", popupMenu="horizontal" }) => {
+const ListTable = ({customProfileSource = false, orientation = "portrait", profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, clonePrivilege = false, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list", popupMenu = "horizontal" }) => {
   const userData = useSelector((state) => state.pages);
   const [users, setUsers] = useState({
     data: null,
@@ -753,7 +753,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
         {profileImage && (
           <ProfileImage>
             <img
-              src={data[profileImage] ? process.env.REACT_APP_CDN + data[profileImage] : food}
+              src={data[profileImage] ? (customProfileSource ? "" :  process.env.REACT_APP_CDN) + data[profileImage] : food}
               onError={(e) => {
                 e.target.src = food; // Hide the image on error
               }}
@@ -1281,7 +1281,7 @@ const ListTable = ({ orientation = "portrait", profileImage, displayColumn = "si
       {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} api={api} formMode={formMode} formType={"post"} header={`Add a ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
       {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? `Update ${shortName}: ` : `Clone ${shortName}: `} <span style="font-weight:bold">'${updateValues._title}' </span>`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
-      {isOpen && <Popup  popupMenu={popupMenu} data={openData} actions={actions}></Popup>}
+      {isOpen && <Popup popupMenu={popupMenu} data={openData} actions={actions}></Popup>}
       {showLoader && <Loader></Loader>}
     </RowContainer>
   );
