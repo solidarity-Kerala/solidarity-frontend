@@ -94,10 +94,10 @@ const FoodMenu = (props) => {
       default: "",
       tag: true,
       label: "Diet Category",
-      required: true,
+      required: false,
       view: true,
-      add: true,
-      update: true,
+      add: false,
+      update: false,
       filter: false,
     },
     {
