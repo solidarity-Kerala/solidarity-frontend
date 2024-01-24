@@ -5,7 +5,7 @@ export const Table = styled.div`
   flex-direction: column;
   row-gap: 0px;
   font-family: Arial, sans-serif;
-  margin-bottom: auto;
+  margin-top:0;
   border-top: 0px solid #d9d9d9;
   width: 100%;
   width: -webkit-fill-available;
@@ -13,6 +13,9 @@ export const Table = styled.div`
   &.record {
     border-top: 0px solid #d9d9d9;
     padding: 0px 0px;
+  }
+  &.norecord {
+    padding: 5px 0px;
   }
   &.double {
     display: grid;
@@ -214,12 +217,7 @@ export const Tr = styled.div`
     }
     && {
       .popup-data & {
-        margin: 20px 30px 30px;
-      }
-      .horizontal & .vertical-menu & {
         margin: 0;
-        .horizontal & {
-        }
       }
     }
   }
@@ -271,7 +269,7 @@ export const Td = styled.div`
     justify-content: right;
     overflow-wrap: normal;
     margin-left: auto;
-    margin-right: 5px;
+    margin-right: 0px;
     padding: 0px 0px 0px 5px;
     position: sticky;
     right: 0;
@@ -860,15 +858,13 @@ export const IconBox = styled.span`
 `;
 export const TableContaner = styled.div`
   margin: 3px 3px 3px;
-  padding: 0em 1em 0em;
+  padding: 0em 0em 0em;
   background-color: white;
   border-radius: 10px;
   height: calc(100vh - 192px);
   overflow: auto;
   width: -webkit-fill-available;
   background: white;
-  /* border: 1px solid rgb(221, 221, 221); */
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   && {
     .show-filter & {
       margin: 0em 2em 0 10px;
@@ -888,14 +884,19 @@ export const TableView = styled.table`
   margin-bottom: auto;
   thead > tr {
     /* background-color: white; */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
+    position: sticky;
+    background-color: ${(props) => props.theme.pageBackground};
+    top: 0;
+    z-index: 100;
   }
   th {
     background-color: ${(props) => props.theme.pageBackground};
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   }
   tr:hover {
-    background-color: ${(props) => props.theme.themeLight};
+    color: ${(props) => props.theme.theme};
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
-    border-radius: 12px;
   }
   &.auto {
     width: auto;

@@ -171,18 +171,18 @@ export const Title = ({ title = "primary" }) => {
 export const Info = ({ content = "primary" }) => {
   return <FormInput dynamicClass="custom" content={content} type="info" />;
 };
-export const ListTabs = ({ actions, setMessage, setLoaderBox, titleValue }) => {
+export const ListTabs = ({ actions, setMessage, setLoaderBox, titleValue, showInfo=false }) => {
   const tabHandler = useCallback(() => {
     const tempTab = actions
       .filter((item) => item.type === "subList" || item.type === "subItem")
       .map((item, index) => ({
         name: `${item.id}-${index}`,
         title: item.title,
-        element: <ListTable viewMode={item.type ?? "subList"} setMessage={setMessage} setLoaderBox={setLoaderBox} parentReference={item?.params?.parentReference} referenceId={0} attributes={item.attributes} {...item.params}></ListTable>,
+        element: <ListTable showInfo={showInfo} viewMode={item.type ?? "subList"} setMessage={setMessage} setLoaderBox={setLoaderBox} parentReference={item?.params?.parentReference} referenceId={0} attributes={item.attributes} {...item.params}></ListTable>,
       }));
 
     setTabs(tempTab);
-  }, [setMessage, setLoaderBox, actions]);
+  }, [setMessage, setLoaderBox, actions, showInfo]);
 
   const [tabs, setTabs] = useState([]);
 

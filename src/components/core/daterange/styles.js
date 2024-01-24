@@ -28,7 +28,7 @@ export const Filter = styled.button`
   padding: 12px;
   background: ${(props) => props.theme.background};
   border-radius: 12px;
-  margin-top: 4px;
+  margin-top: 0px;
   cursor: pointer;
   font-weight: 700;
   font-size: 13.5px;

@@ -4,10 +4,21 @@ export const TabContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 100%;
-  padding: 0px 0px;
   &.vertical-menu {
     flex-direction: row;
     align-items: flex-start;
+    position: relative;
+    min-height: 75vh;
+  }
+  &.horizontal {
+    > .horizontal .tab {
+      margin: 1.65em 2em 0px;
+    }
+    > .menu > div{
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px !important;
+      border-radius: 12px;
+      width:inherit !important;
+    }
   }
   @media (max-width: 768px) {
     padding: 0;
@@ -21,17 +32,20 @@ export const TabHeader = styled.div`
   align-items: flex-end;
   justify-content: flex-start;
   overflow: auto;
-  margin: -2px 28px;
+  margin: 0px;
   gap: 5px;
   padding: 5px;
+  margin: 15px 22px 0px 25px;
   &.vertical-menu {
+    padding: 20px 0px 20px;
+    margin: 20px 20px 0;
+    border-radius: 12px;
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 20px;
-    position: sticky;
-    top: 0;
+    position: absolute;
     gap: 5px;
-    min-width: 190px;
+    min-width: 200px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   }
   &.custom {
     margin: 0;
@@ -46,7 +60,14 @@ export const TabContents = styled.div`
   margin-bottom: 30px;
   &.vertical-menu {
     display: flex;
-    width: inherit;
+    width: calc(100% - 260px);
+    padding: 20px;
+    position: absolute;
+    left: 230px;
+    overflow: auto;
+    margin-bottom: 0;
+    bottom: 0;
+    top: 0;
   }
 `;
 export const Tab = styled.div`
@@ -60,8 +81,8 @@ export const Tab = styled.div`
     margin: 10px 0px 0px;
     padding: 0px;
   }
-  &.vertical-menu  {
-      flex: auto;
+  &.vertical-menu {
+    flex: auto;
   }
   ${(props) =>
     props.active &&
@@ -84,7 +105,8 @@ export const TabLink = styled.div`
   height: 30px;
   flex: inherit;
   gap: 10px;
-  min-width: 60px;
+  /* min-width: 60px;  */
+  white-space: nowrap;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px 2px;
   transition: all 0.1s ease-in;
@@ -93,6 +115,13 @@ export const TabLink = styled.div`
       width: -webkit-fill-available;
       justify-content: left;
       text-align: left;
+      box-shadow: none;
+      min-height: 30px;
+      padding: 5px 20px;
+
+      svg {
+        min-width: 20px;
+      }
     }
   }
   :hover {
@@ -112,6 +141,14 @@ export const TabLink = styled.div`
     font-weight: bold;
     @media (max-width: 768px) {
       font-size: 14px;
+    }
+  }
+  && {
+    .vertical-menu & {
+      &.active {
+        box-shadow: rgba(0, 0, 0, 0.1) 5px 0px 8px 0px;
+      }
+      border-radius: 0;
     }
   }
   @media (max-width: 768px) {

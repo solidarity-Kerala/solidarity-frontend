@@ -9,6 +9,7 @@ import { RowContainer } from "../../../styles/containers/styles";
 import ListTable from "../list";
 import { More } from "../styles";
 import ImagePopup from "../image";
+import { CustomPageTemplate } from "../custom";
 export const DisplayInformations = ({ attributes, data, formMode }) => {
   const [showImage, setShowImage] = useState(false);
   return (
@@ -52,49 +53,50 @@ export const DisplayInformations = ({ attributes, data, formMode }) => {
     </React.Fragment>
   );
 };
-const Popup = ({ popupMenu, formMode, selectedMenuItem, viewMode, themeColors, openData, setLoaderBox, setMessage, closeModal, itemTitle, updatePrivilege, isEditingHandler, udpateView }) => {
+const Popup = ({ showInfo, popupMenu, formMode, selectedMenuItem, viewMode, themeColors, openData, setLoaderBox, setMessage, closeModal, itemTitle, updatePrivilege, isEditingHandler, udpateView }) => {
   const titleValue = (itemTitle.collection?.length > 0 ? openData?.data?.[itemTitle.collection]?.[itemTitle.name] ?? "" : openData?.data?.[itemTitle.name]) || "Please update the itemTitle.";
 
   const tabHandler = useCallback(() => {
     const tempTab = openData.actions
-      .filter((item) => item.type === "subList" || item.type === "subItem")
+      .filter((item) => item.type === "subList" || item.type === "subItem" || item.type === "custom")
       .map((item, index) => ({
         name: `${item.id}-${index}`,
         title: item.title,
         icon: item.icon,
-        element: <ListTable viewMode={item.type ?? "subList"} setMessage={setMessage} setLoaderBox={setLoaderBox} parentReference={item?.params?.parentReference} referenceId={openData?.data?._id} attributes={item.attributes} {...item.params}></ListTable>,
+        element: item.type === "custom" ? <CustomPageTemplate {...item} themeColors={themeColors} setLoaderBox={setLoaderBox} setMessage={setMessage} content={item.content}></CustomPageTemplate> : <ListTable showInfo={item.showInfo ?? true} viewMode={item.type ?? "subList"} setMessage={setMessage} setLoaderBox={setLoaderBox} parentReference={item?.params?.parentReference} referenceId={openData?.data?._id} attributes={item.attributes} {...item.params}></ListTable>,
       }));
-    tempTab.unshift({
-      name: `information-${openData.data._id}`,
-      title: "Informations",
-      icon: "info",
-      element: (
-        <TabContainer>
-          <Head className="sticky">
-            <DataHead>
-              <GetIcon icon={selectedMenuItem.icon}></GetIcon>
-              <span>Basic Details</span>
-            </DataHead>
-            <div>
-              {updatePrivilege && (
-                <More
-                  theme={themeColors}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    isEditingHandler(openData?.data, udpateView, titleValue);
-                  }}
-                >
-                  <GetIcon icon={"edit"} />
-                </More>
-              )}
-            </div>
-          </Head>
-          <DisplayInformations formMode={formMode} attributes={openData.attributes} data={openData.data} />
-        </TabContainer>
-      ),
-    });
+    showInfo &&
+      tempTab.unshift({
+        name: `information-${openData.data._id}`,
+        title: "Informations",
+        icon: "info",
+        element: (
+          <TabContainer className="tab">
+            <Head className="sticky">
+              <DataHead>
+                <GetIcon icon={selectedMenuItem.icon}></GetIcon>
+                <span>Basic Details</span>
+              </DataHead>
+              <div>
+                {updatePrivilege && (
+                  <More
+                    theme={themeColors}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      isEditingHandler(openData?.data, udpateView, titleValue);
+                    }}
+                  >
+                    <GetIcon icon={"edit"} />
+                  </More>
+                )}
+              </div>
+            </Head>
+            <DisplayInformations formMode={formMode} attributes={openData.attributes} data={openData.data} />
+          </TabContainer>
+        ),
+      });
     setTabs(tempTab);
-  }, [setMessage, setLoaderBox, openData, themeColors, formMode, titleValue, udpateView, isEditingHandler, updatePrivilege, selectedMenuItem.icon]);
+  }, [showInfo, setMessage, setLoaderBox, openData, themeColors, formMode, titleValue, udpateView, isEditingHandler, updatePrivilege, selectedMenuItem.icon]);
 
   const [tabs, setTabs] = useState([]);
 

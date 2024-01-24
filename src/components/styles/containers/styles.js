@@ -192,7 +192,7 @@ export const RowContainer = styled.div`
   }
   &.popup-data {
     overflow: auto;
-    padding: 1em 0 0;
+    padding: 0em 0 0;
     border-radius: 12px;
     min-height: 100px;
     display: flex;
@@ -256,7 +256,7 @@ export const RowContainer = styled.div`
       background-color: transparent;
     }
     .vertical-menu & {
-         padding: 0px 30px 0 0;
+         padding: 0px 20px 0 0;
     }
   }
   &.full {
@@ -307,7 +307,7 @@ export const RowContainer = styled.div`
     }
   }
   .data-layout {
-    padding: 1.5em 2em 0;
+    padding: 1.65em 2em 0;
   }
   &.booking {
     flex: 1 1 500px;
