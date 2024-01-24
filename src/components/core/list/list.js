@@ -40,7 +40,7 @@ const SetTr = (props) => {
     return <Tr {...props}></Tr>;
   }
 };
-const ListTable = ({customProfileSource = false, orientation = "portrait", profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, clonePrivilege = false, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list", popupMenu = "horizontal" }) => {
+const ListTable = ({ showInfo=true, customProfileSource = false, orientation = "portrait", profileImage, displayColumn = "single", printPrivilege = true, formMode = "single", parentReference = "_id", referenceId = 0, actions = [], api, setMessage, attributes = [], exportPrivilege = false, addPrivilege = true, delPrivilege = true, updatePrivilege = true, clonePrivilege = false, shortName = "Item", itemTitle = { type: "text", name: "title" }, highlight = null, datefilter = false, preFilter = {}, viewMode = "list", popupMenu = "horizontal" }) => {
   const userData = useSelector((state) => state.pages);
   const [users, setUsers] = useState({
     data: null,
@@ -753,7 +753,7 @@ const ListTable = ({customProfileSource = false, orientation = "portrait", profi
         {profileImage && (
           <ProfileImage>
             <img
-              src={data[profileImage] ? (customProfileSource ? "" :  process.env.REACT_APP_CDN) + data[profileImage] : food}
+              src={data[profileImage] ? (customProfileSource ? "" : process.env.REACT_APP_CDN) + data[profileImage] : food}
               onError={(e) => {
                 e.target.src = food; // Hide the image on error
               }}
@@ -1187,7 +1187,7 @@ const ListTable = ({customProfileSource = false, orientation = "portrait", profi
 
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}
 
-      {isOpen && <Popup popupMenu={popupMenu} selectedMenuItem={selectedMenuItem} formMode={formMode} closeModal={closeModal} themeColors={themeColors} isEditingHandler={isEditingHandler} updateValue={udpateView} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData} updatePrivilege={updatePrivilege}></Popup>}
+      {isOpen && <Popup showInfo={showInfo} popupMenu={popupMenu} selectedMenuItem={selectedMenuItem} formMode={formMode} closeModal={closeModal} themeColors={themeColors} isEditingHandler={isEditingHandler} updateValue={udpateView} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData} updatePrivilege={updatePrivilege}></Popup>}
       {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? `Update ${shortName}: ` : `Clone ${shortName}: `}  <span style="font-weight:bold">'${updateValues._title}'</span>`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {detailView && <Details formMode={formMode} closeModal={closeModal} themeColors={themeColors} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} openData={openData}></Details>}
       {showSublist && subAttributes?.item?.attributes?.length > 0 && <SubPage themeColors={themeColors} formMode={formMode} closeModal={closeModal} setMessage={setMessage} setLoaderBox={setLoaderBox} itemTitle={itemTitle} subAttributes={subAttributes}></SubPage>}
@@ -1264,20 +1264,21 @@ const ListTable = ({customProfileSource = false, orientation = "portrait", profi
       ></PopupView> */}
     </RowContainer>
   ) : (
-    <RowContainer>
+    <RowContainer className={"data-layout "}>
       {users.data?.response?.length === 0 && (
         <ButtonPanel>
+          <FilterBox></FilterBox>
           {(addPrivilege ? addPrivilege : false) && users.data?.response?.length === 0 && (
             <AddButton theme={themeColors} onClick={() => isCreatingHandler(true, refreshView)}>
               <AddIcon></AddIcon>
               {shortName}
             </AddButton>
           )}
-        </ButtonPanel>
+        </ButtonPanel>  
       )}
       <Table className={users.data?.response?.length === 0 ? "norecord" : "record"}>{users.data?.response?.length > 0 && <TableRowWithActions key={`${shortName}-${0}`} slNo={0} attributes={attributes} data={users.data?.response[0]} />}</Table>
-      {!users.data && !users.data?.response && <NoData>1No {shortName} found!</NoData>}
-      {users.data?.response?.length === 0 && <NoData>2No {shortName} found!</NoData>}
+      {!users.data && !users.data?.response && <NoData className="white-list">No {shortName} found!</NoData>}
+      {users.data?.response?.length === 0 && <NoData className="white-list">No data found for {shortName}.</NoData>}
       {isCreating && <CrudForm parentReference={parentReference} referenceId={referenceId} api={api} formMode={formMode} formType={"post"} header={`Add a ${shortName ? shortName : "Form"}`} formInput={formInput} formValues={addValues} formErrors={errroInput} submitHandler={submitHandler} isOpenHandler={isCreatingHandler} isOpen={isCreating}></CrudForm>}
       {isEditing && <CrudForm parentReference={parentReference} referenceId={referenceId} formMode={formMode} api={api} formType={"put"} updateId={updateId} header={`${updateValues.clone === false ? `Update ${shortName}: ` : `Clone ${shortName}: `} <span style="font-weight:bold">'${updateValues._title}' </span>`} formInput={formInput} formErrors={errroInput} formValues={updateValues} submitHandler={updateHandler} isOpenHandler={isEditingHandler} isOpen={isEditing}></CrudForm>}
       {action.data && <Manage setMessage={setMessage} setLoaderBox={setLoaderBox} onClose={closeManage} {...action}></Manage>}

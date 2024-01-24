@@ -17,7 +17,7 @@ const Tabs = ({ tabs = [], className = "", popupMenu = "horizontal" }) => {
   }, [tabs, activeTab]);
   return (
     <TabContainer className={popupMenu}>
-      <TabHeader className={`${className} ${popupMenu}`}>
+      <TabHeader className={`menu ${className} ${popupMenu}`}>
         {tabs.map((tab) => {
           return (
             <TabLink
