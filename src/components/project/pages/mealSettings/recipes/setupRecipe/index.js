@@ -469,7 +469,7 @@ const PDFGenerator = ({ openData, closeModal }) => {
               Number of servings: {openData?.data?.numberOfPortion}
             </Text>
             <Text style={styles.recipetitle}>
-              weight: {openData?.data?.gram}g
+              Weight: {openData?.data?.gram}g
             </Text>
             {/* <Text style={[styles.title, styles.subtitle]}>Yield Management</Text> */}
             <Text style={styles.recipetitle}>
