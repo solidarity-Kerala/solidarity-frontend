@@ -6,11 +6,12 @@ import PopupView from "../../../core/popupview";
 import SetupRecipe from "./setupRecipe";
 import { useSelector } from "react-redux";
 
+
 const RestorePatient = (props) => {
   useEffect(() => {
     document.title = `Recipe - Diet Food Management Portal`;
   }, []);
-
+  const { setMessage } = props;
   const themeColors = useSelector((state) => state.themeColors);
   const [attributes] = useState([
     {
@@ -89,17 +90,38 @@ const RestorePatient = (props) => {
       element: "button",
       type: "callback",
       callback: (item, data) => {
+        setMessage({
+          type: 2,
+          content: "Are you sure you want to restore?",
+          proceed: "Yes",
+          okay: "No",
+          onClose: async () => {
+            try {
+              setMessage({
+                type: 1,
+              });
+              //return false if this second message to show..
+              return false;
+            } catch (error) {}
+          },
+          onProceed: async () => {
+            try {
+              setMessage({
+                type: 1,
+               
+            });
+            setOpenItemData({ item, data }); // This line is incorrect
+            setOpenMenuSetup(true);
+            window.location.reload();
+              //return false if this second message to show..
+              return false;
+            } catch (error) {}
+          },
+          data: { id: 1 },
+        });
         // Display a confirmation dialog
-        const isConfirmed = window.confirm("Are you sure you want to restore?");
-        if (!isConfirmed) {
-          return;
-        }
-        console.log(item, data);
-        setOpenItemData({ item, data });
-        setOpenMenuSetup(true);
-
-        // Add the following line to reload the page
-        window.location.reload();
+        
+       
       },
       itemTitle: {
         name: "userDisplayName",
