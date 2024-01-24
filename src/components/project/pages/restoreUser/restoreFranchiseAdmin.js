@@ -8,12 +8,12 @@ import { useSelector } from "react-redux";
 
 const RestoreFranchiseAdmin = (props) => {
   useEffect(() => {
-    document.title = `Recipe - Diet Food Management Portal`;
+    document.title = `Restore Franchise Admin - Diet Food Management Portal`;
   }, []);
-
+  const { setMessage } = props;
   const themeColors = useSelector((state) => state.themeColors);
   const [attributes] = useState([
-  
+
     {
       type: "text",
       placeholder: "Employee ID",
@@ -50,6 +50,7 @@ const RestoreFranchiseAdmin = (props) => {
       validation: "",
       default: "",
       label: "Name",
+      tag: true,
       required: true,
       view: true,
       add: true,
@@ -61,14 +62,14 @@ const RestoreFranchiseAdmin = (props) => {
       name: "gender",
       validation: "",
       default: "",
-      tag: true,
+      // tag: true,
       label: "Gender",
       showItem: "Gender",
-      required: true,
-      view: false,
+      required: false,
+      view: true,
       filter: false,
       add: true,
-      update: false,
+      update: true,
       apiType: "CSV",
       selectApi: "Male,Female",
     },
@@ -84,23 +85,6 @@ const RestoreFranchiseAdmin = (props) => {
       view: true,
       add: true,
       update: false,
-    },
-    {
-      type: "select",
-      placeholder: "Gender",
-      name: "subscriber",
-      validation: "",
-      default: "",
-      tag: true,
-      label: "Gender",
-      showItem: "gender",
-      required: true,
-      view: true,
-      add: false,
-      update: false,
-      filter: false,
-      // apiType: "CSV",
-      // selectApi: "Male,Female",
     },
     {
       type: "password",
@@ -125,7 +109,7 @@ const RestoreFranchiseAdmin = (props) => {
       validation: "",
       showItem: "address",
       default: "",
-      tag: true,
+      // tag: true,
       label: "Address",
       required: true,
       view: true,
@@ -208,9 +192,35 @@ const RestoreFranchiseAdmin = (props) => {
       element: "button",
       type: "callback",
       callback: (item, data) => {
-        console.log(item, data);
-        setOpenItemData({ item, data });
-        setOpenMenuSetup(true);
+        setMessage({
+          type: 2,
+          content: "Are you sure you want to restore?",
+          proceed: "Yes",
+          okay: "No",
+          onClose: async () => {
+            try {
+              setMessage({
+                type: 1,
+              });
+              //return false if this second message to show..
+              return false;
+            } catch (error) { }
+          },
+          onProceed: async () => {
+            try {
+              setMessage({
+                type: 1,
+
+              });
+              setOpenItemData({ item, data }); // This line is incorrect
+              setOpenMenuSetup(true);
+              window.location.reload();
+              //return false if this second message to show..
+              return false;
+            } catch (error) { }
+          },
+          data: { id: 1 },
+        });
       },
       itemTitle: {
         name: "userDisplayName",
@@ -253,7 +263,7 @@ const RestoreFranchiseAdmin = (props) => {
         api={`user/user-deletion`}
         itemTitle={{ name: "userDisplayName", type: "text", collection: "" }}
         // profileImage="photo"
-        shortName={`Recipe Item`}
+        shortName={`Restore Franchise Admin`}
         formMode={`double`}
         {...props}
         attributes={attributes}

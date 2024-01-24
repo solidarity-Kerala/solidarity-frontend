@@ -9,35 +9,19 @@ import { useSelector } from "react-redux";
 
 const RestorePatient = (props) => {
   useEffect(() => {
-    document.title = `Recipe - Diet Food Management Portal`;
+    document.title = `Restore Patient - Diet Food Management Portal`;
   }, []);
   const { setMessage } = props;
   const themeColors = useSelector((state) => state.themeColors);
   const [attributes] = useState([
     {
-      type: "select",
-      apiType: "API",
-      selectApi: "user-type/select",
-      placeholder: "User Type",
-      name: "userType",
-      validation: "",
-      showItem: "role",
-      tag: true,
-      default: "",
-      label: "User Type",
-      required: true,
-      view: true,
-      add: true,
-      update: false,
-      filter: true,
-    },
-    {
       type: "text",
       placeholder: "Name",
-      name: "userDisplayName",
+      name: "username",
       validation: "",
       default: "",
       label: "Name",
+      tag: true,
       required: true,
       view: true,
       add: true,
@@ -57,17 +41,30 @@ const RestorePatient = (props) => {
       update: false,
     },
     {
-      type: "text",
-      placeholder: "Identity Number",
-      name: "identityNumber",
-      validation: "",
+      type: "number",
+      placeholder: "Mobile Number",
+      name: "mobile",
+      validation: "number",
       default: "",
-      label: "Identity Number",
+      tag: true,
+      label: "Mobile Number",
       required: true,
       view: true,
       add: true,
-      update: false,
+      update: true,
     },
+    // {
+    //   type: "text",
+    //   placeholder: "Identity Number",
+    //   name: "identityNumber",
+    //   validation: "",
+    //   default: "",
+    //   label: "Identity Number",
+    //   required: true,
+    //   view: true,
+    //   add: true,
+    //   update: false,
+    // },
     {
       type: "select",
       placeholder: "Delete",
@@ -119,12 +116,9 @@ const RestorePatient = (props) => {
           },
           data: { id: 1 },
         });
-        // Display a confirmation dialog
-        
-       
       },
       itemTitle: {
-        name: "userDisplayName",
+        name: "username",
         type: "text",
         collection: "",
       },
@@ -134,7 +128,7 @@ const RestorePatient = (props) => {
         api: `food-group-item`,
         parentReference: "",
         itemTitle: {
-          name: "userDisplayName",
+          name: "username",
           type: "text",
           collection: "",
         },
@@ -161,9 +155,9 @@ const RestorePatient = (props) => {
       <ListTable
         actions={actions}
         api={`user/user-deletion`}
-        itemTitle={{ name: "userDisplayName", type: "text", collection: "" }}
+        itemTitle={{ name: "username", type: "text", collection: "" }}
         // profileImage="photo"
-        shortName={`Recipe Item`}
+        shortName={`Restore Patient`}
         formMode={`double`}
         {...props}
         attributes={attributes}
@@ -180,7 +174,7 @@ const RestorePatient = (props) => {
           }
           themeColors={themeColors}
           closeModal={closeModal}
-          itemTitle={{ name: "userDisplayName", type: "text", collection: "" }}
+          itemTitle={{ name: "username", type: "text", collection: "" }}
           openData={openItemData}
           customClass={"full-page"}
         ></PopupView>

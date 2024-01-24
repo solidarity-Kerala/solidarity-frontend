@@ -226,6 +226,51 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
     });
   };
 
+  const printFoodMenu = async (id, index, mealOrRecepe, mealTimeCategory, dayNumber, optionNo) => {
+    setMessage({
+      type: 2,
+      content: "Are you sure you want to print?",
+      proceed: "Print",
+      onProceed: async () => {
+        try {
+          // // Call the deleteData function to delete the item with the given id from the server (Assuming this is an asynchronous function)
+          // await deleteData({ weekNumber: weekNumber, foodMenu: openData?.data?._id }, "food-menu-item");
+
+          // // Create a copy of menuData.foodMenu to work with
+          // const menuDataTemp = { ...menuData };
+
+          // // Find the items object based on the provided parameters (mealTimeCategory, dayNumber, optionNo)
+          // const items = menuDataTemp.foodMenu.find((cat) => cat.mealTimeCategory === mealTimeCategory && cat.dayNumber === dayNumber && cat.optionNo === optionNo);
+
+          // // Check the value of mealOrRecepe to decide whether to delete from recipes or meals
+          // if (mealOrRecepe === "recipe") {
+          //   // Delete the recipeVariant at the specified index
+          //   items.recipes.splice(index, 1);
+          // } else {
+          //   // Delete the meal at the specified index
+          //   items.meals.splice(index, 1);
+          // }
+
+          // // If both recipes and meals are empty, remove the entire items object from menuDataTemp.foodMenu
+          // if (items.recipes.length === 0 && items.meals.length === 0) {
+          //   const itemIndex = menuDataTemp.foodMenu.findIndex((cat) => cat.mealTimeCategory === mealTimeCategory && cat.dayNumber === dayNumber && cat.optionNo === optionNo);
+          //   if (itemIndex !== -1) {
+          //     menuDataTemp.foodMenu.splice(itemIndex, 1);
+          //   }
+          // }
+
+          // // Update the state with the modified menuDataTemp
+          // setMenuData(menuDataTemp);
+        } 
+        catch (error) {
+          // Handle any errors that occur during the deletion process
+          console.log(error);
+        }
+      },
+      data: { id },
+    });
+  };
+
   const deleteFoodMenu = async (id, index, mealOrRecepe, mealTimeCategory, dayNumber, optionNo) => {
     setMessage({
       type: 2,
@@ -967,6 +1012,13 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
               </TabButton>
             </TabContainer>
             <WeekSelection>
+            <button
+                onClick={() => {
+                  printFoodMenu(item.foodMenuItem);
+                }}
+              >
+                <span>Print</span> <GetIcon icon={"print"} />
+              </button>
               <button
                 onClick={() => {
                   deleteFoodMenu(item.foodMenuItem);

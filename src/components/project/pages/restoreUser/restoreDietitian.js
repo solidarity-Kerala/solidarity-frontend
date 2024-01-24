@@ -8,12 +8,12 @@ import { useSelector } from "react-redux";
 
 const RestoreDietitian = (props) => {
   useEffect(() => {
-    document.title = `Recipe - Diet Food Management Portal`;
+    document.title = `Restore Dietitian - Diet Food Management Portal`;
   }, []);
-
+  const { setMessage } = props;
   const themeColors = useSelector((state) => state.themeColors);
   const [attributes] = useState([
-    
+
     {
       type: "text",
       placeholder: "Employee ID",
@@ -208,9 +208,35 @@ const RestoreDietitian = (props) => {
       element: "button",
       type: "callback",
       callback: (item, data) => {
-        console.log(item, data);
-        setOpenItemData({ item, data });
-        setOpenMenuSetup(true);
+        setMessage({
+          type: 2,
+          content: "Are you sure you want to restore?",
+          proceed: "Yes",
+          okay: "No",
+          onClose: async () => {
+            try {
+              setMessage({
+                type: 1,
+              });
+              //return false if this second message to show..
+              return false;
+            } catch (error) { }
+          },
+          onProceed: async () => {
+            try {
+              setMessage({
+                type: 1,
+
+              });
+              setOpenItemData({ item, data }); // This line is incorrect
+              setOpenMenuSetup(true);
+              window.location.reload();
+              //return false if this second message to show..
+              return false;
+            } catch (error) { }
+          },
+          data: { id: 1 },
+        });
       },
       itemTitle: {
         name: "userDisplayName",
@@ -253,7 +279,7 @@ const RestoreDietitian = (props) => {
         api={`user/user-deletion`}
         itemTitle={{ name: "userDisplayName", type: "text", collection: "" }}
         // profileImage="photo"
-        shortName={`Recipe Item`}
+        shortName={`Restore Dietitian`}
         formMode={`double`}
         {...props}
         attributes={attributes}

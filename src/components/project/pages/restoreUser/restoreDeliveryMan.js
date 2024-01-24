@@ -8,12 +8,12 @@ import { useSelector } from "react-redux";
 
 const Resicpes = (props) => {
   useEffect(() => {
-    document.title = `Recipe - Diet Food Management Portal`;
+    document.title = `Restore Delivery Man - Diet Food Management Portal`;
   }, []);
-
+  const { setMessage } = props;
   const themeColors = useSelector((state) => state.themeColors);
   const [attributes] = useState([
-    
+
     {
       type: "text",
       placeholder: "Employee ID",
@@ -25,23 +25,6 @@ const Resicpes = (props) => {
       view: true,
       add: false,
       update: false,
-    },
-    {
-      type: "select",
-      apiType: "API",
-      selectApi: "user-type/select",
-      placeholder: "User Type",
-      name: "userType",
-      validation: "",
-      showItem: "role",
-      tag: true,
-      default: "",
-      label: "User Type",
-      required: true,
-      view: true,
-      add: true,
-      update: false,
-      filter: true,
     },
     {
       type: "text",
@@ -208,9 +191,35 @@ const Resicpes = (props) => {
       element: "button",
       type: "callback",
       callback: (item, data) => {
-        console.log(item, data);
-        setOpenItemData({ item, data });
-        setOpenMenuSetup(true);
+        setMessage({
+          type: 2,
+          content: "Are you sure you want to restore?",
+          proceed: "Yes",
+          okay: "No",
+          onClose: async () => {
+            try {
+              setMessage({
+                type: 1,
+              });
+              //return false if this second message to show..
+              return false;
+            } catch (error) { }
+          },
+          onProceed: async () => {
+            try {
+              setMessage({
+                type: 1,
+
+              });
+              setOpenItemData({ item, data }); // This line is incorrect
+              setOpenMenuSetup(true);
+              window.location.reload();
+              //return false if this second message to show..
+              return false;
+            } catch (error) { }
+          },
+          data: { id: 1 },
+        });
       },
       itemTitle: {
         name: "userDisplayName",
@@ -253,7 +262,7 @@ const Resicpes = (props) => {
         api={`user/user-deletion`}
         itemTitle={{ name: "userDisplayName", type: "text", collection: "" }}
         // profileImage="photo"
-        shortName={`Recipe Item`}
+        shortName={`Restore Delivery Man`}
         formMode={`double`}
         {...props}
         attributes={attributes}

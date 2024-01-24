@@ -29,7 +29,7 @@ const Resicpes = (props) => {
     {
       type: "text",
       placeholder: "Yield Weight",
-      name: "yieldWeight",
+      name: "gram",
       validation: "",
       default: "",
       label: "Yield Weight",
