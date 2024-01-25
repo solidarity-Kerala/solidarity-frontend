@@ -999,7 +999,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   };
 
   return menuData ? (
-    <ColumnContainer style={{ marginBottom: "30px", position: "relative", height: "90%" }}>
+    <ColumnContainer className="diet" style={{ marginBottom: "30px", position: "relative", height: "90%" }}>
       <DndProvider backend={HTML5Backend}>
         <RowContainer className={`menu ${openData.item.viewOnly}`}>
           <RowContainer className="menu-header">
@@ -1632,7 +1632,7 @@ const SetupMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
       )}
     </ColumnContainer>
   ) : (
-    <NoData>Loading</NoData>
+    <NoData className="margin">Loading</NoData>
   );
 };
 

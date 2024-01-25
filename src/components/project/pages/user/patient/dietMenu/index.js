@@ -430,6 +430,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         name: "mealTimeCategory",
         displayValue: "mealtimeCategoriesName",
         updateOn: ["foodMenu", "package"],
+        checkboxDesign: true,
         onChange: onChange,
         default: existingData.mealTimeCategory ?? "",
         defaultArray: existingData.mealTimeCategoryArray ?? [],
@@ -871,6 +872,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
         default: existingData.mealTimeCategory.map((item) => item),
         defaultArray: existingData.mealTimeCategoryArray ?? [],
         updateOn: "foodMenu",
+        checkboxDesign: true,
         params: [
           { name: "package", value: existingData.package },
           { name: "foodMenu", value: existingData.foodMenu },
@@ -2078,7 +2080,7 @@ const DietMenu = ({ openData, themeColors, setMessage, setLoaderBox }) => {
   };
   return (
     menuData?.user && (
-      <ColumnContainer>
+      <ColumnContainer className="diet">
         <RowContainer className="menu-schedule">
           {menuData?.user.diet ? (
             <>

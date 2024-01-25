@@ -16,6 +16,9 @@ export const ColumnContainer = styled.div`
   &.diret {
     justify-content: "space-between";
   }
+  &.diet {
+    margin: 20px 0px 0;
+  }
   &.shadow {
     box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
   }
@@ -256,7 +259,7 @@ export const RowContainer = styled.div`
       background-color: transparent;
     }
     .vertical-menu & {
-         padding: 0px 20px 0 0;
+      padding: 0px 20px 0 0;
     }
   }
   &.full {
