@@ -694,7 +694,8 @@ export const ToggleInput = styled.input`
   }
 `;
 export const NoData = styled.div`
-  padding: 10px;
+  margin:10px;
+
   /* border: 1px solid #ddedeb; */
   justify-content: center;
   display: flex;
@@ -707,6 +708,10 @@ export const NoData = styled.div`
   }
   &.noshadow {
     box-shadow: none;
+  }
+  &.margin {
+   margin: 30px 30px 0;
+   border-radius: 10px;
   }
   &.white-list {
     margin: 0em 2px 0px;
