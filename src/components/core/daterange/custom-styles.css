@@ -1,0 +1,12 @@
+.rdrInRange,
+.rdrStartEdge,
+.rdrEndEdge,
+.rdrDateDisplay {
+  color:rgb(84 140 40) !important;
+}
+.rdrDayHovered {
+  border-color: rgb(84 140 40) !important;
+}
+.rdrDefinedRangesWrapper {
+  display: none;
+}

@@ -33,11 +33,11 @@ const postData = async (fields, ulr, dispatch, navigate) => {
         },
       });
 
-      if (response.status === 440) {
+      if (response.status === 440 || response.status === 401) {
         try {
           dispatch(clearLogin());
           navigate("/");
-          navigate(0);
+          return resolve({ status: response.status, data: [] });
         } catch (error) {
           console.log(error);
         }
@@ -45,10 +45,10 @@ const postData = async (fields, ulr, dispatch, navigate) => {
 
       resolve({ status: response.status, data: response.data });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       resolve({
-        status: error.response.status,
-        data: error.response?.data?.message,
+        status: error?.response?.status,
+        customMessage: error?.response?.data?.customMessage ?? "Something went wrong!",
       });
     }
   });
@@ -57,52 +57,55 @@ const postData = async (fields, ulr, dispatch, navigate) => {
 };
 
 const putData = async (fields, ulr, dispatch, navigate) => {
-  const data = new Promise(async (resolve, reject) => {
-    try {
-      console.log(fields);
-      let token = GetAccessToken();
-      const formData = new FormData();
-      let isUplaoding = false;
-      Object.entries(fields).forEach(([key, value]) => {
-        if (typeof value === "object") {
-          if (value[0] instanceof File) {
-            isUplaoding = true;
-            console.log(value[0] instanceof File);
-            formData.append(key, value[0]);
-          } else {
-            value.forEach((item, index) => {
-              formData.append(`${key}[${index}]`, item);
-            });
-          }
+  try {
+    console.log(fields);
+    let token = GetAccessToken();
+    let formData = new FormData();
+    const apiUrl = process.env.REACT_APP_API;
+    let isUplaoding = false;
+    Object.entries(fields).forEach(([key, value]) => {
+      if (typeof value === "object") {
+        if (value[0] instanceof File) {
+          isUplaoding = true;
+          console.log(value[0] instanceof File);
+          formData.append(key, value[0]);
         } else {
-          formData.append(key, value);
+          value.forEach((item, index) => {
+            formData.append(`${key}[${index}]`, item);
+          });
         }
-      });
-      const response = await axios.put(`${process.env.REACT_APP_API}${ulr}`, formData, {
-        headers: {
-          "Content-Type": isUplaoding ? "multipart/form-data" : "application/json",
-          Authorization: "Bearer " + token,
-        },
-      });
-      if (response.status === 440) {
-        try {
-          dispatch(clearLogin());
-          navigate("/");
-          navigate(0);
-        } catch (error) {
-          console.log(error);
-        }
+      } else {
+        formData.append(key, value);
       }
-      resolve({ status: response.status, data: response.data });
-    } catch (error) {
-      resolve({
-        status: error.response?.status,
-        data: error.response?.data?.message,
-      });
+    });
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
     }
-  });
 
-  return data;
+    const response = await axios.put(`${apiUrl}${ulr}`, formData, {
+      headers: {
+        "Content-Type": isUplaoding ? "multipart/form-data" : "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (response.status === 440 || response.status === 401) {
+      try {
+        dispatch(clearLogin());
+        navigate("/");
+        navigate(0);
+        return { status: response.status, data: [] };
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    console.log(error);
+    return {
+      status: error.response?.status,
+      customMessage: error.response?.data?.customMessage ?? "Something went wrong!",
+    };
+  }
 };
 const getData = async (fields, ulr, dispatch, navigate) => {
   const data = new Promise(async (resolve, reject) => {
@@ -117,7 +120,7 @@ const getData = async (fields, ulr, dispatch, navigate) => {
           Authorization: "Bearer " + token,
         },
       });
-      if (response.status === 440) {
+      if (response.status === 440 || response.status === 401) {
         try {
           localStorage.removeItem("user");
           navigate("/");
@@ -129,7 +132,7 @@ const getData = async (fields, ulr, dispatch, navigate) => {
       resolve({ status: response.status, data: response.data });
     } catch (error) {
       if (error.response?.status) {
-        if (error.response?.status === 440) {
+        if (error.response?.status === 440 || error.response?.status === 401) {
           try {
             localStorage.removeItem("user");
             navigate("/");
@@ -157,7 +160,7 @@ const deleteData = async (fields, ulr, dispatch, navigate) => {
       const response = await axios.delete(`${process.env.REACT_APP_API}${ulr}?${queryString}`, {
         headers: { Authorization: "Bearer " + token },
       });
-      if (response.status === 440) {
+      if (response.status === 440 || response.status === 401) {
         try {
           localStorage.removeItem("user");
           navigate("/");
@@ -171,7 +174,7 @@ const deleteData = async (fields, ulr, dispatch, navigate) => {
       console.log("API Eror", error.message);
       resolve({
         status: error.response.status,
-        data: error.response?.data?.message,
+        customMessage: error.response?.data?.customMessage ?? "Something went wrong!",
       });
     }
   });

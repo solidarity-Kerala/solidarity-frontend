@@ -32,9 +32,14 @@ function userLoginDetailsReducer(state = userDetails, action) {
         error: null,
       };
     case "CLEAR_USER_LOGIN":
-      localStorage.removeItem("user");
-      localStorage.removeItem("selectedMenu");
-      localStorage.removeItem("menuStatus");
+      localStorage.clear();
+      window.location.href = "/";
+      return {
+        ...userDetails,
+        data: JSON.stringify({}),
+      };
+    case "CLEAR_USER_LOGIN_SESSION":
+      localStorage.clear();
       return {
         ...userDetails,
         data: JSON.stringify({}),

@@ -1,6 +1,6 @@
 import React, {useState } from "react";
-import Loader from "../../elements/loader";
-import Message from "../../elements/message";
+import Loader from "../../core/loader";
+import Message from "../../core/message";
 // import Login from "../../../public/login";
 const withLayout = (WrappedComponent) => {
   return (props) => {

@@ -2,29 +2,12 @@
 // This color we using all the pages.
 // I fwe change the color here all the project will be effected.
 
+import { projectSettings } from "../../../components/project/brand/project";
+
 const themColor =
   localStorage.getItem("_theme") !== null
-    ? JSON.parse(localStorage.getItem("_menu"))
-    : {
-      pageBackground:'#EAEAEA;',
-      background: 'white',
-      foreground: '#4f4f4f',
-      border: '#d9d9d9',
-      secBackground: 'rgb(243, 243, 243)',
-      secForeground: 'black',
-      lightBackground: 'White',
-      lightForeground: 'Black',
-      lightBorder: 'Black',
-      lightSecBackground: 'White',
-      lightSecForeground: "#969696",
-      foregroundInvert:'white',
-      backgroundInvert:'#969696;',
-      borderThinkness:'0px',
-      themeBackground:'#FFFFFF',
-      themeForeground:'black',
-      disabledBackground:'rgba(156, 156, 156, 0.41)',
-      disabledForeground:'white',
-      };
+    ? JSON.parse(localStorage.getItem("_theme"))
+    : projectSettings.theme;
 
 // This is the function we use to update the state of redux it initiailly as above. Any where in the apllication programer can call this reducers to update the redux.
 

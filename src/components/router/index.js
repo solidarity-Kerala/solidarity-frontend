@@ -3,63 +3,44 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Switch from "./switch";
 import { useSelector } from "react-redux";
-import Page404 from "../private/pages/page404";
-import {
-  Container,
-  MainContainer,
-  SideBar,
-} from "../private/common/layout/styels";
+import Page404 from "../project/pages /page404/index";
+import { Container, MainContainer, SideBar } from "../core/layout/styels";
 import { RowContainer } from "../styles/containers/styles";
-import Header from "../private/common/layout/header";
-import Footer from "../private/common/layout/footer";
-import Menu from "../private/common/layout/menu";
-import Body from "../private/pages/dashboard";
-// import dietitian from "../private/pages/dashboard/dietitian";
+import Header from "../core/layout/header";
+import Footer from "../core/layout/footer";
+import Menu from "../core/layout/menu";
+import InternetStatusPopup from "../core/InternetStatusPopup";
 
 const PageRouter = () => {
   const user = useSelector((state) => state.login);
   const menuStatus = useSelector((state) => state.menuStatus);
+  const selectedMenuItem = useSelector((state) => state.selectedMenu);
   const createRouter = (router, menu = true) => {
-    const role = menu ? router.menuRoles[0] : router.subMenuRoles[0];
-    return (
-      <Route
-        key={`${router._id}`}
-        path={`${router.path}`}
-        element={
-          <Switch
-            addPrivilege={role.add ?? false}
-            delPrivilege={role.delete ?? false}
-            updatePrivilege={role.update ?? false}
-            exportPrivilege={role.export ?? false}
-            page={router.element}
-          />
-        }
-      />
-    );
+    const role = router.privilege ?? (menu ? router.menuRoles[0] : router.subMenuRoles[0]);
+    return <Route key={`${router._id}`} path={`${router.path}`} element={<Switch user={user.data} addPrivilege={role.add ?? false} delPrivilege={role.delete ?? false} updatePrivilege={role.update ?? false} exportPrivilege={role.export ?? false} clonePrivilege={role.clone ?? false} hideMenu={role.hideMenu ?? false} hideHeader={role.hideMenu ?? false} userType={role.userType} page={router.element} />} />;
   };
+
   const themeColors = useSelector((state) => state.themeColors);
   return user.data.token ? (
     <BrowserRouter>
       <MainContainer>
-        <SideBar theme={themeColors} className={menuStatus && "active"}>
-          <Menu user={user.data}></Menu>
-          <Footer></Footer>
-        </SideBar>
-        <RowContainer className="content">
-          <Header user={user.data}></Header>
+        {!(selectedMenuItem.hideMenu ?? false) && (
+          <SideBar theme={themeColors} className={menuStatus && "active"}>
+            <Menu user={user.data}></Menu>
+            <Footer></Footer>
+          </SideBar>
+        )}
+        <RowContainer className={`content ${selectedMenuItem.hideMenu && "hidemenu"}`}>
+          {!(selectedMenuItem.hideHeader ?? false) && <Header user={user.data}></Header>}
           <Container className="nopadding" theme={themeColors}>
             <Routes>
               <Route path="/" element={<Switch page="login" />} />
-              <Route path="/dashboard" element={<Body />} />
-              <Route path="/dietitian-dashboard" element={<Body />} />
               {user?.data?.menu?.map((menu) => {
                 if (menu.submenus?.length > 0) {
                   return (
                     <React.Fragment key={menu._id}>
                       {createRouter(menu)}
-                      {menu.submenus.map((submenu) =>
-                        createRouter(submenu, false)
-                      )}
+                      {menu.submenus.map((submenu) => createRouter(submenu, false))}
                     </React.Fragment>
                   );
                 }
@@ -69,6 +50,7 @@ const PageRouter = () => {
             </Routes>
           </Container>
         </RowContainer>
+        <InternetStatusPopup />
       </MainContainer>
     </BrowserRouter>
   ) : (
