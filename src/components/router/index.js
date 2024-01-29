@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Switch from "./switch";
 import { useSelector } from "react-redux";
-import Page404 from "../project/pages/page404";
+import Page404 from "../project/pages /page404/index";
 import { Container, MainContainer, SideBar } from "../core/layout/styels";
 import { RowContainer } from "../styles/containers/styles";
 import Header from "../core/layout/header";
